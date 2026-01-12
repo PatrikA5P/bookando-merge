@@ -1,0 +1,53 @@
+{
+  "slug": "tools",
+  "plan": "starter",
+  "version": "1.0.0",
+  "tenant_required": false,
+  "license_required": false,
+  "features_required": [],
+  "group": "core",
+  "is_saas": false,
+  "has_admin": true,
+  "supports_webhook": false,
+  "supports_offline": false,
+  "supports_calendar": false,
+  "name": {
+    "default": "Tools",
+    "de": "Werkzeuge",
+    "en": "Tools",
+    "fr": "Outils",
+    "it": "Strumenti"
+  },
+  "alias": {
+    "de": "Tool",
+    "en": "Tool",
+    "fr": "Out",
+    "it": "Stru"
+  },
+  "description": {
+    "default": "System tools and reports for administrators.",
+    "de": "Systemwerkzeuge und Berichte für Administratoren.",
+    "en": "System tools and reports for administrators.",
+    "fr": "Outils système et rapports pour les administrateurs.",
+    "it": "Strumenti di sistema e report per gli amministratori."
+  },
+  "actions": {
+    "allowed": [],
+    "features": {}
+  },
+  "visible": true,
+  "menu_icon": "dashicons-admin-tools",
+  "menu_position": 100,
+  "dependencies": [],
+  "tabs": [
+    "Reports",
+    "Kursplaner",
+    "Zeiterfassung",
+    "Dienstplanung",
+    "Buchungsformulare",
+    "Benachrichtigungen",
+    "Design"
+  ],
+  "is_submodule": false,
+  "parent_module": null
+}

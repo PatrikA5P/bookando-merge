@@ -1,0 +1,167 @@
+// =====================================
+// _base.scss – Basis-Typografie & Layout
+// =====================================
+
+// Variablen & Mixins
+@use 'sass:color';
+@use 'variables' as *;
+@use 'mixins' as *;
+
+// ==== Global Font-Family für die ganze Seite ====
+// (Gilt für alles, außer explizit überschrieben)
+html, body {
+  font-size: $bookando-font-size-base;
+  color: $bookando-text-dark;
+  margin: 0;
+  padding: 0;
+  -webkit-font-smoothing: antialiased;
+  scroll-behavior: smooth;
+  box-sizing: border-box;
+}
+
+// ==== Global Box Sizing für alle Elemente ====
+*, *::before, *::after {
+  box-sizing: inherit;
+}
+
+// =====================================
+// Bookando Admin-Page Grund-Layout
+// =====================================
+.bookando-admin-page {
+  background-color: $bookando-white;
+  font-family: $bookando-font-family !important;
+  margin: 20px 20px 20px 2px;
+  padding: 0;
+}
+
+// =====================================
+// Headings
+// =====================================
+h1, h2, h3, h4, h5, h6 {
+  color: $bookando-heading-color;
+  font-family: $bookando-font-family;
+  font-weight: $bookando-font-weight-medium;
+  line-height: $bookando-line-height;
+  letter-spacing: 0.01em;
+  margin-top: 0;
+}
+
+h1 {
+  font-size: $bookando-heading-size;
+  margin: $bookando-spacing-md 0;
+}
+h2 {
+  font-size: $bookando-font-size-xl;
+  margin: $bookando-spacing-md 0;
+}
+h3 {
+  font-size: $bookando-font-size-lg;
+  margin: $bookando-spacing-sm 0;
+}
+h4 {
+  font-size: $bookando-font-size-sm;
+  margin: $bookando-spacing-xs 0;
+}
+h5, h6 {
+  font-size: $bookando-font-size-xs;
+  margin: $bookando-spacing-xs 0;
+}
+
+// =====================================
+// Text, Absätze, Listen, etc.
+// =====================================
+p {
+  margin: 0 0 $bookando-spacing-md 0;
+  color: inherit;
+  line-height: 1.65;
+}
+
+a {
+  color: $bookando-primary;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+  transition: color 0.15s;
+  cursor: pointer;
+
+  &:hover,
+  &:focus {
+    color: $bookando-accent;
+    outline: none;
+  }
+  &:active {
+    color: $bookando-primary-dark;
+  }
+}
+
+strong,
+b {
+  font-weight: $bookando-font-weight-bold;
+}
+
+em {
+  font-style: italic;
+}
+
+ul,
+ol {
+  padding-left: 1.6em;
+  margin: 0 0 $bookando-spacing-md 0;
+}
+
+li {
+  margin-bottom: 0.15em;
+}
+
+blockquote {
+  margin: $bookando-spacing-md 0;
+  padding: $bookando-spacing-sm $bookando-spacing-md;
+  background: $bookando-secondary;
+  border-left: 4px solid $bookando-primary;
+  color: $bookando-text-muted;
+  font-size: $bookando-font-size-lg;
+}
+
+img {
+  max-width: 100%;
+  height: auto;
+  border-radius: $bookando-radius;
+  vertical-align: middle;
+  display: inline-block;
+  background: $bookando-gray-100;
+}
+
+// =====================================
+// Utilities für Farben (optional)
+// =====================================
+.text-muted     { color: $bookando-text-muted !important; }
+.text-accent    { color: $bookando-accent !important; }
+.text-success   { color: $bookando-success !important; }
+.text-danger    { color: $bookando-danger !important; }
+.text-warning   { color: $bookando-warning !important; }
+.text-primary   { color: $bookando-primary !important; }
+.text-secondary { color: $bookando-secondary !important; }
+
+// =====================================
+// Visually Hidden (A11y)
+// =====================================
+.sr-only {
+  @include visually-hidden;
+}
+
+// =====================================
+// Optional: Formular-Reset, Inputs, etc.
+// =====================================
+
+// Reset für Inputs (wenn du ein einheitliches Design willst)
+input, textarea, select, button {
+  font-family: inherit;
+  font-size: inherit;
+  color: inherit;
+  background: none;
+  border: none;
+  outline: none;
+  box-shadow: none;
+  padding: 0;
+  margin: 0;
+  line-height: inherit;
+}

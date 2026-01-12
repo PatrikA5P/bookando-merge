@@ -1,0 +1,168 @@
+.services-form {
+  min-height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.services-form__panel {
+  display: flex;
+  flex-direction: column;
+  gap: clamp(1.25rem, 1rem + 0.8vw, 2.2rem);
+  padding: clamp(1.25rem, 1rem + 0.75vw, 2rem) clamp(1.1rem, 0.9rem + 1vw, 2.5rem);
+  background: linear-gradient(180deg, rgba(241, 245, 249, 0.8) 0%, rgba(255, 255, 255, 0.9) 30%, #ffffff 100%);
+}
+
+.services-form__panel > * {
+  min-width: 0;
+}
+
+.services-form__grid {
+  display: grid;
+  gap: clamp(0.75rem, 0.65rem + 0.35vw, 1.2rem);
+}
+
+.services-form__stack {
+  display: flex;
+  flex-direction: column;
+  gap: clamp(0.85rem, 0.7rem + 0.35vw, 1.4rem);
+}
+
+.services-form__grid--two {
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+}
+
+.services-form__grid--three {
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+}
+
+.services-form__grid--stretch {
+  align-items: stretch;
+}
+
+.services-form__grid--promo {
+  display: grid;
+  gap: clamp(0.75rem, 0.6rem + 0.3vw, 1rem);
+  grid-template-columns: minmax(220px, 1.4fr) repeat(2, minmax(180px, 1fr)) minmax(140px, 0.9fr) auto;
+}
+
+.services-form__grid--rules {
+  display: grid;
+  gap: clamp(0.75rem, 0.6rem + 0.3vw, 1rem);
+  grid-template-columns: minmax(220px, 1.5fr) minmax(180px, 1fr) repeat(4, minmax(150px, 1fr)) minmax(140px, 0.9fr) auto;
+}
+
+.services-form__grid--variants {
+  display: grid;
+  gap: clamp(0.6rem, 0.5rem + 0.2vw, 0.9rem);
+  grid-template-columns: minmax(220px, 1.2fr) repeat(3, minmax(140px, 1fr)) auto;
+}
+
+.services-form__column-span-2 {
+  width: 100%;
+}
+
+.services-form__column-span-all {
+  width: 100%;
+  grid-column: 1 / -1;
+}
+
+.services-form__inline-actions {
+  display: inline-flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: clamp(0.5rem, 0.35rem + 0.3vw, 0.9rem);
+}
+
+.services-form__toggle-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--bookando-space-sm, 0.75rem);
+  padding: clamp(0.85rem, 0.7rem + 0.3vw, 1.25rem);
+  border: 1px solid color-mix(in srgb, var(--bookando-border, #d5d9e3) 70%, transparent);
+  border-radius: var(--bookando-radius, 14px);
+  background: rgba(37, 99, 235, 0.04);
+}
+
+.services-form__toggle-card {
+  display: flex;
+  flex-direction: column;
+  gap: clamp(0.6rem, 0.5rem + 0.2vw, 0.95rem);
+  padding: clamp(0.85rem, 0.7rem + 0.3vw, 1.25rem);
+  border: 1px solid color-mix(in srgb, var(--bookando-border, #d5d9e3) 65%, transparent);
+  border-radius: var(--bookando-radius, 16px);
+  background: rgba(15, 23, 42, 0.02);
+}
+
+.services-form__avatar-block {
+  display: grid;
+  place-items: center;
+  gap: var(--bookando-space-sm, 0.75rem);
+  padding: clamp(1rem, 0.8rem + 0.6vw, 1.6rem);
+  border: 1px dashed color-mix(in srgb, var(--bookando-border, #d5d9e3) 60%, transparent);
+  border-radius: var(--bookando-radius, 14px);
+  background: rgba(15, 23, 42, 0.02);
+}
+
+.services-form__avatar-actions {
+  display: flex;
+  align-items: center;
+  gap: var(--bookando-space-xs, 0.5rem);
+}
+
+.services-form__avatar-actions button {
+  border-radius: 999px;
+}
+
+.services-form__badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  padding: 0.35rem 0.65rem;
+  border-radius: 999px;
+  background: rgba(37, 99, 235, 0.12);
+  color: var(--bookando-primary, #2563eb);
+}
+
+.services-form__hint {
+  font-size: 0.92rem;
+  color: var(--bookando-text-muted, #64748b);
+}
+
+@media (max-width: 960px) {
+  .services-form__panel {
+    padding: clamp(1rem, 0.85rem + 0.35vw, 1.5rem) clamp(0.85rem, 0.8rem + 0.5vw, 1.6rem);
+    background: #ffffff;
+  }
+
+  .services-form__toggle-row {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .services-form__inline-actions {
+    width: 100%;
+    justify-content: space-between;
+  }
+
+  .services-form__grid--promo,
+  .services-form__grid--rules,
+  .services-form__grid--variants {
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  }
+}
+
+@media (min-width: 1024px) {
+  .services-form__avatar-block {
+    grid-column: span 1;
+    justify-self: flex-start;
+  }
+
+  .services-form__column-span-2 {
+    grid-column: span 2;
+  }
+}

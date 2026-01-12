@@ -1,0 +1,395 @@
+/**
+ * RTL (Right-to-Left) Support
+ *
+ * Styles for Arabic, Hebrew, and other RTL languages.
+ * This file contains all RTL-specific overrides.
+ *
+ * @package Bookando
+ */
+
+/*
+ * RTL Direction Override
+ */
+[dir="rtl"] {
+  direction: rtl;
+  text-align: right;
+}
+
+/*
+ * Layout & Spacing
+ */
+[dir="rtl"] .bookando-flex {
+  &-row-reverse {
+    flex-direction: row;
+  }
+}
+
+[dir="rtl"] .bookando-text-left {
+  text-align: right !important;
+}
+
+[dir="rtl"] .bookando-text-right {
+  text-align: left !important;
+}
+
+/*
+ * Margins & Padding (flip left/right)
+ */
+[dir="rtl"] {
+  // Margin utilities
+  .bookando-ml-xs { margin-left: 0; margin-right: $bookando-spacing-xs; }
+  .bookando-ml-sm { margin-left: 0; margin-right: $bookando-spacing-sm; }
+  .bookando-ml-md { margin-left: 0; margin-right: $bookando-spacing-md; }
+  .bookando-ml-lg { margin-left: 0; margin-right: $bookando-spacing-lg; }
+  .bookando-ml-xl { margin-left: 0; margin-right: $bookando-spacing-xl; }
+
+  .bookando-mr-xs { margin-right: 0; margin-left: $bookando-spacing-xs; }
+  .bookando-mr-sm { margin-right: 0; margin-left: $bookando-spacing-sm; }
+  .bookando-mr-md { margin-right: 0; margin-left: $bookando-spacing-md; }
+  .bookando-mr-lg { margin-right: 0; margin-left: $bookando-spacing-lg; }
+  .bookando-mr-xl { margin-right: 0; margin-left: $bookando-spacing-xl; }
+
+  // Padding utilities
+  .bookando-pl-xs { padding-left: 0; padding-right: $bookando-spacing-xs; }
+  .bookando-pl-sm { padding-left: 0; padding-right: $bookando-spacing-sm; }
+  .bookando-pl-md { padding-left: 0; padding-right: $bookando-spacing-md; }
+  .bookando-pl-lg { padding-left: 0; padding-right: $bookando-spacing-lg; }
+  .bookando-pl-xl { padding-left: 0; padding-right: $bookando-spacing-xl; }
+
+  .bookando-pr-xs { padding-right: 0; padding-left: $bookando-spacing-xs; }
+  .bookando-pr-sm { padding-right: 0; padding-left: $bookando-spacing-sm; }
+  .bookando-pr-md { padding-right: 0; padding-left: $bookando-spacing-md; }
+  .bookando-pr-lg { padding-right: 0; padding-left: $bookando-spacing-lg; }
+  .bookando-pr-xl { padding-right: 0; padding-left: $bookando-spacing-xl; }
+}
+
+/*
+ * Border Radius (flip corners)
+ */
+[dir="rtl"] {
+  .bookando-rounded-l { border-radius: 0 $bookando-radius $bookando-radius 0; }
+  .bookando-rounded-r { border-radius: $bookando-radius 0 0 $bookando-radius; }
+  .bookando-rounded-tl { border-radius: 0 $bookando-radius 0 0; }
+  .bookando-rounded-tr { border-radius: $bookando-radius 0 0 0; }
+  .bookando-rounded-bl { border-radius: 0 0 $bookando-radius 0; }
+  .bookando-rounded-br { border-radius: 0 0 0 $bookando-radius; }
+}
+
+/*
+ * Icons (flip directional icons)
+ */
+[dir="rtl"] .bookando-icon {
+  &-chevron-right { transform: scaleX(-1); }
+  &-chevron-left { transform: scaleX(-1); }
+  &-arrow-right { transform: scaleX(-1); }
+  &-arrow-left { transform: scaleX(-1); }
+}
+
+/*
+ * Components
+ */
+
+// AppButton with icon
+[dir="rtl"] .bookando-btn {
+  &.has-icon-left {
+    flex-direction: row-reverse;
+
+    .bookando-btn__icon {
+      margin-right: 0;
+      margin-left: 0.5rem;
+    }
+  }
+
+  &.has-icon-right {
+    flex-direction: row;
+
+    .bookando-btn__icon {
+      margin-left: 0;
+      margin-right: 0.5rem;
+    }
+  }
+}
+
+// AppPageHeader
+[dir="rtl"] .bookando-page-header {
+  &__actions {
+    flex-direction: row-reverse;
+  }
+}
+
+// AppFilterBar
+[dir="rtl"] .bookando-filter-bar {
+  &__actions {
+    justify-content: flex-start;
+  }
+}
+
+// AppModal
+[dir="rtl"] .bookando-modal {
+  &__close {
+    right: auto;
+    left: 1rem;
+  }
+}
+
+// AppForm
+[dir="rtl"] .bookando-form {
+  &__label {
+    text-align: right;
+  }
+
+  &-buttons--split {
+    flex-direction: row-reverse;
+  }
+}
+
+// AppTable
+[dir="rtl"] .bookando-table {
+  th, td {
+    text-align: right;
+
+    &:first-child {
+      border-radius: 0 $bookando-radius $bookando-radius 0;
+    }
+
+    &:last-child {
+      border-radius: $bookando-radius 0 0 $bookando-radius;
+    }
+  }
+
+  &__actions {
+    justify-content: flex-start;
+  }
+}
+
+// AppCheckbox & AppRadio
+[dir="rtl"] {
+  .bookando-checkbox,
+  .bookando-radio {
+    flex-direction: row-reverse;
+
+    input {
+      margin-left: 0.5rem;
+      margin-right: 0;
+    }
+  }
+}
+
+// AppSelect & Multiselect
+[dir="rtl"] .bookando-select {
+  &__indicator {
+    left: 0.75rem;
+    right: auto;
+  }
+
+  .bookando-select__option {
+    text-align: right;
+  }
+}
+
+// AppPopover & Tooltip
+[dir="rtl"] .bookando-popover,
+[dir="rtl"] .bookando-tooltip {
+  &[data-placement^="left"] {
+    transform-origin: right center;
+  }
+
+  &[data-placement^="right"] {
+    transform-origin: left center;
+  }
+}
+
+// AppAccordion
+[dir="rtl"] .bookando-accordion {
+  &__trigger {
+    &::after {
+      left: 1rem;
+      right: auto;
+    }
+  }
+
+  &__content {
+    padding-left: 0;
+    padding-right: 2rem;
+  }
+}
+
+// AppBadge with icon
+[dir="rtl"] .bookando-badge {
+  &.has-icon {
+    flex-direction: row-reverse;
+
+    .bookando-icon {
+      margin-left: 0.25rem;
+      margin-right: 0;
+    }
+  }
+}
+
+// AppCard
+[dir="rtl"] .bookando-card {
+  &__header {
+    text-align: right;
+  }
+
+  &__actions {
+    justify-content: flex-start;
+  }
+}
+
+// AppDivider with text
+[dir="rtl"] .bookando-divider {
+  &--with-text {
+    &::before,
+    &::after {
+      transform: scaleX(-1);
+    }
+  }
+}
+
+// AppPagination
+[dir="rtl"] .bookando-pagination {
+  flex-direction: row-reverse;
+
+  &__prev {
+    margin-right: 0;
+    margin-left: 0.5rem;
+  }
+
+  &__next {
+    margin-left: 0;
+    margin-right: 0.5rem;
+  }
+}
+
+// AppBreadcrumb
+[dir="rtl"] .bookando-breadcrumb {
+  flex-direction: row-reverse;
+
+  &__separator {
+    transform: scaleX(-1);
+  }
+}
+
+// AppPhoneInput
+[dir="rtl"] .bookando-phone-input {
+  &__flag {
+    right: auto;
+    left: 1rem;
+  }
+
+  input {
+    padding-left: 1rem;
+    padding-right: 3.5rem;
+  }
+}
+
+// AppDatepicker
+[dir="rtl"] .bookando-datepicker {
+  &__calendar {
+    direction: rtl;
+  }
+
+  &__nav {
+    flex-direction: row-reverse;
+
+    button:first-child {
+      transform: scaleX(-1);
+    }
+
+    button:last-child {
+      transform: scaleX(-1);
+    }
+  }
+}
+
+// AppColumnChooser
+[dir="rtl"] .bookando-column-chooser {
+  &__item {
+    flex-direction: row-reverse;
+
+    .drag-handle {
+      margin-left: 0.5rem;
+      margin-right: 0;
+    }
+  }
+}
+
+// Navigation & Sidebar
+[dir="rtl"] .bookando-nav {
+  text-align: right;
+
+  &__item {
+    &::before {
+      right: 0;
+      left: auto;
+    }
+
+    .bookando-icon {
+      margin-left: 0.75rem;
+      margin-right: 0;
+    }
+  }
+}
+
+// Toast/Alert positioning
+[dir="rtl"] .bookando-toast-container {
+  &.top-right {
+    left: 1rem;
+    right: auto;
+  }
+
+  &.top-left {
+    right: 1rem;
+    left: auto;
+  }
+
+  &.bottom-right {
+    left: 1rem;
+    right: auto;
+  }
+
+  &.bottom-left {
+    right: 1rem;
+    left: auto;
+  }
+}
+
+// Lists
+[dir="rtl"] {
+  ul, ol {
+    padding-right: 1.5rem;
+    padding-left: 0;
+  }
+
+  li {
+    text-align: right;
+  }
+}
+
+/*
+ * Utilities
+ */
+[dir="rtl"] {
+  .bookando-float-left { float: right; }
+  .bookando-float-right { float: left; }
+  .bookando-clear-left { clear: right; }
+  .bookando-clear-right { clear: left; }
+}
+
+/*
+ * Grid System
+ */
+[dir="rtl"] .bookando-grid {
+  direction: rtl;
+}
+
+/*
+ * Flex Utilities
+ */
+[dir="rtl"] {
+  .bookando-justify-start { justify-content: flex-end; }
+  .bookando-justify-end { justify-content: flex-start; }
+  .bookando-items-start { align-items: flex-end; }
+  .bookando-items-end { align-items: flex-start; }
+}

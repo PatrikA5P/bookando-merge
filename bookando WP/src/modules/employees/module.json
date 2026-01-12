@@ -1,0 +1,55 @@
+{
+  "slug": "employees",
+  "plan": "starter",
+  "version": "1.0.0",
+  "tenant_required": true,
+  "license_required": true,
+  "features_required": [
+    "export_csv",
+    "analytics_basic",
+    "rest_api_read",
+    "rest_api_write",
+    "multi_calendar",
+    "user_roles"
+  ],
+  "group": "core",
+  "is_saas": true,
+  "has_admin": true,
+  "supports_webhook": false,
+  "supports_offline": false,
+  "supports_calendar": false,
+  "name": {
+    "default": "Employees",
+    "de": "Mitarbeiter",
+    "en": "Employees",
+    "fr": "Employés",
+    "it": "Dipendenti"
+  },
+  "alias": {
+    "de": "Team",
+    "en": "Team",
+    "fr": "Équipe",
+    "it": "Team"
+  },
+  "description": {
+    "default": "Manage employees, schedules, days off and permissions.",
+    "de": "Mitarbeiter, Zeitpläne, Abwesenheiten und Berechtigungen verwalten.",
+    "en": "Manage employees, schedules, days off and permissions.",
+    "fr": "Gérez les employé·e·s, leurs plannings, absences et autorisations.",
+    "it": "Gestisci dipendenti, pianificazioni, assenze e permessi."
+  },
+  "actions": {
+    "allowed": ["soft_delete", "hard_delete", "block", "activate", "export"],
+    "features": {
+      "export": ["export_csv"],
+      "block": ["user_roles"]
+    }
+  },
+  "visible": true,
+  "menu_icon": "dashicons-groups",
+  "menu_position": 32,
+  "dependencies": [],
+  "tabs": [],
+  "is_submodule": false,
+  "parent_module": null
+}

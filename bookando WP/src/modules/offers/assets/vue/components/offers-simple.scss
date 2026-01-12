@@ -1,0 +1,99 @@
+.offers-simple-view {
+  display: flex;
+  flex-direction: column;
+  gap: clamp(1rem, 0.8rem + 0.6vw, 1.6rem);
+}
+
+.offers-simple-view__toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--bookando-space-sm, 0.75rem);
+  align-items: center;
+  justify-content: space-between;
+}
+
+.offers-simple-view__filters {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--bookando-space-sm, 0.75rem);
+}
+
+.offers-simple-table {
+  --offers-simple-cols: 2fr 1fr 1fr auto;
+  display: grid;
+  gap: clamp(0.75rem, 0.6rem + 0.25vw, 1rem);
+}
+
+.offers-simple-table__head,
+.offers-simple-table__row {
+  display: grid;
+  grid-template-columns: var(--offers-simple-cols);
+  align-items: center;
+  gap: clamp(0.6rem, 0.45rem + 0.3vw, 0.9rem);
+}
+
+.offers-simple-table__head {
+  font-weight: 600;
+  font-size: 0.95rem;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  color: var(--bookando-text-muted, #65748b);
+}
+
+.offers-simple-table__row {
+  padding: clamp(0.75rem, 0.6rem + 0.25vw, 1rem) clamp(0.6rem, 0.5rem + 0.2vw, 0.85rem);
+  border-radius: var(--bookando-radius, 14px);
+  border: 1px solid color-mix(in srgb, var(--bookando-border, #d5d9e3) 60%, transparent);
+  background: rgba(248, 250, 252, 0.6);
+}
+
+.offers-simple-table__row:hover {
+  border-color: color-mix(in srgb, var(--bookando-primary, #2563eb) 30%, transparent);
+  background: rgba(37, 99, 235, 0.08);
+}
+
+.offers-simple-table__meta {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  font-size: 0.85rem;
+  color: var(--bookando-text-muted, #64748b);
+}
+
+.offers-simple-table__tags {
+  display: inline-flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+}
+
+.offers-simple-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  padding: 0.35rem 0.55rem;
+  border-radius: 999px;
+  font-size: 0.78rem;
+  background: rgba(37, 99, 235, 0.12);
+  color: var(--bookando-primary, #2563eb);
+}
+
+.offers-simple-empty {
+  padding: clamp(1rem, 0.9rem + 0.4vw, 1.5rem);
+  text-align: center;
+  color: var(--bookando-text-muted, #64748b);
+  border: 1px dashed color-mix(in srgb, var(--bookando-border, #d5d9e3) 60%, transparent);
+  border-radius: var(--bookando-radius, 14px);
+  background: rgba(248, 250, 252, 0.4);
+}
+
+@media (max-width: 768px) {
+  .offers-simple-table__head {
+    display: none;
+  }
+
+  .offers-simple-table__row {
+    grid-template-columns: 1fr;
+    gap: var(--bookando-space-xs, 0.5rem);
+  }
+}

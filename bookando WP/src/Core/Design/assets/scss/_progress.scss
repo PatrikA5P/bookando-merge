@@ -1,0 +1,58 @@
+// Progess-Bar für Bookando UI
+@use 'sass:color';
+@use 'variables' as *;
+@use 'mixins' as *;
+
+.bookando-progress {
+  background: $bookando-border-light;
+  border-radius: $bookando-radius;
+  height: clamp(0.75rem, 0.5rem + 0.9vw, 1.25rem); // 12–20px
+  width: 100%;
+  overflow: hidden;
+  position: relative;
+
+  &__bar {
+    height: 100%;
+    background: $bookando-primary;
+    border-radius: $bookando-radius 0 0 $bookando-radius;
+    width: 0;
+    min-width: 2.5%;
+    transition: width 0.34s cubic-bezier(.22,1,.36,1), background 0.16s;
+    position: absolute;
+    left: 0; top: 0;
+  }
+
+  // Farbige Varianten (Status)
+  &--success   { .bookando-progress__bar { background: $bookando-success; } }
+  &--danger    { .bookando-progress__bar { background: $bookando-danger;  } }
+  &--warning   { .bookando-progress__bar { background: $bookando-warning; } }
+  &--accent    { .bookando-progress__bar { background: $bookando-accent;  } }
+
+  // Size-Modifier
+  &--sm { height: 0.6rem; }
+  &--lg { height: 2rem; }
+
+  // Label im Balken oder daneben
+  &__label {
+    position: absolute;
+    left: 50%; top: 50%;
+    transform: translate(-50%, -50%);
+    color: $bookando-text-dark;
+    font-size: $bookando-font-size-sm;
+    font-weight: 600;
+    z-index: 2;
+    pointer-events: none;
+    white-space: nowrap;
+    text-shadow: 0 1px 4px rgba(255,255,255,0.13);
+    letter-spacing: 0.01em;
+    user-select: none;
+  }
+}
+
+@include bp-down(md) {
+  .bookando-progress {
+    height: 0.9rem;
+    &--lg { height: 1.2rem; }
+    &__label { font-size: $bookando-font-size-xs; }
+  }
+}

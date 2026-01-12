@@ -1,0 +1,50 @@
+// =============================
+// Bookando Error/Validation Styles
+// =============================
+@use 'sass:color';
+@use 'variables' as *;
+@use 'mixins' as *;
+
+// =====================================
+// ❗ Fehlerstatus für Inputs, Controls, Gruppen
+// =====================================
+
+// Einheitliches Error-Mixin für Controls (auch für eigene Komposables nutzbar)
+@mixin bookando-error-style {
+  border-color: $bookando-danger !important;
+  background: color.scale($bookando-danger, $lightness: 85%) !important;
+  color: $bookando-danger !important;
+  box-shadow: 0 0 0 2px rgba($bookando-danger, 0.2);
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+// Für ALLE Felder mit [aria-invalid="true"] oder expliziter Klasse
+.bookando-control--danger,
+input[aria-invalid="true"],
+select[aria-invalid="true"],
+textarea[aria-invalid="true"] {
+  @include bookando-error-style;
+}
+
+// Optionale Utility für Error-Wrapper (z.B. ganze Gruppen)
+.bookando-form-group--error {
+  .bookando-control,
+  .bookando-checkbox,
+  .bookando-radio,
+  .bookando-combobox-btn,
+  .multiselect,
+  .multiselect--inline {
+    @include bookando-error-style;
+  }
+}
+
+// =====================================
+// ❗ Fehlertext unter Feldern (immer gleich, egal ob Input/Select/...)
+// =====================================
+.form-error,
+.bookando-form-error {
+  color: $bookando-danger;
+  font-size: $bookando-font-size-xs;
+  margin-top: $bookando-spacing-xs;
+  line-height: 1.4;
+}

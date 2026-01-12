@@ -1,0 +1,218 @@
+{
+  "core": {
+    "common": {
+      "save": "Salva",
+      "cancel": "Annulla",
+      "delete": "Elimina",
+      "close": "Chiudi",
+      "edit": "Modifica",
+      "actions": "Azioni"
+    },
+    "bulk": {
+      "selected": "selezionati",
+      "choose": "Scegli azione",
+      "apply": "Applica",
+      "applying": "In esecuzione...",
+      "cancel": "Annulla",
+      "confirmTitle": "Conferma",
+      "confirmMessage": "Vuoi davvero eseguire l'azione selezionata?",
+      "confirm": "Conferma"
+    },
+    "actions": {
+      "save": {
+        "label": "Salva",
+        "success": "Voce salvata con successo",
+        "error": "Errore durante il salvataggio"
+      },
+      "soft_delete": {
+        "label": "Segna come eliminato",
+        "confirm": "Vuoi davvero contrassegnare l'elemento selezionato come eliminato?"
+      },
+      "hard_delete": {
+        "label": "Elimina definitivamente",
+        "confirm": "Vuoi davvero eliminare definitivamente questa voce? Questa azione non può essere annullata."
+      },
+      "block": {
+        "label": "Blocca",
+        "confirm": "Vuoi davvero bloccare questa voce?"
+      },
+      "activate": {
+        "label": "Attiva",
+        "confirm": "Vuoi attivare questa voce?"
+      },
+      "export": {
+        "label": "Esporta",
+        "success": "Esportazione creata"
+      },
+      "generic": {
+        "success": "Azione riuscita",
+        "error": "Azione non riuscita",
+        "busy": "In esecuzione..."
+      }
+    }
+  },
+
+  "ui": {
+    "filter": {
+      "toggle": "Mostra/nascondi filtri",
+      "reset_all": "Reimposta tutti i filtri",
+      "search_placeholder": "Cerca clienti..."
+    },
+    "table": {
+      "no_results": "Nessuna voce trovata.",
+      "choose_columns": "Scegli colonne",
+      "quick_actions": "Azioni rapide",
+      "actions": "Azioni"
+    },
+    "pagination": {
+      "per_page": "Elementi per pagina",
+      "go_to_page": "Vai alla pagina {page}",
+      "range": "{start} a {end} di {total} {label}",
+      "first": "Prima pagina",
+      "prev": "Pagina precedente",
+      "next": "Pagina successiva",
+      "last": "Ultima pagina",
+      "page": "Pagina"
+    },
+    "csv": {
+      "export": "Esportazione CSV",
+      "import": "Importazione CSV",
+      "import_demo": "L'import CSV è implementato come demo."
+    },
+    "dialog": {
+      "confirm_title": "Conferma"
+    },
+    "date": { "select": "Seleziona data" },
+    "upload": {
+      "only_images": "Sono consentite solo immagini.",
+      "too_large_5mb": "File troppo grande. Massimo 5 MB.",
+      "avatar_upload_error": "Errore durante il caricamento dell'avatar.",
+      "avatar_remove_error": "Errore durante la rimozione dell'avatar.",
+      "avatar_upload": "Carica avatar",
+      "avatar_remove": "Rimuovi avatar",
+      "saveFirst": "Salva prima per poter assegnare un avatar."
+    }
+  },
+
+  "fields": {
+    "customer": "Cliente",
+    "id": "ID",
+    "first_name": "Nome",
+    "last_name": "Cognome",
+    "email": "E-mail",
+    "phone": "Telefono",
+    "address": "Indirizzo",
+    "address_2": "Indirizzo 2",
+    "zip": "CAP",
+    "city": "Città",
+    "country": "Paese",
+    "language": "Lingua",
+    "gender": "Genere",
+    "birthdate": "Data di nascita",
+    "status": "Stato",
+    "note": "Nota",
+    "description": "Descrizione",
+    "avatar_url": "Avatar",
+    "timezone": "Fuso orario",
+    "external_id": "ID esterno",
+    "tenant_id": "Tenant",
+    "roles": "Ruoli",
+    "badge_id": "ID badge",
+    "password_hash": "Hash password",
+    "password_reset_token": "Token di reimpostazione",
+    "created_at": "Creato il",
+    "updated_at": "Aggiornato il",
+    "deleted_at": "Eliminato il"
+  },
+
+  "mod": {
+    "customers": {
+      "title": "Gestione clienti",
+      "entity_singular": "Cliente",
+      "entity_plural": "Clienti",
+      "actions": {
+        "add": "Aggiungi cliente",
+        "edit": "Modifica cliente",
+        "delete": "Elimina cliente"
+      },
+      "search_placeholder": "Cerca clienti...",
+      "tabs": {
+        "info": "Informazioni cliente",
+        "activity": "Attività cliente"
+      },
+      "sections": {
+        "data": "Dati",
+        "history": "Appuntamenti e cronologia"
+      },
+      "stats": {
+        "total_appointments": "Numero di appuntamenti",
+        "last_appointment": "Ultimo appuntamento",
+        "next_appointment": "Prossimo appuntamento"
+      },
+      "confirm_delete": "Vuoi davvero eliminare questo cliente?",
+      "alerts": {
+        "blocked": "Questo cliente è bloccato.",
+        "will_be_deleted": "Questo cliente verrà eliminato."
+      },
+      "validation": {
+        "name_required": "Inserisci nome e cognome.",
+        "email_invalid": "Inserisci un indirizzo e-mail valido."
+      },
+      "messages": {
+        "save_success": "Cliente salvato con successo!",
+        "save_error": "Errore durante il salvataggio!",
+        "delete_success": "Cliente eliminato con successo!",
+        "delete_error": "Errore durante l'eliminazione!"
+      }
+    },
+
+    "settings": {
+      "title": "Impostazioni",
+      "general": "Generale",
+      "company": "Azienda",
+      "notifications": "Notifiche",
+      "working_hours": "Orari di lavoro e giorni liberi",
+      "payments": "Pagamenti",
+      "integrations": "Integrazioni",
+      "appointments_events": "Appuntamenti ed eventi",
+      "labels": "Etichette",
+      "roles": "Impostazioni ruoli",
+      "activation": "Attivazione",
+      "api_keys": "Chiavi API",
+
+      "company_form": {
+        "company_name": "Nome azienda",
+        "address": "Indirizzo",
+        "website": "Sito web",
+        "phone": "Telefono",
+        "email": "E-mail",
+        "logo": "Logo",
+        "remove": "Rimuovi",
+        "choose_logo": "Scegli logo",
+        "use_logo": "Usa logo"
+      },
+
+      "general_form": {
+        "title": "Impostazioni generali",
+        "choose_language": "Scegli lingua",
+        "system_language": "Lingua di sistema",
+        "limits": {
+          "max_appointments": "Max. appuntamenti per cliente",
+          "max_packages": "Max. acquisti di pacchetti per cliente",
+          "max_events": "Max. eventi per cliente",
+          "zero_hint": "0 = nessun limite"
+        },
+        "saved": "Salvato!"
+      },
+
+      "roles_form": {
+        "title": "Impostazioni ruoli",
+        "tabs": {
+          "employee": "Personale",
+          "customer": "Cliente",
+          "admin": "Amministratore"
+        }
+      }
+    }
+  }
+}

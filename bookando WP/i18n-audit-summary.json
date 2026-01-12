@@ -1,0 +1,808 @@
+{
+  "root": "C:\\Users\\User\\Local Sites\\bookando-site\\app\\public\\wp-content\\plugins\\bookando",
+  "deJson": "src\\Core\\Design\\i18n\\de.json",
+  "filesScanned": 81,
+  "summary": {
+    "missingSetupFiles": 21,
+    "notI18nFiles": 15,
+    "partialI18nFiles": 17,
+    "filesWithHardText": 32,
+    "missingKeysFiles": 37,
+    "missingKeysTotal": 175,
+    "unusedKeysInDe": 221
+  },
+  "lists": {
+    "missingSetupFiles": [
+      "src\\Core\\Design\\components\\AppDatepicker.vue",
+      "src\\Core\\Design\\components\\AppDropdown.vue",
+      "src\\Core\\Design\\components\\AppInfoModal.vue",
+      "src\\Core\\Design\\components\\AppModal.vue",
+      "src\\Core\\Design\\components\\AppPagination.vue",
+      "src\\Core\\Design\\components\\AppPhoneInput.vue",
+      "src\\Core\\Design\\components\\AppTimeInput.vue",
+      "src\\Core\\Design\\components\\AppTimePickerInput.vue",
+      "src\\modules\\customers\\assets\\vue\\components\\CustomersForm.vue",
+      "src\\modules\\customers\\assets\\vue\\components\\CustomersTable.vue",
+      "src\\modules\\customers\\assets\\vue\\components\\CustomersTableMobile.vue",
+      "src\\modules\\customers\\assets\\vue\\views\\CustomersView.vue",
+      "src\\modules\\employees\\assets\\vue\\components\\AppDaysOffCard.vue",
+      "src\\modules\\employees\\assets\\vue\\components\\AppWorkingDayCard.vue",
+      "src\\modules\\employees\\assets\\vue\\components\\EmployeesDetailsAccordion.vue",
+      "src\\modules\\employees\\assets\\vue\\components\\EmployeesForm.vue",
+      "src\\modules\\employees\\assets\\vue\\components\\EmployeesTable.vue",
+      "src\\modules\\employees\\assets\\vue\\components\\EmployeesTableMobile.vue",
+      "src\\modules\\employees\\assets\\vue\\views\\EmployeesView.vue",
+      "src\\modules\\offers\\assets\\vue\\components\\services\\ui\\AppServiceAvailabilityCard.vue",
+      "src\\modules\\settings\\assets\\vue\\components\\SettingsGeneralForm.vue"
+    ],
+    "notI18nFiles": [
+      "src\\Core\\Design\\components\\AppCard.vue",
+      "src\\Core\\Design\\components\\AppColorInput.vue",
+      "src\\Core\\Design\\components\\AppColumnChooser.vue",
+      "src\\Core\\Design\\components\\AppDateInput.vue",
+      "src\\Core\\Design\\components\\AppFileInput.vue",
+      "src\\Core\\Design\\components\\AppIcon.vue",
+      "src\\Core\\Design\\components\\AppInputText.vue",
+      "src\\Core\\Design\\components\\AppPopover.vue",
+      "src\\Core\\Design\\components\\AppRadioGroup.vue",
+      "src\\Core\\Design\\components\\AppRangeInput.vue",
+      "src\\Core\\Design\\components\\AppRichTextField.vue",
+      "src\\Core\\Design\\components\\AppSearchInput.vue",
+      "src\\Core\\Design\\components\\AppTextarea.vue",
+      "src\\Core\\Design\\components\\AppToggle.vue",
+      "src\\Core\\Design\\components\\BookandoField.vue"
+    ],
+    "partialI18nFiles": [
+      "src\\Core\\Design\\components\\AppAvatar.vue",
+      "src\\Core\\Design\\components\\AppBulkAction.vue",
+      "src\\Core\\Design\\components\\AppColumnChooserDropdown.vue",
+      "src\\Core\\Design\\components\\AppDatepicker.vue",
+      "src\\Core\\Design\\components\\AppDropdown.vue",
+      "src\\Core\\Design\\components\\AppGalleryPicker.vue",
+      "src\\Core\\Design\\components\\AppInfoModal.vue",
+      "src\\Core\\Design\\components\\AppPagination.vue",
+      "src\\Core\\Design\\components\\AppPhoneInput.vue",
+      "src\\Core\\Design\\components\\AppSelect.vue",
+      "src\\Core\\Design\\components\\AppTimeInput.vue",
+      "src\\Core\\Design\\components\\AppTimePickerInput.vue",
+      "src\\modules\\customers\\assets\\vue\\components\\CustomersTableMobile.vue",
+      "src\\modules\\employees\\assets\\vue\\components\\AppDaysOffCard.vue",
+      "src\\modules\\employees\\assets\\vue\\components\\EmployeesTable.vue",
+      "src\\modules\\employees\\assets\\vue\\components\\EmployeesTableMobile.vue",
+      "src\\modules\\offers\\assets\\vue\\components\\services\\tabs\\ServicesFormTabAvailability.vue"
+    ],
+    "filesWithHardText": [
+      {
+        "file": "src\\Core\\Design\\components\\AppAvatar.vue",
+        "count": 3
+      },
+      {
+        "file": "src\\Core\\Design\\components\\AppBulkAction.vue",
+        "count": 2
+      },
+      {
+        "file": "src\\Core\\Design\\components\\AppColumnChooser.vue",
+        "count": 2
+      },
+      {
+        "file": "src\\Core\\Design\\components\\AppSearchInput.vue",
+        "count": 2
+      },
+      {
+        "file": "src\\Core\\Design\\components\\AppCard.vue",
+        "count": 1
+      },
+      {
+        "file": "src\\Core\\Design\\components\\AppColorInput.vue",
+        "count": 1
+      },
+      {
+        "file": "src\\Core\\Design\\components\\AppColumnChooserDropdown.vue",
+        "count": 1
+      },
+      {
+        "file": "src\\Core\\Design\\components\\AppDateInput.vue",
+        "count": 1
+      },
+      {
+        "file": "src\\Core\\Design\\components\\AppDatepicker.vue",
+        "count": 1
+      },
+      {
+        "file": "src\\Core\\Design\\components\\AppDropdown.vue",
+        "count": 1
+      },
+      {
+        "file": "src\\Core\\Design\\components\\AppFileInput.vue",
+        "count": 1
+      },
+      {
+        "file": "src\\Core\\Design\\components\\AppGalleryPicker.vue",
+        "count": 1
+      },
+      {
+        "file": "src\\Core\\Design\\components\\AppIcon.vue",
+        "count": 1
+      },
+      {
+        "file": "src\\Core\\Design\\components\\AppInfoModal.vue",
+        "count": 1
+      },
+      {
+        "file": "src\\Core\\Design\\components\\AppInputText.vue",
+        "count": 1
+      },
+      {
+        "file": "src\\Core\\Design\\components\\AppPagination.vue",
+        "count": 1
+      },
+      {
+        "file": "src\\Core\\Design\\components\\AppPhoneInput.vue",
+        "count": 1
+      },
+      {
+        "file": "src\\Core\\Design\\components\\AppPopover.vue",
+        "count": 1
+      },
+      {
+        "file": "src\\Core\\Design\\components\\AppRadioGroup.vue",
+        "count": 1
+      },
+      {
+        "file": "src\\Core\\Design\\components\\AppRangeInput.vue",
+        "count": 1
+      },
+      {
+        "file": "src\\Core\\Design\\components\\AppRichTextField.vue",
+        "count": 1
+      },
+      {
+        "file": "src\\Core\\Design\\components\\AppSelect.vue",
+        "count": 1
+      },
+      {
+        "file": "src\\Core\\Design\\components\\AppTextarea.vue",
+        "count": 1
+      },
+      {
+        "file": "src\\Core\\Design\\components\\AppTimeInput.vue",
+        "count": 1
+      },
+      {
+        "file": "src\\Core\\Design\\components\\AppTimePickerInput.vue",
+        "count": 1
+      },
+      {
+        "file": "src\\Core\\Design\\components\\AppToggle.vue",
+        "count": 1
+      },
+      {
+        "file": "src\\Core\\Design\\components\\BookandoField.vue",
+        "count": 1
+      },
+      {
+        "file": "src\\modules\\customers\\assets\\vue\\components\\CustomersTableMobile.vue",
+        "count": 1
+      },
+      {
+        "file": "src\\modules\\employees\\assets\\vue\\components\\AppDaysOffCard.vue",
+        "count": 1
+      },
+      {
+        "file": "src\\modules\\employees\\assets\\vue\\components\\EmployeesTable.vue",
+        "count": 1
+      },
+      {
+        "file": "src\\modules\\employees\\assets\\vue\\components\\EmployeesTableMobile.vue",
+        "count": 1
+      },
+      {
+        "file": "src\\modules\\offers\\assets\\vue\\components\\services\\tabs\\ServicesFormTabAvailability.vue",
+        "count": 1
+      }
+    ],
+    "missingKeysByFile": [
+      {
+        "file": "src\\Core\\Design\\components\\AppColumnChooserDraggable.vue",
+        "keys": [
+          "Alle Spalten auf optimale Breite setzen",
+          "Angezeigt",
+          "Anzeigen",
+          "Spalten auswählen",
+          "Verbergen",
+          "Versteckt"
+        ]
+      },
+      {
+        "file": "src\\Core\\Design\\components\\AppColumnChooserDropdown.vue",
+        "keys": [
+          "Angezeigt",
+          "OK",
+          "Versteckt"
+        ]
+      },
+      {
+        "file": "src\\Core\\Design\\components\\AppDropdown.vue",
+        "keys": [
+          "Bitte wählen",
+          "Suchen…"
+        ]
+      },
+      {
+        "file": "src\\Core\\Design\\components\\AppFilter.vue",
+        "keys": [
+          "Bitte wählen",
+          "Felder auswählen…",
+          "Filter",
+          "Filter anzeigen",
+          "Filter zurücksetzen",
+          "Wähle mindestens ein Filterfeld"
+        ]
+      },
+      {
+        "file": "src\\Core\\Design\\components\\AppGalleryPicker.vue",
+        "keys": [
+          "mod.services.gallery_add"
+        ]
+      },
+      {
+        "file": "src\\Core\\Design\\components\\AppLicenseOverlay.vue",
+        "keys": [
+          "mod.license.required_generic"
+        ]
+      },
+      {
+        "file": "src\\Core\\Design\\components\\AppOverlay.vue",
+        "keys": [
+          "Schliessen"
+        ]
+      },
+      {
+        "file": "src\\Core\\Design\\components\\AppSelect.vue",
+        "keys": [
+          "bookando.select_empty"
+        ]
+      },
+      {
+        "file": "src\\Core\\Design\\components\\AppSort.vue",
+        "keys": [
+          "Sortieren nach"
+        ]
+      },
+      {
+        "file": "src\\Core\\Design\\components\\AppTable.vue",
+        "keys": [
+          "core.table.resizeCol"
+        ]
+      },
+      {
+        "file": "src\\modules\\employees\\assets\\vue\\components\\AppAddCalendar.vue",
+        "keys": [
+          "fields.password",
+          "fields.url",
+          "fields.username",
+          "ui.saving"
+        ]
+      },
+      {
+        "file": "src\\modules\\employees\\assets\\vue\\components\\AppCalendarOverview.vue",
+        "keys": [
+          "mod.employees.form.calendar.add_account"
+        ]
+      },
+      {
+        "file": "src\\modules\\employees\\assets\\vue\\components\\AppDaysOffCard.vue",
+        "keys": [
+          "core.common.date",
+          "core.common.note",
+          "core.common.title",
+          "mod.employees.form.days_off.new",
+          "mod.employees.form.days_off.untitled",
+          "ui.date.invalid_range"
+        ]
+      },
+      {
+        "file": "src\\modules\\employees\\assets\\vue\\components\\AppSpecialDaysCard.vue",
+        "keys": [
+          "mod.employees.form.special_days.empty",
+          "mod.employees.form.special_days.empty_title",
+          "ui.date.invalid_range",
+          "ui.date.overlap"
+        ]
+      },
+      {
+        "file": "src\\modules\\employees\\assets\\vue\\components\\AppWorkingDayCard.vue",
+        "keys": [
+          "mod.employees.form.working_days.empty",
+          "mod.employees.form.working_days.new_combo"
+        ]
+      },
+      {
+        "file": "src\\modules\\employees\\assets\\vue\\components\\EmployeesDetailsAccordion.vue",
+        "keys": [
+          "core.common.error_loading",
+          "core.common.loading",
+          "core.common.refresh",
+          "core.common.retry",
+          "core.days.friday",
+          "core.days.monday",
+          "core.days.saturday",
+          "core.days.sunday",
+          "core.days.thursday",
+          "core.days.tuesday",
+          "core.days.wednesday",
+          "mod.employees.form.days_off.no_data",
+          "mod.employees.form.days_off.untitled",
+          "mod.employees.form.days_off.yearly",
+          "mod.employees.form.services.no_data",
+          "mod.employees.form.services.title",
+          "mod.employees.form.special_days.no_data",
+          "mod.employees.form.special_days.no_hours",
+          "mod.employees.form.working_days.no_data"
+        ]
+      },
+      {
+        "file": "src\\modules\\employees\\assets\\vue\\components\\EmployeesForm.vue",
+        "keys": [
+          "mod.employees.form.days_off.header",
+          "mod.employees.form.days_off.header_hint",
+          "mod.employees.special_days",
+          "mod.employees.tabs.days_off",
+          "mod.employees.validation.email_invalid",
+          "mod.employees.validation.name_required"
+        ]
+      },
+      {
+        "file": "src\\modules\\employees\\assets\\vue\\components\\EmployeesTable.vue",
+        "keys": [
+          "core.common.more",
+          "core.common.select"
+        ]
+      },
+      {
+        "file": "src\\modules\\employees\\assets\\vue\\components\\EmployeesTableMobile.vue",
+        "keys": [
+          "core.common.calendar",
+          "core.common.general",
+          "core.common.note",
+          "core.common.past",
+          "core.common.title",
+          "core.common.upcoming",
+          "mod.employees.form.assigned_services.title",
+          "mod.employees.form.days_off.past",
+          "mod.employees.form.days_off.upcoming",
+          "mod.employees.form.special_days.blocks",
+          "mod.employees.form.working_days.blocks",
+          "mod.employees.label.closed",
+          "mod.employees.stats.last_activity",
+          "mod.employees.stats.total_appointments",
+          "mod.employees.tabs.activity",
+          "mod.employees.tabs.assigned_services",
+          "mod.employees.tabs.calendar",
+          "mod.employees.tabs.days_off",
+          "mod.employees.tabs.info",
+          "mod.employees.tabs.special_days",
+          "mod.employees.tabs.working_hours",
+          "ui.common.hide_details",
+          "ui.common.show_details",
+          "ui.common.show_less",
+          "ui.common.show_more",
+          "ui.weekdays.fri_short",
+          "ui.weekdays.mon_short",
+          "ui.weekdays.sat_short",
+          "ui.weekdays.sun_short",
+          "ui.weekdays.thu_short",
+          "ui.weekdays.tue_short",
+          "ui.weekdays.wed_short"
+        ]
+      },
+      {
+        "file": "src\\modules\\offers\\assets\\vue\\components\\Categories.vue",
+        "keys": [
+          "ui.confirm.delete",
+          "ui.table.usage"
+        ]
+      },
+      {
+        "file": "src\\modules\\offers\\assets\\vue\\components\\CategoriesForm.vue",
+        "keys": [
+          "fields.slug"
+        ]
+      },
+      {
+        "file": "src\\modules\\offers\\assets\\vue\\components\\services\\Services.vue",
+        "keys": [
+          "mod.services.category.placeholder",
+          "mod.services.event_type",
+          "mod.services.meeting_type_personal",
+          "mod.services.search_placeholder",
+          "mod.services.sort_tag",
+          "mod.services.tags.placeholder",
+          "ui.sort.asc",
+          "ui.sort.desc"
+        ]
+      },
+      {
+        "file": "src\\modules\\offers\\assets\\vue\\components\\services\\ServicesForm.vue",
+        "keys": [
+          "core.common.settings",
+          "core.status.confirmed",
+          "core.status.pending",
+          "mod.services.add",
+          "mod.services.availability.tab",
+          "mod.services.edit",
+          "mod.services.form",
+          "mod.services.gallery",
+          "mod.services.notifications",
+          "mod.services.pricing.tab"
+        ]
+      },
+      {
+        "file": "src\\modules\\offers\\assets\\vue\\components\\services\\tabs\\ServicesFormTabAvailability.vue",
+        "keys": [
+          "mod.services.availability.header",
+          "mod.services.availability.hint"
+        ]
+      },
+      {
+        "file": "src\\modules\\offers\\assets\\vue\\components\\services\\tabs\\ServicesFormTabDetails.vue",
+        "keys": [
+          "mod.services.avatar_border",
+          "mod.services.employees",
+          "mod.services.locations",
+          "mod.services.recurrence",
+          "mod.services.show_on_website",
+          "mod.services.show_on_website_hint"
+        ]
+      },
+      {
+        "file": "src\\modules\\offers\\assets\\vue\\components\\services\\tabs\\ServicesFormTabForm.vue",
+        "keys": [
+          "mod.services.custom_fields",
+          "mod.services.form",
+          "mod.services.form_hint"
+        ]
+      },
+      {
+        "file": "src\\modules\\offers\\assets\\vue\\components\\services\\tabs\\ServicesFormTabGallery.vue",
+        "keys": [
+          "mod.services.gallery"
+        ]
+      },
+      {
+        "file": "src\\modules\\offers\\assets\\vue\\components\\services\\tabs\\ServicesFormTabNotifications.vue",
+        "keys": [
+          "mod.services.email_reminder",
+          "mod.services.followup_email",
+          "mod.services.followup_when",
+          "mod.services.notifications",
+          "mod.services.reminder_when",
+          "mod.services.send_calendar_invite",
+          "mod.services.sms_reminder",
+          "mod.services.unit"
+        ]
+      },
+      {
+        "file": "src\\modules\\offers\\assets\\vue\\components\\services\\tabs\\ServicesFormTabPricing.vue",
+        "keys": [
+          "mod.services.buffer_after",
+          "mod.services.buffer_before",
+          "mod.services.capacity_max",
+          "mod.services.capacity_min",
+          "mod.services.duration_unit",
+          "mod.services.pricing.clear_promotions",
+          "mod.services.pricing.dynamic",
+          "mod.services.pricing.dynamic_hint",
+          "mod.services.pricing.dynamic_toggle",
+          "mod.services.pricing.fixed",
+          "mod.services.pricing.mode",
+          "mod.services.pricing.percent",
+          "mod.services.pricing.promotions",
+          "mod.services.pricing.promotions_hint",
+          "mod.services.sale_price",
+          "mod.services.variants",
+          "mod.services.variants_hint"
+        ]
+      },
+      {
+        "file": "src\\modules\\offers\\assets\\vue\\components\\services\\tabs\\ServicesFormTabSettings.vue",
+        "keys": [
+          "mod.services.booking_window",
+          "mod.services.day_type",
+          "mod.services.default_status",
+          "mod.services.lead_book",
+          "mod.services.lead_cancel",
+          "mod.services.lead_reschedule",
+          "mod.services.limit_count",
+          "mod.services.limit_per_customer",
+          "mod.services.limit_per_customer_hint",
+          "mod.services.limit_period_unit",
+          "mod.services.limit_period_value",
+          "mod.services.max_days",
+          "mod.services.redirect_url",
+          "mod.services.unit"
+        ]
+      },
+      {
+        "file": "src\\modules\\offers\\assets\\vue\\components\\services\\ui\\AppServiceAvailabilityCard.vue",
+        "keys": [
+          "mod.employees.form.working_days.empty",
+          "mod.employees.form.working_days.new_combo"
+        ]
+      },
+      {
+        "file": "src\\modules\\offers\\assets\\vue\\components\\Tags.vue",
+        "keys": [
+          "fields.slug",
+          "mod.tags.merge",
+          "mod.tags.merge_hint",
+          "mod.tags.merge_selected",
+          "mod.tags.merge_target",
+          "ui.confirm.delete",
+          "ui.table.usage"
+        ]
+      },
+      {
+        "file": "src\\modules\\offers\\assets\\vue\\components\\TagsForm.vue",
+        "keys": [
+          "fields.slug",
+          "mod.tags.add",
+          "mod.tags.edit"
+        ]
+      },
+      {
+        "file": "src\\modules\\offers\\assets\\vue\\views\\OffersView.vue",
+        "keys": [
+          "mod.offers.tabs.categories",
+          "mod.offers.tabs.tags"
+        ]
+      },
+      {
+        "file": "src\\modules\\settings\\assets\\vue\\components\\SettingsCompanyForm.vue",
+        "keys": [
+          "core.fields.address",
+          "core.fields.email",
+          "core.fields.phone",
+          "core.fields.website"
+        ]
+      },
+      {
+        "file": "src\\modules\\settings\\assets\\vue\\components\\SettingsGeneralForm.vue",
+        "keys": [
+          "core.fields.language"
+        ]
+      },
+      {
+        "file": "src\\modules\\settings\\assets\\vue\\views\\SettingsView.vue",
+        "keys": [
+          "mod.settings.cards.notifications.desc",
+          "mod.settings.cards.notifications.link",
+          "mod.settings.cards.notifications.title"
+        ]
+      }
+    ],
+    "unusedKeysInDe": [
+      "core.actions.activate.confirm",
+      "core.actions.block.confirm",
+      "core.actions.generic.busy",
+      "core.actions.hard_delete.confirm",
+      "core.actions.save.error",
+      "core.actions.save.label",
+      "core.actions.save.success",
+      "core.actions.soft_delete.confirm",
+      "core.bulk.cancel",
+      "core.common.duplicate",
+      "core.common.error",
+      "core.common.hint",
+      "core.common.repeat",
+      "core.common.success",
+      "core.genders.female",
+      "core.genders.male",
+      "core.genders.none",
+      "core.genders.other",
+      "core.status.blocked",
+      "core.status.deleted",
+      "fields.address",
+      "fields.address_2",
+      "fields.avatar_url",
+      "fields.badge",
+      "fields.badge_id",
+      "fields.calendar",
+      "fields.city",
+      "fields.country",
+      "fields.created_at",
+      "fields.currency",
+      "fields.customer",
+      "fields.date",
+      "fields.deleted_at",
+      "fields.employee_area_password",
+      "fields.end",
+      "fields.end_date",
+      "fields.end_time",
+      "fields.external_id",
+      "fields.first_name",
+      "fields.gender",
+      "fields.id",
+      "fields.language",
+      "fields.last_name",
+      "fields.location",
+      "fields.locations",
+      "fields.note",
+      "fields.password_hash",
+      "fields.password_reset_token",
+      "fields.phone",
+      "fields.roles",
+      "fields.service",
+      "fields.services",
+      "fields.start",
+      "fields.start_date",
+      "fields.start_time",
+      "fields.tax_rate",
+      "fields.tenant_id",
+      "fields.timezone",
+      "fields.updated_at",
+      "fields.website",
+      "fields.work_locations",
+      "fields.zip",
+      "mod.customers.actions.delete",
+      "mod.customers.alerts.blocked",
+      "mod.customers.alerts.will_be_deleted",
+      "mod.customers.confirm_delete",
+      "mod.employees.actions.delete",
+      "mod.employees.actions.export",
+      "mod.employees.confirm_delete",
+      "mod.employees.form.calendar.apple.subscribe",
+      "mod.employees.form.calendar.connected",
+      "mod.employees.form.calendar.disconnect",
+      "mod.employees.form.calendar.disconnected",
+      "mod.employees.form.calendar.google.connect",
+      "mod.employees.form.calendar.google.connected",
+      "mod.employees.form.calendar.google.disconnect",
+      "mod.employees.form.calendar.google.disconnected",
+      "mod.employees.form.calendar.ics_invite",
+      "mod.employees.form.calendar.labels.exchange_sub",
+      "mod.employees.form.calendar.labels.google_sub",
+      "mod.employees.form.calendar.labels.outlook_sub",
+      "mod.employees.form.calendar.providers.apple",
+      "mod.employees.form.calendar.providers.google",
+      "mod.employees.form.calendar.providers.microsoft",
+      "mod.employees.form.calendar.read_only",
+      "mod.employees.form.calendar.select_calendar",
+      "mod.employees.form.calendar.write_back",
+      "mod.employees.form.days_off.add_day_off",
+      "mod.employees.form.days_off.date",
+      "mod.employees.form.days_off.name",
+      "mod.employees.form.special_days.add",
+      "mod.employees.form.special_days.add_breaks",
+      "mod.employees.form.special_days.date",
+      "mod.employees.form.special_days.header",
+      "mod.employees.form.tabs.assigned_services",
+      "mod.employees.form.tabs.calendar",
+      "mod.employees.form.tabs.days_off",
+      "mod.employees.form.tabs.details",
+      "mod.employees.form.tabs.special_days",
+      "mod.employees.form.tabs.working_hours",
+      "mod.employees.form.validation.break_invalid",
+      "mod.employees.form.validation.email_invalid",
+      "mod.employees.form.validation.name_required",
+      "mod.employees.form.working_days.add_breaks",
+      "mod.employees.form.working_days.apply_to_all",
+      "mod.employees.form.working_days.none",
+      "mod.employees.status.available",
+      "mod.employees.status.away",
+      "mod.employees.status.break",
+      "mod.employees.status.busy",
+      "mod.employees.status.dayoff",
+      "mod.employees.table.columns.badge",
+      "mod.employees.table.columns.calendar",
+      "mod.employees.table.columns.name",
+      "mod.employees.table.columns.work_locations",
+      "mod.employees.table.empty",
+      "mod.services.add_service",
+      "mod.services.categories",
+      "mod.services.categories_hint",
+      "mod.services.dynamic_pricing",
+      "mod.services.external_id",
+      "mod.services.extras",
+      "mod.services.form.availability.add_slot",
+      "mod.services.form.availability.header",
+      "mod.services.form.availability.hint",
+      "mod.services.form.availability.tab",
+      "mod.services.form.details.avatar_border",
+      "mod.services.form.details.recurrence",
+      "mod.services.form.details.show_on_website",
+      "mod.services.form.details.show_on_website_hint",
+      "mod.services.form.gallery.gallery_add",
+      "mod.services.form.pricing.banner",
+      "mod.services.form.pricing.base_hint",
+      "mod.services.form.pricing.base_title",
+      "mod.services.form.pricing.dynamic",
+      "mod.services.form.pricing.dynamic_hint",
+      "mod.services.form.pricing.fixed",
+      "mod.services.form.pricing.mode",
+      "mod.services.form.pricing.percent",
+      "mod.services.form.pricing.promotions",
+      "mod.services.form.pricing.promotions_hint",
+      "mod.services.form.pricing.tab",
+      "mod.services.form.settings.booking_window",
+      "mod.services.form.settings.day_type",
+      "mod.services.form.settings.default_status",
+      "mod.services.form.settings.lead_book",
+      "mod.services.form.settings.lead_cancel",
+      "mod.services.form.settings.lead_reschedule",
+      "mod.services.form.settings.limit_count",
+      "mod.services.form.settings.limit_per_customer",
+      "mod.services.form.settings.limit_per_customer_hint",
+      "mod.services.form.settings.limit_period_unit",
+      "mod.services.form.settings.limit_period_value",
+      "mod.services.form.settings.max_days",
+      "mod.services.form.settings.redirect_url",
+      "mod.services.form.settings.unit",
+      "mod.services.form.tabs.availability",
+      "mod.services.form.tabs.details",
+      "mod.services.form.tabs.extras",
+      "mod.services.form.tabs.notes",
+      "mod.services.form.tabs.pricing",
+      "mod.services.form.tabs.settings",
+      "mod.services.list.columns.category",
+      "mod.services.list.columns.duration",
+      "mod.services.list.columns.name",
+      "mod.services.list.columns.price",
+      "mod.services.list.columns.status",
+      "mod.services.list.empty",
+      "mod.services.list.search_placeholder",
+      "mod.services.notes",
+      "mod.services.title",
+      "mod.settings.activation",
+      "mod.settings.api_keys",
+      "mod.settings.appointments_events",
+      "mod.settings.company",
+      "mod.settings.company_form.address",
+      "mod.settings.company_form.email",
+      "mod.settings.company_form.phone",
+      "mod.settings.company_form.profile",
+      "mod.settings.company_form.remove",
+      "mod.settings.company_form.tabs.contact",
+      "mod.settings.company_form.tabs.profile",
+      "mod.settings.company_form.website",
+      "mod.settings.general",
+      "mod.settings.general_form.choose_language",
+      "mod.settings.general_form.saved",
+      "mod.settings.general_form.system_language",
+      "mod.settings.general_form.tabs.limits",
+      "mod.settings.integrations",
+      "mod.settings.labels",
+      "mod.settings.messages.load_error",
+      "mod.settings.messages.saved_ok",
+      "mod.settings.notifications",
+      "mod.settings.payments",
+      "mod.settings.roles",
+      "ui.color.accent",
+      "ui.color.danger",
+      "ui.color.warning",
+      "ui.date.formats.date",
+      "ui.date.formats.datetime",
+      "ui.date.formats.time",
+      "ui.date.months",
+      "ui.date.months_short",
+      "ui.date.today",
+      "ui.date.tomorrow",
+      "ui.date.week_starts_on",
+      "ui.date.weekdays",
+      "ui.date.yesterday",
+      "ui.filter.search_placeholder",
+      "ui.pagination.first",
+      "ui.pagination.last",
+      "ui.pagination.page",
+      "ui.pagination.per_page",
+      "ui.recurring.yearly",
+      "ui.table.move_column",
+      "ui.table.quick_actions",
+      "ui.table.sort_by",
+      "ui.table.sort_duration",
+      "ui.table.sort_status",
+      "ui.upload.avatar_upload_ok",
+      "ui.upload.route_not_found"
+    ]
+  }
+}

@@ -1,0 +1,249 @@
+// _tokens.scss
+// Primitive Design Tokens (Farben, Spacing, Radius, etc.), Keine Aliase, keine Komponenten-Variablen hier! 
+
+// Farben – Brand
+$color-primary:      #12DE9D;
+$color-primary-dark: #0FB87F;
+$color-primary-light:#E3FBF3;
+$color-secondary:    #f5f6fa;
+$color-accent:       #0087E2;
+$color-danger:       #E14343;
+$color-warning:      #F7C948;
+$color-success:      #28c76f;
+$color-info:         #38BDF8;
+$color-white:        #fff;
+$color-black:        #101828;
+
+// Farben – Status-Varianten (für Badges, Alerts, etc.)
+$color-success-light:  #d1fae5;
+$color-success-dark:   #065f46;
+$color-warning-light:  #fef3c7;
+$color-warning-dark:   #92400e;
+$color-danger-light:   #fee2e2;
+$color-danger-dark:    #991b1b;
+$color-info-light:     #e3f2fd;
+$color-info-dark:      #1565c0;
+
+// Farben – Text
+$color-text:         #0c0c0c;
+$color-text-dark:    #23272f;
+$color-text-muted:   #7b8794;
+
+// Farben – Grau & Border
+$color-gray-100:     #f3f4f6;
+$color-gray-200:     #e5e7eb;
+$color-gray-300:     #d1d5db;
+$color-gray-400:     #9ca3af;
+$color-gray-500:     #6b7280;
+$color-gray-600:     #4b5563;
+$color-border:       #e0e4e8;
+$color-border-light: #f3f3f3;
+$color-border-dark:  #9ca3af;
+
+// Farben – Hintergrund
+$color-bg:           #ffffff;
+$color-bg-soft:      #f8fafc;
+$color-bg-light:     #f5f6fa;
+$color-bg-muted:     #e9edf2;
+$color-bg-contrast:  #dbe2e8;
+$color-bg-dark:      #1e293b;
+
+
+// Typografie
+$font-family-base:    "Manrope", "Inter", "Segoe UI", "Poppins", Arial, sans-serif;
+$font-size-xxs:       clamp(0.625rem, 0.55rem + 0.1vw, 0.7rem);    // ~10-11px
+$font-size-xs:        clamp(0.68rem, 0.6rem + 0.1vw, 0.78rem);     // ~11-12px
+$font-size-sm:        clamp(0.80rem, 0.7rem + 0.2vw, 0.95rem);     // ~13-15px
+$font-size-base:      clamp(0.88rem, 0.75rem + 0.4vw, 1rem);       // ~14-16px
+$font-size-md:        clamp(0.88rem, 0.75rem + 0.4vw, 1rem);       // ~14-16px
+$font-size-lg:        clamp(1.02rem, 0.9rem + 0.5vw, 1.15rem);     // ~16-18px
+$font-size-xl:        clamp(1.19rem, 1.05rem + 1vw, 1.45rem);      // ~19-23px
+$font-size-2xl:       clamp(1.5rem, 1.2rem + 1.5vw, 1.875rem);     // ~24-30px
+$font-size-3xl:       clamp(1.875rem, 1.5rem + 2vw, 2.25rem);      // ~30-36px
+$font-size-4xl:       clamp(2.25rem, 1.8rem + 2.5vw, 3rem);        // ~36-48px
+$font-size-5xl:       clamp(3rem, 2.5rem + 3vw, 4rem);             // ~48-64px
+$font-size-heading:   clamp(1.3rem, 1.05rem + 1.5vw, 2rem);        // ~21-32px
+$font-weight-thin:        100;
+$font-weight-extra-light: 200;
+$font-weight-light:       300;
+$font-weight-normal:      400;
+$font-weight-medium:      500;
+$font-weight-semi-bold:   600;
+$font-weight-bold:        700;
+$font-weight-extra-bold:  800;
+$font-weight-black:       900;
+
+// Spacing (Abstände)
+$spacing-xxxs: clamp(0.03125rem, 0.015rem + 0.09vw, 0.0625rem);
+$spacing-xxs: clamp(0.0625rem, 0.03rem + 0.2vw, 0.125rem);
+$spacing-xs:  clamp(0.125rem, 0.09rem + 0.3vw, 0.375rem);
+$spacing-sm:  clamp(0.3125rem, 0.15rem + 0.7vw, 0.8125rem);
+$spacing-md:  clamp(0.6875rem, 0.3rem + 1.2vw, 1.5rem);
+$spacing-lg:  clamp(1.1875rem, 0.5rem + 2vw, 2.5rem);
+$spacing-xl:  clamp(2rem, 1.1rem + 4vw, 4rem);
+$spacing-xxl: clamp(2.5rem, 1.6rem + 5vw, 5rem);
+$spacing-3xl: clamp(3rem, 2rem + 6vw, 6rem);     // 48-96px
+$spacing-4xl: clamp(4rem, 3rem + 8vw, 8rem);     // 64-128px
+
+// Radius & Shadow
+$radius-xxs:      0.125rem;   // 2px
+$radius-xs:       0.25rem;    // 4px
+$radius-sm:       0.5rem;     // 8px (Standard für Input/Button/Card)
+$radius-base:     0.75rem;    // 12px
+$radius-lg:       1rem;       // 16px
+$radius-xl:       1.5rem;     // 24px
+$radius-xxl:      2rem;       // 32px
+
+$radius-circle: 50%;     // Macht Avatare, Icons perfekt rund
+$radius-pill: 999rem;    // Alternativ für Pill-Shape (voll abgerundet, z.B. bei Badges/Tags)
+
+$shadow-base:     0 4px 16px rgba(16, 40, 60, 0.09);
+
+// Border
+$border-width-sm: clamp(1px, 0.8px + 0.1vw, 1.2px);
+$border-width-md: clamp(1.5px, 1px + 0.2vw, 2px);
+$border-width-lg: clamp(2px, 1.5px + 0.2vw, 2.5px);
+
+// Container / Breakpoints
+$container-max: clamp(100vw, 80vw, 1220px);
+$breakpoint-sm: 480px;
+$breakpoint-md: 768px;
+$breakpoint-lg: 1024px;
+$breakpoint-xl: 1440px;
+
+// Icons
+$icon-path: '@icons/';
+$icon-size-xxs: clamp(0.7em, 0.65em + 0.1vw, 0.85em);
+$icon-size-xs:  clamp(0.85em, 0.8em + 0.1vw, 1em);
+$icon-size-sm:  clamp(1em, 0.95em + 0.1vw, 1.15em);
+$icon-size-md:  clamp(1.15em, 1.1em + 0.1vw, 1.3em);
+$icon-size-lg:  clamp(1.3em, 1.25em + 0.1vw, 1.45em);
+$icon-size-xl:  clamp(1.35em, 1.25em + 0.3vw, 1.5em);
+$icon-size-xxl: clamp(1.7em, 1.6em + 0.2vw, 2em);
+
+// 🖼 SVG-Filter für Icons
+$bookando-icon-filter-default: brightness(0) saturate(100%) invert(57%) sepia(69%) saturate(450%) hue-rotate(102deg) brightness(95%) contrast(85%);
+$bookando-icon-filter-header:  brightness(0) saturate(100%) invert(57%) sepia(69%) saturate(450%) hue-rotate(102deg) brightness(95%) contrast(85%);
+$bookando-icon-filter-search:  brightness(0) saturate(100%) invert(46%) sepia(0%) saturate(0%) hue-rotate(141deg) brightness(97%) contrast(85%);
+$bookando-icon-filter-button:  brightness(0) saturate(100%) invert(50%) sepia(70%) saturate(400%) hue-rotate(115deg) brightness(95%) contrast(90%);
+$bookando-icon-filter-table:   brightness(0) saturate(100%) invert(20%) sepia(0%) saturate(100%) hue-rotate(0deg) brightness(95%) contrast(85%);
+$bookando-icon-filter-toast:   brightness(0) saturate(100%) invert(70%) sepia(95%) saturate(600%) hue-rotate(90deg) brightness(105%) contrast(90%);
+$bookando-icon-filter-action:  brightness(0) saturate(100%) invert(29%) sepia(97%) saturate(2891%) hue-rotate(340deg) brightness(90%) contrast(100%);
+
+// Checkbox
+$checkbox-size-default: clamp(0.88rem, 0.75rem + 0.4vw, 1rem);
+$checkbox-size-sm:      clamp(0.80rem, 0.7rem + 0.2vw, 0.95rem);;
+$checkbox-size-lg:      clamp(1.02rem, 0.9rem + 0.5vw, 1.15rem);
+$checkbox-border-radius: 4px;
+
+// Formularfelder
+$field-bg:             $color-white;
+$field-color:          $color-text-dark;
+$field-disabled-bg:    $color-gray-100;
+$field-disabled-color: $color-gray-400;
+$field-height-sm:      clamp(1.91rem, 1.28rem + 0.85vw, 2.13rem);
+$field-height:         clamp(2.25rem, 1.5rem + 1vw, 2.5rem);
+$field-height-lg:      clamp(2.7rem, 1.8rem + 1.2vw, 3rem);
+$field-border:         $color-border;
+$field-border-width:   $border-width-md;
+$field-radius:         $radius-base;
+$field-radius-xxs:     $radius-xxs;
+$field-radius-xs:      $radius-xs;
+$field-radius-sm:      $radius-sm;
+$field-radius-lg:      $radius-lg;
+$field-radius-xl:      $radius-xl;
+$field-focus-shadow:   0 0 0 2px rgba(18, 222, 157, 0.2);
+$field-min-width-select: clamp(9rem, 7rem + 2vw, 12rem);
+
+//------------------------------------------------------------
+// DARKMODE: Bookando Farb-Map (copy & paste für _tokens.scss oder _variables.scss)
+// --- Primary bleibt gleich ---
+//-------------------------------------------------------------
+$color-primary-darkmode:      $color-primary;  // bleibt gleich!
+
+// --- Weitere Brandfarben: Leicht angepasst für besseren Dark-Kontrast ---
+$color-secondary-darkmode:    #23272f;    // z.B. dunkler Grau-Ton als Sekundär
+$color-accent-darkmode:       #6EC1E4;    // heller Akzent für Links
+$color-danger-darkmode:       #ef6666;    // helleres Rot für Darkmode
+$color-warning-darkmode:      #FFD966;    // helleres Gelb für Darkmode
+$color-success-darkmode:      #34e39c;    // helleres Grün
+$color-info-darkmode:         #60d1fa;
+$color-white-darkmode:        #e8e8e8;    // Offwhite
+$color-black-darkmode:        #101828;    // bleibt identisch
+
+// --- Textfarben ---
+$color-text-darkmode:         #e5e7eb;
+$color-text-dark-darkmode:    #fff;
+$color-text-muted-darkmode:   #9ca3af;
+
+// --- Grautöne & Border ---
+$color-gray-100-darkmode:     #23272f;
+$color-gray-200-darkmode:     #2a303c;
+$color-gray-300-darkmode:     #363c48;
+$color-gray-400-darkmode:     #545d6a;
+$color-gray-500-darkmode:     #8b949e;
+$color-gray-600-darkmode:     #a5b4cb;
+$color-border-darkmode:       #31343b;
+$color-border-light-darkmode: #454c57;
+$color-border-dark-darkmode:  #a5b4cb;
+
+// --- Hintergrundfarben ---
+$color-bg-darkmode:           #181c23;   // Main BG Dark
+$color-bg-soft-darkmode:      #1e2530;
+$color-bg-light-darkmode:     #23272f;
+$color-bg-muted-darkmode:     #20242a;
+$color-bg-contrast-darkmode:  #2c3440;
+$color-bg-dark-darkmode:      #0f141a;
+
+// --- Avatar Grösse ---
+$avatar-size-xxs: 1rem     !default;
+$avatar-size-xs: 1.5rem    !default;
+$avatar-size-sm: 2.5rem    !default; // Default in avatar.scss bisher
+$avatar-size-md: 4.5rem    !default;
+$avatar-size-lg: 5.5rem    !default;
+$avatar-size-xl: 6.5rem    !default;
+
+// ===========================
+// Module-specific Tokens
+// ===========================
+
+// Sidebar / Preview Panel
+$sidebar-resize-handle-width:     0.25rem;        // 4px
+$sidebar-min-width:                17.5rem;       // 280px
+$sidebar-max-width:                37.5rem;       // 600px
+$sidebar-default-width:            20rem;         // 320px
+
+// Page Layout
+$page-header-height:               4rem;          // 64px
+$page-toolbar-height:              3.5rem;        // 56px
+$page-footer-spacer:               5.625rem;      // 90px (für Bulk Actions)
+$page-offset-with-adminbar:        17.5rem;       // 280px
+
+// Icons & Visual Elements
+$icon-stat:                        2.5rem;        // 40px
+$icon-activity:                    2rem;          // 32px
+$icon-list:                        1.5rem;        // 24px
+$icon-placeholder:                 4rem;          // 64px
+
+// Grid Templates
+$grid-stats-2col:                  repeat(2, 1fr);
+$grid-stats-4col:                  repeat(4, 1fr);
+$grid-content-2col:                2fr 1fr;
+$grid-detail-row:                  7.5rem 1fr;   // 120px 1fr
+
+// Overlays & Backdrops
+$overlay-backdrop-opacity:         0.5;
+$loader-backdrop-opacity:          0.6;
+
+// Transitions & Animations
+$transition-fast:                  0.15s;
+$transition-normal:                0.2s;
+$transition-medium:                0.3s;
+$transition-slow:                  0.4s;
+
+// Z-Index Layers
+$z-index-sidebar:                  100;
+$z-index-overlay:                  1000;
+$z-index-modal:                    1050;
+$z-index-bulk-action:              900;
+$z-index-loader:                   9999;

@@ -1,0 +1,1099 @@
+// =============================
+// 🌱 _field.scss – Zentrale Stile für alle Formularfelder
+// =============================
+@use 'sass:color';
+@use 'variables' as *;
+@use 'mixins' as *;
+
+// =============================
+// 🧱 1. Universelle Eingabefelder (Text, E-Mail, Passwort, usw.)
+// =============================
+.bookando-control {
+  width: 100%;
+  height: var(--field-height, $bookando-field-height);
+  min-height: var(--field-height, $bookando-field-height);
+  display: block;
+  border: $bookando-border-width-sm solid $bookando-border;
+  border-radius: $bookando-radius-sm;
+  background: $bookando-field-bg;
+  padding: $bookando-spacing-sm;
+  @include bookando-field-base();
+
+  &::placeholder {
+    color: $bookando-text-muted;
+  }
+
+  // Danger/Error-State
+  &[aria-invalid="true"],
+  &.bookando-control--danger {
+    border-color: $bookando-danger !important;
+    background: color.scale($bookando-danger, $lightness: 85%) !important;
+    color: $bookando-danger !important;
+    box-shadow: 0 0 0 2px rgba($bookando-danger, 0.2);
+  }
+
+  // Disabled-State
+  &:disabled,
+  &[aria-disabled="true"] {
+    background: $bookando-field-disabled-bg !important;
+    color: $bookando-field-disabled-color !important;
+    cursor: not-allowed !important;
+    opacity: 0.7;
+  }
+
+  // Readonly-State (nur visuell, nicht zwingend <input readonly>)
+  &.bookando-control--readonly,
+  &[readonly] {
+    background: $bookando-field-disabled-bg !important;
+    color: $bookando-field-disabled-color !important;
+    cursor: not-allowed !important;
+    opacity: 0.7;
+  }
+
+  // Hover- und Fokus-States
+  &:hover {
+    border-color: $bookando-border-dark;
+    box-shadow: none;
+    outline: none;
+    transition: border-color 0.2s;
+  }
+  &:focus,
+  &:focus-within {
+    border-color: $bookando-primary;
+    box-shadow: 0 0 0 2px rgba($bookando-primary, 0.12);
+    outline: none;
+    transition: border-color 0.2s, box-shadow 0.2s;
+  }
+}
+
+// =============================
+// Alle nativen Input-Typen automatisch stylen
+// =============================
+input[type="text"],
+input[type="email"],
+input[type="tel"],
+input[type="date"],
+input[type="password"],
+input[type="number"],
+input[type="url"],
+input[type="datetime-local"],
+select,
+textarea {
+  @extend .bookando-control;
+}
+
+// =============================
+// 📏 2. Größenvarianten (für Inputs, Selects, usw.)
+// =============================
+/* klassische Inputs (ok mit Padding) */
+.bookando-control--sm {
+  font-size: $bookando-font-size-sm;
+  padding: $bookando-spacing-xs $bookando-spacing-sm;
+  height: $bookando-field-height-sm;
+}
+.bookando-control--lg {
+  font-size: $bookando-font-size-lg;
+  padding: $bookando-spacing-sm $bookando-spacing-lg;
+  height: $bookando-field-height-lg;
+}
+
+/* NEU: Varianten für Komposit-Wrapper wie Search (keine Doppel-Paddings) */
+.bookando-search-wrapper--sm {
+  height: var(--field-height-sm, $bookando-field-height-sm);
+  --bookando-search-gap: #{$bookando-spacing-xs};
+}
+.bookando-search-wrapper--lg {
+  height: var(--field-height-lg, $bookando-field-height-lg);
+  --bookando-search-gap: #{$bookando-spacing-md};
+}
+
+// =============================
+// 📝 3. Textarea – Mehrzeilige Eingabefelder
+// =============================
+textarea,
+textarea.bookando-control {
+  resize: vertical;
+  min-height: 6rem;
+  padding-top: $bookando-spacing-sm;
+  padding-bottom: $bookando-spacing-sm;
+  line-height: 1.5;
+  font-family: inherit;
+  overflow-y: hidden;
+}
+
+// =============================
+// 🔍 4. Suchfeld & Icon Utility
+// =============================
+.bookando-search-wrapper {
+  display: grid;
+  grid-template-columns: auto 1fr; // Icon | Eingabe
+  align-items: center;
+  width: 100%;
+
+  background: $bookando-secondary;
+  border: $bookando-border-width-sm solid $bookando-border;
+  border-radius: $bookando-radius-sm;
+
+  /* AUSSEN-Abstand und Innenabstand zwischen Icon/Text – zentral per CSS-Var */
+  --bookando-search-gap: #{$bookando-spacing-sm};
+  padding-inline: var(--bookando-search-gap);
+  column-gap: var(--bookando-search-gap);
+
+  height: var(--field-height, $bookando-field-height); // gleiche Quelle wie generische Controls
+  transition: border-color 0.2s, box-shadow 0.2s;
+
+  &:focus-within {
+    border-color: $bookando-primary;
+    box-shadow: 0 0 0 2px rgba($bookando-primary, 0.15);
+  }
+}
+
+/* Spezifisch genug, um WP/UA Defaults zu neutralisieren */
+.bookando-search-wrapper .bookando-search-input {
+  width: 100%;
+  height: 100% !important;        // überstimmt input[type="search"]-Höhen
+  min-height: 0 !important;       // verhindert, dass ein min-height > Wrapper greift
+  line-height: 1;                  // kein Zeilenabstand als Zusatz-Höhe
+  min-width: 0;
+
+  padding: 0 !important;
+  border: none !important;
+  background: transparent !important;
+  appearance: none;
+  -webkit-appearance: none;
+
+  font-family: inherit;
+  font-size: $bookando-font-size-base;
+  outline: none;
+  box-shadow: none !important;
+
+  &:focus-visible {
+    outline: none;
+    box-shadow: none;
+  }
+}
+
+/* Browser-Spezialteile abschalten, damit das Feld immer gleich aussieht */
+.bookando-search-wrapper .bookando-search-input::-webkit-search-decoration,
+.bookando-search-wrapper .bookando-search-input::-webkit-search-cancel-button,
+.bookando-search-wrapper .bookando-search-input::-webkit-search-results-button,
+.bookando-search-wrapper .bookando-search-input::-webkit-search-results-decoration {
+  display: none;
+}
+
+
+.bookando-input-icon {
+  position: static;
+  transform: none;
+  display: flex;
+  align-items: center;
+  line-height: 0;        // verhindert Zusatzraum durch Font-Metriken
+  pointer-events: none;
+  opacity: 0.6;
+
+  svg { display: block; } // saubere Box ohne Inline-Glyphen-Spacing
+}
+
+/* neutraler Hook */
+.bookando-input-wrapper {}
+
+// =============================
+// 🔽 5. Select Dropdown – Native Select-Felder mit Chevron
+// =============================
+select.bookando-control {
+  appearance: none;
+  padding-right: $bookando-spacing-lg;
+  background: $bookando-bg-light url("#{$bookando-icon-path}chevron-down.svg") no-repeat right $bookando-spacing-md center;
+  background-size: 1em;
+}
+
+// =============================
+// ☑ 6. Checkbox – Custom Styles & Wrapper (zentral!)
+// =============================
+
+.bookando-checkbox-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: $bookando-spacing-xs;
+  cursor: pointer;
+  user-select: none;
+  font-family: $bookando-font-family;
+  font-size: $bookando-font-size-base;
+  min-width: 1.25rem;
+  min-height: 1.25rem;
+  width: 100%;
+  height: 100%;
+  position: relative;
+
+  &.bookando-checkbox--align-left   { justify-content: flex-start; }
+  &.bookando-checkbox--align-center { justify-content: center; }
+  &.bookando-checkbox--align-right  { justify-content: flex-end; }
+
+  &:focus-within {
+    outline: none;
+    outline-offset: 2px;
+  }
+
+  &:has(.bookando-checkbox:disabled),
+  &:has(.bookando-checkbox--readonly) {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+}
+
+.bookando-checkbox-label {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+  min-width: $bookando-checkbox-size-default;
+  min-height: $bookando-checkbox-size-default;
+  position: relative;
+  padding: 0;
+  justify-content: flex-start; // ⬅️ linksbündig
+
+  // Wrapper-Ausrichtung erbt nach innen
+  .bookando-checkbox-wrapper.bookando-checkbox--align-center & {
+    justify-content: center;
+  }
+  .bookando-checkbox-wrapper.bookando-checkbox--align-right & {
+    justify-content: flex-end;
+  }
+}
+
+// --- Unsichtbares Input-Feld (Accessibility, Interaktion) ---
+.bookando-checkbox {
+  opacity: 0;
+  position: absolute;
+  left: 0;                    // ⬅️ an den linken Rand
+  top: 50%;
+  width: $bookando-checkbox-size-default;
+  height: $bookando-checkbox-size-default;
+  transform: translateY(-50%); // ⬅️ nur vertikal zentrieren
+  margin: 0;
+  z-index: 2;
+  cursor: pointer;
+
+  &:focus-visible + .bookando-checkbox-custom {
+    outline: 2px solid $bookando-primary;
+    outline-offset: 1.5px;
+  }
+
+  &:disabled + .bookando-checkbox-custom {
+    opacity: 0.5;
+    cursor: not-allowed;
+    background: $bookando-field-disabled-bg;
+    border-color: $bookando-border;
+  }
+}
+
+// --- Sichtbare Checkbox-Box ---
+.bookando-checkbox-custom {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: $bookando-checkbox-size-default;
+  height: $bookando-checkbox-size-default;
+  border: 1.5px solid $bookando-border;
+  border-radius: $bookando-checkbox-border-radius;
+  background: $bookando-white;
+  position: relative;
+  transition: border-color 0.16s, box-shadow 0.15s;
+  margin: 0; // ⬅️ keine Auto-Zentrierung
+
+  .bookando-checkbox-checkmark {
+    width: 70%;
+    height: 70%;
+    color: $bookando-primary;
+    display: block;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.18s, transform 0.19s;
+    z-index: 3;
+  }
+}
+
+// Zeige das Icon, wenn gecheckt
+.bookando-checkbox:checked + .bookando-checkbox-custom .bookando-checkbox-checkmark {
+  opacity: 1;
+  transform: none;
+}
+
+// --- Hover / Checked ---
+.bookando-checkbox:not(:disabled):hover + .bookando-checkbox-custom,
+.bookando-checkbox:checked + .bookando-checkbox-custom {
+  border-color: $bookando-primary !important;
+  box-shadow: none;
+}
+
+// --- Fehler/Invalid ---
+.bookando-checkbox[aria-invalid="true"] + .bookando-checkbox-custom,
+.bookando-checkbox--danger + .bookando-checkbox-custom {
+  border-color: $bookando-danger !important;
+  background: color.scale($bookando-danger, $lightness: 88%) !important;
+}
+
+// --- Größen-Varianten ---
+.bookando-checkbox--sm + .bookando-checkbox-custom {
+  width: $bookando-checkbox-size-sm;
+  height: $bookando-checkbox-size-sm;
+}
+.bookando-checkbox--lg + .bookando-checkbox-custom {
+  width: $bookando-checkbox-size-lg;
+  height: $bookando-checkbox-size-lg;
+}
+.bookando-checkbox--readonly + .bookando-checkbox-custom {
+  background: $bookando-field-disabled-bg !important;
+  border-color: $bookando-border !important;
+  color: $bookando-field-disabled-color !important;
+  cursor: not-allowed !important;
+  opacity: 0.7;
+}
+
+// --- Label-Text ---
+.bookando-label-text {
+  padding-left: $bookando-spacing-xs;
+}
+
+// =============================
+// 📻 7. Radio – Custom Styles
+// =============================
+.bookando-radio-group {
+  display: flex;
+  gap: $bookando-spacing-md;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  &--vertical { flex-direction: column; gap: $bookando-spacing-sm; }
+  &[aria-invalid="true"] .bookando-radio input[type="radio"] {
+    border-color: $bookando-danger !important;
+  }
+}
+.bookando-radio {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  font-family: $bookando-font-family;
+  font-size: $bookando-font-size-base;
+  font-weight: 400;
+  user-select: none;
+  gap: $bookando-spacing-xs;
+
+  &--disabled {
+    opacity: 0.5;
+    cursor: not-allowed !important;
+  }
+  span {
+    color: $bookando-text;
+    font-size: $bookando-font-size-base;
+    line-height: 1.4;
+  }
+  input[type="radio"] {
+    appearance: none;
+    width: 1.18em;
+    height: 1.18em;
+    border-radius: $bookando-radius-circle;
+    border: $bookando-border-width-md solid $bookando-border;
+    background: $bookando-white;
+    margin: 0 $bookando-spacing-xs 0 0;
+    display: inline-block;
+    position: relative;
+    vertical-align: middle;
+    cursor: pointer;
+    transition: border 0.18s, box-shadow 0.18s;
+    &:checked {
+      border-color: $bookando-primary;
+      background: $bookando-white;
+    }
+    &:checked::after {
+      content: "";
+      display: block;
+      position: absolute;
+      left: 0.28em;
+      top: 0.28em;
+      width: 0.6em;
+      height: 0.6em;
+      background: $bookando-primary;
+      border-radius: $bookando-radius-circle;
+    }
+    &:focus {
+      outline: none;
+      box-shadow: 0 0 0 2px rgba($bookando-primary, 0.19);
+    }
+    &:focus-visible {
+      box-shadow: 0 0 0 2px rgba($bookando-primary, 0.25);
+      outline: none;
+    }
+    &:disabled {
+      opacity: 0.5;
+      cursor: not-allowed !important;
+      background: $bookando-field-disabled-bg;
+      border-color: $bookando-field-disabled-bg;
+    }
+    &.bookando-control--danger,
+    &[aria-invalid="true"] {
+      border-color: $bookando-danger !important;
+      box-shadow: 0 0 0 2px rgba($bookando-danger, 0.13);
+    }
+  }
+}
+.bookando-radio--sm input[type="radio"] { width: 1em; height: 1em; }
+.bookando-radio--lg input[type="radio"] { width: 1.45em; height: 1.45em; }
+
+// =============================
+// 🔽 8. Dropdown & Combobox Controls
+// =============================
+
+.bookando-dropdown-wrapper {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  min-width: 0;
+
+  &.bulk-select {
+    min-width: 170px;
+    max-width: 380px;
+    flex: 1 1 0%;
+  }
+}
+
+/* Shrink-to-content für kompakte Dropdowns (z. B. Pagination) */
+.bookando-dropdown-wrapper--auto {
+  width: auto !important;      /* statt 100% */
+  min-width: 0 !important;     /* statt 170px */
+  display: inline-flex;        /* schrumpft auf Inhalt */
+}
+
+/* wenn width="content": Wrapper selbst darf schrumpfen */
+.bookando-dropdown-wrapper.is-width-content {
+  width: auto !important;
+  min-width: 0 !important;
+  display: inline-flex !important;
+}
+
+/* und der Button darin ebenso */
+.bookando-dropdown-wrapper.is-width-content > .bookando-combobox-btn {
+  width: auto !important;
+  min-width: 0 !important;
+  display: inline-flex !important;
+}
+
+/* immer schrumpfen, wenn width="content" genutzt wird (alle Breakpoints) */
+.bookando-dropdown-wrapper.is-width-content > .bookando-combobox-btn {
+  width: auto;
+  display: inline-flex;
+}
+
+/* -----------------------------
+   Button-Style (Combobox, Dropdown, Phone, etc.)
+   ----------------------------- */
+.bookando-combobox-btn {
+  @include bookando-combobox-btn-base;
+  width: 100%;
+  justify-content: space-between;
+  display: flex;
+  align-items: center;
+  min-height: $bookando-field-height;
+
+  /* Linkes Icon: analog SearchInput – aber statisch, mit Abstand */
+  .bookando-input-icon {
+    display: flex;
+    align-items: center;
+    position: static;
+    left: unset;
+    top: unset;
+    transform: none;
+    pointer-events: none;
+    opacity: 0.7;
+  }
+
+  /* === Inhalt (Tags/Label) === */
+  .content-wrapper {
+    display: flex;
+    align-items: center;
+    flex: 1 1 0;
+    min-width: 0;
+    gap: $bookando-spacing-xs;
+    flex-wrap: nowrap;
+    overflow: hidden;
+  }
+
+  /* Ellipsis gilt auch für Placeholder-Text */
+  .content-wrapper > .bookando-text-muted,
+  .content-wrapper > .option-label {
+    flex: 1 1 auto;
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .flag {
+    margin-right: $bookando-spacing-xs;
+    font-size: 1.3em;
+  }
+
+  .label-wrapper,
+  .option-label {
+    flex: 1 1 0%;
+    display: flex;
+    align-items: center;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    font-weight: $bookando-font-weight-normal;
+    color: $bookando-text-dark;
+  }
+
+  /* Rechts: Chevron-Icon (besser Abstand zum Text!) */
+  .bookando-icon--select {
+    opacity: 0.6;
+    width: 1em;
+    height: 1em;
+    vertical-align: middle;
+  }
+
+  .bookando-chevron {
+    margin-left: auto;
+    width: 1em;
+    height: 1em;
+    opacity: 0.6;
+    background: url('#{$bookando-icon-path}chevron-down.svg') no-repeat center;
+    background-size: contain;
+  }
+
+  .bookando-combobox-clear {
+    margin-left: 0.5em;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    &:hover, &:focus { color: $bookando-danger; }
+  }
+
+  &[aria-invalid="true"],
+  &.bookando-control--danger {
+    border-color: $bookando-danger !important;
+    background: color.scale($bookando-danger, $lightness: 85%) !important;
+    color: $bookando-danger !important;
+    box-shadow: 0 0 0 2px rgba($bookando-danger, 0.2);
+  }
+
+  &:disabled, &[aria-disabled="true"] {
+    background: $bookando-field-disabled-bg !important;
+    color: $bookando-field-disabled-color !important;
+    cursor: not-allowed !important;
+    opacity: 0.7;
+  }
+
+  &:hover { border-color: $bookando-border-dark; }
+
+  &:focus, &:focus-visible {
+    border-color: $bookando-primary;
+    box-shadow: 0 0 0 2px rgba($bookando-primary, 0.12);
+  }
+
+  /* ---------------------------------
+     Multiselect-Tags (einzeilig, no-wrap)
+     --------------------------------- */
+  .bookando-multiselect-tag {
+    /* nicht schrumpfen – echte Breite beibehalten */
+    flex: 0 0 auto;
+    display: inline-flex;
+    align-items: center;
+    gap: $bookando-spacing-xxs;
+    padding: 0 $bookando-spacing-sm;
+    height: calc(#{$bookando-field-height} - 10px);
+    border-radius: $bookando-radius-sm;
+    background: $bookando-gray-100;
+    color: $bookando-text;
+    white-space: nowrap;                  /* KEIN Umbruch innerhalb des Tags */
+    border: 1px solid $bookando-field-border;
+  }
+
+  .bookando-multiselect-tag .remove-tag {
+    appearance: none;
+    border: 0;
+    background: transparent;
+    padding: 0;
+    margin-left: $bookando-spacing-xxs;
+    cursor: pointer;
+    line-height: 1;
+    color: inherit;
+  }
+
+  /* +N Counter-Badge (wird via Script gezeigt) */
+  .bookando-multiselect-tag--counter {
+    background: $bookando-gray-200;
+    border-color: transparent;
+    font-weight: 600;
+  }
+
+  /* Versteckte Mess-Probe für +N-Badge (Script benutzt die Breite) */
+  .bookando-tag-measure {
+    position: absolute !important;
+    visibility: hidden !important;
+    left: -9999px;
+    top: -9999px;
+    pointer-events: none;
+  }
+}
+
+/* -----------------------------
+   Panel / Option
+   ----------------------------- */
+.bookando-combobox-list {
+  max-width: none;
+  background: $bookando-field-bg;
+  border: 1px solid $bookando-field-border;
+  @include bookando-shadow(2);
+  border-radius: $bookando-radius;
+  max-height: 240px;
+  overflow-y: auto;
+  padding: 0;
+
+  /* Teleported Panels bekommen (zusätzlich) fixed – meist inline gesetzt */
+  &[data-teleported="true"] {
+    /* position wird inline vom JS gesetzt; diese Regel ist nur ein Fallback */
+    position: fixed;
+  }
+}
+
+.dropdown-option {
+  display: flex;
+  align-items: center;
+  gap: $bookando-spacing-xs;
+  padding: $bookando-spacing-xs $bookando-spacing-sm;
+  font-size: $bookando-font-size-base;
+  cursor: pointer;
+  color: $bookando-field-color;
+  background: $bookando-field-bg;
+  transition: background 0.15s, font-weight 0.15s;
+
+  /* Checkbox kompakt im Dropdown */
+  > .bookando-checkbox-wrapper { width: auto; height: auto; min-width: 0; min-height: 0; gap: $bookando-spacing-xxs; }
+  > .bookando-checkbox-label   { width: auto; }
+  > .bookando-checkbox-custom  { margin-right: $bookando-spacing-xs; }
+
+  .flag { margin-right: $bookando-spacing-xs; font-size: 1.2em; }
+  .option-label { flex: 1; display: flex; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .country-code { font-size: $bookando-font-size-sm; color: $bookando-text-muted; margin-left: $bookando-spacing-xs; }
+  .dial { min-width: 46px; text-align: right; color: $bookando-text; }
+
+  &.bookando-text-muted { color: $bookando-text-muted; }
+}
+
+/* feste Icon-Spalte + mittige Ausrichtung im Dropdown */
+.dropdown-option .dropdown-icon,
+.dropdown-option .bookando-icon {
+  flex: 0 0 22px;      // fixe Spaltenbreite für alle Icons
+  width: 18px;
+  height: 18px;
+  display: inline-flex;
+  align-items: center; // vertikal mittig
+  justify-content: center; // horizontal mittig
+}
+
+/* Trenner zwischen Gruppen (optional; falls noch nicht vorhanden) */
+.dropdown-separator {
+  height: 1px;
+  background: $bookando-field-border;
+  margin: $bookando-spacing-xxs $bookando-spacing-sm;
+}
+
+/* -----------------------------
+   Responsive – Token-basiert
+   ----------------------------- */
+
+/* Mobile Panels: Breite begrenzen (teleported) */
+@include respond-to('md') {
+  .bookando-combobox-list[data-teleported="true"] {
+    max-width: calc(100vw - 24px);
+  }
+}
+
+/* Mobile: Auto-Shrink für kompakte Controls erlauben */
+@include respond-to('md') {
+  .bookando-dropdown-wrapper--auto,
+  .bookando-dropdown-wrapper--auto > .bookando-combobox-btn {
+    width: auto !important;
+    min-width: 0 !important;
+    max-width: none !important;
+  }
+}
+
+/* WICHTIG: Wenn zusätzlich .is-width-full gesetzt ist,
+   soll es auf <md **immer gewinnen** – auch gegen --auto. */
+@include respond-to('md') {
+  .bookando-dropdown-wrapper.is-width-full,
+  .bookando-dropdown-wrapper.is-width-full.bookando-dropdown-wrapper--auto,
+  .bookando-dropdown-wrapper.is-width-full > .bookando-combobox-btn,
+  .bookando-dropdown-wrapper.is-width-full.bookando-dropdown-wrapper--auto > .bookando-combobox-btn {
+    width: 100% !important;
+  }
+}
+
+
+
+// =============================
+// 📞 9. Telefonfeld – Flagge, Ländervorwahl und Nummer als Flex-Reihe
+// =============================
+.phone-field-wrapper {
+  width: 100%;
+  max-width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 0 !important;
+
+  // Vorwahl-Button (Länder-Button vor Input)
+  .phone-combobox-container {
+    @include bookando-combobox-btn-base;
+    background: $bookando-bg-gray-300;
+    border-radius: $bookando-radius-sm 0 0 $bookando-radius-sm;
+    min-width: 90px;
+
+    .flag {
+      @include bookando-flag;
+    }
+    .dial {
+      color: $bookando-text;
+      min-width: 36px;
+      text-align: left;
+    }
+    .bookando-chevron {
+      width: 1em;
+      height: 1em;
+      opacity: 0.6;
+      background: url('#{$bookando-icon-path}chevron-down.svg') no-repeat center;
+      background-size: contain;
+    }
+
+    &:hover {
+      border-color: $bookando-border-dark;
+      box-shadow: none;
+      transition: border-color 0.18s;
+    }
+    &:focus,
+    &:focus-visible {
+      border-color: $bookando-primary;
+      box-shadow: 0 0 0 2px rgba($bookando-primary, 0.12);
+      outline: none;
+      transition: border-color 0.18s, box-shadow 0.18s;
+    }
+    &:disabled,
+    &[aria-disabled="true"] {
+      background: $bookando-field-disabled-bg;
+      color: $bookando-field-disabled-color;
+      cursor: not-allowed;
+      opacity: 0.7;
+    }
+    &[aria-invalid="true"],
+    &.bookando-control--danger {
+      border-color: $bookando-danger !important;
+      background: color.scale($bookando-danger, $lightness: 85%) !important;
+      color: $bookando-danger !important;
+      box-shadow: 0 0 0 2px rgba($bookando-danger, 0.2);
+    }
+  }
+
+  // Input-Feld für Telefonnummer
+  .phone-field {
+    flex: 1 1 0%;
+    height: var(--field-height, $bookando-field-height);
+    min-height: var(--field-height, $bookando-field-height);
+    outline: none;
+    background: transparent;
+    font-size: $bookando-font-size-base;
+    padding: $bookando-spacing-sm;
+    font-family: inherit;
+    color: $bookando-field-color;
+    border: $bookando-border-width-sm solid $bookando-border;
+    border-radius: 0 $bookando-radius-sm $bookando-radius-sm 0;
+
+    &::placeholder { color: $bookando-text-muted; }
+
+    &:disabled {
+      background: transparent;
+      color: $bookando-field-disabled-color;
+      cursor: not-allowed;
+    }
+
+    &:hover {
+      border-color: $bookando-border-dark;
+      box-shadow: none;
+      transition: border-color 0.18s;
+    }
+    &:focus,
+    &:focus-visible {
+      border-color: $bookando-primary;
+      box-shadow: 0 0 0 2px rgba($bookando-primary, 0.12);
+      outline: none;
+      transition: border-color 0.18s, box-shadow 0.18s;
+    }
+    &[aria-invalid="true"],
+    &.bookando-control--danger {
+      border-color: $bookando-danger !important;
+      background: color.scale($bookando-danger, $lightness: 85%) !important;
+      color: $bookando-danger !important;
+      box-shadow: 0 0 0 2px rgba($bookando-danger, 0.2);
+    }
+  }
+}
+
+// =============================
+// Dropdown-Panel und Optionen
+// =============================
+
+// Für NICHT-teleportierte Panel (Dropdown-Liste)
+.bookando-dropdown-wrapper > .phone-combobox-dropdown,
+.bookando-dropdown-wrapper > .phone-combobox-list,
+.bookando-dropdown-wrapper > .bookando-combobox-list {
+  position: absolute;
+  left: 0;
+  top: calc(100% + 2px);
+  width: 100%;
+  min-width: 100%;
+  z-index: 2100;
+  background: $bookando-field-bg;
+  border: 1px solid $bookando-field-border;
+  @include bookando-shadow(2);
+  @include rounded;
+  max-height: 240px;
+  overflow-y: auto;
+  padding: 0;
+}
+
+// Für teleportierte Panel (Dropdown-Liste)
+.bookando-combobox-list[data-teleported="true"] {
+  position: fixed !important;     // ⬅️ über Scrollbars
+  z-index: 10020 !important;      // konsistent zu Script
+  max-width: none !important;
+  // left/top/width kommen inline aus Vue (panelStyle)
+  background: $bookando-field-bg;
+  border: 1px solid $bookando-field-border;
+  @include bookando-shadow(2);
+  @include rounded;
+  max-height: 240px;
+  overflow-y: auto;
+  padding: 0;
+}
+
+
+// Richtung per Klasse umschalten (Dropup)
+.bookando-dropdown-wrapper > .phone-combobox-dropdown.dropup,
+.bookando-dropdown-wrapper > .phone-combobox-list.dropup,
+.bookando-dropdown-wrapper > .bookando-combobox-list.dropup {
+  top: auto;
+  bottom: calc(100% + 2px);
+}
+
+
+// Einzelne Option (Dropdown)
+.dropdown-option {
+  display: flex;
+  align-items: center;
+  gap: $bookando-spacing-xs;
+  padding: $bookando-spacing-xs $bookando-spacing-sm;
+  font-size: $bookando-font-size-base;
+  cursor: pointer;
+  color: $bookando-field-color;
+  background: $bookando-field-bg;
+  transition: background 0.15s, font-weight 0.15s;
+
+  .content-wrapper {
+    @include bookando-content-row;
+    flex: 1; // optional, je nach Bedarf
+    min-width: 0; // wichtig für ellipsis!
+  }
+
+  .flag {
+    @include bookando-flag;
+  }
+  .flag--sm { font-size: 1em; }
+  .flag--muted { opacity: 0.5; }
+
+  .option-label {
+    flex: 1;
+    align-items: center;
+    display: flex;
+    @include ellipsis;
+  }
+
+  .country-code {
+    font-size: $bookando-font-size-sm;
+    color: $bookando-text-muted;
+    margin-left: $bookando-spacing-xs;
+    letter-spacing: 0.02em;
+  }
+
+  .dial {
+    min-width: 46px;
+    text-align: right;
+    color: $bookando-text;
+  }
+}
+
+// Dropdown-Suchfeld
+.bookando-dropdown-search {
+  @include bookando-input-reset;
+  width: 100%;
+  padding: $bookando-spacing-xs $bookando-spacing-md;
+  font-size: $bookando-font-size-base;
+  font-family: $bookando-font-family;
+  color: $bookando-field-color;
+  border: none !important;
+  border-bottom: 1.5px solid $bookando-field-border !important;
+  border-radius: 0 !important;
+  background: transparent !important;
+  box-shadow: none !important;
+  outline: none !important;
+  transition: border-color 0.18s;
+  &::placeholder {
+    color: $bookando-text-muted;
+  }
+  &:focus {
+    border-bottom: 2px solid $bookando-field-color;
+    outline: none;
+    box-shadow: none;
+  }
+}
+
+/* Suchfeld im Panel nutzt den AppSearch-Wrapper, aber flach/integriert */
+.bookando-combobox-list .bookando-dropdown-search-wrapper.bookando-search-wrapper {
+  border: none;
+  border-bottom: 1.5px solid $bookando-field-border;
+  border-radius: 0;
+  background: transparent;
+}
+
+/* Input bleibt wie gewohnt reseted; nur sicherstellen: kein extra Padding */
+.bookando-combobox-list .bookando-dropdown-search-wrapper .bookando-search-input {
+  padding: 0 !important;
+}
+
+
+// =============================
+// 🎯 10. Multiselect (vue-multiselect, etc.)
+// =============================
+.multiselect,
+.bookando-multiselect {
+  @include bookando-combofield-wrapper;
+  display: flex;
+  align-items: center;
+  width: 100%;
+  gap: $bookando-spacing-xs;
+  padding: 0 $bookando-spacing-sm;
+  position: relative;
+  &.is-disabled,
+  &[aria-disabled="true"] {
+    background: $bookando-field-disabled-bg;
+    color: $bookando-field-disabled-color;
+    cursor: not-allowed;
+    opacity: 0.7;
+  }
+  .multiselect__tags,
+  .multiselect__single,
+  .multiselect__input {
+    @include bookando-input-reset;
+    height: 100%;
+    font-size: $bookando-font-size-base;
+    flex: 1;
+  }
+  .multiselect__select {
+    pointer-events: none;
+    position: absolute;
+    right: $bookando-spacing-md;
+    background: url('#{$bookando-icon-path}chevron-down.svg') no-repeat center;
+    background-size: 1em;
+    width: 1.5em;
+    height: 1.5em;
+  }
+}
+.multiselect__content-wrapper {
+  @include bookando-shadow(2);
+  @include rounded;
+  background: $bookando-field-bg;
+  border: 1px solid $bookando-field-border;
+  position: absolute;
+  left: 0;
+  width: 100%;
+  z-index: 2100;
+  max-height: 230px;
+  overflow-y: auto;
+}
+
+/* Richtung über Klasse steuern – wie bei .bookando-combobox-list */
+.bookando-dropdown-wrapper > .multiselect__content-wrapper:not(.dropup) {
+  top: calc(100% + 2px);
+  bottom: auto;
+}
+.bookando-dropdown-wrapper > .multiselect__content-wrapper.dropup {
+  bottom: calc(100% + 2px);
+  top: auto;
+}
+
+.multiselect__option {
+  display: flex;
+  align-items: center;
+  padding: $bookando-spacing-xs $bookando-spacing-md;
+  font-size: $bookando-font-size-base;
+  color: $bookando-field-color;
+  background: $bookando-field-bg;
+  cursor: pointer;
+  user-select: none;
+  transition: background 0.15s ease;
+}
+.multiselect__placeholder {
+  color: $bookando-text-muted;
+  font-size: $bookando-font-size-sm;
+}
+.bookando-multiselect-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: $bookando-spacing-sm;
+  background: $bookando-bg-gray-100;
+  color: $bookando-text;
+  @include rounded;
+  font-size: $bookando-font-size-sm;
+  font-weight: $bookando-font-weight-normal;
+
+  padding: $bookando-spacing-xs $bookando-spacing-sm;
+  .remove-tag {
+    background: transparent;
+    color: $bookando-text;
+    border: none;
+    font-size: 1.5rem;
+    cursor: pointer;
+    &:hover {
+    }
+  }
+}
+.multiselect--inline {
+  @include bookando-combofield-wrapper;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  padding: $bookando-spacing-xxs $bookando-spacing-md;
+  .multiselect__tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: $bookando-spacing-xs;
+    flex: 1;
+  }
+  .multiselect__input {
+    @include bookando-input-reset;
+    min-width: 100px;
+    flex: 1;
+    font-size: $bookando-font-size-base;
+    height: $bookando-field-height;
+  }
+  .bookando-multiselect-tag {
+    margin: $bookando-spacing-xxs 0;
+  }
+}
+
+// =============================
+// 🌍 11. Flagge Utility – Für Dropdowns, Telefonnummern, etc.
+// =============================
+.flag        { @include bookando-flag; }
+.flag--sm    { font-size: 1em; }
+.flag--muted { opacity: 0.5; }

@@ -1,0 +1,210 @@
+@use 'sass:map';
+@use '@scss/variables' as *;
+@use '@scss/mixins' as *;
+
+// Modul-spezifische Styles für "customers"
+
+/* ============================================================================
+ * RESPONSIVE OPTIMIERUNGEN FÜR CUSTOMERS-MODUL
+ * ========================================================================== */
+
+/* Desktop: Standard-Darstellung (keine Änderungen nötig) */
+/* Tablets (lg und darüber bekommen jetzt Desktop-Ansicht) */
+
+/* Tablet-Optimierungen (md bis lg) */
+@media (min-width: $bookando-breakpoint-md) and (max-width: $bookando-breakpoint-lg - 1px) {
+  // Accordion-Detail-Grid: 2 Spalten beibehalten auf Tablets
+  .customer-detail-grid {
+    --bookando-grid-cols: 1fr 1fr;
+    gap: var(--bookando-space-md);
+  }
+
+  // Leicht kleinere Schrift für bessere Platznutzung
+  .customer-detail-card {
+    .detail-title {
+      font-size: 0.95rem;
+    }
+    .detail-label {
+      font-size: 0.875rem;
+    }
+    .detail-value {
+      font-size: 0.875rem;
+    }
+  }
+
+  // Kompaktere Action-Buttons
+  .actions-cell {
+    gap: var(--bookando-space-xs);
+  }
+}
+
+/* Mobile-Optimierungen (unter md) */
+@media (max-width: $bookando-breakpoint-md - 1px) {
+  // Accordion-Detail-Grid: Auf 1 Spalte wechseln
+  .customer-detail-grid {
+    --bookando-grid-cols: 1fr !important;
+    gap: var(--bookando-space-sm);
+  }
+
+  // Mobile-spezifische Spacing-Optimierungen
+  .customer-detail-card {
+    .bookando-card__header {
+      padding: var(--bookando-space-sm);
+    }
+
+    .bookando-card__body {
+      padding: var(--bookando-space-sm);
+    }
+
+    .detail-title {
+      font-size: 0.9rem;
+      margin-bottom: var(--bookando-space-xs);
+    }
+
+    .detail-row {
+      padding: var(--bookando-space-xs) 0;
+      gap: var(--bookando-space-xs);
+    }
+
+    .detail-label {
+      font-size: 0.8125rem;
+      min-width: 100px;
+    }
+
+    .detail-value {
+      font-size: 0.8125rem;
+    }
+  }
+}
+
+/* Small Mobile (unter sm) */
+@media (max-width: $bookando-breakpoint-sm - 1px) {
+  // Noch kompaktere Darstellung für sehr kleine Bildschirme
+  .customer-detail-card {
+    .detail-title {
+      font-size: 0.875rem;
+    }
+
+    .detail-label,
+    .detail-value {
+      font-size: 0.75rem;
+    }
+
+    .detail-row {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: var(--bookando-space-xxs);
+    }
+
+    .detail-label {
+      min-width: unset;
+      font-weight: 600;
+    }
+  }
+
+  // Mobile Card Layout Optimierungen
+  .bookando-table-card {
+    &__main-left {
+      flex: 1;
+      min-width: 0; // Verhindert Overflow
+    }
+
+    &__meta {
+      .title {
+        font-size: 0.9rem;
+        line-height: 1.3;
+      }
+
+      .muted {
+        font-size: 0.75rem;
+        line-height: 1.4;
+
+        .bookando-link {
+          word-break: break-word;
+        }
+      }
+    }
+
+    &__actions {
+      gap: var(--bookando-space-xxs);
+    }
+  }
+
+  // Details-Grid in Mobile-Cards
+  .details-grid-2col {
+    --bookando-grid-cols: 1fr !important;
+    gap: var(--bookando-space-xs);
+  }
+}
+
+/* ============================================================================
+ * PERFORMANCE-OPTIMIERUNGEN
+ * ========================================================================== */
+
+// GPU-Beschleunigung für Accordion-Animationen
+.customer-detail-card,
+.bookando-table-card__details,
+.details-anim {
+  will-change: auto;
+  transform: translateZ(0);
+  backface-visibility: hidden;
+}
+
+// Smooth Transitions
+.bookando-table-card {
+  transition: box-shadow 0.2s ease, border-color 0.2s ease;
+
+  &.is-expanded {
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  }
+}
+
+/* ============================================================================
+ * ACCESSIBILITY-VERBESSERUNGEN
+ * ========================================================================== */
+
+// Besserer Focus-State für Cards
+.bookando-table-card {
+  &:focus-within {
+    outline: 2px solid var(--bookando-color-primary);
+    outline-offset: 2px;
+  }
+}
+
+// Link-Kontrast verbessern
+.detail-value .bookando-link,
+.bookando-table-card__meta .bookando-link {
+  &:hover {
+    text-decoration: underline;
+  }
+
+  &:focus {
+    outline: 2px solid var(--bookando-color-primary);
+    outline-offset: 1px;
+    border-radius: 2px;
+  }
+}
+
+/* ============================================================================
+ * PRINT-OPTIMIERUNGEN
+ * ========================================================================== */
+
+@media print {
+  // Accordion-Inhalte immer anzeigen
+  .bookando-table-card__details {
+    display: block !important;
+    height: auto !important;
+  }
+
+  // Actions ausblenden
+  .bookando-table-card__actions,
+  .actions-cell {
+    display: none !important;
+  }
+
+  // Kompakte Darstellung
+  .customer-detail-grid {
+    --bookando-grid-cols: 1fr 1fr;
+    page-break-inside: avoid;
+  }
+}

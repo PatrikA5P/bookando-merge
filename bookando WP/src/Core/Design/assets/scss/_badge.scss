@@ -1,0 +1,62 @@
+@use 'sass:color';
+@use 'variables' as *;
+@use 'mixins' as *;
+
+.bookando-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45em;
+  padding: clamp(0.12em, 0.09em + 0.15vw, 0.21em) clamp(0.55em, 0.3em + 0.6vw, 0.88em);
+  font-size: clamp(0.82rem, 0.7rem + 0.2vw, 0.95rem); // 13–15px
+  border-radius: 2em;
+  font-weight: 700;
+  margin-right: 0.42em;
+  background: $bookando-border-light;
+  color: $bookando-text-dark;
+  letter-spacing: 0.01em;
+  vertical-align: middle;
+  line-height: 1.2;
+  user-select: none;
+  white-space: nowrap;
+
+  &:last-child { margin-right: 0; }
+
+  // Farbliche Varianten
+  &--primary  { background: $bookando-primary; color: $bookando-white; }
+  &--danger   { background: $bookando-danger;  color: $bookando-white; }
+  &--success  { background: $bookando-success; color: $bookando-white; }
+  &--warning  { background: $bookando-warning; color: $bookando-black; }
+  &--info     { background: $bookando-info;    color: $bookando-white; }
+
+  // Status-Varianten (Soft/Light)
+  &--success-light { background: $bookando-success-light; color: $bookando-success-dark; }
+  &--warning-light { background: $bookando-warning-light; color: $bookando-warning-dark; }
+  &--danger-light  { background: $bookando-danger-light;  color: $bookando-danger-dark; }
+  &--info-light    { background: $bookando-info-light;    color: $bookando-info-dark; }
+
+  // Status-Varianten (Dark)
+  &--success-dark { background: $bookando-success-dark; color: $bookando-white; }
+  &--warning-dark { background: $bookando-warning-dark; color: $bookando-white; }
+  &--danger-dark  { background: $bookando-danger-dark;  color: $bookando-white; }
+  &--info-dark    { background: $bookando-info-dark;    color: $bookando-white; }
+
+  // Größen-Modifier
+  &--sm {
+    font-size: clamp(0.72rem, 0.65rem + 0.1vw, 0.82rem);
+    padding: 0.09em 0.5em;
+    border-radius: 1.2em;
+  }
+  &--lg {
+    font-size: clamp(1rem, 0.85rem + 0.25vw, 1.17rem);
+    padding: 0.22em 1.1em;
+    border-radius: 2.8em;
+  }
+
+  // Icon-Support (SVG, Font, Emoji)
+  .badge-icon {
+    display: inline-flex;
+    align-items: center;
+    font-size: 1.12em;
+    margin-right: 0.18em;
+  }
+}

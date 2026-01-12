@@ -1,0 +1,54 @@
+{
+  "slug": "customers",
+  "plan": "starter",
+  "version": "1.0.0",
+  "tenant_required": true,
+  "license_required": true,
+  "features_required": [
+    "waitlist",
+    "feedback",
+    "mobile_app",
+    "webhooks",
+    "export_csv",
+    "rest_api_read"
+  ],
+  "group": "crm",
+  "is_saas": true,
+  "has_admin": true,
+  "supports_webhook": true,
+  "supports_offline": true,
+  "supports_calendar": false,
+  "name": {
+    "default": "Customers",
+    "de": "Kunden",
+    "en": "Customers",
+    "fr": "Client·e·s",
+    "it": "Clienti"
+  },
+  "alias": {
+    "de": "Kd",
+    "en": "Cust",
+    "fr": "Cli",
+    "it": "Cli"
+  },
+  "description": {
+    "default": "Manage customers for bookings and CRM.",
+    "de": "Verwaltung von Kunden- und Kontaktdaten.",
+    "en": "Manage customers for bookings and CRM.",
+    "fr": "Gérez les client·e·s pour les réservations et le CRM.",
+    "it": "Gestisci i clienti per le prenotazioni e il CRM."
+  },
+  "actions": {
+    "allowed": ["soft_delete", "hard_delete", "block", "activate", "export"],
+    "features": {
+      "export": ["export_csv"]
+    }
+  },
+  "visible": true,
+  "menu_icon": "dashicons-groups",
+  "menu_position": 30,
+  "dependencies": [],
+  "tabs": [],
+  "is_submodule": false,
+  "parent_module": null
+}

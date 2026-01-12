@@ -1,0 +1,46 @@
+// =====================================
+// tsconfig.json
+// =====================================
+
+{
+  "compilerOptions": {
+    "target": "ESNext",                      // Modernes JavaScript-Ziel
+    "module": "ESNext",                      // ESM-Module passend zu Vite
+    "moduleResolution": "node",             
+
+    "strict": true,                         // Strenge TS-Checks
+    "jsx": "preserve",                      // Für Vue SFC-Kompatibilität
+    "sourceMap": true,
+    "resolveJsonModule": true,
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true,
+    "skipLibCheck": true,                   // Schnellere Kompilierung
+
+    "baseUrl": ".",                         // Basis für Pfad-Aliase
+    "paths": {
+      "@core/*": ["src/Core/*"],
+      "@modules/*": ["src/modules/*"],      // Kleinbuchstaben konsistent
+      "@assets/*": ["src/assets/*"],
+      "@assets/http": ["src/assets/http/index.ts"],
+      "@http": ["src/assets/http/index.ts"]
+    },
+
+    "types": ["vite/client", "vitest/globals"], // Automatisch Vite & Vitest Typen
+
+    "isolatedModules": true,                // Für Vite und ESM wichtig
+    "noEmit": true                         // Keine JS-Dateien erzeugen, nur Typprüfung
+  },
+  "include": [
+    "src/**/*.ts",
+    "src/**/*.d.ts",
+    "src/**/*.tsx",
+    "src/**/*.vue",
+    "src/**/*.js",
+    "vite.config.*.ts",                     // Vite Config Dateien
+    "scripts/**/*.ts"                       // Eigene TS-Scripts (optional)
+  ],
+  "exclude": [
+    "node_modules",
+    "dist"
+  ]
+}

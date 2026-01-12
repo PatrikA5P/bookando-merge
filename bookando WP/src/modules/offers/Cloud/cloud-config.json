@@ -1,0 +1,9 @@
+{
+  "slug": "offers",
+  "embed": true,
+  "admin_path": "/admin/offers",
+  "api_path": "/api/offers",
+  "allowed_domains": [
+    "*.deine-saas-domain.tld"
+  ]
+}

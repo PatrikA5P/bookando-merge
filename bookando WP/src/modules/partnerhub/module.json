@@ -1,0 +1,18 @@
+{
+  "name": "partnerhub",
+  "title": "Partner Hub",
+  "description": "Verwalten Sie Partnerschaften, teilen Sie Dienstleistungen und Kurse, und tauschen Sie Kundendaten DSGVO-konform aus.",
+  "version": "1.0.0",
+  "author": "Bookando",
+  "plan": "professional",
+  "features_required": [
+    "partnerhub",
+    "partner_network",
+    "data_sharing"
+  ],
+  "dependencies": [
+    "offers",
+    "customers"
+  ],
+  "order": 35
+}

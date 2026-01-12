@@ -1,0 +1,54 @@
+{
+  "name": "bruderwerk/bookando",
+  "description": "Modulares Kurs- & Buchungs-Plugin für WordPress",
+  "type": "wordpress-plugin",
+  "license": "GPL-2.0-or-later",
+  "require": {
+    "php": ">=8.1",
+    "psr/container": "^2.0",
+    "stripe/stripe-php": "^13.0",
+    "paypal/paypal-server-sdk": "^0.6",
+    "klarna/kco_rest": "^4.0",
+    "mollie/mollie-api-php": "^2.0"
+  },
+  "require-dev": {
+    "wp-cli/wp-cli-bundle": "^2.11",
+    "wp-cli/i18n-command": "^2.5",
+    "phpstan/phpstan": "^1.11",
+    "phpunit/phpunit": "^10.5"
+  },
+  "autoload": {
+    "psr-4": {
+      "Bookando\\Core\\": "src/Core/",
+      "Bookando\\Helper\\": "src/Helper/",
+      "Bookando\\Module\\": "src/Module/",
+      "Bookando\\Modules\\": "src/modules/",
+      "Bookando\\CLI\\": "src/CLI/"
+    }
+  },
+  "scripts": {
+    "i18n:pot": [
+      "@php vendor/bin/wp --allow-root i18n make-pot . languages/bookando.pot --exclude=node_modules,vendor,tests,scripts,test-results"
+    ],
+    "i18n:mo": [
+      "@php vendor/bin/wp --allow-root i18n make-mo languages languages"
+    ],
+    "lint:phpstan": [
+      "@php vendor/bin/phpstan analyse src/Core src/modules"
+    ],
+    "phpstan": [
+      "@php vendor/bin/phpstan analyse src/Core src/modules"
+    ],
+    "test": [
+      "@php vendor/bin/phpunit --colors=always",
+      "@php scripts/qa/check-debug-artifacts.php"
+    ],
+    "qa:debug-scan": [
+      "@php scripts/qa/check-debug-artifacts.php"
+    ]
+  },
+  "config": {
+    "optimize-autoloader": true,
+    "preferred-install": "dist"
+  }
+}

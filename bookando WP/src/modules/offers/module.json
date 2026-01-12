@@ -1,0 +1,49 @@
+{
+  "slug": "offers",
+  "plan": "starter",
+  "version": "1.0.0",
+  "tenant_required": true,
+  "license_required": true,
+  "features_required": [
+    "rest_api_read",
+    "rest_api_write"
+  ],
+  "group": "offers",
+  "is_saas": true,
+  "has_admin": true,
+  "supports_webhook": false,
+  "supports_offline": false,
+  "supports_calendar": false,
+  "name": {
+    "default": "Offers",
+    "de": "Angebote",
+    "en": "Offers",
+    "fr": "Offres",
+    "it": "Offerte"
+  },
+  "alias": {
+    "de": "Angebote",
+    "en": "Offers",
+    "fr": "Offres",
+    "it": "Offerte"
+  },
+  "description": {
+    "default": "Zentraler Hub für Kurse, Dienstleistungen, Pakete und Gutscheine.",
+    "de": "Zentraler Hub für Kurse, Dienstleistungen, Pakete und Gutscheine.",
+    "en": "Central hub for courses, services, bundles and vouchers.",
+    "fr": "Hub central pour les cours, services, forfaits et bons cadeaux.",
+    "it": "Hub centrale per corsi, servizi, pacchetti e buoni regalo."
+  },
+  "visible": true,
+  "menu_icon": "dashicons-products",
+  "menu_position": 26,
+  "dependencies": [],
+  "tabs": [
+    "Kurse",
+    "Dienstleistungen",
+    "Pakete",
+    "Gutscheine"
+  ],
+  "is_submodule": false,
+  "parent_module": null
+}

@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Bookando - Enterprise Management</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            fontFamily: {
+              sans: ['Inter', 'sans-serif'],
+            },
+            fontSize: {
+              // Responsive Typography using Clamp
+              // Format: clamp(min, preferred, max)
+              'xs': 'clamp(0.7rem, 0.65rem + 0.2vw, 0.75rem)',
+              'sm': 'clamp(0.8rem, 0.75rem + 0.25vw, 0.875rem)',
+              'base': 'clamp(0.9rem, 0.85rem + 0.25vw, 1rem)',
+              'lg': 'clamp(1.05rem, 1rem + 0.3vw, 1.125rem)',
+              'xl': 'clamp(1.15rem, 1.1rem + 0.4vw, 1.25rem)',
+              '2xl': 'clamp(1.35rem, 1.25rem + 0.5vw, 1.5rem)',
+              '3xl': 'clamp(1.75rem, 1.5rem + 1vw, 2rem)',
+              '4xl': 'clamp(2.25rem, 2rem + 1.5vw, 2.75rem)',
+            },
+            colors: {
+              brand: {
+                50: '#f0f9ff',
+                100: '#e0f2fe',
+                500: '#0ea5e9',
+                600: '#0284c7',
+                700: '#0369a1',
+                900: '#0c4a6e',
+              },
+              slate: {
+                850: '#15202b', // Darker slate for sidebar
+              }
+            }
+          }
+        }
+      }
+    </script>
+    <style>
+      body {
+        font-family: 'Inter', sans-serif;
+        background-color: #f8fafc;
+        font-size: 16px; /* Base size fallback */
+        color: #1e293b;
+      }
+      /* Automatic Heading Styles using fluid font sizes */
+      h1 { font-size: theme('fontSize.3xl'); font-weight: 700; letter-spacing: -0.025em; }
+      h2 { font-size: theme('fontSize.2xl'); font-weight: 700; letter-spacing: -0.025em; }
+      h3 { font-size: theme('fontSize.xl'); font-weight: 600; letter-spacing: -0.015em; }
+      h4 { font-size: theme('fontSize.lg'); font-weight: 600; }
+      h5 { font-size: theme('fontSize.base'); font-weight: 600; }
+      h6 { font-size: theme('fontSize.sm'); font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; }
+
+      /* Custom scrollbar */
+      ::-webkit-scrollbar {
+        width: 6px;
+        height: 6px;
+      }
+      ::-webkit-scrollbar-track {
+        background: transparent;
+      }
+      ::-webkit-scrollbar-thumb {
+        background: #cbd5e1;
+        border-radius: 3px;
+      }
+      ::-webkit-scrollbar-thumb:hover {
+        background: #94a3b8;
+      }
+    </style>
+  <script type="importmap">
+{
+  "imports": {
+    "react-dom/": "https://aistudiocdn.com/react-dom@^19.2.0/",
+    "recharts": "https://aistudiocdn.com/recharts@^3.4.1",
+    "react/": "https://aistudiocdn.com/react@^19.2.0/",
+    "react": "https://aistudiocdn.com/react@^19.2.0",
+    "lucide-react": "https://aistudiocdn.com/lucide-react@^0.554.0",
+    "qrcode": "https://esm.sh/qrcode@1.5.3",
+    "vite": "https://esm.sh/vite@^7.3.1",
+    "@vitejs/plugin-react": "https://esm.sh/@vitejs/plugin-react@^5.1.2",
+    "path": "https://esm.sh/path@^0.12.7",
+    "url": "https://esm.sh/url@^0.11.4"
+  }
+}
+</script>
+<link rel="stylesheet" href="/index.css">
+</head>
+  <body>
+    <div id="root"></div>
+  <script type="module" src="/index.tsx"></script>
+</body>
+</html>

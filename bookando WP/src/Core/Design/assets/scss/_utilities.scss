@@ -1,0 +1,332 @@
+// ===============================
+// Bookando Utility-Classes (100% Token/Map-based, responsive, darkmode)
+// ===============================
+//
+// ► Utilities werden ausschließlich aus Maps und Variablen in _variables.scss / _tokens.scss generiert.
+// ► NIE harte Werte in dieser Datei! Neue Werte IMMER zuerst in den zentralen Maps anlegen.
+// ► Responsive Utilities (z.B. .sm\:bookando-p-md) nach gleichem Prinzip via Media-Query/Loop.
+// ► Darkmode-Utilities mit .theme-dark / [data-theme="dark"] Selector!
+//
+// Erweiterbar: Einfach Map-Einträge in _variables.scss/_tokens.scss ergänzen – Utilities werden automatisch mitgebaut!
+// ===============================
+
+@use "sass:map";
+@use "sass:string";
+@use 'variables' as *;
+@use 'mixins' as *;
+
+// --- TEXT & FARBE ---
+@each $name, $color in $bookando-text-utilities {
+  .bookando-text-#{$name} { color: $color !important; }
+}
+
+// --- FONT-SIZE Utilities ---
+@each $name, $size in $bookando-font-size-utilities {
+  .bookando-text-#{$name} { font-size: $size !important; }
+}
+
+// --- TEXT-TRANSFORM, ELLIPSIS, STYLE ---
+.bookando-text-uppercase  { text-transform: uppercase !important; }
+.bookando-text-lowercase  { text-transform: lowercase !important; }
+.bookando-ellipsis        { @include ellipsis; }
+.bookando-italic          { font-style: italic !important; }
+.bookando-underline       { text-decoration: underline !important; }
+.bookando-line-through    { text-decoration: line-through !important; }
+
+// --- FONT-WEIGHT (aus zentraler Map) ---
+.bookando-font-bold      { font-weight: $bookando-font-weight-bold !important; }
+.bookando-font-semibold  { font-weight: $bookando-font-weight-semi-bold !important; }
+.bookando-font-normal    { font-weight: $bookando-font-weight-normal !important; }
+
+// --- MARGIN / PADDING (Spacing) ---
+@each $side, $abbr in (top: t, right: r, bottom: b, left: l) {
+  @each $name, $val in $bookando-spacing {
+    .bookando-m#{$abbr}-#{$name} { margin-#{$side}: $val !important; }
+    .bookando-p#{$abbr}-#{$name} { padding-#{$side}: $val !important; }
+  }
+}
+@each $axis, $props in (x: (left, right), y: (top, bottom)) {
+  @each $name, $val in $bookando-spacing {
+    .bookando-m#{$axis}-#{$name} { @each $prop in $props { margin-#{$prop}: $val !important; } }
+    .bookando-p#{$axis}-#{$name} { @each $prop in $props { padding-#{$prop}: $val !important; } }
+  }
+}
+@each $name, $val in $bookando-spacing {
+  .bookando-m-#{$name} { margin: $val !important; }
+  .bookando-p-#{$name} { padding: $val !important; }
+}
+
+// --- WIDTH / MAX-WIDTH / CONTAINER ---
+// Breiten aus Token-Map ($bookando-width-utilities)
+@each $name, $val in $bookando-width-utilities {
+  .bookando-width-#{$name} { width: $val !important; max-width: $val !important; }
+}
+
+// Max-Widths aus Token-Map ($bookando-container-max-utilities)
+@each $name, $val in $bookando-container-max-utilities {
+  .bookando-max-w-#{$name} { max-width: $val !important; }
+}
+
+// Container-Helfer
+.bookando-container-max {
+  max-width: $bookando-container-max !important;
+  width: 100%;
+  margin: 0 auto;
+}
+
+// Legacy-Aliasse (keine harten Werte mehr)
+.bookando-max-width-100 { max-width: map.get($bookando-container-max-utilities, full) !important; }
+.bookando-max-width-800 { max-width: map.get($bookando-container-max-utilities, narrow) !important; }
+
+
+// === WIDTH/HEIGHT Utilities ===
+@function _bookando-prop-for($name) {
+  @if string.index($name, "min-w-") == 1 { @return min-width; }
+  @if string.index($name, "max-w-") == 1 { @return max-width; }
+  @if string.index($name, "min-h-") == 1 { @return min-height; }
+  @if string.index($name, "max-h-") == 1 { @return max-height; }
+  @if string.index($name, "w-") == 1 { @return width; }
+  @if string.index($name, "h-") == 1 { @return height; }
+  @return width;
+}
+@each $name, $val in $bookando-size-utilities {
+  .bookando-#{$name} { #{_bookando-prop-for($name)}: $val !important; }
+}
+
+// === Card-spezifische Hoehen als Utilities injizieren ===
+@each $key, $val in $bookando-card-heights {
+  .bookando-min-h-card-#{$key} { min-height: $val !important; } // Shortcut
+}
+ 
+/* === Sticky helpers === */
+.bookando-sticky-top-0 { position: sticky !important; top: 0 !important; }
+
+
+// --- FLEX, GRID, GAP, OVERFLOW, DISPLAY ---
+.bookando-flex           { display: flex !important; }
+.bookando-inline-flex    { display: inline-flex !important; }
+.bookando-flex-center    { @include flex-center; }
+.bookando-flex-wrap      { flex-wrap: wrap !important; }
+.bookando-flex-column    { flex-direction: column !important; } // legacy alias
+.bookando-grid           { display: grid !important; }
+
+// FLEX Alignment Utilities (aus Map)
+@each $name, $val in $bookando-flex-align-utilities {
+  @if string.index($name, "items-") {
+    .bookando-#{$name} { align-items: $val !important; }
+  } @else if string.index($name, "justify-") {
+    .bookando-#{$name} { justify-content: $val !important; }
+  }
+}
+
+// FLEX Direction (macht .bookando-flex-col / -row verfügbar)
+@each $name, $val in $bookando-flex-direction-utilities {
+  .bookando-#{$name} { flex-direction: $val !important; }
+}
+
+// FLEX Basis Utilities (nun ohne doppeltes "basis-": erzeugt .bookando-basis-md usw.)
+@each $name, $val in $bookando-flex-basis-utilities {
+  .bookando-#{$name} { flex: 0 0 $val !important; }
+}
+
+// FLEX Shrink Utilities (für .bookando-flex-shrink-0)
+@each $name, $val in $bookando-flex-shrink-utilities {
+  .bookando-#{$name} { flex-shrink: $val !important; }
+}
+
+// TEXT-ALIGN Utilities (für .bookando-text-center)
+@each $name, $val in $bookando-text-align-utilities {
+  .bookando-#{$name} { text-align: $val !important; }
+}
+
+
+@each $name, $val in $bookando-spacing {
+  .bookando-gap-#{$name} { gap: $val !important; }
+}
+
+.bookando-hide           { display: none !important; }
+.bookando-show           { display: block !important; }
+.bookando-visible        { visibility: visible !important; }
+.bookando-invisible      { visibility: hidden !important; }
+.bookando-overflow-hidden { overflow: hidden !important; }
+.bookando-overflow-auto   { overflow: auto !important; }
+
+// --- CURSOR, Z-INDEX, A11Y ---
+.bookando-cursor-pointer     { cursor: pointer !important; }
+.bookando-cursor-not-allowed { cursor: not-allowed !important; }
+@each $z, $val in $bookando-z-utilities {
+  .bookando-z-#{$z} { z-index: $val !important; }
+}
+.bookando-sr-only { @include visually-hidden; }
+
+// --- BORDER-RADIUS (inkl. Pill, Full, usw.) ---
+@each $radius-name, $radius-val in $bookando-radius-sizes {
+  .bookando-rounded-#{$radius-name}  { border-radius: $radius-val !important; }
+  .bookando-rounded-t#{$radius-name} { border-top-left-radius: $radius-val !important; border-top-right-radius: $radius-val !important; }
+  .bookando-rounded-b#{$radius-name} { border-bottom-left-radius: $radius-val !important; border-bottom-right-radius: $radius-val !important; }
+  .bookando-rounded-l#{$radius-name} { border-top-left-radius: $radius-val !important; border-bottom-left-radius: $radius-val !important; }
+  .bookando-rounded-r#{$radius-name} { border-top-right-radius: $radius-val !important; border-bottom-right-radius: $radius-val !important; }
+  .bookando-rounded-tl-#{$radius-name} { border-top-left-radius: $radius-val !important; }
+  .bookando-rounded-tr-#{$radius-name} { border-top-right-radius: $radius-val !important; }
+  .bookando-rounded-bl-#{$radius-name} { border-bottom-left-radius: $radius-val !important; }
+  .bookando-rounded-br-#{$radius-name} { border-bottom-right-radius: $radius-val !important; }
+}
+// Semantische Shortcuts
+.bookando-rounded      { border-radius: map.get($bookando-radius-sizes, md) !important; }
+.bookando-rounded-sm   { border-radius: map.get($bookando-radius-sizes, sm) !important; }
+.bookando-rounded-md   { border-radius: map.get($bookando-radius-sizes, md) !important; }
+.bookando-rounded-lg   { border-radius: map.get($bookando-radius-sizes, lg) !important; }
+.bookando-rounded-full { border-radius: map.get($bookando-radius-sizes, full) !important; }
+.bookando-rounded-pill { border-radius: map.get($bookando-radius-sizes, pill) !important; }
+
+// --- BOX-SHADOW Utilities ---
+@each $level, $shadow in $bookando-shadows {
+  .bookando-shadow-#{$level} { box-shadow: #{$shadow} !important; }
+}
+
+// --- BORDER-WIDTH & BORDER-COLOR Utilities ---
+@each $bw, $val in $bookando-border-widths {
+  .bookando-border-#{$bw}  { border-width: $val !important; }
+}
+@each $bname, $bcolor in $bookando-border-utilities {
+  .bookando-border-#{$bname} { border-color: $bcolor !important; }
+}
+
+// --- BORDER-WIDTH (per Seite) ---
+@each $side, $abbr in (top: t, right: r, bottom: b, left: l) {
+  @each $bw, $val in $bookando-border-widths {
+    .bookando-border-#{$abbr}-#{$bw} { border-#{$side}-width: $val !important; }
+  }
+}
+
+// --- BORDER-COLOR (per Seite) ---
+@each $side, $abbr in (top: t, right: r, bottom: b, left: l) {
+  @each $bname, $bcolor in $bookando-border-utilities {
+    .bookando-border-#{$abbr}-#{$bname} { border-#{$side}-color: $bcolor !important; }
+  }
+}
+
+// --- BORDER-STYLE (per Seite) ---
+@each $side, $abbr in (top: t, right: r, bottom: b, left: l) {
+  @each $style, $def in $bookando-border-styles {
+    .bookando-border-#{$abbr}-#{$style} { border-#{$side}-style: $def !important; }
+  }
+}
+
+// --- BORDER-WIDTH (Achsen) ---
+@each $axis, $props in (x: (left, right), y: (top, bottom)) {
+  @each $bw, $val in $bookando-border-widths {
+    .bookando-border-#{$axis}-#{$bw} {
+      @each $p in $props { border-#{$p}-width: $val !important; }
+    }
+  }
+}
+
+// --- BG-COLOR Utilities ---
+@each $bgname, $bgcolor in $bookando-bg-utilities {
+  .bookando-bg-#{$bgname} { background: $bgcolor !important; }
+}
+
+// --- OPACITY Utilities ---
+@each $op, $val in $bookando-opacity-utilities {
+  .bookando-opacity-#{$op} { opacity: $val !important; }
+}
+
+// --- TRANSITION-DURATION Utilities (setzt nur CSS-Var, nicht forcebar) ---
+@each $name, $ms in $bookando-duration-utilities {
+  .bookando-duration-#{$name} { --bookando-duration: #{$ms}; }
+}
+
+// --- BORDER-STYLE Utilities ---
+@each $style, $def in $bookando-border-styles {
+  .bookando-border-#{$style} { border-style: $def !important; }
+}
+
+// --- FLEX-FILL UTILITIES (z.B. in FilterBar) ---
+@each $name, $props in $bookando-flex-fill {
+  .bookando-#{$name} {
+    @each $prop, $val in $props {
+      #{$prop}: #{$val} !important;
+    }
+  }
+}
+
+// -------------------------------------------------------------------------
+// RESPONSIVE Utilities (für ALLE Maps, einfach erweiterbar!)
+// Beispiel: .sm\:bookando-p-md, .md\:bookando-text-lg, ...
+// -------------------------------------------------------------------------
+// nutzt die zentrale Breakpoint-Map aus _variables.scss ($bookando-breakpoints)
+@each $label, $bp in $bookando-breakpoints {
+  @media (max-width: #{$bp}) {
+    // Responsive Padding/Margin
+    @each $side, $abbr in (top: t, right: r, bottom: b, left: l) {
+      @each $name, $val in $bookando-spacing {
+        .#{$label}\:bookando-m#{$abbr}-#{$name} { margin-#{$side}: $val !important; }
+        .#{$label}\:bookando-p#{$abbr}-#{$name} { padding-#{$side}: $val !important; }
+      }
+    }
+    @each $axis, $props in (x: (left, right), y: (top, bottom)) {
+      @each $name, $val in $bookando-spacing {
+        .#{$label}\:bookando-m#{$axis}-#{$name} { @each $prop in $props { margin-#{$prop}: $val !important; } }
+        .#{$label}\:bookando-p#{$axis}-#{$name} { @each $prop in $props { padding-#{$prop}: $val !important; } }
+      }
+    }
+    @each $name, $val in $bookando-spacing {
+      .#{$label}\:bookando-m-#{$name} { margin: $val !important; }
+      .#{$label}\:bookando-p-#{$name} { padding: $val !important; }
+    }
+    // Responsive Font-Size
+    @each $name, $size in $bookando-font-size-utilities {
+      .#{$label}\:bookando-text-#{$name} { font-size: $size !important; }
+    }
+    // Responsive Border-Radius
+    @each $radius-name, $radius-val in $bookando-radius-sizes {
+      .#{$label}\:bookando-rounded-#{$radius-name} { border-radius: $radius-val !important; }
+    }
+    // Responsive BG-Color
+    @each $bgname, $bgcolor in $bookando-bg-utilities {
+      .#{$label}\:bookando-bg-#{$bgname} { background: $bgcolor !important; }
+    }
+    // Responsive Visibility
+    .#{$label}\:bookando-hide { display: none !important; }
+    .#{$label}\:bookando-show { display: block !important; }
+  }
+}
+
+// -------------------------------------------------------------------------
+// RESPONSIVE Utilities (für show und Hide)
+// Wird z.b. in _layout.scss verwendet
+// -------------------------------------------------------------------------
+
+.bookando-hide-on-mobile {
+  @media (max-width: $bookando-breakpoint-sm) {
+    display: none !important;
+  }
+}
+.bookando-show-on-mobile {
+  display: none !important;
+  @media (max-width: $bookando-breakpoint-sm) {
+    display: flex !important;
+  }
+}
+
+// -------------------------------------------------------------------------
+// DARKMODE Utilities – ALLE relevanten Utilities auch für Darkmode
+// Mapping: 
+//    a) Per Map mit Darkmode-Farben (empfohlen: $bookando-bg-dark-utilities, $bookando-text-dark-utilities etc.)
+//    b) Oder via CSS-Variable-Overrides, falls Farben zentral über :root/.theme-dark gesetzt werden
+//    c) Fallback: Standardfarben, wenn keine spezielle Darkmap gepflegt ist
+// -------------------------------------------------------------------------
+
+.theme-dark, [data-theme="dark"] {
+  @each $bgname, $bgcolor in $bookando-bg-dark-utilities {
+    .bookando-bg-#{$bgname} { background: $bgcolor !important; }
+  }
+  @each $name, $color in $bookando-text-dark-utilities {
+    .bookando-text-#{$name} { color: $color !important; }
+  }
+}
+
+// =====================
+// ** ANCHOR: Nur Maps/Design-Tokens nutzen, keine harten Werte oder doppelte Definitionen! **
+// =====================

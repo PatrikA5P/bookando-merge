@@ -1,0 +1,693 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: bookando\n"
+"POT-Creation-Date: 2025-11-09 00:00+0000\n"
+"PO-Revision-Date: 2025-11-09 00:00+0000\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#: src/modules/academy/Admin/Admin.php:12
+msgid "Academy"
+msgstr ""
+
+#: src/modules/employees/RestHandler.php:543
+msgid "Aktion fehlt."
+msgstr ""
+
+#: src/Core/Admin/LogsPage.php:17
+msgid "Aktivitätslog"
+msgstr ""
+
+#: src/Core/Admin/LogsPage.php:40
+msgid "Aktivitätsprotokoll"
+msgstr ""
+
+#: src/modules/offers/RestHandler.php:146 src/modules/offers/RestHandler.php:404
+msgid "Aktualisierung fehlgeschlagen."
+msgstr ""
+
+#: src/Core/Admin/LogsPage.php:182
+msgid "Aktueller Mandant"
+msgstr ""
+
+#: src/Core/Admin/LogsPage.php:183
+msgid "Alle Mandanten"
+msgstr ""
+
+#: src/Core/Admin/LogsPage.php:197
+msgid "Als CSV exportieren"
+msgstr ""
+
+#: src/modules/appointments/Admin/Admin.php:12
+msgid "Appointments"
+msgstr ""
+
+#: src/modules/academy/RestHandler.php:166
+msgid "Ausbildungskarte fehlt."
+msgstr ""
+
+#: src/modules/academy/RestHandler.php:182
+msgid "Ausbildungskarte nicht gefunden."
+msgstr ""
+
+#: src/modules/academy/StateRepository.php:195
+msgid "Autobahntraining"
+msgstr ""
+
+#: src/modules/employees/RestHandler.php:2366 src/modules/employees/RestHandler.php:2198 src/modules/employees/RestHandler.php:899 src/modules/employees/RestHandler.php:790 src/modules/employees/RestHandler.php:675
+msgid "Benutzer-ID fehlt."
+msgstr ""
+
+#: src/Core/Admin/LogsPage.php:168
+msgid "Bis"
+msgstr ""
+
+#: src/Core/Admin/Menu.php:80 src/Core/Admin/Menu.php:30 src/Core/Admin/Menu.php:29
+msgid "Bookando"
+msgstr ""
+
+#: src/Core/Admin/LogsPage.php:16
+msgid "Bookando Aktivitätsprotokoll"
+msgstr ""
+
+#: src/Core/Role/CapabilityService.php:61
+msgid "Bookando Manager"
+msgstr ""
+
+#: src/Core/Role/CapabilityService.php:64
+msgid "Bookando Mitarbeiter"
+msgstr ""
+
+#: src/modules/employees/RestHandler.php:2316
+msgid "connection_id oder URL fehlt."
+msgstr ""
+
+#: src/modules/customers/Admin/Admin.php:12
+msgid "Customers"
+msgstr ""
+
+#: src/modules/academy/RestHandler.php:218
+msgid "Das Academy-Modul ist für deinen Tarif nicht verfügbar."
+msgstr ""
+
+#: src/modules/finance/RestHandler.php:284
+msgid "Das Finanzmodul ist für deinen Tarif nicht verfügbar."
+msgstr ""
+
+#: src/modules/settings/RestHandler.php:186
+msgid "Der Feature-Schlüssel fehlt."
+msgstr ""
+
+#: src/modules/appointments/RestHandler.php:98
+msgid "Die Felder customer_id, service_id und starts_at müssen angegeben werden."
+msgstr ""
+
+#: src/modules/appointments/RestHandler.php:162
+msgid "Die Felder event_id und customer_id müssen angegeben werden."
+msgstr ""
+
+#: src/modules/settings/RestHandler.php:131
+msgid "Die Rollen-ID fehlt."
+msgstr ""
+
+#: src/modules/finance/StateRepository.php:249
+msgid "Dienstleistungen"
+msgstr ""
+
+#: src/modules/employees/RestHandler.php:1021
+msgid "Dieser Endpunkt ist veraltet. Bitte /employees/{id}/special-day-sets verwenden."
+msgstr ""
+
+#: src/Core/Licensing/LicenseManager.php:430
+msgid "Dieses Feature ist in deinem aktuellen Tarif nicht enthalten."
+msgstr ""
+
+#: src/modules/employees/RestHandler.php:2514
+msgid "E-Mail-Versand fehlgeschlagen."
+msgstr ""
+
+#: src/modules/academy/StateRepository.php:172
+msgid "Einführungskurs in die theoretischen Inhalte."
+msgstr ""
+
+#: src/modules/finance/StateRepository.php:410
+msgid "Einführungsrabatt für neue Kunden"
+msgstr ""
+
+#: src/modules/employees/RestHandler.php:2493
+msgid "Empfänger fehlen."
+msgstr ""
+
+#: src/modules/employees/Admin/Admin.php:12
+msgid "Employees"
+msgstr ""
+
+#: src/modules/offers/RestHandler.php:108 src/modules/offers/RestHandler.php:390
+msgid "Erstellen fehlgeschlagen."
+msgstr ""
+
+#: src/modules/offers/RestHandler.php:222
+msgid "Es wurden keine gültigen IDs übermittelt."
+msgstr ""
+
+#: src/Core/Dispatcher/CronDispatcher.php:86
+msgid "Every 15 Minutes"
+msgstr ""
+
+#: src/modules/customers/Api/Api.php:79
+msgid "Export noch nicht implementiert"
+msgstr ""
+
+#: src/modules/finance/StateRepository.php:363
+msgid "Fahrlektion 90min"
+msgstr ""
+
+#: src/modules/academy/StateRepository.php:194
+msgid "Fahrpraxis Stadt"
+msgstr ""
+
+#: src/modules/academy/StateRepository.php:173
+msgid "Fahrschule"
+msgstr ""
+
+#: src/modules/academy/StateRepository.php:189
+msgid "Fahrschule Klasse B"
+msgstr ""
+
+#: src/modules/resources/StateRepository.php:200
+msgid "Fahrzeug A"
+msgstr ""
+
+#: src/modules/academy/StateRepository.php:178
+msgid "Fahrzeugkontrolle vorbereiten"
+msgstr ""
+
+#: src/Core/Admin/LogsPage.php:159
+msgid "Fehler"
+msgstr ""
+
+#: src/Core/Admin/LogsPage.php:195
+msgid "Filtern"
+msgstr ""
+
+#: src/modules/finance/Admin/Admin.php:12
+msgid "Finance"
+msgstr ""
+
+#: src/modules/academy/RestHandler.php:174
+msgid "Fortschritt fehlt."
+msgstr ""
+
+#: src/modules/resources/StateRepository.php:189
+msgid "Geeignet für Theorieunterricht."
+msgstr ""
+
+#: src/modules/academy/StateRepository.php:193
+msgid "Grundkurs Theorie"
+msgstr ""
+
+#: src/modules/academy/StateRepository.php:191
+msgid "Grundlagen abgeschlossen, Fahrpraxis in Arbeit."
+msgstr ""
+
+#: src/modules/academy/StateRepository.php:171
+msgid "Grundlagen Theorie"
+msgstr ""
+
+#: src/modules/academy/StateRepository.php:177
+msgid "Grundlagen und Prioritäten erkennen"
+msgstr ""
+
+#: src/modules/finance/StateRepository.php:394
+msgid "Gutschrift – abgesagte Fahrlektion"
+msgstr ""
+
+#: src/Core/Dispatcher/WebhookDispatcher.php:45
+msgid "Handler für %s nicht gefunden"
+msgstr ""
+
+#: src/modules/resources/StateRepository.php:167
+msgid "Hauptstandort"
+msgstr ""
+
+#: src/modules/employees/RestHandler.php:2500
+msgid "ICS-Helfer fehlt."
+msgstr ""
+
+#: src/modules/employees/RestHandler.php:560 src/modules/employees/RestHandler.php:553 src/modules/employees/RestHandler.php:547 src/modules/customers/CustomerService.php:187 src/modules/customers/CustomerService.php:176 src/modules/customers/CustomerService.php:164
+msgid "IDs fehlen."
+msgstr ""
+
+#: src/Core/Admin/LogsPage.php:157
+msgid "Info"
+msgstr ""
+
+#: src/Core/Admin/LogsPage.php:270
+msgid "Integrationshinweise"
+msgstr ""
+
+#: src/Core/Admin/Menu.php:80
+msgid "Kein Modul aktiviert."
+msgstr ""
+
+#: src/Core/Base/BaseAdmin.php:41 src/Core/Admin/LogsPage.php:27
+msgid "Keine Berechtigung"
+msgstr ""
+
+#: src/modules/employees/RestHandler.php:2488 src/modules/employees/RestHandler.php:2447 src/modules/employees/RestHandler.php:2408 src/modules/employees/RestHandler.php:2397 src/modules/employees/RestHandler.php:2372 src/modules/employees/RestHandler.php:2188 src/modules/employees/RestHandler.php:972 src/modules/employees/RestHandler.php:903 src/modules/employees/RestHandler.php:830 src/modules/employees/RestHandler.php:800 src/modules/employees/RestHandler.php:737 src/modules/employees/RestHandler.php:680 src/modules/employees/RestHandler.php:386 src/modules/employees/RestHandler.php:74
+msgid "Keine Berechtigung."
+msgstr ""
+
+#: src/Core/Admin/LogsPage.php:207
+msgid "Keine Logeinträge gefunden."
+msgstr ""
+
+#: src/Core/Admin/LogsPage.php:216 src/Core/Admin/LogsPage.php:146
+msgid "Kontext"
+msgstr ""
+
+#: src/modules/finance/StateRepository.php:250
+msgid "Kurse & Ausbildung"
+msgstr ""
+
+#: src/Core/Admin/vue-container.php:149
+msgid "Lade Modul..."
+msgstr ""
+
+#: src/Core/Admin/LogsPage.php:171
+msgid "Limit"
+msgstr ""
+
+#: src/modules/resources/StateRepository.php:201
+msgid "Limousine Automatik"
+msgstr ""
+
+#: src/modules/offers/RestHandler.php:181 src/modules/offers/RestHandler.php:418
+msgid "Löschen fehlgeschlagen."
+msgstr ""
+
+#: src/Core/Admin/LogsPage.php:215 src/Core/Admin/LogsPage.php:179
+msgid "Mandant"
+msgstr ""
+
+#: src/modules/settings/RestHandler.php:225 src/modules/settings/RestHandler.php:170 src/modules/settings/RestHandler.php:114 src/modules/settings/RestHandler.php:66 src/modules/resources/RestHandler.php:115 src/modules/resources/RestHandler.php:67 src/modules/offers/RestHandler.php:427 src/modules/finance/RestHandler.php:145 src/modules/finance/RestHandler.php:129 src/modules/finance/RestHandler.php:116 src/modules/finance/RestHandler.php:87 src/modules/finance/RestHandler.php:58 src/modules/finance/RestHandler.php:26 src/modules/employees/RestHandler.php:2463 src/modules/employees/RestHandler.php:2348 src/modules/employees/RestHandler.php:1010 src/modules/employees/RestHandler.php:872 src/modules/employees/RestHandler.php:774 src/modules/employees/RestHandler.php:525 src/modules/customers/RestHandler.php:90 src/modules/appointments/RestHandler.php:150 src/modules/appointments/RestHandler.php:83 src/modules/academy/RestHandler.php:99 src/modules/academy/RestHandler.php:86 src/modules/academy/RestHandler.php:57 src/modules/academy/RestHandler.php:25
+msgid "Methode nicht unterstützt."
+msgstr ""
+
+#: src/Core/Admin/LogsPage.php:217 src/Core/Admin/LogsPage.php:149
+msgid "Modul"
+msgstr ""
+
+#: src/Core/Dispatcher/RestDispatcher.php:60
+msgid "Module slug must not be empty when registering REST handlers."
+msgstr ""
+
+#: src/Core/Admin/LogsPage.php:218 src/Core/Admin/LogsPage.php:152
+msgid "Nachricht"
+msgstr ""
+
+#: src/modules/offers/RestHandler.php:86 src/modules/offers/RestHandler.php:131 src/modules/offers/RestHandler.php:169 src/modules/offers/RestHandler.php:189 src/modules/offers/RestHandler.php:357 src/modules/employees/RestHandler.php:2423 src/modules/employees/RestHandler.php:398 src/modules/employees/RestHandler.php:82 src/modules/customers/CustomerService.php:40
+msgid "Nicht gefunden."
+msgstr ""
+
+#: src/modules/employees/RestHandler.php:83 src/modules/customers/CustomerService.php:44
+msgid "Nicht mehr verfügbar."
+msgstr ""
+
+#: src/modules/offers/RestHandler.php:232 src/modules/offers/RestHandler.php:459
+msgid "Nicht unterstützte Sammelaktion."
+msgstr ""
+
+#: src/Core/Admin/LogsPage.php:271
+msgid "Nutze ActivityLogger::log() in WP-CLI-Kommandos, Cronjobs oder Webhook-Handlern, um Vorgänge tenant-sicher zu verfolgen. Über die Filter `bookando_tenant_id_resolved` und `bookando_tenant_allow_header_switch` lassen sich externe Systeme einbinden."
+msgstr ""
+
+#: src/modules/offers/Admin/Admin.php:12
+msgid "Offers"
+msgstr ""
+
+#: src/Core/Admin/LogsPage.php:219
+msgid "Payload"
+msgstr ""
+
+#: src/modules/employees/RestHandler.php:590 src/modules/employees/RestHandler.php:409 src/modules/employees/RestHandler.php:326 src/modules/customers/CustomerValidator.php:60
+msgid "Pflichtfelder fehlen."
+msgstr ""
+
+#: src/modules/resources/Admin/Admin.php:12
+msgid "Resources"
+msgstr ""
+
+#: src/modules/resources/RestHandler.php:139
+msgid "Ressource fehlt."
+msgstr ""
+
+#: src/Core/Dispatcher/RestDispatcher.php:67
+msgid "REST handler class \"%1$s\" for module \"%2$s\" does not exist."
+msgstr ""
+
+#: src/modules/offers/RestHandler.php:245
+msgid "Sammelaktion fehlgeschlagen."
+msgstr ""
+
+#: src/modules/resources/StateRepository.php:188
+msgid "Seminarraum"
+msgstr ""
+
+#: src/modules/settings/Admin/Admin.php:12
+msgid "Settings"
+msgstr ""
+
+#: src/Core/Admin/LogsPage.php:214 src/Core/Admin/LogsPage.php:155
+msgid "Severity"
+msgstr ""
+
+#: src/modules/academy/StateRepository.php:178
+msgid "Sicherheitschecks"
+msgstr ""
+
+#: src/Core/Admin/LogsPage.php:184
+msgid "Spezifischer Mandant"
+msgstr ""
+
+#: src/modules/appointments/RestHandler.php:184
+msgid "Startzeitpunkt der Veranstaltung konnte nicht ermittelt werden."
+msgstr ""
+
+#: src/modules/appointments/RestHandler.php:109
+msgid "Startzeitpunkt konnte nicht verarbeitet werden."
+msgstr ""
+
+#: src/modules/offers/RestHandler.php:297
+msgid "Status ist ungültig."
+msgstr ""
+
+#: src/Core/Admin/LogsPage.php:193
+msgid "Tenant-ID"
+msgstr ""
+
+#: src/modules/finance/StateRepository.php:371
+msgid "Theoriekurs"
+msgstr ""
+
+#: src/modules/offers/RestHandler.php:279 src/modules/offers/RestHandler.php:287
+msgid "Titel ist erforderlich."
+msgstr ""
+
+#: src/Core/Admin/LogsPage.php:41
+msgid "Überwache die letzten Vorgänge im System. Filtere nach Schweregrad, Kontext, Zeitraum oder Modul und exportiere die Daten bei Bedarf als CSV."
+msgstr ""
+
+#: src/modules/finance/StateRepository.php:251
+msgid "Umsatzsteuer"
+msgstr ""
+
+#: src/modules/employees/RestHandler.php:650 src/modules/customers/CustomerService.php:251
+msgid "Unbekannte Aktion."
+msgstr ""
+
+#: src/modules/offers/RestHandler.php:63 src/modules/offers/RestHandler.php:122 src/modules/offers/RestHandler.php:160
+msgid "Ungültige Angebots-ID."
+msgstr ""
+
+#: src/modules/employees/RestHandler.php:581 src/modules/employees/RestHandler.php:391 src/modules/employees/RestHandler.php:318 src/modules/customers/CustomerValidator.php:49
+msgid "Ungültige E-Mail-Adresse."
+msgstr ""
+
+#: src/modules/offers/RestHandler.php:267
+msgid "Ungültige Eingabedaten."
+msgstr ""
+
+#: src/modules/finance/RestHandler.php:235
+msgid "Ungültige Einstellungen."
+msgstr ""
+
+#: src/modules/finance/RestHandler.php:187
+msgid "Ungültige Gutschriftsdaten."
+msgstr ""
+
+#: src/modules/academy/RestHandler.php:120
+msgid "Ungültige Kursdaten übermittelt."
+msgstr ""
+
+#: src/modules/finance/RestHandler.php:211
+msgid "Ungültige Rabattcode-Daten."
+msgstr ""
+
+#: src/modules/finance/RestHandler.php:163
+msgid "Ungültige Rechnungsdaten."
+msgstr ""
+
+#: src/modules/resources/RestHandler.php:125
+msgid "Ungültige Ressourcendaten."
+msgstr ""
+
+#: src/modules/offers/RestHandler.php:203 src/modules/offers/RestHandler.php:213
+msgid "Ungültige Sammelaktion."
+msgstr ""
+
+#: src/modules/academy/RestHandler.php:147
+msgid "Ungültige Trainingsdaten übermittelt."
+msgstr ""
+
+#: src/modules/employees/RestHandler.php:2210
+msgid "Ungültige URL."
+msgstr ""
+
+#: src/modules/employees/RestHandler.php:2207
+msgid "URL fehlt."
+msgstr ""
+
+#: src/modules/customers/CustomerService.php:323
+msgid "Validierung fehlgeschlagen."
+msgstr ""
+
+#: src/modules/academy/StateRepository.php:177
+msgid "Verkehrsregeln"
+msgstr ""
+
+#: src/Core/Admin/LogsPage.php:165
+msgid "Von"
+msgstr ""
+
+#: src/Core/Admin/LogsPage.php:158
+msgid "Warnung"
+msgstr ""
+
+#: src/Core/Admin/LogsPage.php:213
+msgid "Zeitpunkt"
+msgstr ""
+
+#: src/modules/resources/StateRepository.php:168
+msgid "Zentrale Anlaufstelle für Kunden."
+msgstr ""
+
+#: src/Core/Admin/LogsPage.php:196
+msgid "Zurücksetzen"
+msgstr ""
+
+#: src/modules/resources/RestHandler.php:194 src/modules/resources/RestHandler.php:181
+msgid "Zusätzliche Berechtigung %s erforderlich."
+msgstr ""
+
+#: src/modules/employees/RestHandler.php:2561
+msgid "Zusätzliche Berechtigung manage_bookando_employees erforderlich."
+msgstr ""
+
+#: src/Core/Dispatcher/RestModuleGuard.php:62
+msgctxt "REST API error message"
+msgid "Additional permission guard failed."
+msgstr ""
+
+#: src/Core/Dispatcher/RestDispatcher.php:466
+msgctxt "REST API error message"
+msgid "code/state missing"
+msgstr ""
+
+#: src/Core/Dispatcher/RestDispatcher.php:506
+msgctxt "REST API error message"
+msgid "Google client missing"
+msgstr ""
+
+#: src/Core/Dispatcher/RestDispatcher.php:777
+msgctxt "REST API error message"
+msgid "Handler %1$s::%2$s not found"
+msgstr ""
+
+#: src/Core/Dispatcher/RestGuard.php:41 src/Core/Auth/Gate.php:142 src/Core/Auth/Gate.php:120
+msgctxt "REST API error message"
+msgid "Insufficient capability"
+msgstr ""
+
+#: src/Core/Dispatcher/RestDispatcher.php:909
+msgctxt "REST API error message"
+msgid "Invalid file type or size"
+msgstr ""
+
+#: src/Core/Dispatcher/RestPermissions.php:73 src/Core/Dispatcher/RestGuard.php:25 src/Core/Auth/Gate.php:103
+msgctxt "REST API error message"
+msgid "Invalid nonce"
+msgstr ""
+
+#: src/Core/Dispatcher/WebhookDispatcher.php:34
+msgctxt "REST API error message"
+msgid "Invalid token"
+msgstr ""
+
+#: src/Core/Dispatcher/RestDispatcher.php:886
+msgctxt "REST API error message"
+msgid "Invalid user"
+msgstr ""
+
+#: src/Core/Dispatcher/RestDispatcher.php:1081
+msgctxt "REST API error message"
+msgid "invalid/expired token"
+msgstr ""
+
+#: src/Core/Dispatcher/RestDispatcher.php:956
+msgctxt "REST API error message"
+msgid "Method not allowed"
+msgstr ""
+
+#: src/Core/Dispatcher/RestPermissions.php:38
+msgctxt "REST API error message"
+msgid "Missing capability to list customers."
+msgstr ""
+
+#: src/Core/Dispatcher/RestDispatcher.php:367
+msgctxt "REST API error message"
+msgid "Missing Google client_id"
+msgstr ""
+
+#: src/Core/Dispatcher/RestDispatcher.php:411
+msgctxt "REST API error message"
+msgid "Missing Microsoft client_id"
+msgstr ""
+
+#: src/Core/Dispatcher/RestPermissions.php:65
+msgctxt "REST API error message"
+msgid "Missing permission for this customer."
+msgstr ""
+
+#: src/Core/Dispatcher/RestDispatcher.php:1051
+msgctxt "REST API error message"
+msgid "Missing resource/grantee"
+msgstr ""
+
+#: src/Core/Dispatcher/RestDispatcher.php:766
+msgctxt "REST API error message"
+msgid "Module handler failed"
+msgstr ""
+
+#: src/Core/Dispatcher/RestModuleGuard.php:43
+msgctxt "REST API error message"
+msgid "Module not allowed for current plan"
+msgstr ""
+
+#: src/Core/Dispatcher/RestDispatcher.php:586
+msgctxt "REST API error message"
+msgid "MS client missing"
+msgstr ""
+
+#: src/Core/Dispatcher/RestDispatcher.php:619 src/Core/Dispatcher/RestDispatcher.php:539
+msgctxt "REST API error message"
+msgid "No access_token"
+msgstr ""
+
+#: src/Core/Dispatcher/RestDispatcher.php:898
+msgctxt "REST API error message"
+msgid "No file uploaded"
+msgstr ""
+
+#: src/Core/Dispatcher/RestDispatcher.php:802
+msgctxt "REST API error message"
+msgid "No REST module registered for \"%s\"."
+msgstr ""
+
+#: src/Core/Dispatcher/RestDispatcher.php:1039
+msgctxt "REST API error message"
+msgid "Not allowed"
+msgstr ""
+
+#: src/Core/Dispatcher/RestGuard.php:34 src/Core/Auth/Gate.php:83
+msgctxt "REST API error message"
+msgid "Not logged in"
+msgstr ""
+
+#: src/Core/Dispatcher/RestDispatcher.php:328
+msgctxt "REST API error message"
+msgid "provider/employee_id missing"
+msgstr ""
+
+#: src/Core/Auth/Gate.php:131
+msgctxt "REST API error message"
+msgid "REST read feature disabled by license"
+msgstr ""
+
+#: src/Core/Auth/Gate.php:112
+msgctxt "REST API error message"
+msgid "REST write feature disabled by license"
+msgstr ""
+
+#: src/Core/Dispatcher/RestDispatcher.php:1032
+msgctxt "REST API error message"
+msgid "Sharing feature disabled"
+msgstr ""
+
+#: src/Core/Dispatcher/RestDispatcher.php:480
+msgctxt "REST API error message"
+msgid "state invalid/expired"
+msgstr ""
+
+#: src/Core/Dispatcher/RestGuard.php:54 src/Core/Auth/Gate.php:93
+msgctxt "REST API error message"
+msgid "Tenant scope invalid"
+msgstr ""
+
+#: src/Core/Dispatcher/RestDispatcher.php:1073
+msgctxt "REST API error message"
+msgid "token missing"
+msgstr ""
+
+#: src/Core/Dispatcher/RestDispatcher.php:641 src/Core/Dispatcher/RestDispatcher.php:561
+msgctxt "REST API error message"
+msgid "Unable to persist OAuth token"
+msgstr ""
+
+#: src/Core/Dispatcher/RestDispatcher.php:793
+msgctxt "REST API error message"
+msgid "Unable to resolve module for this request"
+msgstr ""
+
+#: src/Core/Dispatcher/RestDispatcher.php:661 src/Core/Dispatcher/RestDispatcher.php:445
+msgctxt "REST API error message"
+msgid "unsupported provider"
+msgstr ""
+
+#: src/modules/customers/Api/Api.php:45
+msgctxt "REST parameter description"
+msgid "Customer ID"
+msgstr ""
+
+#: src/modules/settings/Api/Api.php:54
+msgctxt "REST parameter description"
+msgid "Feature key"
+msgstr ""
+
+#: src/modules/customers/Api/Api.php:49
+msgctxt "REST parameter description"
+msgid "Hard delete when set to 1"
+msgstr ""
+
+#: src/modules/employees/Api/Api.php:65
+msgctxt "REST parameter description"
+msgid "Numeric employee ID."
+msgstr ""
+
+#: src/modules/settings/Api/Api.php:42
+msgctxt "REST parameter description"
+msgid "Role slug"
+msgstr ""

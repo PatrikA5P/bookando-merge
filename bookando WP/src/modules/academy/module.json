@@ -1,0 +1,44 @@
+{
+  "slug": "academy",
+  "plan": "starter",
+  "version": "1.0.0",
+  "tenant_required": true,
+  "license_required": true,
+  "features_required": [
+    "education_management",
+    "rest_api_read"
+  ],
+  "group": "operations",
+  "is_saas": true,
+  "has_admin": true,
+  "supports_webhook": false,
+  "supports_offline": true,
+  "supports_calendar": false,
+  "name": {
+    "default": "Academy",
+    "de": "Academy",
+    "en": "Academy",
+    "fr": "Académie",
+    "it": "Accademia"
+  },
+  "alias": {
+    "de": "Akademie",
+    "en": "Academy",
+    "fr": "Académie",
+    "it": "Accademia"
+  },
+  "description": {
+    "default": "Manage courses and training plans for learners.",
+    "de": "Verwalten Sie Kurse und Ausbildungskarten für Lernende.",
+    "en": "Manage courses and training plans for learners.",
+    "fr": "Gérez les cours et parcours de formation pour les apprenant·e·s.",
+    "it": "Gestisci corsi e piani di formazione per le persone in apprendimento."
+  },
+  "visible": true,
+  "menu_icon": "dashicons-welcome-learn-more",
+  "menu_position": 29,
+  "dependencies": [],
+  "tabs": [],
+  "is_submodule": false,
+  "parent_module": null
+}

@@ -1,0 +1,363 @@
+// _design-tab-v2.scss - Plugintemplate-inspired styles for DesignTab
+// This file contains shared styles and variables from Plugintemplate customize.less
+
+// Import Bookando variables
+@use '@scss/variables' as *;
+
+// Plugintemplate Color Variables (from _variables.less)
+$am-color-text-prime: #354052;
+$am-color-text-second: #7F8FA4;
+$am-color-divider-gray: #E2E6EC;
+$am-color-highlight: #f9f9f9;
+$am-color-white: #ffffff;
+$am-color-blue: #1A84EE;
+$am-color-red: #FF0040;
+
+// Plugintemplate Spacing (from _variables.less)
+$am-padding-big: 24px;
+$am-padding-medium: 16px;
+$am-padding-small: 8px;
+$am-margin-big: 24px;
+$am-margin-medium: 16px;
+$am-margin-small: 8px;
+
+// Plugintemplate Font Sizes (from _variables.less)
+$am-regular-fs: 16px;
+$am-small-fs: 14px;
+$am-mini-fs: 12px;
+$am-medium-fs: 20px;
+
+// Plugintemplate Border Radius (from _variables.less)
+$am-border-radius: 6px;
+
+// Plugintemplate Font Weights (from _variables.less)
+$am-light: 300;
+$am-regular: 400;
+$am-medium: 500;
+$am-bold: 700;
+
+// Media Queries (from _variables.less)
+$am-bp-small-max: 767px;
+$am-bp-medium-max: 991px;
+$am-bp-large-max: 1199px;
+
+// Mixins
+@mixin am-respond-below($breakpoint) {
+  @media only screen and (max-width: $breakpoint) {
+    @content;
+  }
+}
+
+// Global Design Tab Styles
+.design-tab-v2 {
+  // Reset base styles
+  * {
+    box-sizing: border-box;
+  }
+
+  // Plugintemplate Typography
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Helvetica Neue', Arial, sans-serif;
+  font-size: $am-regular-fs;
+  line-height: 1.5;
+  color: $am-color-text-prime;
+
+  h1, h2, h3, h4, h5, h6 {
+    margin: 0;
+    font-weight: $am-medium;
+    color: $am-color-text-prime;
+  }
+
+  p {
+    margin: 0;
+    color: $am-color-text-second;
+  }
+
+  // Plugintemplate Button Styles
+  button, .button {
+    border-radius: $am-border-radius;
+    font-weight: $am-medium;
+    transition: all 0.2s ease;
+
+    &:hover {
+      transform: translateY(-1px);
+    }
+
+    &:active {
+      transform: translateY(0);
+    }
+  }
+
+  // Plugintemplate Input Styles
+  input, select, textarea {
+    border-radius: $am-border-radius;
+    border: 1px solid $am-color-divider-gray;
+    font-family: inherit;
+    font-size: $am-small-fs;
+
+    &:focus {
+      outline: none;
+      border-color: $am-color-blue;
+      box-shadow: 0 0 0 3px rgba($am-color-blue, 0.1);
+    }
+  }
+
+  // Plugintemplate Card Styles
+  .am-card {
+    background: $am-color-white;
+    border: 1px solid $am-color-divider-gray;
+    border-radius: $am-border-radius;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+    transition: all 0.3s ease;
+
+    &:hover {
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+    }
+  }
+
+  // Plugintemplate Settings Styles (customize.less)
+  .am-customize-settings {
+    .am-setting {
+      // Match Plugintemplate setting item styles
+      animation: fadeIn 0.3s ease;
+
+      &:hover {
+        background: rgba($am-color-blue, 0.02);
+      }
+
+      &-collapse {
+        .collapse-header {
+          user-select: none;
+
+          &:hover {
+            .collapse-title {
+              color: $am-color-blue;
+            }
+          }
+        }
+
+        .collapse-body {
+          animation: slideDown 0.3s ease;
+        }
+      }
+    }
+
+    .color-group {
+      animation: fadeIn 0.3s ease;
+
+      .color-group-title {
+        position: relative;
+        padding-left: 12px;
+
+        &::before {
+          content: '';
+          position: absolute;
+          left: 0;
+          top: 50%;
+          transform: translateY(-50%);
+          width: 4px;
+          height: 14px;
+          background: $am-color-blue;
+          border-radius: 2px;
+        }
+      }
+    }
+  }
+
+  // Plugintemplate Preview Styles (am-step-booking from customize.less)
+  .am-step-booking {
+    position: relative;
+    transition: all 0.6s cubic-bezier(0.23, 1, 0.32, 1);
+
+    // Plugintemplate responsive breakpoints
+    @include am-respond-below($am-bp-large-max) {
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+    }
+
+    @include am-respond-below($am-bp-medium-max) {
+      box-shadow: none;
+      border: none;
+    }
+
+    @include am-respond-below($am-bp-small-max) {
+      border-radius: 0;
+    }
+  }
+
+  // Plugintemplate Add Element Button (customize.less)
+  .am-add-element {
+    display: flex;
+    align-items: center;
+    font-size: $am-regular-fs;
+    color: $am-color-blue;
+    background-color: rgba($am-color-blue, 0.07);
+    border-radius: $am-border-radius;
+    border: 1px solid transparent;
+    padding: $am-padding-small;
+    cursor: pointer;
+    transition: all 0.2s ease;
+
+    &:hover {
+      background-color: rgba($am-color-blue, 0.12);
+      border-color: rgba($am-color-blue, 0.2);
+    }
+
+    i {
+      font-size: $am-small-fs;
+      padding: $am-padding-small / 2;
+      margin-right: $am-margin-small / 2;
+      background-color: $am-color-white;
+      border-radius: 50%;
+      border: 1px solid $am-color-divider-gray;
+    }
+  }
+
+  // Plugintemplate Reset Button (customize.less)
+  .am-reset-button {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    opacity: 0;
+    transition: opacity 0.2s ease;
+
+    .am-setting:hover & {
+      opacity: 1;
+    }
+
+    span {
+      display: flex;
+      align-items: center;
+      font-size: $am-small-fs;
+      line-height: 1;
+      color: $am-color-text-second;
+      cursor: pointer;
+      transition: color 0.2s ease;
+
+      &:hover {
+        color: $am-color-blue;
+      }
+    }
+  }
+
+  // Plugintemplate Gradient Picker (customize.less)
+  .am-gradient-picker {
+    min-width: 95px;
+    border: 1px solid $am-color-divider-gray;
+    border-radius: $am-border-radius;
+    overflow: hidden;
+    transition: all 0.2s ease;
+
+    &:hover {
+      border-color: $am-color-blue;
+      box-shadow: 0 2px 8px rgba($am-color-blue, 0.15);
+    }
+  }
+
+  // Component Cards (drill-down cards)
+  .component-card {
+    position: relative;
+    overflow: visible;
+
+    &::after {
+      content: '';
+      position: absolute;
+      right: 16px;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 20px;
+      height: 20px;
+      opacity: 0;
+      transition: all 0.3s ease;
+      background: $am-color-blue;
+      border-radius: 50%;
+    }
+
+    &:hover::after {
+      opacity: 0.1;
+      transform: translateY(-50%) scale(3);
+    }
+  }
+
+  // Scrollbar Styling (Plugintemplate-inspired)
+  .settings-content,
+  .preview-container {
+    &::-webkit-scrollbar {
+      width: 8px;
+      height: 8px;
+    }
+
+    &::-webkit-scrollbar-track {
+      background: $am-color-highlight;
+      border-radius: 4px;
+    }
+
+    &::-webkit-scrollbar-thumb {
+      background: rgba($am-color-text-second, 0.3);
+      border-radius: 4px;
+      transition: background 0.2s ease;
+
+      &:hover {
+        background: rgba($am-color-text-second, 0.5);
+      }
+    }
+  }
+}
+
+// Animations (inspired by Plugintemplate customize.less)
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    max-height: 0;
+  }
+  to {
+    opacity: 1;
+    max-height: 1000px;
+  }
+}
+
+@keyframes am-animation-slide-up {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes am-animation-slide-right {
+  from {
+    opacity: 0;
+    transform: translateX(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+// Preview Device Styles
+.device-preview {
+  &.desktop {
+    animation: am-animation-slide-up 0.4s ease;
+  }
+
+  &.tablet {
+    animation: am-animation-slide-right 0.4s ease;
+  }
+
+  &.mobile {
+    animation: am-animation-slide-right 0.4s ease;
+  }
+}

@@ -1,0 +1,45 @@
+{
+  "slug": "workday",
+  "plan": "starter",
+  "version": "1.0.0",
+  "tenant_required": true,
+  "license_required": true,
+  "features_required": [
+    "workday_management",
+    "rest_api_read",
+    "rest_api_write"
+  ],
+  "group": "operations",
+  "is_saas": true,
+  "has_admin": true,
+  "supports_webhook": false,
+  "supports_offline": true,
+  "supports_calendar": true,
+  "name": {
+    "default": "Workday",
+    "de": "Arbeitstag",
+    "en": "Workday",
+    "fr": "Journée de travail",
+    "it": "Giornata lavorativa"
+  },
+  "alias": {
+    "de": "Arbeitstag",
+    "en": "Workday",
+    "fr": "Journée de travail",
+    "it": "Giornata lavorativa"
+  },
+  "description": {
+    "default": "Manage calendar, appointments, time tracking and duty scheduling.",
+    "de": "Verwalten Sie Kalender, Termine, Zeiterfassung und Dienstplanung.",
+    "en": "Manage calendar, appointments, time tracking and duty scheduling.",
+    "fr": "Gérez calendrier, rendez-vous, suivi du temps et planification des services.",
+    "it": "Gestisci calendario, appuntamenti, rilevazione presenze e pianificazione turni."
+  },
+  "visible": true,
+  "menu_icon": "dashicons-calendar-alt",
+  "menu_position": 50,
+  "dependencies": [],
+  "tabs": [],
+  "is_submodule": false,
+  "parent_module": null
+}

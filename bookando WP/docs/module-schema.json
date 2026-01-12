@@ -1,0 +1,165 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://bookando.local/schemas/module.json",
+  "title": "Bookando module manifest",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "slug",
+    "plan",
+    "version",
+    "tenant_required",
+    "license_required",
+    "features_required",
+    "group",
+    "is_saas",
+    "has_admin",
+    "supports_webhook",
+    "supports_offline",
+    "supports_calendar",
+    "name",
+    "alias",
+    "description",
+    "visible",
+    "menu_icon",
+    "menu_position",
+    "dependencies",
+    "tabs",
+    "is_submodule",
+    "parent_module"
+  ],
+  "properties": {
+    "slug": {
+      "type": "string",
+      "pattern": "^[a-z][a-z0-9_-]+$"
+    },
+    "plan": {
+      "type": "string",
+      "enum": ["starter", "pro", "academy", "enterprise"]
+    },
+    "version": {
+      "type": "string",
+      "pattern": "^\\d+\\.\\d+\\.\\d+$"
+    },
+    "tenant_required": { "type": "boolean" },
+    "license_required": { "type": "boolean" },
+    "features_required": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "pattern": "^[a-z0-9_:-]+$"
+      },
+      "uniqueItems": true
+    },
+    "group": {
+      "type": "string",
+      "enum": ["core", "operations", "crm", "offers"]
+    },
+    "is_saas": { "type": "boolean" },
+    "has_admin": { "type": "boolean" },
+    "supports_webhook": { "type": "boolean" },
+    "supports_offline": { "type": "boolean" },
+    "supports_calendar": { "type": "boolean" },
+    "name": {
+      "$ref": "#/definitions/i18nBlock"
+    },
+    "alias": {
+      "$ref": "#/definitions/i18nOptionalDefault"
+    },
+    "description": {
+      "$ref": "#/definitions/i18nBlock"
+    },
+    "visible": { "type": "boolean" },
+    "menu_icon": {
+      "type": "string",
+      "pattern": "^[a-z0-9-]+$"
+    },
+    "menu_position": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "dependencies": {
+      "type": "array",
+      "description": "Liste von Modul-Slugs, die vor diesem Modul geladen sein müssen. Fehlende Abhängigkeiten deaktivieren das betroffene Modul automatisch und verhindern dessen Bootstrapping.",
+      "items": { "type": "string", "pattern": "^[a-z][a-z0-9_-]+$" },
+      "uniqueItems": true
+    },
+    "tabs": {
+      "type": "array",
+      "items": { "type": "string", "minLength": 1 }
+    },
+    "is_submodule": { "type": "boolean" },
+    "parent_module": {
+      "anyOf": [
+        { "type": "null" },
+        { "type": "string", "pattern": "^[a-z][a-z0-9_-]+$" }
+      ]
+    },
+    "actions": {
+      "anyOf": [
+        { "type": "null" },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "allowed": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "enum": ["save", "soft_delete", "hard_delete", "block", "activate", "export"]
+              },
+              "uniqueItems": true
+            },
+            "endpoint": {
+              "type": "string",
+              "minLength": 1
+            },
+            "features": {
+              "type": "object",
+              "propertyNames": {
+                "enum": ["save", "soft_delete", "hard_delete", "block", "activate", "export"]
+              },
+              "additionalProperties": {
+                "anyOf": [
+                  { "type": "string", "minLength": 1 },
+                  {
+                    "type": "array",
+                    "items": { "type": "string", "minLength": 1 },
+                    "minItems": 1,
+                    "uniqueItems": true
+                  }
+                ]
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  "definitions": {
+    "i18nBlock": {
+      "type": "object",
+      "required": ["default", "de", "en"],
+      "additionalProperties": {
+        "type": "string"
+      },
+      "properties": {
+        "default": { "type": "string", "minLength": 1 },
+        "de": { "type": "string", "minLength": 1 },
+        "en": { "type": "string", "minLength": 1 }
+      }
+    },
+    "i18nOptionalDefault": {
+      "type": "object",
+      "required": ["de", "en"],
+      "additionalProperties": {
+        "type": "string"
+      },
+      "properties": {
+        "default": { "type": "string", "minLength": 1 },
+        "de": { "type": "string", "minLength": 1 },
+        "en": { "type": "string", "minLength": 1 }
+      }
+    }
+  }
+}

@@ -1,0 +1,78 @@
+// Bookando SCSS Helpers – Utility-Mixins & Funktionen (perfektioniert 2025)
+// _helpers.scss
+@use 'sass:map';
+@use 'variables' as *;
+@use 'mixins' as *;
+
+// ---------------------------------------------
+// Farb-Helper: Schattierung/Abwandlung via Design-Token
+@function bookando-shade($color, $amount) {
+  @return color.adjust($color, $lightness: $amount);
+}
+
+// ---------------------------------------------
+// Universelles Helper-Mixin – dünner Wrapper auf die Kern-Mixins
+@mixin respond($breakpoint, $type: min) {
+  @if $type == min { @include bp-up($breakpoint) { @content; } }
+  @else { @include bp-down($breakpoint) { @content; } }
+}
+
+// ---------------------------------------------
+// Utility: Font-Weight-Helper
+@mixin bookando-font-weight($weight-key) {
+  font-weight: map.get((
+    thin: $bookando-font-weight-thin,
+    extra-light: $bookando-font-weight-extra-light,
+    light: $bookando-font-weight-light,
+    normal: $bookando-font-weight-normal,
+    medium: $bookando-font-weight-medium,
+    semi-bold: $bookando-font-weight-semi-bold,
+    bold: $bookando-font-weight-bold,
+    extra-bold: $bookando-font-weight-extra-bold,
+    black: $bookando-font-weight-black
+  ), $weight-key);
+}
+
+// ---------------------------------------------
+// Admin-spezifische Legacy-Hilfsklassen (NUR für Admin, keine globale Utility!)
+// Wo möglich: bestehende Backend-Templates auf neue Utility-Klassen umstellen, 
+// Legacy-Klassen ggf. schrittweise auslaufen lassen!
+
+.bookando-admin-page {
+  // Textausrichtung (Legacy, z.B. TinyMCE/Altsysteme)
+  .text-center   { text-align: center !important; }
+  .text-right    { text-align: right !important; }
+  .text-left     { text-align: left !important; }
+  .text-ellipsis { @include ellipsis; }
+  .nowrap        { white-space: nowrap !important; }
+
+  // Flex-Utilities
+  .flex          { display: flex !important; }
+  .flex-center   { justify-content: center !important; align-items: center !important; }
+  .flex-col      { flex-direction: column !important; }
+
+  // Spacing (empfohlen: auf Utility-Klassen .bookando-mt-xs etc. migrieren!)
+  .mt-xs         { margin-top: map.get($bookando-spacing, xs) !important; }
+  .mt-sm         { margin-top: map.get($bookando-spacing, sm) !important; }
+  .mb-xs         { margin-bottom: map.get($bookando-spacing, xs) !important; }
+  .mb-md         { margin-bottom: map.get($bookando-spacing, md) !important; }
+
+  // Display & Sichtbarkeit
+  .hide          { display: none !important; }
+  .show          { display: block !important; }
+  .invisible     { visibility: hidden !important; }
+  .visible       { visibility: visible !important; }
+
+}
+
+// ---------------------------------------------
+// Extra: Ein universelles Helper-Mixin für dynamisches Spacing (Padding/Margin mit Key)
+@mixin bookando-admin-spacing($property, $key) {
+  #{$property}: map.get($bookando-spacing, $key) !important;
+}
+
+// ---------------------------------------------
+// Extra: Helper-Mixin für dynamische Textfarben aus Utility-Map
+@mixin bookando-admin-text-color($color-key) {
+  color: map.get($bookando-text-utilities, $color-key) !important;
+}

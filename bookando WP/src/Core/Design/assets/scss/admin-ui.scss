@@ -1,0 +1,72 @@
+/* ========================================================== */
+/* 📦 Bookando Admin UI – zentrales Entry-Stylesheet für das Plugin */
+/* Struktur: Tokens → Mixins → Controls → Layout → Komponenten */
+/* ========================================================== */
+
+/* ---------------------------------- */
+/* 📁 DESIGN-TOKENS + BASIS-UTILS */
+/* ---------------------------------- */
+@use 'sass:map';
+@use 'custom-properties' as *;  // 🎨 CSS Custom Properties für Runtime-Theming
+@use 'variables' as *;
+@use 'mixins' as *;         // 💡 Muss vor allen Komponenten kommen, die Mixins nutzen
+@use 'animations' as *;     // 🎬 Animation Utilities & Keyframes
+
+/* ---------------------------------- */
+/* 🎯 FELDLAYOUTS (zentrale UI-Komponenten) */
+/* ---------------------------------- */
+@use 'field' as *;          // .bookando-field → Input, Select etc.
+@use 'form' as *;           // Formularstruktur, Grid, Fehler etc.
+
+/* ---------------------------------- */
+/* 🧩 KOMPONENTEN (modular & wiederverwendbar) */
+/* ---------------------------------- */
+@use 'avatar' as *;
+@use 'button' as *;
+@use 'icons' as *;
+@use 'table' as *;
+@use 'table-cards' as *;
+@use 'grid-list' as *;
+@use 'modal' as *;
+@use 'alert' as *;
+@use 'badge' as *;
+@use 'progress' as *;
+@use 'stepper' as *;
+@use 'breadcrumb' as *;
+@use 'card' as *;
+@use 'tabs' as *;
+@use 'tooltip' as *;
+@use 'vue-datepicker' as *;      // 📅 Date/Time Styles
+
+/* ---------------------------------- */
+/* 📐 LAYOUT-GRUNDLAGEN */
+/* ---------------------------------- */
+@use 'base' as *;
+@use 'layout' as *;
+@use 'container' as *;
+@use 'page-layout' as *;    // 📄 AppPageLayout component styles
+
+/* ---------------------------------- */
+/* 🧪 SPEZIAL UI-BLÖCKE */
+/* ---------------------------------- */
+@use 'toolbar' as *;
+@use 'bulk' as *;
+@use 'toast' as *;
+@use 'slider' as *;
+@use 'upload' as *;
+@use 'toggle' as *;
+@use 'states' as *;
+@use 'error' as *;
+
+/* ---------------------------------- */
+/* 📋 MODULE LAYOUTS */
+/* ---------------------------------- */
+@use 'module-layout' as *;  // Wiederverwendbare Layouts für Customers, Employees etc.
+@use 'crm-split-view' as *; // CRM/HRM Split-View System
+
+/* ---------------------------------- */
+/* 🔧 UTILITIES & HELPER */
+/* ---------------------------------- */
+@use 'helpers' as *;
+@use 'utilities' as *;
+@include bookando-export-css-vars();

@@ -1,0 +1,738 @@
+{
+  "core": {
+    "common": {
+      "save": "Speichern",
+      "saved": "Gespeichert!",
+      "cancel": "Abbrechen",
+      "add": "Hinzufügen",
+      "delete": "Löschen",
+      "close": "Schließen",
+      "edit": "Bearbeiten",
+      "actions": "Aktionen",
+      "success": "Erfolg",
+      "hint": "Hinweis",
+      "error": "Fehler",
+      "info": "Info",
+      "remove": "Entfernen",
+      "once": "Einmalig",
+      "repeat": "Wiederholen",
+      "unnamed": "Ohne Namen",
+      "and": "und",
+      "all": "Alle",
+      "details": "Details",
+      "copy": "Kopie",
+      "duplicate": "Duplizieren",
+      "disabled": "Deaktiviert",
+      "ok": "OK",
+      "reset": "Zurücksetzen"
+    },
+    "bulk": {
+      "selected": "ausgewählt",
+      "choose": "Aktion wählen",
+      "apply": "Anwenden",
+      "applying": "Wird ausgeführt...",
+      "cancel": "Abbrechen",
+      "confirmTitle": "Bitte bestätigen",
+      "confirmMessage": "Möchten Sie die ausgewählte Aktion wirklich ausführen?",
+      "confirm": "Bestätigen"
+    },
+    "actions": {
+      "save": {
+        "label": "Speichern",
+        "success": "Eintrag erfolgreich gespeichert",
+        "error": "Fehler beim Speichern"
+      },
+      "soft_delete": {
+        "label": "Als gelöscht markieren",
+        "confirm": "Möchten Sie diesen Eintrag wirklich als gelöscht markieren?"
+      },
+      "hard_delete": {
+        "label": "Endgültig löschen",
+        "confirm": "Möchten Sie diesen Eintrag endgültig löschen? Diese Aktion kann nicht rückgängig gemacht werden."
+      },
+      "block": {
+        "label": "Blockieren",
+        "confirm": "Möchten Sie diesen Eintrag wirklich blockieren?"
+      },
+      "activate": {
+        "label": "Aktivieren",
+        "confirm": "Möchten Sie diesen Eintrag aktivieren?"
+      },
+      "export": {
+        "label": "Exportieren",
+        "success": "Export erstellt"
+      },
+      "generic": {
+        "success": "Aktion erfolgreich",
+        "error": "Aktion fehlgeschlagen",
+        "busy": "Wird ausgeführt..."
+      }
+    },
+    "status": {
+      "active": "Aktiv",
+      "blocked": "Blockiert",
+      "marked_for_deletion": "Zum Löschen markiert",
+      "deleted": "Gelöscht",
+      "hidden": "Versteckt"
+    },
+    "genders": {
+      "male": "Männlich",
+      "female": "Weiblich",
+      "other": "Divers",
+      "none": "Keine Angabe"
+    }
+  },
+  "ui": {
+    "a11y": {
+      "select_all": "Alle auswählen",
+      "select_item": "Eintrag auswählen",
+      "time": "Uhr",
+      "calendar": "Kalender"
+    },
+    "filter": {
+      "toggle": "Filter anzeigen/verstecken",
+      "reset_all": "Alle Filter zurücksetzen",
+      "search_placeholder": "Suchen..."
+    },
+    "table": {
+      "no_results": "Keine Einträge gefunden.",
+      "choose_columns": "Spalten wählen",
+      "quick_actions": "Schnellaktionen",
+      "actions": "Aktionen",
+      "sort_by": "Sortieren nach",
+      "sort_name": "Name",
+      "sort_price": "Preis",
+      "sort_duration": "Dauer",
+      "sort_category": "Kategorie",
+      "sort_status": "Status",
+      "move_column": "Spalte verschieben"
+    },
+    "tabs": {
+      "scroll_left": "Tabs nach links scrollen",
+      "scroll_right": "Tabs nach rechts scrollen"
+    },
+    "csv": {
+      "export": "CSV Export",
+      "import": "CSV Import",
+      "import_demo": "CSV Import ist als Demo-Stub implementiert."
+    },
+    "dialog": {
+      "confirm_title": "Bitte bestätigen"
+    },
+    "date": {
+      "select": "Datum auswählen",
+      "today": "Heute",
+      "tomorrow": "Morgen",
+      "yesterday": "Gestern",
+      "week_starts_on": 1,
+      "months": [
+        "Januar",
+        "Februar",
+        "März",
+        "April",
+        "Mai",
+        "Juni",
+        "Juli",
+        "August",
+        "September",
+        "Oktober",
+        "November",
+        "Dezember"
+      ],
+      "months_short": [
+        "Jan",
+        "Feb",
+        "Mär",
+        "Apr",
+        "Mai",
+        "Jun",
+        "Jul",
+        "Aug",
+        "Sep",
+        "Okt",
+        "Nov",
+        "Dez"
+      ],
+      "weekdays": [
+        "Sonntag",
+        "Montag",
+        "Dienstag",
+        "Mittwoch",
+        "Donnerstag",
+        "Freitag",
+        "Samstag"
+      ],
+      "weekdays_short": [
+        "So",
+        "Mo",
+        "Di",
+        "Mi",
+        "Do",
+        "Fr",
+        "Sa"
+      ],
+      "range": "Datumsbereich",
+      "range_select": "Zeitraum wählen",
+      "formats": {
+        "date": "dd.MM.yyyy",
+        "time": "HH:mm",
+        "datetime": "dd.MM.yyyy HH:mm"
+      }
+    },
+    "time": {
+      "select": "Zeit auswählen",
+      "min": "Min",
+      "invalid_format_hint": "Bitte eine gültige Zeit im Format HH:MM eingeben."
+    },
+    "upload": {
+      "only_images": "Nur Bilddateien erlaubt.",
+      "too_large_5mb": "Datei zu groß. Maximal 5 MB.",
+      "avatar_upload": "Avatar hochladen",
+      "avatar_remove": "Avatar entfernen",
+      "avatar_upload_ok": "Avatar wurde aktualisiert.",
+      "avatar_upload_error": "Fehler beim Hochladen des Avatars.",
+      "avatar_remove_error": "Fehler beim Löschen des Avatars.",
+      "route_not_found": "Upload-Route nicht gefunden. Bitte Seite neu laden oder Plugin aktivieren.",
+      "saveFirst": "Bitte zuerst speichern, damit ein Avatar zugeordnet werden kann.",
+      "media_unavailable": "WordPress Medienbibliothek nicht verfügbar."
+    },
+    "pagination": {
+      "per_page": "Einträge pro Seite",
+      "go_to_page": "Gehe zu Seite {page}",
+      "range": "{start} bis {end} von {total} {label}",
+      "first": "Erste Seite",
+      "prev": "Vorherige Seite",
+      "next": "Nächste Seite",
+      "last": "Letzte Seite",
+      "page": "Seite"
+    },
+    "search": {
+      "placeholder": "Suchen...",
+      "countries": "Ländersuche"
+    },
+    "common": {
+      "loading": "Laden…",
+      "coming_soon": "Bald verfügbar",
+      "image": "Bild"
+    },
+    "color": {
+      "accent": "Akzent",
+      "warning": "Warnung",
+      "danger": "Gefahr"
+    },
+    "days": {
+      "mon": "Montag",
+      "tue": "Dienstag",
+      "wed": "Mittwoch",
+      "thu": "Donnerstag",
+      "fri": "Freitag",
+      "sat": "Samstag",
+      "sun": "Sonntag"
+    },
+    "recurring": {
+      "daily": "Täglich",
+      "weekly": "Wöchentlich",
+      "monthly": "Monatlich",
+      "yearly": "Jährlich"
+    },
+    "phone": {
+      "clear_country": "Vorwahl zurücksetzen"
+    }
+  },
+  "fields": {
+    "customer": "Kunde",
+    "id": "ID",
+    "name": "Name",
+    "first_name": "Vorname",
+    "last_name": "Nachname",
+    "email": "E-Mail",
+    "phone": "Telefon",
+    "address": "Adresse",
+    "address_2": "Adresszusatz",
+    "zip": "PLZ",
+    "city": "Ort",
+    "country": "Land",
+    "language": "Sprache",
+    "gender": "Geschlecht",
+    "birthdate": "Geburtsdatum",
+    "date": "Datum",
+    "start": "Start",
+    "end": "Ende",
+    "start_date": "Start",
+    "end_date": "Ende",
+    "start_time": "Start (Uhr)",
+    "end_time": "Ende (Uhr)",
+    "days": "Wochentage",
+    "status": "Status",
+    "note": "Notiz",
+    "description": "Beschreibung",
+    "avatar_url": "Avatar",
+    "timezone": "Zeitzone",
+    "external_id": "External-ID",
+    "tenant_id": "Mandant",
+    "roles": "Rollen",
+    "badge_id": "Badge-ID",
+    "password_hash": "Passwort-Hash",
+    "password_reset_token": "Reset-Token",
+    "created_at": "Erstellt am",
+    "updated_at": "Aktualisiert am",
+    "deleted_at": "Gelöscht am",
+    "website": "Website",
+    "location": "Ort",
+    "locations": "Orte",
+    "work_locations": "Arbeitsorte",
+    "badge": "Badge",
+    "wordpress_user": "WordPress-Benutzer",
+    "employee_area_password": "Passwort (Mitarbeiterbereich)",
+    "calendar": "Kalender",
+    "min_capacity": "Min. Plätze",
+    "max_capacity": "Max. Plätze",
+    "capacity": "Plätze",
+    "price": "Preis",
+    "currency": "Währung",
+    "tax_rate": "Steuer %",
+    "label": "Label",
+    "amount": "Betrag",
+    "color": "Farbe",
+    "sort": "Sortierung",
+    "service": "Dienstleistung",
+    "services": "Dienstleistungen"
+  },
+  "mod": {
+    "license": {
+      "upgrade_required": "Upgrade erforderlich",
+      "not_in_plan": "Dieses Modul ist im aktuellen Plan nicht enthalten.",
+      "required": "ist erforderlich",
+      "upgrade_now": "Jetzt upgraden"
+    },
+    "customers": {
+      "title": "Kundenverwaltung",
+      "entity_singular": "Kunde",
+      "entity_plural": "Kunden",
+      "actions": {
+        "add": "Kunde hinzufügen",
+        "edit": "Kunde bearbeiten",
+        "delete": "Kunde löschen"
+      },
+      "search_placeholder": "Kunden suchen...",
+      "tabs": {
+        "info": "Kundeninformation",
+        "activity": "Kundenaktivität"
+      },
+      "sections": {
+        "data": "Daten",
+        "history": "Termine & Historie"
+      },
+      "stats": {
+        "total_appointments": "Anzahl Termine",
+        "last_appointment": "Letzter Termin",
+        "next_appointment": "Nächster Termin"
+      },
+      "confirm_delete": "Soll dieser Kunde wirklich gelöscht werden?",
+      "alerts": {
+        "blocked": "Dieser Kunde ist blockiert.",
+        "will_be_deleted": "Dieser Kunde wird gelöscht."
+      },
+      "validation": {
+        "name_required": "Bitte Vorname und Nachname angeben.",
+        "email_invalid": "Bitte eine gültige E-Mail-Adresse eingeben."
+      },
+      "messages": {
+        "save_success": "Kunde erfolgreich gespeichert!",
+        "save_error": "Fehler beim Speichern!",
+        "delete_success": "Kunde erfolgreich gelöscht!",
+        "delete_error": "Fehler beim Löschen!"
+      }
+    },
+    "settings": {
+      "title": "Einstellungen",
+      "general": "Allgemein",
+      "company": "Unternehmen",
+      "notifications": "Benachrichtigungen",
+      "payments": "Zahlungen",
+      "integrations": "Integrationen",
+      "appointments_events": "Termine und Ereignisse",
+      "labels": "Beschriftungen",
+      "roles": "Rollen-Einstellungen",
+      "activation": "Aktivierung",
+      "api_keys": "API-Schlüssel",
+      "cards": {
+        "general": {
+          "title": "Allgemein",
+          "desc": "Generelle Standards für Dienstleistungen und Termine definieren",
+          "link": "Allgemeine Einstellungen anzeigen"
+        },
+        "company": {
+          "title": "Unternehmen",
+          "desc": "Bilder, Name, Adresse, Telefonnummer und Website deines Unternehmens",
+          "link": "Unternehmens-Einstellungen anzeigen"
+        },
+        "notifications": {
+          "title": "Benachrichtigungen",
+          "desc": "E-Mail-Eigenschaften für Benachrichtigungen an Kunden und Mitarbeiter",
+          "link": "Benachrichtigungs-Einstellungen anzeigen"
+        },
+        "working_hours": {
+          "title": "Arbeitszeiten & freie Tage",
+          "desc": "Arbeitszeiten und freie Tage definieren, die für alle Mitarbeiter gelten",
+          "link": "Einstellungen für Arbeitszeit und freie Tage"
+        },
+        "payments": {
+          "title": "Zahlungen",
+          "desc": "Preisgestaltung, Zahlungsmethode und Gutschein-Codes",
+          "link": "Zahlungs-Einstellungen anzeigen"
+        },
+        "integrations": {
+          "title": "Integrationen",
+          "desc": "Google/Outlook Kalender, Zoom und Webhooks",
+          "link": "Integrationen-Einstellungen anzeigen"
+        },
+        "appointments_events": {
+          "title": "Termine und Ereignisse",
+          "desc": "Frontend-Buchungen verwalten",
+          "link": "Einstellungen für Termine und Ereignisse"
+        },
+        "labels": {
+          "title": "Beschriftungen",
+          "desc": "Beschriftungen auf den Frontend-Seiten ändern",
+          "link": "Beschriftungs-Einstellungen anzeigen"
+        },
+        "roles": {
+          "title": "Rollen-Einstellungen",
+          "desc": "Einstellungen für spezifische Bookando-Rollen",
+          "link": "Rollen-Einstellungen anzeigen"
+        },
+        "activation": {
+          "title": "Aktivierung",
+          "desc": "Plugin-Code aktivieren, Updates erhalten",
+          "link": "Aktivierungs-Einstellungen anzeigen"
+        },
+        "api_keys": {
+          "title": "API-Schlüssel",
+          "desc": "API-Keys für Bookando-Endpunkte verwalten",
+          "link": "API-Schlüssel-Einstellungen anzeigen"
+        }
+      },
+      "messages": {
+        "load_error": "Fehler beim Laden der Einstellungen.",
+        "save_error": "Fehler beim Speichern.",
+        "saved_ok": "Einstellungen gespeichert."
+      },
+      "general_form": {
+        "title": "Allgemeine Einstellungen",
+        "choose_language": "Sprache auswählen",
+        "system_language": "Systemsprache",
+        "system_language_named": "Systemsprache ({lang})",
+        "tabs": {
+          "limits": "Limits"
+        },
+        "limits": {
+          "max_appointments": "Max. Termine pro Kunde",
+          "max_packages": "Max. Paketkäufe pro Kunde",
+          "max_events": "Max. Veranstaltungen pro Kunde",
+          "zero_hint": "0 = kein Limit"
+        },
+        "saved": "Gespeichert!"
+      },
+      "company_form": {
+        "company_name": "Unternehmensname",
+        "address": "Adresse",
+        "website": "Website",
+        "phone": "Telefon",
+        "email": "E-Mail",
+        "logo": "Logo",
+        "remove": "Entfernen",
+        "choose_logo": "Logo auswählen",
+        "use_logo": "Logo übernehmen",
+        "tabs": {
+          "profile": "Profil",
+          "contact": "Kontakt"
+        }
+      },
+      "roles_form": {
+        "title": "Rollen-Einstellungen",
+        "tabs": {
+          "employee": "Mitarbeiter",
+          "customer": "Kunde",
+          "admin": "Administrator"
+        },
+        "fields": {
+          "employee": {
+            "can_configure_services": "Dienstleistungen konfigurieren",
+            "can_edit_schedule": "Zeitplan konfigurieren",
+            "can_edit_days_off": "Freie Tage konfigurieren",
+            "can_edit_special_days": "Besondere Tage konfigurieren",
+            "can_manage_appointments": "Termine verwalten",
+            "can_manage_events": "Veranstaltungen verwalten",
+            "employee_area_enabled": "Mitarbeiterbereich aktivieren",
+            "employee_area_url": "Mitarbeiterbereich Seiten-URL",
+            "can_manage_badges": "Mitarbeiter-Badges verwalten",
+            "max_appointments": "Termine pro Mitarbeiter begrenzen"
+          },
+          "customer": {
+            "check_existing_contact": "Kundennamen auf existierende E-Mail/Telefon prüfen",
+            "auto_create_account": "Automatisch Benutzerkonto erstellen",
+            "can_reschedule_appointments": "Eigene Termine verschieben erlauben",
+            "customer_area_enabled": "Kundenbereich aktivieren",
+            "customer_area_url": "Kundenbereich Seiten-URL",
+            "require_password": "Passwort für Anmeldung erforderlich",
+            "can_self_delete": "Profil selbst löschen erlauben",
+            "can_cancel_packages": "Pakete stornieren erlauben",
+            "enable_no_show_tag": "No-Show-Tag aktivieren",
+            "max_appointments": "Termine pro Kunde begrenzen",
+            "max_packages": "Paketkäufe pro Kunde begrenzen",
+            "max_events": "Veranstaltungen pro Kunde begrenzen"
+          },
+          "admin": {
+            "can_always_book": "Admin kann jederzeit Termin buchen",
+            "book_window_depends_on_service": "Buchungszeitfenster an Dienstleistungsdauer koppeln"
+          }
+        }
+      }
+    },
+    "employees": {
+      "title": "Mitarbeiter",
+      "entity_singular": "Mitarbeiter",
+      "entity_plural": "Mitarbeiter",
+      "actions": {
+        "add": "Mitarbeiter hinzufügen",
+        "edit": "Mitarbeiter bearbeiten",
+        "delete": "Mitarbeiter löschen",
+        "export": "Exportieren"
+      },
+      "employee_area_password_hint": "Eingabe zum Setzen oder Zurücksetzen des Passworts",
+      "messages": {
+        "save_success": "Mitarbeiter erfolgreich gespeichert!",
+        "save_error": "Fehler beim Speichern!",
+        "delete_success": "Mitarbeiter erfolgreich gelöscht!",
+        "delete_error": "Fehler beim Löschen!"
+      },
+      "confirm_delete": "Soll dieser Mitarbeiter wirklich gelöscht werden?",
+      "search_placeholder": "Mitarbeiter suchen...",
+      "status": {
+        "available": "Verfügbar",
+        "busy": "Gebucht",
+        "away": "Abwesend",
+        "break": "Pause",
+        "dayoff": "Freier Tag"
+      },
+      "table": {
+        "empty": "Keine Mitarbeiter gefunden.",
+        "columns": {
+          "name": "Name",
+          "work_locations": "Arbeitsorte",
+          "badge": "Badge",
+          "calendar": "Kalender"
+        }
+      },
+      "form": {
+        "tabs": {
+          "details": "Details",
+          "calendar": "Kalender",
+          "assigned_services": "Zugeordnete Dienstleistungen",
+          "working_hours": "Arbeitszeiten",
+          "days_off": "Urlaub",
+          "special_days": "Besondere Tage"
+        },
+        "calendar": {
+          "overview_title": "Kalenderübersicht",
+          "add_account": "Kalenderkonto hinzufügen",
+          "connect": "Verbinden",
+          "connected": "Verbunden",
+          "disconnect": "Trennen",
+          "disconnected": "Nicht verbunden",
+          "availability": "Verfügbarkeit",
+          "connect_existing": "Einen vorhandenen Kalender verbinden",
+          "connect_existing_hint": "Für die Dauer Ihrer Kalenderereignisse werden Sie als nicht verfügbar angezeigt, damit Sie nicht doppelt gebucht werden.",
+          "read_title": "Kalender, die auf beschäftigte Zeiten überprüft werden sollen",
+          "read_hint": "Diese Kalender werden verwendet, um Doppelbuchungen zu vermeiden",
+          "write_title": "Kalender, denen Ereignisse hinzugefügt werden sollen",
+          "write_hint": "Es können ein oder mehrere Kalender ausgewählt werden",
+          "sync_title": "Synchronisierungseinstellungen",
+          "sync_buffer": "Puffer für diesen Kalender berücksichtigen",
+          "sync_changes": "Änderungen von diesem Kalender automatisch synchronisieren",
+          "sync_help": "Synchronisierungseinstellungen\n\nPuffer für diesen Kalender berücksichtigen\n\nÄnderungen von diesem Kalender automatisch synchronisieren",
+          "ics_feed": "Privater ICS-Feed (Lesen)",
+          "ics_invite": "Einladungs-E-Mail (Schreiben via .ics)",
+          "test_ics": "ICS prüfen",
+          "read_only": "Nur lesen (Kalender prüfen)",
+          "write_back": "Schreiben (Termine eintragen)",
+          "select_calendar": "Kalender auswählen",
+          "labels": {
+            "google_calendar": "Google-Kalender",
+            "google_sub": "Gmail, G Suite",
+            "outlook_calendar": "Outlook-Kalender",
+            "outlook_sub": "Office-365 / Outlook / Hotmail",
+            "exchange_calendar": "Exchange-Kalender",
+            "exchange_sub": "Exchange-Server 2013 / 2016 / 2019 (EWS/AutoDiscover)",
+            "apple_calendar": "Apple / iCloud"
+          },
+          "providers": {
+            "google": "Google",
+            "microsoft": "Microsoft",
+            "apple": "Apple / iCloud (ICS)"
+          },
+          "google": {
+            "connect": "Mit Google verbinden",
+            "disconnect": "Von Google abmelden",
+            "connected": "Mit Google verbunden",
+            "disconnected": "Nicht verbunden"
+          },
+          "outlook": {
+            "connect": "Mit Outlook verbinden",
+            "disconnect": "Von Outlook abmelden",
+            "connected": "Mit Outlook verbunden",
+            "disconnected": "Nicht verbunden"
+          },
+          "apple": {
+            "subscribe": "In Apple Kalender abonnieren"
+          }
+        },
+        "validation": {
+          "title": "Bitte Eingaben prüfen",
+          "work_required": "Mindestens eine Arbeitszeit ist erforderlich.",
+          "worktime_invalid": "Die erfassten Arbeitszeiten sind nicht gültig.",
+          "break_invalid": "Die erfassten Pausen sind nicht gültig."
+        },
+        "working_days": {
+          "title": "Arbeitszeiten",
+          "header": "Arbeitszeiten erfassen",
+          "header_hint": "Hier kann die Standard-Arbeitswoche für Dienstleistungen und Orte geplant werden.",
+          "service": "Dienstleistung",
+          "services": "Dienstleistungen",
+          "location": "Ort",
+          "locations": "Orte",
+          "working_hours": "Arbeitszeiten",
+          "add_working_hours": "Arbeitszeit hinzufügen",
+          "breaks": "Pausen",
+          "add_breaks": "Pause hinzufügen",
+          "apply_to_all": "Auf alle Tage anwenden",
+          "apply_to_other_days": "Auf andere Tage anwenden",
+          "choose_days": "Tage auswählen",
+          "none": "Keine"
+        },
+        "days_off": {
+          "title": "Urlaub / freie Tage",
+          "date": "Datum",
+          "name": "Name des freien Tags",
+          "repeat_yearly": "Jährlich wiederholen",
+          "add_day_off": "Freien Tag hinzufügen"
+        },
+        "special_days": {
+          "title": "Besondere Tage",
+          "header": "Besonere Tage definieren",
+          "header_hint": "Hier werden spezielle Tage für Dienstleistungen und Orte geplant, welche vom Standard abweichen.",
+          "add": "Hinzufügen",
+          "date": "Datum",
+          "change_date": "Datum ändern",
+          "copy": "Kopieren",
+          "add_combo": "Kombination hinzufügen",
+          "new_combo": "Neue Kombination für diesen Tag definieren",
+          "working_hours": "Arbeitszeiten",
+          "add_working_hours": "Arbeitszeit hinzufügen",
+          "breaks": "Pausen",
+          "add_breaks": "Pause hinzufügen",
+          "service": "Dienstleistung",
+          "services": "Dienstleistungen",
+          "location": "Ort",
+          "locations": "Orte",
+          "delete": "Löschen"
+        }
+      }
+    },
+    "offers": {
+      "title": "Angebote",
+      "tabs": {
+        "courses": "Kurse",
+        "services": "Dienstleistungen",
+        "packages": "Pakete",
+        "coupons": "Gutscheine"
+      }
+    },
+    "services": {
+      "title": "Dienstleistungen",
+      "categories": "Kategorien",
+      "categories_hint": "Wähle eine Kategorie aus, um rechts die zugehörigen Dienstleistungen zu sehen.",
+      "add_service": "Dienstleistung hinzufügen",
+      "duration": "Dauer",
+      "uncategorized": "Ohne Kategorie",
+      "dynamic_pricing": "Dynamische Preise",
+      "category": {
+        "label": "Kategorie",
+        "add": "Kategorie hinzufügen",
+        "edit": "Kategorie bearbeiten"
+      },
+      "list": {
+        "search_placeholder": "Dienstleistungen suchen...",
+        "columns": {
+          "name": "Name",
+          "category": "Kategorie",
+          "price": "Preis",
+          "duration": "Dauer",
+          "status": "Status"
+        },
+        "empty": "Keine Dienstleistungen gefunden."
+      },
+      "form": {
+        "tabs": {
+          "details": "Details",
+          "pricing": "Preise",
+          "availability": "Verfügbarkeiten",
+          "settings": "Einstellungen",
+          "notes": "Notizen",
+          "extras": "Zusatz"
+        },
+        "details": {
+          "avatar_border": "Avatar-Randfarbe",
+          "show_on_website": "Auf Website anzeigen",
+          "show_on_website_hint": "Macht die Dienstleistung im öffentlichen Buchungswidget sichtbar.",
+          "recurrence": "Wiederkehrende Termine erlauben"
+        },
+        "pricing": {
+          "tab": "Preise",
+          "base_title": "Basispreis",
+          "base_hint": "Standardpreis ohne Aktionen/Regeln.",
+          "promotions": "Preisaktionen / Promotions",
+          "promotions_hint": "Definiere befristete Aktionspreise. Ein aktiver Zeitraum zeigt in der Übersicht ein Banner.",
+          "banner": "Bannertext",
+          "dynamic": "Dynamische Preisregeln",
+          "dynamic_hint": "Preis abhängig von Wochentag, Datum und Uhrzeit ändern.",
+          "mode": "Modus",
+          "fixed": "Fix",
+          "percent": "Prozent",
+          "example_label": "z.B. Sa 10–14 Uhr -10%"
+        },
+        "availability": {
+          "tab": "Verfügbarkeiten",
+          "header": "Verfügbarkeiten",
+          "hint": "Unabhängig von Mitarbeiterzeiten. Diese Slots werden bei der Buchung berücksichtigt.",
+          "add_slot": "Zeitfenster hinzufügen"
+        },
+        "settings": {
+          "default_status": "Voreinstellung für Terminstatus",
+          "booking_window": "Buchungszeitraum",
+          "max_days": "Max. Anzahl",
+          "day_type": "Typ",
+          "unit": "Einheit",
+          "redirect_url": "Weiterleitungs-URL nach Buchung",
+          "lead_book": "Mindestzeit vor Buchung",
+          "lead_cancel": "Mindestzeit vor Absage",
+          "lead_reschedule": "Mindestzeit vor Verschiebung",
+          "limit_per_customer": "Termine pro Kunde begrenzen",
+          "limit_per_customer_hint": "Begrenzt, wie viele Termine ein Kunde in einem Zeitraum buchen darf.",
+          "limit_count": "Anzahl Termine",
+          "limit_period_value": "Zeitraum",
+          "limit_period_unit": "Einheit"
+        }
+      },
+      "external_id": "Externe Produkt-ID",
+      "extras": "Zusatz",
+      "notes": "Interne Notizen & Optionen"
+    }
+  },
+  "PENDING": {
+    "TEXT": {
+      "dieses_modul_ist_in_deinem_aktuellen_plan": "Dieses Modul ist in deinem aktuellen Plan"
+    }
+  }
+}

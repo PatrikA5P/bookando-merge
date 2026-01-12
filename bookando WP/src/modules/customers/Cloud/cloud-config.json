@@ -1,0 +1,9 @@
+{
+  "slug": "customers",
+  "embed": true,
+  "admin_path": "/admin/customers",
+  "api_path": "/api/customers",
+  "allowed_domains": [
+    "*.deine-saas-domain.tld"
+  ]
+}

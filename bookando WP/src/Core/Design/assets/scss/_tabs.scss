@@ -1,0 +1,305 @@
+@use 'sass:map';
+@use 'sass:color';
+@use 'variables' as *;
+@use 'mixins' as *;
+
+$bookando-tab-caret-pad: 20px;
+
+// =====================================
+// Tabs – Bookando
+// =====================================
+.bookando-tabs {
+  width: 100%;
+
+  // ==============================
+  // Scrollbare Nav + Carets (Wrapper)
+  // ==============================
+  .bookando-tab-nav-wrap {
+    position: relative;
+    display: flex;
+    align-items: stretch;
+    overflow: hidden;
+    background: inherit;
+
+    // durchgehende Unterkante (Border)
+    &::after {
+      content: "";
+      position: absolute;
+      left: 0; right: 0; bottom: 0;
+      height: $bookando-border-width-lg;
+      background: $bookando-border;
+      z-index: 2; // Border über Carets, unter Tabs/Indicator
+    }
+
+    // Standard: kein Zusatzabstand
+    padding-inline-start: 0;
+    padding-inline-end: 0;
+
+    // Nur Polster an der Seite setzen, wo wirklich ein Caret sichtbar ist
+    &.is-left-visible  { padding-inline-start: $bookando-tab-caret-pad; box-sizing: border-box; }
+    &.is-right-visible { padding-inline-end:   $bookando-tab-caret-pad; box-sizing: border-box; }
+  }
+
+  // Progress-Bar (optional)
+  .bookando-tab-progress {
+    position: absolute;
+    left: 0; bottom: 0;
+    height: 2px;
+    width: var(--bookando-tab-progress, 0%);
+    z-index: 3; // über Border, unter Tabs/Indicator
+    border-radius: 999px;
+    background: linear-gradient(90deg, rgba($bookando-primary,.18) 0%, rgba($bookando-primary,.55) 100%);
+    box-shadow:
+      0 0 0 1px rgba($bookando-primary, .10) inset,
+      0 2px 8px rgba($bookando-primary, .18);
+    transition: width 140ms linear, opacity .18s ease;
+    pointer-events: none;
+  }
+
+  // ==============================
+  // Scrollbare Nav
+  // ==============================
+  .bookando-tab-nav {
+    position: relative; // für Indicator
+    display: flex;
+    align-items: stretch;
+    gap: $bookando-spacing-xs;
+    margin: 0;
+    padding: 0;
+    list-style: none !important;
+
+    flex: 1 1 auto;
+    min-width: 0;
+    white-space: nowrap;
+    overflow-x: auto;
+    overflow-y: hidden;
+    touch-action: pan-x;
+
+    border-bottom: none;
+    background: none;
+    z-index: 4; // ganz oben
+
+    // zentrierter Modus (wenn kein Overflow)
+    &.is-centered {
+      justify-content: center;
+    }
+
+    // Scrollbars verstecken
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+    &::-webkit-scrollbar { display: none; }
+
+    @include respond-to('md') {
+      gap: $bookando-spacing-xs;
+    }
+
+    // Unterstreichung schmaler (kann überschrieben werden)
+    --bookando-tab-inset: 14px;
+
+    // ========= Indicator =========
+    .bookando-tab-indicator {
+      --bookando-tab-x: 0px;
+      --bookando-tab-scale: 0;
+      --bookando-tab-hover-x: var(--bookando-tab-x);
+      --bookando-tab-hover-scale: var(--bookando-tab-scale);
+      --bookando-tab-indicator-h: 3.5px;
+
+      position: absolute;
+      left: 0;
+      bottom: 0;
+      height: var(--bookando-tab-indicator-h);
+      width: 1px;
+      transform-origin: left center;
+
+
+      background: linear-gradient(
+        180deg,
+        color.adjust($bookando-primary, $lightness: 8%) 0%,
+        $bookando-primary 100%
+      );
+      border-radius: map.get($bookando-radius-sizes, xxs);
+      box-shadow:
+        0 6px 16px rgba($bookando-primary, .28),
+        0 0 0 1px rgba($bookando-primary, .24) inset;
+      filter: saturate(115%);
+
+      pointer-events: none;
+      will-change: transform;
+      transform: translate3d(var(--bookando-tab-x), 0, 0) scaleX(var(--bookando-tab-scale));
+      transition: transform 280ms cubic-bezier(.18,.89,.32,1.28);
+
+      &.is-no-animate { transition: none !important; }
+
+      .is-indicator-hovering & {
+        transform: translate3d(var(--bookando-tab-hover-x), 0, 0) scaleX(var(--bookando-tab-hover-scale));
+        transition-duration: 200ms;
+      }
+
+      @media (prefers-reduced-motion: reduce) { transition: none; }
+    }
+  }
+
+  // ==============================
+  // Tab-Button
+  // ==============================
+  .bookando-tab {
+    display: inline-flex;
+    align-items: center;
+    gap: $bookando-spacing-xxs;
+
+    padding: $bookando-spacing-sm $bookando-spacing-sm;
+    margin: 0;
+    background: transparent;
+    border: none;
+
+    cursor: pointer;
+    position: relative;
+    color: $bookando-text-muted;
+    font-weight: $bookando-font-weight-medium;
+    font-size: $bookando-font-size-md;
+
+    scroll-margin-left: $bookando-spacing-sm;
+
+    transition: color .18s ease, background .18s ease, transform .18s ease;
+
+    &:hover,
+    &:focus-visible { color: $bookando-primary; }
+
+    &.bookando-tab--disabled {
+      opacity: .5;
+      cursor: not-allowed;
+    }
+
+    &.active { color: $bookando-primary; }
+
+    @include respond-to('md') {
+      padding: $bookando-spacing-xs $bookando-spacing-md;
+      font-size: $bookando-font-size-sm;
+    }
+  }
+
+  // ==============================
+  // Panels
+  // ==============================
+  .bookando-tab-content {
+    padding: $bookando-spacing-lg 0;
+    animation: fadeInTab 0.32s cubic-bezier(0.19, 1, 0.22, 1);
+
+    @include respond-to('md') { padding: $bookando-spacing-md 0; }
+  }
+}
+
+// =====================================
+// Caret-Buttons (Amelia-like, ohne Fades)
+// =====================================
+.bookando-tab-caret {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: $bookando-tab-caret-pad;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  border: 0;
+  padding: 0;
+  cursor: pointer;
+
+  background: inherit; // gleiche Farbe wie der Hintergrund
+  color: $bookando-text-muted;
+  box-shadow: none;
+  z-index: 1; // unter Border
+
+  .bookando-icon { font-size: $bookando-font-size-lg; }
+  &:hover { color: $bookando-primary; }
+  &:focus-visible { outline: 2px solid $bookando-primary; outline-offset: 2px; }
+
+  &::before { content: none; }
+
+  &--left  { left: 0; }
+  &--right { right: 0; }
+}
+
+// =====================================
+// Animationen
+// =====================================
+@keyframes fadeInTab {
+  from { opacity: 0; transform: translateY(10px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+// =====================================
+// Dark-Mode Tweaks
+// =====================================
+.theme-dark .bookando-tabs,
+[data-theme="dark"] .bookando-tabs {
+  .bookando-tab-nav-wrap::after {
+    background: color.adjust($bookando-border, $lightness: -5%);
+  }
+
+  .bookando-tab-progress {
+    background: linear-gradient(
+      90deg,
+      rgba(color.adjust($bookando-primary, $lightness: 6%), .22) 0%,
+      rgba(color.adjust($bookando-primary, $lightness: 6%), .6) 100%
+    );
+    box-shadow:
+      0 0 0 1px rgba($bookando-primary, .12) inset,
+      0 2px 8px rgba($bookando-primary, .22);
+  }
+
+  .bookando-tab-nav {
+    .bookando-tab-indicator {
+      background: linear-gradient(
+        180deg,
+        color.adjust($bookando-primary, $lightness: 10%) 0%,
+        color.adjust($bookando-primary, $lightness: 4%) 100%
+      );
+      box-shadow:
+        0 6px 16px rgba($bookando-primary, .34),
+        0 0 0 1px rgba($bookando-primary, .26) inset;
+    }
+  }
+
+  .bookando-tab {
+    color: color.adjust($bookando-text-muted, $lightness: 12%);
+    &:hover,
+    &:focus-visible { color: color.adjust($bookando-primary, $lightness: 6%); }
+    &.active        { color: color.adjust($bookando-primary, $lightness: 6%); }
+  }
+
+  .bookando-tab-caret {
+    background: inherit;
+    color: color.adjust($bookando-text-muted, $lightness: 8%);
+    &:hover { color: color.adjust($bookando-primary, $lightness: 6%); }
+  }
+}
+
+// Reduced Motion
+@media (prefers-reduced-motion: reduce) {
+  .bookando-tab-nav { scroll-behavior: auto; }
+}
+
+
+// ==============================
+// Panels  (NEU: via CSS-Var und Modifiers steuerbar)
+// ==============================
+.bookando-tabs {
+  .bookando-tab-content {
+    /* vorher: padding: $bookando-spacing-lg 0; */
+    padding: var(--bookando-tab-content-py, #{map.get($bookando-spacing, md)}) 0;
+    animation: fadeInTab 0.32s cubic-bezier(0.19, 1, 0.22, 1);
+
+    @include respond-to('md') {
+      padding: var(--bookando-tab-content-py, #{map.get($bookando-spacing, sm)}) 0;
+    }
+  }
+
+  /* Kompakte Varianten als Utilities, steuerbar über Klassen */
+  &.bookando-tabs--py-none { --bookando-tab-content-py: 0; }
+  &.bookando-tabs--py-xxs  { --bookando-tab-content-py: #{map.get($bookando-spacing, xxs)}; }
+  &.bookando-tabs--py-xs   { --bookando-tab-content-py: #{map.get($bookando-spacing, xs)}; }
+  &.bookando-tabs--py-sm   { --bookando-tab-content-py: #{map.get($bookando-spacing, sm)}; }
+  &.bookando-tabs--py-md   { --bookando-tab-content-py: #{map.get($bookando-spacing, md)}; }
+  &.bookando-tabs--py-lg   { --bookando-tab-content-py: #{map.get($bookando-spacing, lg)}; }
+}

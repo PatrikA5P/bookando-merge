@@ -1,0 +1,44 @@
+{
+  "slug": "appointments",
+  "plan": "starter",
+  "version": "1.0.0",
+  "tenant_required": true,
+  "license_required": true,
+  "features_required": [
+    "calendar_sync",
+    "rest_api_read"
+  ],
+  "group": "operations",
+  "is_saas": true,
+  "has_admin": true,
+  "supports_webhook": true,
+  "supports_offline": true,
+  "supports_calendar": true,
+  "name": {
+    "default": "Appointments",
+    "de": "Termine",
+    "en": "Appointments",
+    "fr": "Rendez-vous",
+    "it": "Appuntamenti"
+  },
+  "alias": {
+    "de": "Termine",
+    "en": "Appt",
+    "fr": "Rdv",
+    "it": "App."
+  },
+  "description": {
+    "default": "Manage appointments, events and manual bookings.",
+    "de": "Verwalten Sie Termine, Veranstaltungen und manuelle Buchungen.",
+    "en": "Manage appointments, events and manual bookings.",
+    "fr": "Gérez les rendez-vous, événements et réservations manuelles.",
+    "it": "Gestisci appuntamenti, eventi e prenotazioni manuali."
+  },
+  "visible": true,
+  "menu_icon": "dashicons-calendar-alt",
+  "menu_position": 28,
+  "dependencies": [],
+  "tabs": [],
+  "is_submodule": false,
+  "parent_module": null
+}

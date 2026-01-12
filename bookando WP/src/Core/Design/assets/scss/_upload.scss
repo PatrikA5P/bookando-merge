@@ -1,0 +1,55 @@
+// Upload-Feld – komplett geprefixt!
+@use 'sass:color';
+@use 'variables' as *;
+@use 'mixins' as *;
+
+.bookando-upload {
+  display: flex;
+  align-items: center;
+  gap: $bookando-spacing-md;
+  background: $bookando-secondary;
+  border-radius: $bookando-radius;
+  padding: $bookando-spacing-md;
+  cursor: pointer;
+  transition: background 0.18s;
+
+  &:hover {
+    background: $bookando-primary-light;
+  }
+
+  .bookando-upload-label {
+    font-size: $bookando-font-size-base;
+    font-weight: 500;
+    color: $bookando-text-dark;
+    cursor: pointer;
+    margin-right: $bookando-spacing-sm;
+  }
+
+  input[type="file"] {
+    display: none;
+  }
+
+  .bookando-upload-filename {
+    font-size: $bookando-font-size-sm;
+    color: $bookando-text-muted;
+    margin-left: $bookando-spacing-sm;
+  }
+
+  .bookando-upload-preview {
+    display: flex;
+    align-items: center;
+    img, svg {
+      max-width: 46px;
+      max-height: 46px;
+      border-radius: $bookando-radius;
+      margin-right: $bookando-spacing-sm;
+      box-shadow: 0 1px 4px rgba(16,40,60,0.09);
+    }
+  }
+}
+
+// Fehler/Status
+.bookando-upload.is-error {
+  background: color.scale($bookando-danger, $lightness: 92%);
+  border: 1.5px solid $bookando-danger;
+}

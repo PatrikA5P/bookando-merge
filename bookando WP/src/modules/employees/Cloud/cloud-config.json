@@ -1,0 +1,9 @@
+{
+  "slug": "employees",
+  "embed": true,
+  "admin_path": "/admin/employees",
+  "api_path": "/api/employees",
+  "allowed_domains": [
+    "*.deine-saas-domain.tld"
+  ]
+}

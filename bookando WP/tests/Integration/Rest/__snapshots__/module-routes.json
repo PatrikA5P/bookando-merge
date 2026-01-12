@@ -1,0 +1,447 @@
+{
+  "/bookando/v1/academy/courses": [
+    {
+      "methods": [
+        "POST"
+      ],
+      "show_in_index": true
+    }
+  ],
+  "/bookando/v1/academy/courses/(?P<id>[a-zA-Z0-9-]+)": [
+    {
+      "methods": [
+        "DELETE"
+      ],
+      "show_in_index": true
+    }
+  ],
+  "/bookando/v1/academy/state": [
+    {
+      "methods": [
+        "GET"
+      ],
+      "show_in_index": true
+    }
+  ],
+  "/bookando/v1/academy/training_cards": [
+    {
+      "methods": [
+        "POST"
+      ],
+      "show_in_index": true
+    }
+  ],
+  "/bookando/v1/academy/training_cards/(?P<id>[a-zA-Z0-9-]+)": [
+    {
+      "methods": [
+        "DELETE"
+      ],
+      "show_in_index": true
+    }
+  ],
+  "/bookando/v1/academy/training_cards_progress": [
+    {
+      "methods": [
+        "POST"
+      ],
+      "show_in_index": true
+    }
+  ],
+  "/bookando/v1/appointments/appointments": [
+    {
+      "methods": [
+        "DELETE",
+        "GET",
+        "PATCH",
+        "POST",
+        "PUT"
+      ],
+      "show_in_index": true
+    }
+  ],
+  "/bookando/v1/appointments/appointments/(?P<subkey>[a-zA-Z0-9_-]+)": [
+    {
+      "methods": [
+        "DELETE",
+        "GET",
+        "PATCH",
+        "POST",
+        "PUT"
+      ],
+      "show_in_index": true
+    }
+  ],
+  "/bookando/v1/appointments/assign": [
+    {
+      "methods": [
+        "POST"
+      ],
+      "show_in_index": true
+    }
+  ],
+  "/bookando/v1/appointments/lookups": [
+    {
+      "methods": [
+        "GET"
+      ],
+      "show_in_index": true
+    }
+  ],
+  "/bookando/v1/appointments/timeline": [
+    {
+      "methods": [
+        "GET"
+      ],
+      "show_in_index": true
+    }
+  ],
+  "/bookando/v1/customers": [
+    {
+      "methods": [
+        "GET",
+        "POST"
+      ],
+      "show_in_index": true
+    }
+  ],
+  "/bookando/v1/customers/(?P<subkey>\\d+)": [
+    {
+      "methods": [
+        "DELETE",
+        "GET",
+        "PATCH",
+        "PUT"
+      ],
+      "show_in_index": true
+    }
+  ],
+  "/bookando/v1/customers/bulk": [
+    {
+      "methods": [
+        "POST"
+      ],
+      "show_in_index": true
+    }
+  ],
+  "/bookando/v1/customers/export": [
+    {
+      "methods": [
+        "GET"
+      ],
+      "show_in_index": true
+    }
+  ],
+  "/bookando/v1/employees": [
+    {
+      "methods": [
+        "GET",
+        "POST"
+      ],
+      "show_in_index": true
+    }
+  ],
+  "/bookando/v1/employees/bulk": [
+    {
+      "methods": [
+        "POST"
+      ],
+      "show_in_index": false
+    }
+  ],
+  "/bookando/v1/employees/employees": [
+    {
+      "methods": [
+        "GET",
+        "POST"
+      ],
+      "show_in_index": false
+    }
+  ],
+  "/bookando/v1/employees/employees/(?P<subkey>\\d+)": [
+    {
+      "methods": [
+        "DELETE",
+        "GET",
+        "PATCH",
+        "PUT"
+      ],
+      "show_in_index": false
+    }
+  ],
+  "/bookando/v1/employees/(?P<id>\\d+)": [
+    {
+      "methods": [
+        "DELETE",
+        "GET",
+        "PATCH",
+        "PUT"
+      ],
+      "show_in_index": true
+    }
+  ],
+  "/bookando/v1/employees/(?P<id>\\d+)/calendar/connections/ics": [
+    {
+      "methods": [
+        "DELETE",
+        "POST"
+      ],
+      "show_in_index": false
+    }
+  ],
+  "/bookando/v1/employees/(?P<id>\\d+)/calendar/invite": [
+    {
+      "methods": [
+        "POST"
+      ],
+      "show_in_index": true
+    }
+  ],
+  "/bookando/v1/employees/(?P<id>\\d+)/calendars": [
+    {
+      "methods": [
+        "GET",
+        "PATCH",
+        "PUT"
+      ],
+      "show_in_index": true
+    }
+  ],
+  "/bookando/v1/employees/(?P<id>\\d+)/days-off": [
+    {
+      "methods": [
+        "GET",
+        "PATCH",
+        "POST",
+        "PUT"
+      ],
+      "show_in_index": true
+    }
+  ],
+  "/bookando/v1/employees/(?P<id>\\d+)/special-day-sets": [
+    {
+      "methods": [
+        "GET",
+        "POST"
+      ],
+      "show_in_index": true
+    }
+  ],
+  "/bookando/v1/employees/(?P<id>\\d+)/special-days": [
+    {
+      "methods": [
+        "GET"
+      ],
+      "show_in_index": false
+    }
+  ],
+  "/bookando/v1/employees/(?P<id>\\d+)/workday-sets": [
+    {
+      "methods": [
+        "GET",
+        "POST"
+      ],
+      "show_in_index": true
+    }
+  ],
+  "/bookando/v1/finance/credit_notes": [
+    {
+      "methods": [
+        "POST"
+      ],
+      "show_in_index": true
+    }
+  ],
+  "/bookando/v1/finance/credit_notes/(?P<id>[a-zA-Z0-9-]+)": [
+    {
+      "methods": [
+        "DELETE"
+      ],
+      "show_in_index": true
+    }
+  ],
+  "/bookando/v1/finance/discount_codes": [
+    {
+      "methods": [
+        "POST"
+      ],
+      "show_in_index": true
+    }
+  ],
+  "/bookando/v1/finance/discount_codes/(?P<id>[a-zA-Z0-9-]+)": [
+    {
+      "methods": [
+        "DELETE"
+      ],
+      "show_in_index": true
+    }
+  ],
+  "/bookando/v1/finance/export": [
+    {
+      "methods": [
+        "POST"
+      ],
+      "show_in_index": true
+    }
+  ],
+  "/bookando/v1/finance/invoices": [
+    {
+      "methods": [
+        "POST"
+      ],
+      "show_in_index": true
+    }
+  ],
+  "/bookando/v1/finance/invoices/(?P<id>[a-zA-Z0-9-]+)": [
+    {
+      "methods": [
+        "DELETE"
+      ],
+      "show_in_index": true
+    }
+  ],
+  "/bookando/v1/finance/settings": [
+    {
+      "methods": [
+        "POST"
+      ],
+      "show_in_index": true
+    }
+  ],
+  "/bookando/v1/finance/state": [
+    {
+      "methods": [
+        "GET"
+      ],
+      "show_in_index": true
+    }
+  ],
+  "/bookando/v1/offers/bulk": [
+    {
+      "methods": [
+        "POST"
+      ],
+      "show_in_index": true
+    }
+  ],
+  "/bookando/v1/offers/offers": [
+    {
+      "methods": [
+        "GET",
+        "POST"
+      ],
+      "show_in_index": true
+    }
+  ],
+  "/bookando/v1/offers/offers/(?P<subkey>[a-zA-Z0-9_-]+)": [
+    {
+      "methods": [
+        "DELETE",
+        "GET",
+        "PATCH",
+        "POST",
+        "PUT"
+      ],
+      "show_in_index": true
+    }
+  ],
+  "/bookando/v1/resources/locations": [
+    {
+      "methods": [
+        "POST"
+      ],
+      "show_in_index": true
+    }
+  ],
+  "/bookando/v1/resources/locations/(?P<id>[a-zA-Z0-9-]+)": [
+    {
+      "methods": [
+        "DELETE"
+      ],
+      "show_in_index": true
+    }
+  ],
+  "/bookando/v1/resources/materials": [
+    {
+      "methods": [
+        "POST"
+      ],
+      "show_in_index": true
+    }
+  ],
+  "/bookando/v1/resources/materials/(?P<id>[a-zA-Z0-9-]+)": [
+    {
+      "methods": [
+        "DELETE"
+      ],
+      "show_in_index": true
+    }
+  ],
+  "/bookando/v1/resources/rooms": [
+    {
+      "methods": [
+        "POST"
+      ],
+      "show_in_index": true
+    }
+  ],
+  "/bookando/v1/resources/rooms/(?P<id>[a-zA-Z0-9-]+)": [
+    {
+      "methods": [
+        "DELETE"
+      ],
+      "show_in_index": true
+    }
+  ],
+  "/bookando/v1/resources/state": [
+    {
+      "methods": [
+        "GET"
+      ],
+      "show_in_index": true
+    }
+  ],
+  "/bookando/v1/settings": [
+    {
+      "methods": [
+        "GET"
+      ],
+      "show_in_index": true
+    }
+  ],
+  "/bookando/v1/settings/company": [
+    {
+      "methods": [
+        "GET",
+        "POST"
+      ],
+      "show_in_index": true
+    }
+  ],
+  "/bookando/v1/settings/feature/(?P<feature_key>[a-z0-9_-]+)": [
+    {
+      "methods": [
+        "GET",
+        "POST"
+      ],
+      "show_in_index": true
+    }
+  ],
+  "/bookando/v1/settings/general": [
+    {
+      "methods": [
+        "GET",
+        "POST"
+      ],
+      "show_in_index": true
+    }
+  ],
+  "/bookando/v1/settings/roles/(?P<role_slug>[a-z0-9_-]+)": [
+    {
+      "methods": [
+        "GET",
+        "POST"
+      ],
+      "show_in_index": true
+    }
+  ]
+}

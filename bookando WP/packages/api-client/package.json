@@ -1,0 +1,49 @@
+{
+  "name": "@bookando/api-client",
+  "version": "1.0.0",
+  "description": "Unified API client for Bookando platform (WordPress, SaaS, Mobile)",
+  "type": "module",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./dist/index.js",
+      "types": "./dist/index.d.ts"
+    },
+    "./composables": {
+      "import": "./dist/composables.js",
+      "types": "./dist/composables.d.ts"
+    }
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsc",
+    "watch": "tsc --watch",
+    "clean": "rm -rf dist",
+    "dev": "tsc --watch"
+  },
+  "keywords": [
+    "bookando",
+    "api-client",
+    "rest",
+    "typescript"
+  ],
+  "author": "Bookando Team",
+  "license": "PROPRIETARY",
+  "dependencies": {
+    "@bookando/types": "*"
+  },
+  "devDependencies": {
+    "typescript": "^5.9.3"
+  },
+  "peerDependencies": {
+    "vue": "^3.0.0"
+  },
+  "peerDependenciesMeta": {
+    "vue": {
+      "optional": true
+    }
+  }
+}

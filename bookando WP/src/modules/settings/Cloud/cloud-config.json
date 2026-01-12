@@ -1,0 +1,9 @@
+{
+  "slug": "settings",
+  "embed": true,
+  "admin_path": "/admin/settings",
+  "api_path": "/api/settings",
+  "allowed_domains": [
+    "*.deine-saas-domain.tld"
+  ]
+}

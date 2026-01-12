@@ -1,0 +1,282 @@
+@use 'sass:color';
+@use 'variables' as *;
+@use 'mixins' as *;
+@use 'field' as *;
+
+// Adminbar-Höhe definieren
+$admin-bar-height-desktop: 32px;
+$admin-bar-height-mobile: 46px;
+
+// =====================================
+// 🔤 Titel (Header oben)
+// =====================================
+.dialog-title-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: nowrap;
+  gap: 0.75em;
+
+  h2, .dialog-title {
+    margin: 0 !important;
+    font-weight: $bookando-font-weight-medium;
+    line-height: 1.2;
+    flex: 1 1 auto;
+    min-width: 0;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  // KEIN Button-Style hier!
+}
+
+// =====================================
+// 🔤 Formular-Gruppen (konsistent mit AppFormGroup)
+// =====================================
+.bookando-form-group {
+  // sauberes Flex-Layout, keine "inherit"-Spezialfälle
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  justify-content: flex-start;
+
+  // Volle Breite im Grid/Wrapper
+  width: 100%;
+  min-width: 0;
+
+  // vertikale Abstände nur hier zentral steuern
+  margin-bottom: $bookando-spacing-sm;
+
+  // Label-Abstand schlank halten
+  > label { margin-bottom: $bookando-spacing-xs; }
+
+  // Umschließt echte Inputs
+  > .bookando-control,
+  > .bookando-field {
+    margin-bottom: 0; // keine Doppelabstände
+  }
+
+  // optional: interner Gap via Token/Var
+  gap: var(--bookando-field-gap, $bookando-spacing-xs);
+}
+
+// Inline / Row-Layout (z.B. für Toggle-Reihen)
+.bookando-form-group--row {
+  display: flex; // explizit machen
+  flex-direction: row !important;
+  align-items: center;
+  justify-content: space-between;
+  gap: $bookando-spacing-md;
+}
+
+// =====================================
+// 🗂 Dialog & Overlay – SEITENLEISTEN-LAYOUT
+// =====================================
+
+// Wrapper: full-screen overlay with centred dialog
+.bookando-dialog-wrapper {
+  position: fixed;
+  inset: 0;
+  z-index: 1050;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  padding: clamp(1.5rem, 4vh, 3.5rem) clamp(1rem, 4vw, 2.5rem);
+  overflow-y: auto;
+  pointer-events: none;
+
+  &.active { pointer-events: all; }
+}
+
+// --- MODAL DIALOG PANEL ---
+.bookando-side-dialog {
+  position: relative;
+  width: min(920px, 100%);
+  max-height: min(92vh, 1100px);
+  background: $bookando-white;
+  padding: 0;
+  border-radius: $bookando-radius-xl;
+  @include bookando-shadow(3);
+  z-index: 1052;
+
+  /* Layout: Header (fix) → Tabs (fix) → Body (scroll) → Footer (fix) */
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  overflow: hidden;
+
+  .dialog-title-row {
+    flex: 0 0 auto;
+    padding: $bookando-spacing-md;
+    background: $bookando-white;
+    border-bottom: 1px solid $bookando-border;
+    z-index: 3; /* höher als Body */
+  }
+
+  /* ⬇︎ Nur die NAV der Tabs (kein Panel-Content!) */
+  .bookando-tabs,
+  > nav {
+    flex: 0 0 auto;
+    margin: 0;
+    padding: $bookando-spacing-xs $bookando-spacing-md;
+    background: $bookando-white;
+    z-index: 3; /* über Body, damit nichts „durchscrollt“ */
+  }
+
+  /* Scrollbarer Body darunter */
+  .bookando-side-dialog__body {
+    flex: 1 1 auto;
+    min-height: 0;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+    padding: clamp($bookando-spacing-md, 1.2rem + 0.5vw, $bookando-spacing-lg);
+    position: relative;
+    z-index: 1; /* unter Header/Tabs/Footer */
+  }
+
+  .sticky-footer {
+    position: sticky;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    width: 100%;
+    background: $bookando-white;
+    padding: $bookando-spacing-lg clamp($bookando-spacing-md, 1.2rem + 0.5vw, $bookando-spacing-lg) $bookando-spacing-md clamp($bookando-spacing-md, 1.2rem + 0.5vw, $bookando-spacing-lg);
+    border-top: $bookando-border-width-md solid $bookando-border;
+    z-index: 4; /* über Body */
+    flex: 0 0 auto;
+  }
+
+  .bookando-form-buttons { display: flex; gap: $bookando-spacing-md; width: 100%; }
+  .bookando-form-buttons--split { justify-content: space-between; }
+}
+
+// --- OVERLAY für Modalität ---
+.bookando-form-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(15, 23, 42, 0.45);
+  backdrop-filter: blur(2px);
+  z-index: 1051;
+}
+
+// --- RESPONSIVE ---
+// WordPress Adminbar auf Mobile: body.admin-bar!
+body.admin-bar {
+  .bookando-dialog-wrapper {
+    padding-top: calc(#{$admin-bar-height-desktop} + clamp(1.5rem, 4vh, 3.5rem));
+
+    @media (max-width: $bookando-breakpoint-md) {
+      padding-top: calc(#{$admin-bar-height-mobile} + clamp(1.25rem, 5vh, 3rem));
+    }
+  }
+}
+
+@media (max-width: $bookando-breakpoint-lg) {
+  .bookando-side-dialog {
+    width: min(840px, 100%);
+  }
+}
+
+@media (max-width: $bookando-breakpoint-md) {
+  .bookando-dialog-wrapper {
+    align-items: stretch;
+    padding: clamp(1.25rem, 5vh, 2rem) clamp(0.75rem, 3vw, 1.5rem);
+  }
+
+  .bookando-side-dialog {
+    max-height: min(96vh, 1000px);
+  }
+}
+
+// Das "body.admin-bar &" im @media-Query
+@media (max-width: $bookando-breakpoint-sm) {
+  .bookando-dialog-wrapper {
+    padding: 0;
+  }
+
+  .bookando-side-dialog {
+    width: 100vw;
+    max-width: 100vw;
+    max-height: 100vh;
+    border-radius: 0;
+
+    // iOS Momentum-Scroll gehört auf den Body-Scroller
+    .bookando-side-dialog__body { -webkit-overflow-scrolling: touch; }
+  }
+
+  body.admin-bar .bookando-dialog-wrapper {
+    padding-top: $admin-bar-height-mobile;
+  }
+}
+
+
+// =====================================
+// ☑ Checkbox-Zeile
+// =====================================
+.form-checkbox-row {
+  display: flex;
+  align-items: center;
+  gap: $bookando-spacing-xs;
+  margin: $bookando-spacing-md 0 $bookando-spacing-sm;
+
+  input[type='checkbox'] {
+    @include bookando-checkbox($bookando-checkbox-size-form);
+  }
+
+  .bookando-label {
+    font-size: $bookando-font-size-base;
+    color: $bookando-text-dark;
+    margin: 0;
+    line-height: 1.4;
+  }
+}
+
+// =====================================
+// 🧱 Grid-System (API identisch zu .bookando-grid in layout.scss)
+// =====================================
+.bookando-form-grid {
+  display: grid;
+  width: 100%;
+  gap: $bookando-spacing-md;
+  grid-template-columns: var(--bookando-grid-cols, 1fr 1fr); // <— vereinheitlichte Variable!
+
+  &.align-center   { align-items: center; justify-items: center; }
+  &.align-top      { align-items: start; }
+  &.align-bottom   { align-items: end; }
+
+  // FormGroups innen: keine Extra-Margins, damit Abstände nicht doppeln
+  > .bookando-form-group { margin-bottom: 0; }
+}
+
+// Vordefinierte Presets (gleich wie .bookando-grid in layout.scss)
+.bookando-form-grid.one-column     { --bookando-grid-cols: 1fr; }
+.bookando-form-grid.two-columns    { --bookando-grid-cols: 1fr 1fr; }
+.bookando-form-grid.three-columns  { --bookando-grid-cols: 1fr 1fr 1fr; }
+.bookando-form-grid.four-columns   { --bookando-grid-cols: 1fr 1fr 1fr 1fr; }
+.bookando-form-grid.auto-columns   { --bookando-grid-cols: repeat(auto-fit, minmax(160px, 1fr)); }
+
+// Responsives Fallback: immer 1 Spalte auf kleineren Screens
+@include respond-to('md') {
+  .bookando-form-grid,
+  .bookando-form-grid.one-column,
+  .bookando-form-grid.two-columns,
+  .bookando-form-grid.three-columns,
+  .bookando-form-grid.four-columns,
+  .bookando-form-grid.auto-columns {
+    grid-template-columns: 1fr !important;
+    gap: $bookando-spacing-sm;
+  }
+}
+
+// =====================================
+// 📦 Wrapper
+// =====================================
+.bookando-field-wrapper {
+  width: 100%;
+  max-width: 100%;
+  display: flex;
+  align-items: center;
+  gap: var(--bookando-field-gap, 0.5rem);
+}

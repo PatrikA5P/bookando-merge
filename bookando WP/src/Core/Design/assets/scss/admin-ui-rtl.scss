@@ -1,0 +1,21 @@
+/**
+ * Bookando Admin UI - RTL Version
+ *
+ * Right-to-Left stylesheet for Arabic, Hebrew, and other RTL languages.
+ * This is the complete RTL build including all base styles with RTL overrides.
+ *
+ * @package Bookando
+ */
+
+// Import all base styles
+@import 'admin-ui';
+
+// Force RTL direction on root
+html[dir="rtl"],
+body[dir="rtl"],
+.bookando-rtl {
+  direction: rtl;
+  text-align: right;
+}
+
+// Additional RTL-specific overrides can go here

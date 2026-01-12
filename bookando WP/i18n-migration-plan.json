@@ -1,0 +1,730 @@
+{
+  "summary": {
+    "filesPlanned": 32,
+    "filesApplicable": 4,
+    "totalEdits": 5,
+    "totalSkipped": 32,
+    "totalKeysToAdd": 1
+  },
+  "plan": [
+    {
+      "file": "C:\\Users\\User\\Local Sites\\bookando-site\\app\\public\\wp-content\\plugins\\bookando\\src\\Core\\Design\\components\\AppAvatar.vue",
+      "canApply": false,
+      "edits": [],
+      "skipped": [
+        {
+          "file": "C:\\Users\\User\\Local Sites\\bookando-site\\app\\public\\wp-content\\plugins\\bookando\\src\\Core\\Design\\components\\AppAvatar.vue",
+          "line": 10,
+          "col": 4,
+          "kind": "bound-attr-complex",
+          "attr": ":title",
+          "text": "title || ''",
+          "full": " :title=\"title || ''\"",
+          "start": 226,
+          "end": 247,
+          "context": "-interactive' : '',       hasImage ? '' : 'bookando-avatar--empty'     ]\"     :title=\"title || ''\"   >     <img       v-if=\"hasImage && !failed\"       :src=\"url\"       @erro",
+          "suggestion_key": null
+        },
+        {
+          "file": "C:\\Users\\User\\Local Sites\\bookando-site\\app\\public\\wp-content\\plugins\\bookando\\src\\Core\\Design\\components\\AppAvatar.vue",
+          "line": 30,
+          "col": 8,
+          "kind": "bound-attr-complex",
+          "attr": ":aria-label",
+          "text": "uploadLabel",
+          "full": " :aria-label=\"uploadLabel\"",
+          "start": 849,
+          "end": 875,
+          "context": "kando-avatar__action bookando-avatar__btn bookando-avatar__btn--center\"         :aria-label=\"uploadLabel\"         @click=\"$emit('upload')\"       >         <AppIcon name=\"upload\" clas",
+          "suggestion_key": null
+        },
+        {
+          "file": "C:\\Users\\User\\Local Sites\\bookando-site\\app\\public\\wp-content\\plugins\\bookando\\src\\Core\\Design\\components\\AppAvatar.vue",
+          "line": 42,
+          "col": 6,
+          "kind": "bound-attr-complex",
+          "attr": ":aria-label",
+          "text": "removeLabel",
+          "full": " :aria-label=\"removeLabel\"",
+          "start": 1278,
+          "end": 1304,
+          "context": "o-avatar__badge-remove bookando-avatar__btn bookando-avatar__btn--corner\"       :aria-label=\"removeLabel\"       @click=\"$emit('remove')\"     >       <AppIcon name=\"trash\" class=\"book",
+          "suggestion_key": null
+        }
+      ],
+      "keysToAdd": {}
+    },
+    {
+      "file": "C:\\Users\\User\\Local Sites\\bookando-site\\app\\public\\wp-content\\plugins\\bookando\\src\\Core\\Design\\components\\AppBulkAction.vue",
+      "canApply": false,
+      "edits": [],
+      "skipped": [
+        {
+          "file": "C:\\Users\\User\\Local Sites\\bookando-site\\app\\public\\wp-content\\plugins\\bookando\\src\\Core\\Design\\components\\AppBulkAction.vue",
+          "line": 21,
+          "col": 10,
+          "kind": "bound-attr-complex",
+          "attr": ":placeholder",
+          "text": "L.choose",
+          "full": " :placeholder=\"L.choose\"",
+          "start": 651,
+          "end": 675,
+          "context": "ions\"           option-label=\"label\"           option-value=\"value\"           :placeholder=\"L.choose\"           :disabled=\"isBusy\"           :appearance=\"'default'\"           :z-",
+          "suggestion_key": null
+        },
+        {
+          "file": "C:\\Users\\User\\Local Sites\\bookando-site\\app\\public\\wp-content\\plugins\\bookando\\src\\Core\\Design\\components\\AppBulkAction.vue",
+          "line": 63,
+          "col": 8,
+          "kind": "bound-attr-complex",
+          "attr": ":title",
+          "text": "L.confirmTitle",
+          "full": " :title=\"L.confirmTitle\"",
+          "start": 1714,
+          "end": 1738,
+          "context": "     <AppModal         v-if=\"showConfirm\"         :show=\"showConfirm\"         :title=\"L.confirmTitle\"         :confirmText=\"L.confirmOk\"         :cancelText=\"L.confirmCancel\"    ",
+          "suggestion_key": null
+        }
+      ],
+      "keysToAdd": {}
+    },
+    {
+      "file": "C:\\Users\\User\\Local Sites\\bookando-site\\app\\public\\wp-content\\plugins\\bookando\\src\\Core\\Design\\components\\AppCard.vue",
+      "canApply": false,
+      "edits": [],
+      "skipped": [
+        {
+          "file": "C:\\Users\\User\\Local Sites\\bookando-site\\app\\public\\wp-content\\plugins\\bookando\\src\\Core\\Design\\components\\AppCard.vue",
+          "line": 66,
+          "col": 6,
+          "kind": "bound-attr-complex",
+          "attr": ":aria-label",
+          "text": "title ? title + ' Inhalt' : undefined",
+          "full": " :aria-label=\"title ? title + ' Inhalt' : undefined\"",
+          "start": 2276,
+          "end": 2328,
+          "context": " :class=\"{ 'is-open': isOpen }\"       :id=\"panelId\"       role=\"region\"       :aria-label=\"title ? title + ' Inhalt' : undefined\"     >       <div class=\"bookando-card__panel-inner\">         <div          ",
+          "suggestion_key": null
+        }
+      ],
+      "keysToAdd": {}
+    },
+    {
+      "file": "C:\\Users\\User\\Local Sites\\bookando-site\\app\\public\\wp-content\\plugins\\bookando\\src\\Core\\Design\\components\\AppColorInput.vue",
+      "canApply": false,
+      "edits": [],
+      "skipped": [
+        {
+          "file": "C:\\Users\\User\\Local Sites\\bookando-site\\app\\public\\wp-content\\plugins\\bookando\\src\\Core\\Design\\components\\AppColorInput.vue",
+          "line": 4,
+          "col": 4,
+          "kind": "bound-attr-complex",
+          "attr": ":label",
+          "text": "label",
+          "full": " :label=\"label\"",
+          "start": 60,
+          "end": 75,
+          "context": "<!-- AppColorInput.vue --> <template>   <AppFormGroup     :label=\"label\"     :required=\"required\"     :hint=\"hint\"     :error=\"error\"     :for=\"id\"\r",
+          "suggestion_key": null
+        }
+      ],
+      "keysToAdd": {}
+    },
+    {
+      "file": "C:\\Users\\User\\Local Sites\\bookando-site\\app\\public\\wp-content\\plugins\\bookando\\src\\Core\\Design\\components\\AppColumnChooser.vue",
+      "canApply": true,
+      "edits": [
+        {
+          "start": 493,
+          "end": 520,
+          "replacement": ":title=\"t('ui.table.move_column') || 'Spalte verschieben'\"",
+          "kind": "attr",
+          "key": "ui.table.move_column",
+          "previewBefore": "      <span class=\"bookando-drag-handle\" title=\"Spalte verschieben\">⋮⋮</span>\r\n      <input\r\n        type=\"",
+          "previewAfter": ":title=\"t('ui.table.move_column') || 'Spalte verschieben'\""
+        },
+        {
+          "start": 882,
+          "end": 884,
+          "replacement": "{{ t('core.common.ok') }}",
+          "kind": "text",
+          "key": "core.common.ok",
+          "previewBefore": "do-btn--primary\" @click=\"emit('close')\">OK</button>\r\n    </div>\r\n  </div>\r\n</templ",
+          "previewAfter": "{{ t('core.common.ok') }}"
+        }
+      ],
+      "skipped": [],
+      "keysToAdd": {}
+    },
+    {
+      "file": "C:\\Users\\User\\Local Sites\\bookando-site\\app\\public\\wp-content\\plugins\\bookando\\src\\Core\\Design\\components\\AppColumnChooserDropdown.vue",
+      "canApply": true,
+      "edits": [
+        {
+          "start": 721,
+          "end": 748,
+          "replacement": ":title=\"t('ui.table.move_column') || 'Spalte verschieben'\"",
+          "kind": "attr",
+          "key": "ui.table.move_column",
+          "previewBefore": "      <span class=\"bookando-drag-handle\" title=\"Spalte verschieben\">⋮⋮</span>\r\n              {{ element.lab",
+          "previewAfter": ":title=\"t('ui.table.move_column') || 'Spalte verschieben'\""
+        }
+      ],
+      "skipped": [],
+      "keysToAdd": {}
+    },
+    {
+      "file": "C:\\Users\\User\\Local Sites\\bookando-site\\app\\public\\wp-content\\plugins\\bookando\\src\\Core\\Design\\components\\AppDateInput.vue",
+      "canApply": false,
+      "edits": [],
+      "skipped": [
+        {
+          "file": "C:\\Users\\User\\Local Sites\\bookando-site\\app\\public\\wp-content\\plugins\\bookando\\src\\Core\\Design\\components\\AppDateInput.vue",
+          "line": 6,
+          "col": 4,
+          "kind": "bound-attr-complex",
+          "attr": ":placeholder",
+          "text": "placeholder",
+          "full": " :placeholder=\"placeholder\"",
+          "start": 92,
+          "end": 119,
+          "context": "Input.vue --> <template>   <AppDatepicker     :id=\"id\"     :name=\"name\"     :placeholder=\"placeholder\"     :format=\"displayFormat\"     :clearable=\"clearable\"     :editable=\"comput",
+          "suggestion_key": null
+        }
+      ],
+      "keysToAdd": {}
+    },
+    {
+      "file": "C:\\Users\\User\\Local Sites\\bookando-site\\app\\public\\wp-content\\plugins\\bookando\\src\\Core\\Design\\components\\AppDatepicker.vue",
+      "canApply": false,
+      "edits": [],
+      "skipped": [
+        {
+          "file": "C:\\Users\\User\\Local Sites\\bookando-site\\app\\public\\wp-content\\plugins\\bookando\\src\\Core\\Design\\components\\AppDatepicker.vue",
+          "line": 8,
+          "col": 4,
+          "kind": "bound-attr-complex",
+          "attr": ":placeholder",
+          "text": "placeholder",
+          "full": " :placeholder=\"placeholder\"",
+          "start": 144,
+          "end": 171,
+          "context": "bind=\"extraProps\"     v-model=\"innerValue\"     :id=\"id\"     :name=\"name\"     :placeholder=\"placeholder\"     :locale=\"locale\"     :format=\"displayFormat\"     :clearable=\"clearable\"\r",
+          "suggestion_key": null
+        }
+      ],
+      "keysToAdd": {}
+    },
+    {
+      "file": "C:\\Users\\User\\Local Sites\\bookando-site\\app\\public\\wp-content\\plugins\\bookando\\src\\Core\\Design\\components\\AppDropdown.vue",
+      "canApply": true,
+      "edits": [
+        {
+          "start": 2249,
+          "end": 2252,
+          "replacement": "{{ t('PENDING.TEXT.99') }}",
+          "kind": "text",
+          "key": "PENDING.TEXT.99",
+          "previewBefore": "ookando-tag-measure\" aria-hidden=\"true\">+99</div>\r\n        </template>\r\n\r\n        <",
+          "previewAfter": "{{ t('PENDING.TEXT.99') }}"
+        }
+      ],
+      "skipped": [],
+      "keysToAdd": {
+        "PENDING.TEXT.99": "+99"
+      }
+    },
+    {
+      "file": "C:\\Users\\User\\Local Sites\\bookando-site\\app\\public\\wp-content\\plugins\\bookando\\src\\Core\\Design\\components\\AppFileInput.vue",
+      "canApply": false,
+      "edits": [],
+      "skipped": [
+        {
+          "file": "C:\\Users\\User\\Local Sites\\bookando-site\\app\\public\\wp-content\\plugins\\bookando\\src\\Core\\Design\\components\\AppFileInput.vue",
+          "line": 4,
+          "col": 4,
+          "kind": "bound-attr-complex",
+          "attr": ":label",
+          "text": "label",
+          "full": " :label=\"label\"",
+          "start": 59,
+          "end": 74,
+          "context": "<!-- AppFileInput.vue --> <template>   <AppFormGroup     :label=\"label\"     :required=\"required\"     :hint=\"hint\"     :error=\"error\"     :for=\"id\"\r",
+          "suggestion_key": null
+        }
+      ],
+      "keysToAdd": {}
+    },
+    {
+      "file": "C:\\Users\\User\\Local Sites\\bookando-site\\app\\public\\wp-content\\plugins\\bookando\\src\\Core\\Design\\components\\AppGalleryPicker.vue",
+      "canApply": false,
+      "edits": [],
+      "skipped": [
+        {
+          "file": "C:\\Users\\User\\Local Sites\\bookando-site\\app\\public\\wp-content\\plugins\\bookando\\src\\Core\\Design\\components\\AppGalleryPicker.vue",
+          "line": 19,
+          "col": 43,
+          "kind": "bound-attr-complex",
+          "attr": ":title",
+          "text": "img.name",
+          "full": " :title=\"img.name\"",
+          "start": 777,
+          "end": 795,
+          "context": "kando-items-center bookando-mt-xxs\">           <small class=\"bookando-ellipsis\" :title=\"img.name\">{{ img.name || (t('ui.common.image') || 'Bild') }}</small>           <AppButto",
+          "suggestion_key": null
+        }
+      ],
+      "keysToAdd": {}
+    },
+    {
+      "file": "C:\\Users\\User\\Local Sites\\bookando-site\\app\\public\\wp-content\\plugins\\bookando\\src\\Core\\Design\\components\\AppIcon.vue",
+      "canApply": false,
+      "edits": [],
+      "skipped": [
+        {
+          "file": "C:\\Users\\User\\Local Sites\\bookando-site\\app\\public\\wp-content\\plugins\\bookando\\src\\Core\\Design\\components\\AppIcon.vue",
+          "line": 6,
+          "col": 4,
+          "kind": "bound-attr-complex",
+          "attr": ":aria-label",
+          "text": "alt || name",
+          "full": " :aria-label=\"alt || name\"",
+          "start": 102,
+          "end": 128,
+          "context": "<template>   <component     v-if=\"iconComponent\"     :is=\"iconComponent\"     :aria-label=\"alt || name\"     role=\"img\"     :class=\"['bookando-icon', sizeClass]\"     :style=\"sizeSty",
+          "suggestion_key": null
+        }
+      ],
+      "keysToAdd": {}
+    },
+    {
+      "file": "C:\\Users\\User\\Local Sites\\bookando-site\\app\\public\\wp-content\\plugins\\bookando\\src\\Core\\Design\\components\\AppInfoModal.vue",
+      "canApply": false,
+      "edits": [],
+      "skipped": [
+        {
+          "file": "C:\\Users\\User\\Local Sites\\bookando-site\\app\\public\\wp-content\\plugins\\bookando\\src\\Core\\Design\\components\\AppInfoModal.vue",
+          "line": 23,
+          "col": 10,
+          "kind": "bound-attr-complex",
+          "attr": ":aria-label",
+          "text": "t?.('core.common.close') ?? 'Close'",
+          "full": " :aria-label=\"t?.('core.common.close') ?? 'Close'\"",
+          "start": 656,
+          "end": 706,
+          "context": "\"           class=\"bookando-notice__close\"           @click=\"close\"           :aria-label=\"t?.('core.common.close') ?? 'Close'\"         >           <AppIcon name=\"x\" size=\"sm\" />         </button>      ",
+          "suggestion_key": null
+        }
+      ],
+      "keysToAdd": {}
+    },
+    {
+      "file": "C:\\Users\\User\\Local Sites\\bookando-site\\app\\public\\wp-content\\plugins\\bookando\\src\\Core\\Design\\components\\AppInputText.vue",
+      "canApply": false,
+      "edits": [],
+      "skipped": [
+        {
+          "file": "C:\\Users\\User\\Local Sites\\bookando-site\\app\\public\\wp-content\\plugins\\bookando\\src\\Core\\Design\\components\\AppInputText.vue",
+          "line": 7,
+          "col": 4,
+          "kind": "bound-attr-complex",
+          "attr": ":placeholder",
+          "text": "placeholder",
+          "full": " :placeholder=\"placeholder\"",
+          "start": 109,
+          "end": 136,
+          "context": "emplate>   <input     :id=\"id\"     :type=\"type\"     :value=\"modelValue\"     :placeholder=\"placeholder\"     :disabled=\"disabled\"     :required=\"required\"     :aria-invalid=\"!!error",
+          "suggestion_key": null
+        }
+      ],
+      "keysToAdd": {}
+    },
+    {
+      "file": "C:\\Users\\User\\Local Sites\\bookando-site\\app\\public\\wp-content\\plugins\\bookando\\src\\Core\\Design\\components\\AppPagination.vue",
+      "canApply": false,
+      "edits": [],
+      "skipped": [
+        {
+          "file": "C:\\Users\\User\\Local Sites\\bookando-site\\app\\public\\wp-content\\plugins\\bookando\\src\\Core\\Design\\components\\AppPagination.vue",
+          "line": 19,
+          "col": 10,
+          "kind": "bound-attr-complex",
+          "attr": ":label",
+          "text": "''",
+          "full": " :label=\"''\"",
+          "start": 740,
+          "end": 752,
+          "context": "er-width=\"true\"           :dropup=\"true\"           :z-index=\"10020\"           :label=\"''\"           width=\"content\"           class=\"bookando-dropdown-wrapper--auto\" ",
+          "suggestion_key": null
+        }
+      ],
+      "keysToAdd": {}
+    },
+    {
+      "file": "C:\\Users\\User\\Local Sites\\bookando-site\\app\\public\\wp-content\\plugins\\bookando\\src\\Core\\Design\\components\\AppPhoneInput.vue",
+      "canApply": false,
+      "edits": [],
+      "skipped": [
+        {
+          "file": "C:\\Users\\User\\Local Sites\\bookando-site\\app\\public\\wp-content\\plugins\\bookando\\src\\Core\\Design\\components\\AppPhoneInput.vue",
+          "line": 63,
+          "col": 6,
+          "kind": "bound-attr-complex",
+          "attr": ":placeholder",
+          "text": "placeholder",
+          "full": " :placeholder=\"placeholder\"",
+          "start": 1972,
+          "end": 1999,
+          "context": ":aria-describedby=\"error ? errorId : undefined\"       autocomplete=\"tel\"       :placeholder=\"placeholder\"       :name=\"name\"     />      <!-- 🔽 Dropdown -->     <div       v-show",
+          "suggestion_key": null
+        }
+      ],
+      "keysToAdd": {}
+    },
+    {
+      "file": "C:\\Users\\User\\Local Sites\\bookando-site\\app\\public\\wp-content\\plugins\\bookando\\src\\Core\\Design\\components\\AppPopover.vue",
+      "canApply": false,
+      "edits": [],
+      "skipped": [
+        {
+          "file": "C:\\Users\\User\\Local Sites\\bookando-site\\app\\public\\wp-content\\plugins\\bookando\\src\\Core\\Design\\components\\AppPopover.vue",
+          "line": 19,
+          "col": 8,
+          "kind": "bound-attr-complex",
+          "attr": ":tooltip",
+          "text": "tooltip",
+          "full": " :tooltip=\"tooltip\"",
+          "start": 556,
+          "end": 575,
+          "context": "     :iconColor=\"triggerIconColor\"         :customClass=\"triggerClass\"         :tooltip=\"tooltip\"         :is-mobile-view=\"isMobileView\"         :icon-only-on-mobile=\"iconOnly",
+          "suggestion_key": null
+        }
+      ],
+      "keysToAdd": {}
+    },
+    {
+      "file": "C:\\Users\\User\\Local Sites\\bookando-site\\app\\public\\wp-content\\plugins\\bookando\\src\\Core\\Design\\components\\AppRadioGroup.vue",
+      "canApply": false,
+      "edits": [],
+      "skipped": [
+        {
+          "file": "C:\\Users\\User\\Local Sites\\bookando-site\\app\\public\\wp-content\\plugins\\bookando\\src\\Core\\Design\\components\\AppRadioGroup.vue",
+          "line": 18,
+          "col": 4,
+          "kind": "bound-attr-complex",
+          "attr": ":label",
+          "text": "label",
+          "full": " :label=\"label\"",
+          "start": 634,
+          "end": 649,
+          "context": "ce-Variante in AppSelect/AppDropdown.   -->  <template>   <AppFormGroup     :label=\"label\"     :id=\"id\"     :hint=\"hint\"     :error=\"error\"     :required=\"required\" ",
+          "suggestion_key": null
+        }
+      ],
+      "keysToAdd": {}
+    },
+    {
+      "file": "C:\\Users\\User\\Local Sites\\bookando-site\\app\\public\\wp-content\\plugins\\bookando\\src\\Core\\Design\\components\\AppRangeInput.vue",
+      "canApply": false,
+      "edits": [],
+      "skipped": [
+        {
+          "file": "C:\\Users\\User\\Local Sites\\bookando-site\\app\\public\\wp-content\\plugins\\bookando\\src\\Core\\Design\\components\\AppRangeInput.vue",
+          "line": 4,
+          "col": 4,
+          "kind": "bound-attr-complex",
+          "attr": ":label",
+          "text": "label",
+          "full": " :label=\"label\"",
+          "start": 60,
+          "end": 75,
+          "context": "<!-- AppRangeInput.vue --> <template>   <AppFormGroup     :label=\"label\"     :required=\"required\"     :hint=\"hint\"     :error=\"error\"     :for=\"id\"\r",
+          "suggestion_key": null
+        }
+      ],
+      "keysToAdd": {}
+    },
+    {
+      "file": "C:\\Users\\User\\Local Sites\\bookando-site\\app\\public\\wp-content\\plugins\\bookando\\src\\Core\\Design\\components\\AppRichTextField.vue",
+      "canApply": false,
+      "edits": [],
+      "skipped": [
+        {
+          "file": "C:\\Users\\User\\Local Sites\\bookando-site\\app\\public\\wp-content\\plugins\\bookando\\src\\Core\\Design\\components\\AppRichTextField.vue",
+          "line": 15,
+          "col": 8,
+          "kind": "bound-attr-complex",
+          "attr": ":placeholder",
+          "text": "placeholder",
+          "full": " :placeholder=\"placeholder\"",
+          "start": 493,
+          "end": 520,
+          "context": "olbar=\"toolbar\"         :formats=\"formats\"         :modules=\"modules\"         :placeholder=\"placeholder\"         class=\"bookando-quill\"       />     </div>      <div v-if=\"hint\" c",
+          "suggestion_key": null
+        }
+      ],
+      "keysToAdd": {}
+    },
+    {
+      "file": "C:\\Users\\User\\Local Sites\\bookando-site\\app\\public\\wp-content\\plugins\\bookando\\src\\Core\\Design\\components\\AppSearchInput.vue",
+      "canApply": false,
+      "edits": [],
+      "skipped": [
+        {
+          "file": "C:\\Users\\User\\Local Sites\\bookando-site\\app\\public\\wp-content\\plugins\\bookando\\src\\Core\\Design\\components\\AppSearchInput.vue",
+          "line": 17,
+          "col": 8,
+          "kind": "bound-attr-complex",
+          "attr": ":placeholder",
+          "text": "placeholder",
+          "full": " :placeholder=\"placeholder\"",
+          "start": 495,
+          "end": 522,
+          "context": "id\"         class=\"bookando-search-input\"         :value=\"modelValue\"         :placeholder=\"placeholder\"         :disabled=\"disabled\"         :readonly=\"readonly\"         :aria-labe",
+          "suggestion_key": null
+        },
+        {
+          "file": "C:\\Users\\User\\Local Sites\\bookando-site\\app\\public\\wp-content\\plugins\\bookando\\src\\Core\\Design\\components\\AppSearchInput.vue",
+          "line": 20,
+          "col": 8,
+          "kind": "bound-attr-complex",
+          "attr": ":aria-label",
+          "text": "ariaLabel || label",
+          "full": " :aria-label=\"ariaLabel || label\"",
+          "start": 591,
+          "end": 624,
+          "context": "laceholder\"         :disabled=\"disabled\"         :readonly=\"readonly\"         :aria-label=\"ariaLabel || label\"         :aria-invalid=\"!!error\"         @input=\"$emit('update:modelValue', $e",
+          "suggestion_key": null
+        }
+      ],
+      "keysToAdd": {}
+    },
+    {
+      "file": "C:\\Users\\User\\Local Sites\\bookando-site\\app\\public\\wp-content\\plugins\\bookando\\src\\Core\\Design\\components\\AppSelect.vue",
+      "canApply": false,
+      "edits": [],
+      "skipped": [
+        {
+          "file": "C:\\Users\\User\\Local Sites\\bookando-site\\app\\public\\wp-content\\plugins\\bookando\\src\\Core\\Design\\components\\AppSelect.vue",
+          "line": 4,
+          "col": 4,
+          "kind": "bound-attr-complex",
+          "attr": ":label",
+          "text": "label",
+          "full": " :label=\"label\"",
+          "start": 56,
+          "end": 71,
+          "context": "<!-- AppSelect.vue --> <template>   <AppFormGroup     :label=\"label\"     :id=\"id\"     :required=\"required\"     :hint=\"hint\"     :error=\"error\" ",
+          "suggestion_key": null
+        }
+      ],
+      "keysToAdd": {}
+    },
+    {
+      "file": "C:\\Users\\User\\Local Sites\\bookando-site\\app\\public\\wp-content\\plugins\\bookando\\src\\Core\\Design\\components\\AppTextarea.vue",
+      "canApply": false,
+      "edits": [],
+      "skipped": [
+        {
+          "file": "C:\\Users\\User\\Local Sites\\bookando-site\\app\\public\\wp-content\\plugins\\bookando\\src\\Core\\Design\\components\\AppTextarea.vue",
+          "line": 6,
+          "col": 4,
+          "kind": "bound-attr-complex",
+          "attr": ":placeholder",
+          "text": "placeholder",
+          "full": " :placeholder=\"placeholder\"",
+          "start": 93,
+          "end": 120,
+          "context": "rea.vue --> <template>   <textarea     :id=\"id\"     :value=\"modelValue\"     :placeholder=\"placeholder\"     :disabled=\"disabled\"     :readonly=\"readonly\"     :required=\"required\" ",
+          "suggestion_key": null
+        }
+      ],
+      "keysToAdd": {}
+    },
+    {
+      "file": "C:\\Users\\User\\Local Sites\\bookando-site\\app\\public\\wp-content\\plugins\\bookando\\src\\Core\\Design\\components\\AppTimeInput.vue",
+      "canApply": false,
+      "edits": [],
+      "skipped": [
+        {
+          "file": "C:\\Users\\User\\Local Sites\\bookando-site\\app\\public\\wp-content\\plugins\\bookando\\src\\Core\\Design\\components\\AppTimeInput.vue",
+          "line": 7,
+          "col": 6,
+          "kind": "bound-attr-complex",
+          "attr": ":placeholder",
+          "text": "platzhalter",
+          "full": " :placeholder=\"platzhalter\"",
+          "start": 215,
+          "end": 242,
+          "context": "put type=\"text\"       class=\"bookando-control\"       v-model=\"zeitText\"       :placeholder=\"platzhalter\"       :aria-invalid=\"!isvalid\"       @blur=\"pruefeZeit\"       @input=\"feedba",
+          "suggestion_key": null
+        }
+      ],
+      "keysToAdd": {}
+    },
+    {
+      "file": "C:\\Users\\User\\Local Sites\\bookando-site\\app\\public\\wp-content\\plugins\\bookando\\src\\Core\\Design\\components\\AppTimePickerInput.vue",
+      "canApply": false,
+      "edits": [],
+      "skipped": [
+        {
+          "file": "C:\\Users\\User\\Local Sites\\bookando-site\\app\\public\\wp-content\\plugins\\bookando\\src\\Core\\Design\\components\\AppTimePickerInput.vue",
+          "line": 9,
+          "col": 8,
+          "kind": "bound-attr-complex",
+          "attr": ":placeholder",
+          "text": "platzhalter",
+          "full": " :placeholder=\"platzhalter\"",
+          "start": 357,
+          "end": 384,
+          "context": "pe=\"text\"         class=\"bookando-control\"         v-model=\"zeitText\"         :placeholder=\"platzhalter\"         :aria-invalid=\"!isvalid\"         @blur=\"onBlurValidate\"         @inp",
+          "suggestion_key": null
+        }
+      ],
+      "keysToAdd": {}
+    },
+    {
+      "file": "C:\\Users\\User\\Local Sites\\bookando-site\\app\\public\\wp-content\\plugins\\bookando\\src\\Core\\Design\\components\\AppToggle.vue",
+      "canApply": false,
+      "edits": [],
+      "skipped": [
+        {
+          "file": "C:\\Users\\User\\Local Sites\\bookando-site\\app\\public\\wp-content\\plugins\\bookando\\src\\Core\\Design\\components\\AppToggle.vue",
+          "line": 7,
+          "col": 4,
+          "kind": "bound-attr-complex",
+          "attr": ":aria-label",
+          "text": "ariaLabel",
+          "full": " :aria-label=\"ariaLabel\"",
+          "start": 136,
+          "end": 160,
+          "context": "toggleButton\"     :class=\"['liquid-toggle', sizeClass]\"     type=\"button\"     :aria-label=\"ariaLabel\"     :aria-pressed=\"isPressed.toString()\"     :data-active=\"isInteracting ? 't",
+          "suggestion_key": null
+        }
+      ],
+      "keysToAdd": {}
+    },
+    {
+      "file": "C:\\Users\\User\\Local Sites\\bookando-site\\app\\public\\wp-content\\plugins\\bookando\\src\\Core\\Design\\components\\BookandoField.vue",
+      "canApply": false,
+      "edits": [],
+      "skipped": [
+        {
+          "file": "C:\\Users\\User\\Local Sites\\bookando-site\\app\\public\\wp-content\\plugins\\bookando\\src\\Core\\Design\\components\\BookandoField.vue",
+          "line": 5,
+          "col": 4,
+          "kind": "bound-attr-complex",
+          "attr": ":label",
+          "text": "label",
+          "full": " :label=\"label\"",
+          "start": 86,
+          "end": 101,
+          "context": "ookandoField.vue --> <template>   <AppFormGroup     v-if=\"showFormGroup\"     :label=\"label\"     :required=\"required\"     :hint=\"description || help\"     :error=\"error\"\r",
+          "suggestion_key": null
+        }
+      ],
+      "keysToAdd": {}
+    },
+    {
+      "file": "C:\\Users\\User\\Local Sites\\bookando-site\\app\\public\\wp-content\\plugins\\bookando\\src\\modules\\customers\\assets\\vue\\components\\CustomersTableMobile.vue",
+      "canApply": false,
+      "edits": [],
+      "skipped": [
+        {
+          "file": "C:\\Users\\User\\Local Sites\\bookando-site\\app\\public\\wp-content\\plugins\\bookando\\src\\modules\\customers\\assets\\vue\\components\\CustomersTableMobile.vue",
+          "line": 41,
+          "col": 101,
+          "kind": "bound-attr-complex",
+          "attr": ":alt",
+          "text": "`${item.first_name ?? ''} ${item.last_name ?? ''}`.trim()",
+          "full": " :alt=\"`${item.first_name ?? ''} ${item.last_name ?? ''}`.trim()\"",
+          "start": 1817,
+          "end": 1882,
+          "context": "ppAvatar :src=\"avatarSrc(item)\" :initials=\"initials(item)\" size=\"sm\" fit=\"cover\" :alt=\"`${item.first_name ?? ''} ${item.last_name ?? ''}`.trim()\" @error=\"e => onAvatarError(e, item)\" />                 </div>                 ",
+          "suggestion_key": null
+        }
+      ],
+      "keysToAdd": {}
+    },
+    {
+      "file": "C:\\Users\\User\\Local Sites\\bookando-site\\app\\public\\wp-content\\plugins\\bookando\\src\\modules\\employees\\assets\\vue\\components\\AppDaysOffCard.vue",
+      "canApply": true,
+      "edits": [
+        {
+          "start": 917,
+          "end": 943,
+          "replacement": ":aria-label=\"t('ui.filter.reset_all') || 'Reset Filter'\"",
+          "kind": "attr",
+          "key": "ui.filter.reset_all",
+          "previewBefore": "mmon.reset') || 'Zurücksetzen'\"\r\n        aria-label=\"Reset Filter\"\r\n        @click=\"resetFilterToDefault\"\r",
+          "previewAfter": ":aria-label=\"t('ui.filter.reset_all') || 'Reset Filter'\""
+        }
+      ],
+      "skipped": [],
+      "keysToAdd": {}
+    },
+    {
+      "file": "C:\\Users\\User\\Local Sites\\bookando-site\\app\\public\\wp-content\\plugins\\bookando\\src\\modules\\employees\\assets\\vue\\components\\EmployeesTable.vue",
+      "canApply": false,
+      "edits": [],
+      "skipped": [
+        {
+          "file": "C:\\Users\\User\\Local Sites\\bookando-site\\app\\public\\wp-content\\plugins\\bookando\\src\\modules\\employees\\assets\\vue\\components\\EmployeesTable.vue",
+          "line": 24,
+          "col": 12,
+          "kind": "bound-attr-complex",
+          "attr": ":alt",
+          "text": "`${item.first_name || ''} ${item.last_name || ''}`.trim()",
+          "full": " :alt=\"`${item.first_name || ''} ${item.last_name || ''}`.trim()\"",
+          "start": 905,
+          "end": 970,
+          "context": "als=\"initials(item)\"             size=\"md\"             fit=\"contain\"             :alt=\"`${item.first_name || ''} ${item.last_name || ''}`.trim()\"           />           <div class=\"bookando-flex bookando-flex-col\">           ",
+          "suggestion_key": null
+        }
+      ],
+      "keysToAdd": {}
+    },
+    {
+      "file": "C:\\Users\\User\\Local Sites\\bookando-site\\app\\public\\wp-content\\plugins\\bookando\\src\\modules\\employees\\assets\\vue\\components\\EmployeesTableMobile.vue",
+      "canApply": false,
+      "edits": [],
+      "skipped": [
+        {
+          "file": "C:\\Users\\User\\Local Sites\\bookando-site\\app\\public\\wp-content\\plugins\\bookando\\src\\modules\\employees\\assets\\vue\\components\\EmployeesTableMobile.vue",
+          "line": 68,
+          "col": 20,
+          "kind": "bound-attr-complex",
+          "attr": ":alt",
+          "text": "`${item.first_name ?? ''} ${item.last_name ?? ''}`.trim()",
+          "full": " :alt=\"`${item.first_name ?? ''} ${item.last_name ?? ''}`.trim()\"",
+          "start": 2304,
+          "end": 2369,
+          "context": "                 size=\"sm\"                     fit=\"cover\"                     :alt=\"`${item.first_name ?? ''} ${item.last_name ?? ''}`.trim()\"                     @error=\"e => onAvatarError(e, item)\"                   />",
+          "suggestion_key": null
+        }
+      ],
+      "keysToAdd": {}
+    },
+    {
+      "file": "C:\\Users\\User\\Local Sites\\bookando-site\\app\\public\\wp-content\\plugins\\bookando\\src\\modules\\offers\\assets\\vue\\components\\services\\tabs\\ServicesFormTabAvailability.vue",
+      "canApply": false,
+      "edits": [],
+      "skipped": [
+        {
+          "file": "C:\\Users\\User\\Local Sites\\bookando-site\\app\\public\\wp-content\\plugins\\bookando\\src\\modules\\offers\\assets\\vue\\components\\services\\tabs\\ServicesFormTabAvailability.vue",
+          "line": 13,
+          "col": 8,
+          "kind": "bound-attr-complex",
+          "attr": ":title",
+          "text": "dayLabel(day.key)",
+          "full": " :title=\"dayLabel(day.key)\"",
+          "start": 577,
+          "end": 604,
+          "context": "n form.availability\"         :key=\"day.key\"         :dayKey=\"day.key\"         :title=\"dayLabel(day.key)\"         :combos=\"day.combos\"         :locationOptions=\"locations\"         lo",
+          "suggestion_key": null
+        }
+      ],
+      "keysToAdd": {}
+    }
+  ]
+}

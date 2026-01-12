@@ -1,0 +1,44 @@
+{
+  "slug": "finance",
+  "plan": "starter",
+  "version": "1.0.0",
+  "tenant_required": true,
+  "license_required": true,
+  "features_required": [
+    "billing",
+    "rest_api_read"
+  ],
+  "group": "operations",
+  "is_saas": true,
+  "has_admin": true,
+  "supports_webhook": false,
+  "supports_offline": true,
+  "supports_calendar": false,
+  "name": {
+    "default": "Finance",
+    "de": "Finanzen",
+    "en": "Finance",
+    "fr": "Finances",
+    "it": "Finanze"
+  },
+  "alias": {
+    "de": "Finanzen",
+    "en": "Finance",
+    "fr": "Finances",
+    "it": "Finanze"
+  },
+  "description": {
+    "default": "Manage invoices, credit notes and financial exports.",
+    "de": "Verwalten Sie Rechnungen, Gutschriften und FIBU-Export.",
+    "en": "Manage invoices, credit notes and FIBU export.",
+    "fr": "Gérez les factures, avoirs et exports comptables.",
+    "it": "Gestisci fatture, note di credito ed esportazioni contabili."
+  },
+  "visible": true,
+  "menu_icon": "dashicons-chart-area",
+  "menu_position": 30,
+  "dependencies": [],
+  "tabs": [],
+  "is_submodule": false,
+  "parent_module": null
+}

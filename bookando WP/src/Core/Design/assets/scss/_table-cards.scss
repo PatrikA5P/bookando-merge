@@ -1,0 +1,497 @@
+@use 'sass:map';
+@use 'sass:color';
+@use 'variables' as *;
+@use 'mixins' as *;
+
+/* =====================================
+   📦 Table-Card (Mobile-Ansicht & generische Details)
+   → Unverändert aus ALT übernommen (benötigt von Employees/Customers Mobile)
+===================================== */
+
+$bookando-table-card-sizes: (
+  xxs: (pad: xxs, gap: xxs, thumb: map.get($bookando-avatar-sizes, xxs), font: $bookando-font-size-xs),
+  xs:  (pad: xs,  gap: xs,  thumb: map.get($bookando-avatar-sizes, xs),  font: $bookando-font-size-xs),
+  sm:  (pad: sm,  gap: sm,  thumb: map.get($bookando-avatar-sizes, sm),  font: $bookando-font-size-base),
+  md:  (pad: md,  gap: md,  thumb: map.get($bookando-avatar-sizes, md),  font: $bookando-font-size-base),
+  lg:  (pad: lg,  gap: lg,  thumb: map.get($bookando-avatar-sizes, lg),  font: $bookando-font-size-lg),
+  xl:  (pad: xl,  gap: xl,  thumb: map.get($bookando-avatar-sizes, xl),  font: $bookando-font-size-lg)
+) !default;
+
+$bookando-table-card-density: (
+  compact: 56px,
+  comfy:   72px,
+  roomy:   96px
+) !default;
+
+/* Kontext + Size-Presets */
+.bookando-table-cards-context {
+  --tc-pad:   #{map.get($bookando-spacing, md)};
+  --tc-gap:   #{map.get($bookando-spacing, md)};
+  --tc-gap-inline: clamp(6px, 1.2vw, #{map.get($bookando-spacing, sm)});
+  --tc-checkbox-w: clamp(20px, 2.2vw, 28px);
+  --tc-thumb: clamp(34px, 7vw, 56px);
+  --tc-head-min: clamp(40px, 6vw, 56px);
+  --tc-cols: var(--tc-checkbox-w) minmax(0, 1fr) max-content;
+  --tc-font:  #{$bookando-font-size-base};
+  font-size: var(--tc-font);
+
+  @each $name, $conf in $bookando-table-card-sizes {
+    &.bookando-table-cards--#{$name} {
+      --tc-pad:   #{map.get($bookando-spacing, map.get($conf, pad))};
+      --tc-gap:   #{map.get($bookando-spacing, map.get($conf, gap))};
+      --tc-font:  #{map.get($conf, font)};
+      font-size: var(--tc-font);
+    }
+  }
+}
+
+/* Containerbreite erzwingen */
+.bookando-container > .bookando-table-cards-header,
+.bookando-container > .bookando-table-cards {
+  width: 100%;
+  max-width: 100%;
+  margin: 0;
+}
+
+/* Sticky Header */
+.bookando-table-cards-header {
+  display: grid;
+  grid-template-columns: var(--tc-cols);
+  align-items: center;
+  background: color-mix(in oklab, #fff 86%, transparent);
+  backdrop-filter: blur(6px);
+  border-bottom: 1px solid $bookando-border-light;
+  padding: var(--tc-pad);
+  column-gap: var(--tc-gap-inline);
+  font-weight: $bookando-font-weight-semi-bold;
+  position: sticky; top: 0;
+  z-index: map.get($bookando-z-utilities, 10);
+
+  .header-col      { display: flex; align-items: center; min-height: var(--tc-head-min); }
+  .header-checkbox { justify-content: flex-start; }
+  .header-title    { justify-content: flex-start; }
+  .header-actions  { justify-content: flex-end; }
+}
+
+/* Liste */
+.bookando-table-cards {
+  display: grid;
+  grid-template-columns: 1fr;
+  width: 100%;
+  padding-bottom: env(safe-area-inset-bottom);
+}
+
+/* Karte */
+.bookando-table-card {
+  container-type: inline-size; /* für Avatar-Umschaltung */
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
+  padding: var(--tc-pad);
+  background: $bookando-white;
+  border: 1px solid $bookando-border-light;
+  transition: background .16s, box-shadow .16s, border-color .16s;
+
+  &:hover { box-shadow: 0 4px 16px rgba(16,40,60,0.08); }
+  &:active { background: rgba(0,0,0,.035); }
+}
+
+/* Zeilenlayout */
+.bookando-table-card__row {
+  display: grid;
+  align-items: center;
+  gap: var(--tc-gap);
+}
+
+/* Topzeile */
+.bookando-table-card__row--top {
+  grid-template-columns: var(--tc-cols);
+  min-height: var(--tc-head-min);
+  align-items: stretch;
+  column-gap: var(--tc-gap-inline);
+  overflow: hidden;
+
+  > * { min-width: 0; }
+
+  .bookando-table-card__select {
+    width: var(--tc-checkbox-w);
+    min-width: var(--tc-checkbox-w);
+    max-width: var(--tc-checkbox-w);
+    display: flex;
+    align-self: start;
+    justify-self: start;
+  }
+}
+
+/* Hauptinhalt links */
+.bookando-table-card__main-left { display: block; min-width: 0; }
+.customer-identity-row {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--tc-gap-inline);
+  width: 100%;
+}
+.bookando-table-card__meta  {
+  min-width: 0;
+  flex: 1 1 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+
+  .title { font-weight: $bookando-font-weight-semi-bold; }
+  .muted { color: $bookando-text-muted; font-size: .97rem; }
+  a { overflow-wrap: anywhere; word-break: break-word; }
+}
+
+/* Avatar-Größe */
+.bookando-table-card__thumb {
+  display: flex; align-items: center;
+
+  .bookando-avatar,
+  .bookando-avatar-img,
+  .bookando-avatar__img {
+    width:  var(--tc-thumb) !important;
+    height: var(--tc-thumb) !important;
+    border-radius: 50%;
+    object-fit: cover;
+    background: $bookando-bg-muted;
+    flex: 0 0 auto;
+  }
+}
+
+/* Avatar über Name bei schmaler Karte */
+@container (max-width: 420px) {
+  .customer-identity-row { flex-direction: column; align-items: flex-start; gap: 6px; }
+  .bookando-table-card__thumb { align-self: flex-start; }
+}
+@media (max-width: 420px) {
+  .customer-identity-row { flex-direction: column; align-items: flex-start; gap: 6px; }
+  .bookando-table-card__thumb { align-self: flex-start; }
+}
+
+/* Right-Panel */
+.bookando-table-card__right {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: flex-end;
+  min-width: max-content;
+  min-height: var(--tc-head-min);
+  height: 100%;
+}
+.bookando-table-card__chevron {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  line-height: 0;
+}
+.bookando-table-card.is-expanded .bookando-table-card__chevron .bookando-icon {
+  transform: rotate(180deg);
+  transition: transform .18s ease;
+}
+
+/* Actions */
+.bookando-table-card__actions {
+  display: inline-flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: var(--tc-gap-inline);
+}
+.bookando-table-card__actions .bookando-btn { inline-size: auto; block-size: auto; }
+
+/* Details (Accordion) */
+.bookando-table-card__details {
+  margin-top: var(--tc-gap);
+  border-top: none;
+
+  .details-card {
+    padding: #{map.get($bookando-spacing, xs)} #{map.get($bookando-spacing, sm)};
+    background: $bookando-white;
+    border: 1px solid $bookando-border-light;
+    border-radius: map.get($bookando-radius-sizes, md);
+    box-shadow: 0 2px 10px rgba(16,40,60,0.06);
+
+    /* visueller Bounce */
+    transform-origin: top center;
+    will-change: transform;
+  }
+}
+
+/* Wrapper reserviert die Panelhöhe */
+.details-anim {
+  position: relative;
+  height: auto;
+  overflow: hidden;
+  transition: height .26s cubic-bezier(.2,.8,.2,1);
+}
+
+/* Slide-Container */
+.bookando-table-card__details .bookando-card__body {
+  position: relative;
+  overflow-x: clip;
+  overflow-y: visible;
+}
+
+/* Leaving-Panels nicht zur Höhe zählen */
+.bookando-table-card__details .panel-slide-left-leave-active,
+.bookando-table-card__details .panel-slide-right-leave-active,
+.bookando-table-card__details .panel-fade-leave-active {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+/* Bounce-Keyframes */
+.details-card.card-bounce-grow   { animation: card-bounce-grow .30s ease-out; }
+.details-card.card-bounce-shrink { animation: card-bounce-shrink .30s ease-out; }
+
+@keyframes card-bounce-grow {
+  0%   { transform: scaleY(1); }
+  65%  { transform: scaleY(1.02); }
+  100% { transform: scaleY(1); }
+}
+@keyframes card-bounce-shrink {
+  0%   { transform: scaleY(1); }
+  65%  { transform: scaleY(0.985); }
+  100% { transform: scaleY(1); }
+}
+
+/* Details-Grid */
+.details-grid-2col {
+  grid-template-columns: 1fr;
+  column-gap: #{map.get($bookando-spacing, md)};
+  row-gap: #{map.get($bookando-spacing, sm)};
+  @include bp-up(sm) { grid-template-columns: 1fr 1fr; }
+}
+
+/* Zustände */
+.bookando-table-card.is-selected,
+.bookando-table-card--highlight {
+  background: rgba($bookando-primary, .06);
+  border-color: $bookando-primary;
+  box-shadow: 0 4px 18px rgba(16,40,60,.1);
+}
+.bookando-table-card.is-expanded {
+  background: $bookando-bg-soft;
+  border-color: $bookando-border-light;
+}
+
+/* Empty-State */
+.bookando-table-cards-empty {
+  text-align: center;
+  color: $bookando-text-muted;
+  margin: #{map.get($bookando-spacing, lg)} 0 #{map.get($bookando-spacing, md)};
+  font-size: 1.05em;
+}
+
+/* Animations (Slide + Fade) */
+.accordion-bounce-enter-from { opacity: 0; transform: translateY(-12px) scale(.96); }
+.accordion-bounce-enter-active { transition: transform 360ms cubic-bezier(.18,.89,.32,1.28), opacity 220ms ease-out; }
+.accordion-bounce-enter-to { opacity: 1; transform: translateY(0) scale(1); }
+.accordion-bounce-leave-from { opacity: 1; }
+.accordion-bounce-leave-active { transition: opacity 160ms ease, transform 180ms ease; }
+.accordion-bounce-leave-to { opacity: 0; transform: translateY(-6px); }
+
+.panel-slide-left-enter-active,
+.panel-slide-left-leave-active,
+.panel-slide-right-enter-active,
+.panel-slide-right-leave-active {
+  transition: transform .32s cubic-bezier(.18,.89,.32,1.28), opacity .22s ease;
+  will-change: transform, opacity;
+}
+.panel-slide-left-enter-from   { transform: translateX(16px);  opacity: 0; }
+.panel-slide-left-leave-to     { transform: translateX(-16px); opacity: 0; }
+.panel-slide-right-enter-from  { transform: translateX(-16px); opacity: 0; }
+.panel-slide-right-leave-to    { transform: translateX(16px);  opacity: 0; }
+
+@media (prefers-reduced-motion: reduce) {
+  .panel-slide-left-enter-active,
+  .panel-slide-left-leave-active,
+  .panel-slide-right-enter-active,
+  .panel-slide-right-leave-active { transition: opacity .15s ease !important; }
+  .panel-slide-left-enter-from,
+  .panel-slide-left-leave-to,
+  .panel-slide-right-enter-from,
+  .panel-slide-right-leave-to { transform: none !important; }
+}
+
+.panel-fade-enter-active, .panel-fade-leave-active { transition: opacity .16s ease; }
+.panel-fade-enter-from,  .panel-fade-leave-to      { opacity: 0; }
+
+/* Sonstiges */
+.bookando-container { overflow-x: hidden; }
+
+/* Desktop-Detail-Card Variablen */
+.customer-detail-card {
+  --bookando-card-padding: #{map.get($bookando-spacing, md)};
+  --bookando-card-radius:  #{map.get($bookando-radius-sizes, sm)};
+  --bookando-card-shadow:  #{map.get($bookando-shadows, 1)};
+}
+
+/* ===========================================================
+   Row-based List Layout (Generic, reusable)
+   → Token-basiert, Drag-Handle via <AppIcon />, sauberes Hover
+   → Verwendet von: Services, Design Templates, etc.
+=========================================================== */
+
+/* Grid-Container für Row-Karten */
+.bookando-row-list {
+  display: grid;
+  grid-auto-rows: min-content;
+  gap: var(--bookando-grid-gap, #{map.get($bookando-spacing, md)});
+}
+
+/* Einzelkarte */
+.bookando-row {
+  --row-bg: #f5f9ff;
+  --row-border: #{$bookando-border-light};
+  --row-radius: 12px;
+
+  position: relative;
+  display: block;
+  background: #{$bookando-white};
+  border: 1px solid var(--row-border);
+  border-radius: var(--row-radius);
+  padding: .75rem 1rem;
+  overflow: clip;
+  transition: box-shadow .16s ease, transform .16s ease, background-color .16s ease;
+
+  &.is-hidden { opacity: .65; }
+}
+
+/* Hover-Lift */
+.bookando-row:hover  {
+  background: color-mix(in oklab, var(--row-bg) 45%, white);
+  box-shadow: 0 6px 20px rgba(16,40,60,.09);
+  transform: translateY(-1px);
+}
+.bookando-row:active { transform: translateY(0); }
+
+/* Drag-Zustände (vuedraggable) */
+.bookando-row--ghost    { opacity: .6; }
+.bookando-row--dragging { box-shadow: 0 8px 28px rgba(20,30,60,.12); }
+
+/* Farbiges Seiten-Cap (Kategorie/Promo) */
+.bookando-row-side-cap {
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 6px;
+  border-radius: 0;
+}
+
+/* Drag-Handle (Icon via AppIcon) – rein visuell */
+.bookando-row-drag-handle {
+  position: absolute;
+  left: .4rem;
+  top: 50%;
+  transform: translateY(-50%);
+  background: transparent;
+  border: 0;
+  padding: .25rem;
+  line-height: 1;
+  color: $bookando-gray-400;
+  pointer-events: none;
+}
+.bookando-row-drag-handle .bookando-icon {
+  width: 20px;
+  height: 20px;
+}
+
+/* Card-Body */
+.bookando-row-body {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 1rem;
+}
+
+/* Linker Block: [Checkbox][Avatar][Text] */
+.bookando-row-left {
+  display: grid;
+  grid-template-columns: auto auto 1fr;
+  gap: .75rem;
+  align-items: start;
+  padding-left: 1.25rem; /* Platz fürs Drag-Icon */
+}
+
+/* Avatar */
+.bookando-row-avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 9999px;
+  object-fit: cover;
+  box-shadow: var(--bookando-shadow-sm);
+}
+
+/* Titel / Meta */
+.bookando-row-title {
+  font-size: 1.05rem;
+  line-height: 1.25;
+  margin: 0 0 .15rem 0;
+  color: $bookando-heading-color;
+
+  small {
+    margin-left: .35rem;
+    font-weight: normal;
+    color: $bookando-text-muted;
+    font-size: .875rem;
+  }
+}
+.bookando-row-meta { margin: 0; color: $bookando-text-muted; font-size: .9rem; }
+.bookando-row-desc { margin: .25rem 0 0 0; font-size: .9rem; }
+.bookando-row-code { display: inline-block; margin-top: .4rem; color: $bookando-text-muted; }
+
+/* Actions rechts */
+.bookando-row-right         { display: flex; align-items: center; gap: .5rem; }
+.bookando-row-actions,
+.bookando-row-secondary     { display: inline-flex; gap: .25rem; align-items: center; }
+.bookando-row-copy-pill     { border-radius: 9999px; padding: .3rem .75rem; }
+
+/* Verfügbarkeitszeile */
+.bookando-row-availability  { margin: .1rem 0 0; font-size: .9rem; color: $bookando-text-muted; }
+
+/* Select (Checkbox) */
+.bookando-row-select {}
+
+/* Text Content */
+.bookando-row-text {}
+
+/* Responsive Reflow über Token-Breakpoint */
+@media (max-width: $bookando-breakpoint-sm) {
+  .bookando-row-body  { grid-template-columns: 1fr; gap: .75rem; }
+  .bookando-row-right { justify-content: flex-start; flex-wrap: wrap; }
+
+  .bookando-row-left {
+    grid-template-columns: auto 1fr;
+    grid-template-rows: auto auto;
+  }
+  .bookando-row-select { grid-column: 1; grid-row: 1 / span 2; align-self: start; }
+  .bookando-row-avatar { grid-column: 2; grid-row: 1; justify-self: start; }
+  .bookando-row-text   { grid-column: 2; grid-row: 2; }
+}
+
+/* ===========================================================
+   BACKWARDS COMPATIBILITY ALIASES
+   → Keep old services-* classes working
+=========================================================== */
+.services-list          { @extend .bookando-row-list; }
+.services-row           { @extend .bookando-row; }
+.svc-row--ghost         { @extend .bookando-row--ghost; }
+.svc-row--dragging      { @extend .bookando-row--dragging; }
+.services-side-cap      { @extend .bookando-row-side-cap; }
+.services-drag-handle   { @extend .bookando-row-drag-handle; }
+.services-body          { @extend .bookando-row-body; }
+.services-left          { @extend .bookando-row-left; }
+.services-avatar        { @extend .bookando-row-avatar; }
+.services-title         { @extend .bookando-row-title; }
+.services-meta          { @extend .bookando-row-meta; }
+.services-desc          { @extend .bookando-row-desc; }
+.services-code          { @extend .bookando-row-code; }
+.services-right         { @extend .bookando-row-right; }
+.services-actions       { @extend .bookando-row-actions; }
+.services-secondary     { @extend .bookando-row-secondary; }
+.services-copy-pill     { @extend .bookando-row-copy-pill; }
+.services-availability  { @extend .bookando-row-availability; }
+.services-select        { @extend .bookando-row-select; }
+.services-text          { @extend .bookando-row-text; }

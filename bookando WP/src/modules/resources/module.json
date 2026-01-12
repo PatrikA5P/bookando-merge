@@ -1,0 +1,41 @@
+{
+  "slug": "resources",
+  "plan": "starter",
+  "version": "1.0.0",
+  "tenant_required": true,
+  "license_required": true,
+  "features_required": ["resource_management", "rest_api_read", "rest_api_write"],
+  "group": "operations",
+  "is_saas": true,
+  "has_admin": true,
+  "supports_webhook": false,
+  "supports_offline": false,
+  "supports_calendar": true,
+  "name": {
+    "default": "Resources",
+    "de": "Ressourcen",
+    "en": "Resources",
+    "fr": "Ressources",
+    "it": "Risorse"
+  },
+  "alias": {
+    "de": "Ressourcen",
+    "en": "Resources",
+    "fr": "Ressources",
+    "it": "Risorse"
+  },
+  "description": {
+    "default": "Manage locations, rooms and materials with availability windows.",
+    "de": "Verwalten Sie Orte, Räume und Materialien inklusive Verfügbarkeiten.",
+    "en": "Manage locations, rooms and materials with availability windows.",
+    "fr": "Gérez lieux, salles et matériels avec leurs disponibilités.",
+    "it": "Gestisci sedi, sale e materiali con relative disponibilità."
+  },
+  "visible": true,
+  "menu_icon": "dashicons-location",
+  "menu_position": 31,
+  "dependencies": [],
+  "tabs": [],
+  "is_submodule": false,
+  "parent_module": null
+}

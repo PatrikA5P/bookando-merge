@@ -1,0 +1,41 @@
+{
+  "slug": "settings",
+  "plan": "starter",
+  "version": "1.0.0",
+  "tenant_required": false,
+  "license_required": false,
+  "features_required": [],
+  "group": "core",
+  "is_saas": true,
+  "has_admin": true,
+  "supports_webhook": false,
+  "supports_offline": true,
+  "supports_calendar": false,
+  "name": {
+    "default": "Settings",
+    "de": "Einstellungen",
+    "en": "Settings",
+    "fr": "Paramètres",
+    "it": "Impostazioni"
+  },
+  "alias": {
+    "de": "Eins",
+    "en": "Sett",
+    "fr": "Param",
+    "it": "Impo"
+  },
+  "description": {
+    "default": "Global settings for the plugin, e.g. language, Integrations, Company, etc.",
+    "de": "Globale Einstellungen für das Plugin, z.b. Sprache, Integrationen, Unternehmen, etc.",
+    "en": "Global settings for the plugin, e.g. language, Integrations, Company, etc.",
+    "fr": "Paramètres globaux du plugin : langue, intégrations, entreprise, etc.",
+    "it": "Impostazioni globali del plugin: lingua, integrazioni, azienda, ecc."
+  },
+  "visible": true,
+  "menu_icon": "dashicons-admin-generic",
+  "menu_position": 30,
+  "dependencies": [],
+  "tabs": [],
+  "is_submodule": false,
+  "parent_module": null
+}

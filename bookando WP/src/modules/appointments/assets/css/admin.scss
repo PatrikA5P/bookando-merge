@@ -1,0 +1,93 @@
+@use 'sass:map';
+@use '@scss/variables' as *;
+@use '@scss/mixins' as *;
+
+.bookando-appointments-page {
+  display: flex;
+  flex-direction: column;
+  gap: map.get($bookando-spacing, lg);
+}
+
+.bookando-appointments-timeline {
+  display: flex;
+  flex-direction: column;
+  gap: map.get($bookando-spacing, md);
+}
+
+.bookando-appointments-group {
+  border: $bookando-border-width-sm solid rgba($bookando-black, 0.08);
+  border-radius: map.get($bookando-radius-sizes, md);
+  overflow: hidden;
+  background: $bookando-white;
+}
+
+.bookando-appointments-group__header {
+  padding: map.get($bookando-spacing, sm) map.get($bookando-spacing, md);
+  background: rgba($bookando-black, 0.03);
+  font-weight: $bookando-font-weight-semi-bold;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.bookando-appointments-group__list {
+  display: flex;
+  flex-direction: column;
+  gap: map.get($bookando-spacing, sm);
+  padding: map.get($bookando-spacing, md);
+}
+
+.bookando-appointments-item {
+  display: grid;
+  gap: map.get($bookando-spacing, xs);
+  grid-template-columns: minmax(120px, 180px) 1fr;
+  align-items: flex-start;
+
+  @include bp-down(sm) {
+    grid-template-columns: 1fr;
+  }
+}
+
+.bookando-appointments-item__time {
+  font-weight: $bookando-font-weight-semi-bold;
+  color: $bookando-primary;
+}
+
+.bookando-appointments-item__meta {
+  display: flex;
+  flex-direction: column;
+  gap: map.get($bookando-spacing, xxs);
+}
+
+.bookando-appointments-empty {
+  padding: map.get($bookando-spacing, xl);
+  text-align: center;
+  color: $bookando-text-muted;
+  background: rgba($bookando-bg-dark, 0.03);
+  border-radius: map.get($bookando-radius-sizes, md);
+}
+
+.bookando-appointments-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: map.get($bookando-spacing, sm);
+}
+
+.bookando-appointments-modal-form {
+  display: grid;
+  gap: map.get($bookando-spacing, md);
+}
+
+.bookando-appointments-modal-grid {
+  display: grid;
+  gap: map.get($bookando-spacing, sm);
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+
+  @include bp-down(sm) {
+    grid-template-columns: 1fr;
+  }
+}
+
+.bookando-appointments-form-note {
+  min-height: 80px;
+}

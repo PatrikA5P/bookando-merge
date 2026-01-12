@@ -1,0 +1,24 @@
+{
+  "entries": [
+    "src/Core/Design/assets/vue/ui.js",
+    "src/modules/customers/assets/vue/main.ts",
+    "src/modules/settings/assets/vue/main.ts"
+  ],
+  "assumeUsedGlobs": [
+    "src/Core/Design/components/**/*.vue",
+    "src/Core/Design/assets/icons/**/*.svg"
+  ],
+  "assumeUsedNamespaces": [
+    "Bookando\\Core\\"
+  ],
+  "allowUnused": [
+    "src/**/e2e/**",
+    "**/*.spec.ts",
+    "src/Core/Design/assets/vendor/select2/**",
+    "src/Core/Design/assets/vendor/select2/i18n/**"
+  ],
+  "treatAsTemplate": [
+    "src/Core/Design/Templates/**",
+    "src/modules/*/Templates/**"
+  ]
+}

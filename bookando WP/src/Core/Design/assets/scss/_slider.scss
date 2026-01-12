@@ -1,0 +1,84 @@
+// Slider
+@use 'sass:color';
+@use 'variables' as *;
+
+.bookando-slider {
+  width: 100%;
+  margin-bottom: $bookando-spacing-md;
+
+  input[type="range"] {
+    width: 100%;
+    height: 1.2em;
+    background: transparent;
+    appearance: none;
+    margin: 0;
+    padding: 0;
+    border-radius: $bookando-radius;
+    // Track
+    &::-webkit-slider-runnable-track {
+      height: 6px;
+      background: $bookando-secondary;
+      border-radius: $bookando-radius;
+    }
+    &::-moz-range-track {
+      height: 6px;
+      background: $bookando-secondary;
+      border-radius: $bookando-radius;
+    }
+    &::-ms-fill-lower, &::-ms-fill-upper {
+      height: 6px;
+      background: $bookando-secondary;
+      border-radius: $bookando-radius;
+    }
+    // Thumb
+    &::-webkit-slider-thumb {
+      appearance: none;
+      width: 24px; height: 24px;
+      border-radius: $bookando-radius-circle;
+      background: $bookando-primary;
+      border: 2px solid $bookando-white;
+      box-shadow: 0 1px 4px rgba(16,40,60,0.11);
+      cursor: pointer;
+      transition: background 0.18s;
+      margin-top: -9px;
+    }
+    &::-moz-range-thumb {
+      width: 24px; height: 24px;
+      border-radius: $bookando-radius-circle;
+      background: $bookando-primary;
+      border: 2px solid $bookando-white;
+      box-shadow: 0 1px 4px rgba(16,40,60,0.11);
+      cursor: pointer;
+      transition: background 0.18s;
+    }
+    &::-ms-thumb {
+      width: 24px; height: 24px;
+      border-radius: $bookando-radius-circle;
+      background: $bookando-primary;
+      border: 2px solid $bookando-white;
+      box-shadow: 0 1px 4px rgba(16,40,60,0.11);
+      cursor: pointer;
+      transition: background 0.18s;
+    }
+    &:focus {
+      outline: none;
+      box-shadow: 0 0 0 2px $bookando-accent;
+    }
+  }
+  // Label & Value
+  .slider-label {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: $bookando-spacing-xs;
+    font-size: $bookando-font-size-base;
+    color: $bookando-text-dark;
+    font-weight: 500;
+  }
+  .slider-value {
+    margin-left: $bookando-spacing-sm;
+    font-size: $bookando-font-size-lg;
+    font-weight: 600;
+    color: $bookando-primary;
+  }
+}

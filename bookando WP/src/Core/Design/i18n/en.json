@@ -1,0 +1,268 @@
+{
+  "core": {
+    "common": {
+      "save": "Save",
+      "cancel": "Cancel",
+      "delete": "Delete",
+      "close": "Close",
+      "edit": "Edit",
+      "actions": "Actions"
+    },
+    "bulk": {
+      "selected": "selected",
+      "choose": "Choose action",
+      "apply": "Apply",
+      "applying": "Running...",
+      "cancel": "Cancel",
+      "confirmTitle": "Please confirm",
+      "confirmMessage": "Do you really want to run the selected action?",
+      "confirm": "Confirm"
+    },
+    "actions": {
+      "save": {
+        "label": "Save",
+        "success": "Entry saved successfully",
+        "error": "Error while saving"
+      },
+      "soft_delete": {
+        "label": "Mark as deleted",
+        "confirm": "Do you really want to mark the selected item as deleted?"
+      },
+      "hard_delete": {
+        "label": "Delete permanently",
+        "confirm": "Do you really want to permanently delete this entry? This action cannot be undone."
+      },
+      "block": {
+        "label": "Block",
+        "confirm": "Do you really want to block this entry?"
+      },
+      "activate": {
+        "label": "Activate",
+        "confirm": "Do you want to activate this entry?"
+      },
+      "export": {
+        "label": "Export",
+        "success": "Export created"
+      },
+      "generic": {
+        "success": "Action successful",
+        "error": "Action failed",
+        "busy": "Running..."
+      }
+    }
+  },
+
+  "ui": {
+    "filter": {
+      "toggle": "Show/hide filters",
+      "reset_all": "Reset all filters",
+      "search_placeholder": "Search customers..."
+    },
+    "table": {
+      "no_results": "No entries found.",
+      "choose_columns": "Choose columns",
+      "quick_actions": "Quick actions",
+      "actions": "Actions"
+    },
+    "pagination": {
+      "per_page": "Items per page",
+      "go_to_page": "Go to page {page}",
+      "range": "{start} to {end} of {total} {label}",
+      "first": "First page",
+      "prev": "Previous page",
+      "next": "Next page",
+      "last": "Last page",
+      "page": "Page"
+    },
+    "csv": {
+      "export": "CSV export",
+      "import": "CSV import",
+      "import_demo": "CSV import is implemented as a demo stub."
+    },
+    "dialog": {
+      "confirm_title": "Please confirm"
+    },
+    "date": { "select": "Select date" },
+    "upload": {
+      "only_images": "Images only.",
+      "too_large_5mb": "File too large. Maximum 5 MB.",
+      "avatar_upload_error": "Error uploading avatar.",
+      "avatar_remove_error": "Error removing avatar.",
+      "avatar_upload": "Upload avatar",
+      "avatar_remove": "Remove avatar",
+      "saveFirst": "Please save first so an avatar can be assigned."
+    }
+  },
+
+  "fields": {
+    "customer": "Customer",
+    "id": "ID",
+    "first_name": "First name",
+    "last_name": "Last name",
+    "email": "Email",
+    "phone": "Phone",
+    "address": "Address",
+    "address_2": "Address 2",
+    "zip": "ZIP",
+    "city": "City",
+    "country": "Country",
+    "language": "Language",
+    "gender": "Gender",
+    "birthdate": "Date of birth",
+    "status": "Status",
+    "note": "Note",
+    "description": "Description",
+    "avatar_url": "Avatar",
+    "timezone": "Time zone",
+    "external_id": "External ID",
+    "tenant_id": "Tenant",
+    "roles": "Roles",
+    "badge_id": "Badge ID",
+    "password_hash": "Password hash",
+    "password_reset_token": "Reset token",
+    "created_at": "Created at",
+    "updated_at": "Updated at",
+    "deleted_at": "Deleted at"
+  },
+
+  "mod": {
+    "customers": {
+      "title": "Customer management",
+      "entity_singular": "Customer",
+      "entity_plural": "Customers",
+      "actions": {
+        "add": "Add customer",
+        "edit": "Edit customer",
+        "delete": "Delete customer"
+      },
+      "search_placeholder": "Search customers...",
+      "tabs": {
+        "info": "Customer information",
+        "activity": "Customer activity"
+      },
+      "sections": {
+        "data": "Data",
+        "history": "Appointments & history"
+      },
+      "stats": {
+        "total_appointments": "Number of appointments",
+        "last_appointment": "Last appointment",
+        "next_appointment": "Next appointment"
+      },
+      "confirm_delete": "Do you really want to delete this customer?",
+      "alerts": {
+        "blocked": "This customer is blocked.",
+        "will_be_deleted": "This customer will be deleted."
+      },
+      "validation": {
+        "name_required": "Please enter first and last name.",
+        "email_invalid": "Please enter a valid email address."
+      },
+      "messages": {
+        "save_success": "Customer saved successfully!",
+        "save_error": "Error while saving!",
+        "delete_success": "Customer deleted successfully!",
+        "delete_error": "Error while deleting!"
+      }
+    },
+
+    "settings": {
+      "title": "Settings",
+      "general": "General",
+      "company": "Company",
+      "notifications": "Notifications",
+      "working_hours": "Working hours & days off",
+      "payments": "Payments",
+      "integrations": "Integrations",
+      "appointments_events": "Appointments and events",
+      "labels": "Labels",
+      "roles": "Role settings",
+      "activation": "Activation",
+      "api_keys": "API keys",
+
+      "company_form": {
+        "company_name": "Company name",
+        "address": "Address",
+        "website": "Website",
+        "phone": "Phone",
+        "email": "Email",
+        "logo": "Logo",
+        "remove": "Remove",
+        "choose_logo": "Choose logo",
+        "use_logo": "Use logo"
+      },
+
+      "general_form": {
+        "title": "General settings",
+        "choose_language": "Choose language",
+        "system_language": "System language",
+        "limits": {
+          "max_appointments": "Max. appointments per customer",
+          "max_packages": "Max. package purchases per customer",
+          "max_events": "Max. events per customer",
+          "zero_hint": "0 = no limit"
+        },
+        "saved": "Saved!"
+      },
+
+      "roles_form": {
+        "title": "Role settings",
+        "tabs": {
+          "employee": "Employee",
+          "customer": "Customer",
+          "admin": "Administrator"
+        }
+      }
+    },
+
+    "tools": {
+      "title": "Tools",
+      "design": {
+        "backgroundColor": "Background Color",
+        "borderColor": "Border Color",
+        "borderRadius": "Border Radius",
+        "borderWidth": "Border Width",
+        "buttonSettings": "Button Settings",
+        "cardBackgroundColor": "Card Background Color",
+        "cardSettings": "Card Settings",
+        "confirmReset": "Do you want to reset all design settings to default values?",
+        "containerPadding": "Container Padding",
+        "containerSettings": "Container Settings",
+        "courses": "Courses",
+        "descriptionSettings": "Description Settings",
+        "enterTemplateName": "Enter template name",
+        "enterTemplateNameFirst": "Please enter a template name first",
+        "events": "Events",
+        "filterBackgroundColor": "Filter Background Color",
+        "filterSettings": "Filter Settings",
+        "filterTextColor": "Filter Text Color",
+        "fontSize": "Font Size",
+        "fontWeight": "Font Weight",
+        "horizontalPadding": "Horizontal Padding",
+        "imageFit": "Image Fit",
+        "imageHeight": "Image Height",
+        "imageSettings": "Image Settings",
+        "lineHeight": "Line Height",
+        "livePreview": "Live Preview",
+        "loadTemplate": "Load Template",
+        "marginBottom": "Margin Bottom",
+        "padding": "Padding",
+        "priceSettings": "Price Settings",
+        "resetToDefault": "Reset to Default",
+        "saveTemplate": "Save Template",
+        "services": "Services",
+        "shadow": "Shadow",
+        "showDescription": "Show Description",
+        "showFilters": "Show Filters",
+        "showImage": "Show Image",
+        "spacingBetweenItems": "Spacing Between Items",
+        "gridColumns": "Grid Columns",
+        "templateManagement": "Template Management",
+        "templateName": "Template Name",
+        "textColor": "Text Color",
+        "titleSettings": "Title Settings",
+        "verticalPadding": "Vertical Padding"
+      }
+    }
+  }
+}

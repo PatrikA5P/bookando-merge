@@ -1,0 +1,40 @@
+{
+  "name": "@bookando/design-system",
+  "version": "1.0.0",
+  "description": "Shared UI components and design system for Bookando platform",
+  "type": "module",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./dist/index.js",
+      "types": "./dist/index.d.ts"
+    },
+    "./vue": {
+      "import": "./dist/vue/index.js",
+      "types": "./dist/vue/index.d.ts"
+    },
+    "./styles": "./dist/styles/index.css"
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "echo 'Design system build coming soon'",
+    "dev": "echo 'Design system dev mode coming soon'"
+  },
+  "keywords": [
+    "bookando",
+    "design-system",
+    "vue",
+    "components"
+  ],
+  "author": "Bookando Team",
+  "license": "PROPRIETARY",
+  "dependencies": {
+    "@bookando/types": "*"
+  },
+  "peerDependencies": {
+    "vue": "^3.0.0"
+  }
+}

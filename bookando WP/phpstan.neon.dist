@@ -1,0 +1,11 @@
+parameters:
+    level: 6
+    paths:
+        - src
+    tmpDir: var/cache/phpstan
+    stubFiles:
+        - stubs/wordpress.php
+    checkMissingIterableValueType: true
+    checkMissingThrowableCatch: true
+    checkClassCaseSensitivity: true
+    treatPhpDocTypesAsCertain: false
