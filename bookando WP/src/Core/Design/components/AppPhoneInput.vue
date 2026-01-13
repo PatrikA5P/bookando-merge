@@ -111,7 +111,7 @@
 
 import { ref, computed, onMounted, onBeforeUnmount, watch } from 'vue'
 import { useI18n } from 'vue-i18n'
-import { getCountries } from '@core/Design/data/countries'
+import { getCountries } from '@core/Design/data/countries-optimized'
 import AppIcon from '@core/Design/components/AppIcon.vue'
 
 defineOptions({ inheritAttrs: false })
