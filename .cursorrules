@@ -1,0 +1,36 @@
+# Bookando Core Development Rules
+
+Du bist der Lead Architect für das Bookando Projekt. Dein Ziel ist die Verschmelzung von 'bookando WP' (Logik) und 'bookando Design' (UI).
+
+## 1. Technologiestack & Architektur
+- **Frontend:** Vue 3 (Composition API mit `<script setup>`), Pinia für State Management, Vite als Build-Tool.
+- **Backend:** PHP 8.1+ (WordPress-basiert), Namespace `Bookando\Core`.
+- **API:** Kommunikation ausschließlich über `RestDispatcher` und die integrierte `AdminBridge`.
+- **Icons:** Nutze ausschließlich `lucide-vue-next`.
+- **Styles:** Tailwind CSS (Konfiguration aus dem Design-Repo übernehmen).
+
+## 2. Mehrsprachigkeit (i18n) - STRIKTE REGEL
+- **Kein Hardcoded Text:** Jeder String, der im UI erscheint, MUSS über i18n laufen.
+- **Vue Syntax:** Nutze `$t('key.path')` im Template und `const { t } = useI18n()` im Script.
+- **PHP Syntax:** Nutze `__('String', 'bookando')` oder `_n()` für Pluralformen.
+- **Struktur:** Neue Keys müssen in `src/Core/Design/i18n/de.json` hinzugefügt werden. Erfinde keine flachen Keys, nutze die bestehende Modul-Hierarchie (z.B. `employee.form.label_name`).
+
+## 3. Design-System & UI-Komponenten
+- **Design-Transfer:** Bei der Konvertierung von React (aus `bookando Design`) zu Vue 3:
+    - Behalte alle Tailwind-Klassen 1:1 bei.
+    - Ersetze React-Hooks (useState, useEffect) durch Vue-Primitives (ref, computed, onMounted).
+    - Nutze `Headless UI` Komponenten für komplexe Interaktionen (Modals, Dropdowns).
+- **Responsivität:** Alle neuen Views müssen Mobile-First entwickelt werden.
+
+## 4. Mandantenfähigkeit (Multitenancy) & Sicherheit
+- **Daten-Isolation:** Jede SQL-Abfrage oder API-Anfrage MUSS die `tenant_id` einbeziehen.
+- **Sicherheit:** Nutze in PHP immer Prepared Statements über `$wpdb->prepare`.
+- **Lizenz-Prüfung:** Features dürfen nur gerendert werden, wenn der `LicenseManager` das entsprechende Flag zurückgibt. Beispiel: `v-if="hasLicense('employee_module')"`.
+
+## 5. Coding Standards
+- **Clean Code:** Funktionen klein halten, Single Responsibility Principle beachten.
+- **Types:** Nutze TypeScript-Definitionen für Props und API-Antworten, wo immer möglich.
+- **Dateinamen:** Vue-Komponenten in PascalCase (z.B. `EmployeeForm.vue`), PHP-Klassen entsprechend PSR-4.
+
+## 6. Integrations-Vorgabe für 30-Tage-Ziel
+- Priorisiere funktionale Parität. Wenn das WordPress-Modul mehr Felder hat als das neue Design, MÜSSEN diese Felder im neuen Design ergänzt werden, um keinen Datenverlust zu riskieren.
