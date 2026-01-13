@@ -14,6 +14,9 @@ use function wp_timezone;
 /**
  * Enhanced Time Tracking Service integrated with Employee module.
  *
+ * @deprecated Use Bookando\Modules\workday\Services\WorkforceTimeTrackingService instead
+ * @todo Remove in next major version - functionality moved to workday module
+ *
  * Features:
  * - Clock-in/out timers with employee data
  * - Automatic break calculation based on work duration

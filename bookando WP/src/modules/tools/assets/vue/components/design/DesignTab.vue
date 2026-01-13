@@ -896,7 +896,6 @@ const saveTemplate = () => {
   if (!currentTemplate.value) return
 
   // TODO: API Call zum Speichern
-  console.log('Saving template:', currentTemplate.value)
 
   // Update or add template
   if (currentTemplate.value.id) {

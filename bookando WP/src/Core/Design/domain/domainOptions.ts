@@ -1,6 +1,6 @@
 // @core/Design/domain/domainOptions.ts
 import { messages } from '@core/Design/i18n'
-import { getCountries } from '@core/Design/data/countries'
+import { getCountries } from '@core/Design/data/countries-optimized'
 import { getLanguages } from '@core/Design/data/languages'
 import { getGenders  } from '@core/Design/data/genders'
 

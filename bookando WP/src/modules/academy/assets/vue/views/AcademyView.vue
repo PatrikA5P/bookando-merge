@@ -467,17 +467,14 @@ async function handleCourseSave(savedCourse: AcademyCourse) {
 }
 
 async function removeCourse(course: AcademyCourse) {
-  console.log('[Academy] removeCourse called with course:', course)
 
   if (!course.id) {
     console.error('[Academy] No course ID provided')
     return
   }
 
-  console.log('[Academy] Course ID:', course.id, 'Type:', typeof course.id)
 
   try {
-    console.log('[Academy] Showing confirmation dialog...')
     const confirmed = await confirmAction({
       title: 'Kurs löschen',
       message: t('mod.academy.messages.confirm_delete'),
@@ -486,19 +483,15 @@ async function removeCourse(course: AcademyCourse) {
       type: 'danger'
     })
 
-    console.log('[Academy] Confirmation result:', confirmed)
 
     if (!confirmed) {
-      console.log('[Academy] User cancelled deletion')
       return
     }
 
-    console.log('[Academy] Calling deleteCourse API with ID:', course.id)
     deletingId.value = course.id
 
     const ok = await deleteCourse(course.id)
 
-    console.log('[Academy] Delete API response:', ok)
 
     if (ok) {
       courses.value = courses.value.filter(c => c.id !== course.id)
@@ -515,7 +508,6 @@ async function removeCourse(course: AcademyCourse) {
     notify({ type: 'danger', message: t('mod.academy.messages.delete_error') })
   } finally {
     deletingId.value = null
-    console.log('[Academy] removeCourse completed')
   }
 }
 

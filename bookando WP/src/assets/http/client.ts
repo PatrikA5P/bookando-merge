@@ -113,16 +113,12 @@ function makeClient(baseURL: string): AxiosInstance {
           'color:#2563eb',
           full
         )
-        console.log('baseURL :', base)
-        console.log('url     :', url)
         if (config.params) console.log('params  :', config.params)
-        console.log('headers :', config.headers)
 
         if (/\/bookando\/v1\/employees\/bookando\/v1/i.test(full)) {
           console.warn('⚠️ Doppelter Namespace erkannt → irgendwo wird bereits "bookando/v1/..." an einen Modul-Client übergeben.')
         }
 
-        console.log('caller  :\n' + stackLines)
         console.groupEnd()
       } catch { /* noop */ }
     }
@@ -166,9 +162,6 @@ function makeClient(baseURL: string): AxiosInstance {
             'color:#2563eb',
             full
           );
-          console.log('status :', res.status);
-          console.log('data (raw):', res.data);
-          console.log('headers:', res.headers);
           console.groupEnd();
         } catch { /* noop */ }
       }
@@ -209,9 +202,6 @@ function makeClient(baseURL: string): AxiosInstance {
             'color:#b91c1c',
             (req?.baseURL || '') + (req?.url || '')
           )
-          console.log('status :', status)
-          console.log('data   :', data)
-          console.log('config :', { baseURL:req?.baseURL, url:req?.url, params:req?.params, headers:req?.headers })
           console.groupEnd()
         } catch { /* noop */ }
       }

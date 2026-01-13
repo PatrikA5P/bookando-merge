@@ -1,5 +1,4 @@
 // src/modules/employees/assets/vue/api/EmployeesApi.ts
-console.log('[employees:api] LOADED EmployeesApi.ts v3 – standalone endpoints enabled');
 
 import httpBase from '@assets/http'
 import type { AxiosResponse } from 'axios'
@@ -155,7 +154,6 @@ type DetailWith = (typeof EMPLOYEE_DETAIL_WITH)[number]
 // ============================================================================
 
 function log(...a: unknown[]) {
-  console.log('[employees:api]', ...a)
 }
 
 /** HH:mm oder HH:mm:ss → immer HH:mm, sonst '' */

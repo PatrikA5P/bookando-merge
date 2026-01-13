@@ -247,3 +247,61 @@ $z-index-overlay:                  1000;
 $z-index-modal:                    1050;
 $z-index-bulk-action:              900;
 $z-index-loader:                   9999;
+// ============================================================================
+// MODULE-SPECIFIC DESIGN TOKENS (from bookando Design)
+// ============================================================================
+
+// Dashboard - Brand Blue
+$module-dashboard-accent: #0284c7;
+$module-dashboard-bg: #f0f9ff;
+$module-dashboard-text: #0369a1;
+
+// Customers - Emerald/Green
+$module-customers-accent: #059669;
+$module-customers-bg: #f0fdf4;
+$module-customers-text: #047857;
+
+// Employees - Slate/Professional
+$module-employees-accent: #334155;
+$module-employees-bg: #f1f5f9;
+$module-employees-text: #0f172a;
+
+// Workday - Orange/Amber
+$module-workday-accent: #d97706;
+$module-workday-bg: #fffbeb;
+$module-workday-text: #b45309;
+
+// Finance - Purple/Violet
+$module-finance-accent: #7c3aed;
+$module-finance-bg: #faf5ff;
+$module-finance-text: #6d28d9;
+
+// Offers - Blue
+$module-offers-accent: #2563eb;
+$module-offers-bg: #eff6ff;
+$module-offers-text: #1d4ed8;
+
+// Academy - Rose/Pink
+$module-academy-accent: #e11d48;
+$module-academy-bg: #fff1f2;
+$module-academy-text: #be123c;
+
+// Resources - Cyan/Teal
+$module-resources-accent: #0891b2;
+$module-resources-bg: #ecfeff;
+$module-resources-text: #0e7490;
+
+// Partner Hub - Indigo
+$module-partnerhub-accent: #4f46e5;
+$module-partnerhub-bg: #eef2ff;
+$module-partnerhub-text: #4338ca;
+
+// Tools - Fuchsia/Purple
+$module-tools-accent: #c026d3;
+$module-tools-bg: #fdf4ff;
+$module-tools-text: #a21caf;
+
+// Settings - Slate/Gray
+$module-settings-accent: #334155;
+$module-settings-bg: #f1f5f9;
+$module-settings-text: #0f172a;

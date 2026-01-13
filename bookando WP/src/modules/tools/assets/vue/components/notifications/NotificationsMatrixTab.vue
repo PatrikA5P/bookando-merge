@@ -631,7 +631,6 @@ const closeMatrixModal = () => {
 
 const saveMatrix = async () => {
   // API call to save notification matrix
-  console.log('Saving notification matrix:', matrixData.value)
 
   // Simulate save
   if (editingNotification.value) {
@@ -652,7 +651,6 @@ const saveMatrix = async () => {
 const deleteNotification = async (id?: number) => {
   if (confirm('Möchten Sie diese Benachrichtigung wirklich löschen?')) {
     // API call to delete notification
-    console.log('Deleting notification:', id)
     notifications.value = notifications.value.filter(n => n.id !== id)
   }
 }

@@ -162,9 +162,6 @@ async function request<T=any>(method: HttpMethod, path: string, options: Request
         'color:#2563eb',
         url
       );
-      console.log('status :', (resp as Response).status);
-      console.log('data   :', data);
-      console.log('headers:', Object.fromEntries(resHeaders.entries()));
       console.groupEnd();
     } catch { /* noop */ }
   }

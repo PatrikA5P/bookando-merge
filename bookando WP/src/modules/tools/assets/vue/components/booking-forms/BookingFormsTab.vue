@@ -531,7 +531,6 @@ const removeField = (index: number) => {
 
 const saveForm = async () => {
   // API call to save form
-  console.log('Saving booking form:', formData.value)
 
   // Simulate save
   if (editingForm.value) {
@@ -552,7 +551,6 @@ const saveForm = async () => {
 const deleteForm = async (id?: number) => {
   if (confirm('Möchten Sie dieses Buchungsformular wirklich löschen?')) {
     // API call to delete form
-    console.log('Deleting form:', id)
     forms.value = forms.value.filter(f => f.id !== id)
   }
 }

@@ -9,7 +9,7 @@ import quarterOfYear from 'dayjs/plugin/quarterOfYear'
 import updateLocale from 'dayjs/plugin/updateLocale'
 import duration from 'dayjs/plugin/duration'
 
-import { getCountries } from '@core/Design/data/countries'
+import { getCountries } from '@core/Design/data/countries-optimized'
 import { getGenders }  from '@core/Design/data/genders'
 import { getLanguages } from '@core/Design/data/languages'
 import { asString } from '@core/Util/sanitize'
