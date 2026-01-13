@@ -425,14 +425,12 @@ const removeField = (index: number) => {
 
 const saveTemplate = async () => {
   // API call to save template
-  console.log('Saving template:', formData.value)
   closeModal()
 }
 
 const deleteTemplate = async (id?: number) => {
   if (confirm('Möchten Sie diese Vorlage wirklich löschen?')) {
     // API call to delete template
-    console.log('Deleting template:', id)
   }
 }
 

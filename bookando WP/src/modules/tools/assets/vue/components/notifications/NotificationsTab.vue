@@ -588,20 +588,17 @@ const closeModal = () => {
 
 const saveNotification = async () => {
   // API call to save notification
-  console.log('Saving notification:', formData.value)
   closeModal()
 }
 
 const deleteNotification = async (id?: number) => {
   if (confirm('Möchten Sie diese Benachrichtigung wirklich löschen?')) {
     // API call to delete notification
-    console.log('Deleting notification:', id)
   }
 }
 
 const testNotification = async (notification: Notification) => {
   // API call to send test notification
-  console.log('Sending test notification:', notification)
   alert('Test-Benachrichtigung wurde versendet!')
 }
 

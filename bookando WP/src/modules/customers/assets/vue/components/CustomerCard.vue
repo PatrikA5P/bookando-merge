@@ -419,12 +419,10 @@ function makeCall() {
 
 function newAppointment() {
   // TODO: Implement new appointment
-  console.log('New appointment for', props.customer)
 }
 
 function assignCoupon() {
   // TODO: Implement assign coupon
-  console.log('Assign coupon to', props.customer)
 }
 
 // Close on ESC key

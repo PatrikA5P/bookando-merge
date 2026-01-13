@@ -707,9 +707,7 @@ function locationWord(n:number) {
 
 /* Dev traces */
 onMounted(() => {
-  console.debug(`[Card:${props.dayKey}] mounted combos:`, JSON.parse(JSON.stringify(props.combos)))
 })
 watch(() => props.combos, (nv) => {
-  console.debug(`[Card:${props.dayKey}] combos changed:`, JSON.parse(JSON.stringify(nv)))
 }, { deep: true })
 </script>

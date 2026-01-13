@@ -229,12 +229,9 @@ export async function saveCourse(course: Partial<AcademyCourse>): Promise<Academ
 }
 
 export async function deleteCourse(id: string): Promise<boolean> {
-  console.log('[AcademyApi] deleteCourse called with ID:', id, 'Type:', typeof id)
-  console.log('[AcademyApi] Request URL:', `${BASE_URL}/courses/${id}`)
 
   try {
     const { data } = await http.delete<{ deleted: boolean }>(`${BASE_URL}/courses/${id}`)
-    console.log('[AcademyApi] Delete response:', data)
     return !!data?.deleted
   } catch (error) {
     console.error('[AcademyApi] Delete request failed:', error)

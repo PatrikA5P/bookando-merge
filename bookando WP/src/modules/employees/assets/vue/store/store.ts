@@ -448,7 +448,6 @@ export const useEmployeesStore = defineStore('employees', () => {
     try {
       const emp = await getEmployee(id)
       const setCount = emp.workday_sets?.length ?? 0
-      console.log('[employees] fetchById:', id, 'workday_sets:', setCount)
       if (!setCount) {
         console.warn('[employees] Achtung: workday_sets ist leer – Backend hat keine Relationen geliefert.')
       }

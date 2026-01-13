@@ -13,6 +13,9 @@ use function wp_timezone;
 /**
  * Vacation Request Service with approval workflow.
  *
+ * @deprecated Use Bookando\Modules\workday\Services\VacationRequestService instead
+ * @todo Remove in next major version - functionality moved to workday module
+ *
  * Features:
  * - Employee vacation requests
  * - Approval/rejection workflow

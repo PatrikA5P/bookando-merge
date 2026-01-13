@@ -603,7 +603,6 @@ function closeFullCard() {
 }
 
 async function onSaveEmployee(vm: EmployeeFormVM) {
-  console.debug('[EmployeesView] submit VM.specialDays (raw):', JSON.parse(JSON.stringify(vm.specialDays)));
   const ok = await store.saveFromForm(vm)
   if (ok) {
     showDialog.value = false

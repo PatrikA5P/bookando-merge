@@ -204,7 +204,6 @@ const exportReport = async (format: string) => {
       }
     )
     const data = await response.json()
-    console.log('Export initiated:', data)
   } catch (error) {
     console.error('Error exporting report:', error)
   }

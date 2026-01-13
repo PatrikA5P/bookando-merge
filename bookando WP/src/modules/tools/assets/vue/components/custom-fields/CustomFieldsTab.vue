@@ -320,14 +320,12 @@ const closeModal = () => {
 
 const saveField = async () => {
   // API call to save field
-  console.log('Saving field:', formData.value)
   closeModal()
 }
 
 const deleteField = async (id: number) => {
   if (confirm('Möchten Sie dieses Feld wirklich löschen?')) {
     // API call to delete field
-    console.log('Deleting field:', id)
   }
 }
 
