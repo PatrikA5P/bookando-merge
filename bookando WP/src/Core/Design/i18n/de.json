@@ -67,12 +67,14 @@
       "module_name": "Modul",
       "ok": "OK",
       "once": "Einmalig",
+      "please_select": "Bitte wählen",
       "remove": "Entfernen",
       "repeat": "Wiederholen",
       "reset": "Zurücksetzen",
       "summary": "Zusammenfassung",
       "save": "Speichern",
       "saved": "Gespeichert!",
+      "saving": "Wird gespeichert...",
       "success": "Erfolg",
       "true": "Richtig",
       "unnamed": "Ohne Namen"
@@ -99,6 +101,7 @@
     "avatar_url": "Avatar",
     "badge": "Badge",
     "badge_id": "Badge-ID",
+    "birthday": "Geburtstag",
     "calendar": "Kalender",
     "capacity": "Plätze",
     "city": "Ort",
@@ -133,6 +136,8 @@
     "min_capacity": "Min. Plätze",
     "name": "Name",
     "note": "Notiz",
+    "notes": "Notizen",
+    "notes_placeholder": "Interne Notizen zum Kunden",
     "password_hash": "Passwort-Hash",
     "password_reset_token": "Reset-Token",
     "prompt": "Fragestellung",
@@ -165,19 +170,25 @@
         "delete": "Kunde löschen",
         "edit": "Kunde bearbeiten"
       },
+      "add_customer": "Kunde hinzufügen",
+      "additional_info": "Zusätzliche Informationen",
+      "address_info": "Adressinformationen",
       "alerts": {
         "blocked": "Dieser Kunde ist blockiert.",
         "will_be_deleted": "Dieser Kunde wird gelöscht."
       },
       "confirm_delete": "Soll dieser Kunde wirklich gelöscht werden?",
+      "edit_customer": "Kunde bearbeiten",
       "entity_plural": "Kunden",
       "entity_singular": "Kunde",
+      "form_description": "Geben Sie die Kundendaten ein",
       "messages": {
         "delete_error": "Fehler beim Löschen!",
         "delete_success": "Kunde erfolgreich gelöscht!",
         "save_error": "Fehler beim Speichern!",
         "save_success": "Kunde erfolgreich gespeichert!"
       },
+      "personal_info": "Persönliche Informationen",
       "search_placeholder": "Kunden suchen...",
       "sections": {
         "data": "Daten",
@@ -494,6 +505,9 @@
       }
     },
     "services": {
+      "add_service": "Dienstleistung hinzufügen",
+      "adjust_filters": "Filter anpassen",
+      "basic_info": "Grundinformationen",
       "categories": "Kategorien",
       "categories_hint": "Wähle eine Kategorie aus, um rechts die zugehörigen Dienstleistungen zu sehen.",
       "category": {
@@ -501,7 +515,29 @@
         "edit": "Kategorie bearbeiten",
         "label": "Kategorie"
       },
+      "category_placeholder": "z.B. Haarpflege, Massage",
+      "confirm_delete": "Dienstleistung wirklich löschen?",
+      "description": "Verwalten Sie Ihr Dienstleistungsangebot",
+      "description_placeholder": "Beschreiben Sie die Dienstleistung ausführlich",
+      "duration": "Dauer",
+      "duration_placeholder": "z.B. 60 Min, 1.5 Std",
+      "dynamic_pricing": "Dynamische Preise",
+      "edit_service": "Dienstleistung bearbeiten",
       "external_id": "Externe Produkt-ID",
+      "extras": "Zusatz",
+      "form_description": "Geben Sie die Details zur Dienstleistung ein",
+      "messages": {
+        "save_error": "Fehler beim Speichern!",
+        "save_success": "Dienstleistung erfolgreich gespeichert!"
+      },
+      "name_placeholder": "z.B. Haarschnitt, Entspannungsmassage",
+      "notes": "Interne Notizen & Optionen",
+      "notes_placeholder": "Interne Notizen (nicht für Kunden sichtbar)",
+      "status": {
+        "hidden": "Versteckt"
+      },
+      "title": "Dienstleistungen",
+      "uncategorized": "Ohne Kategorie",
       "form": {
         "tab": {
           "details": "Details",
@@ -569,14 +605,7 @@
         },
         "empty": "Keine Dienstleistungen gefunden.",
         "search_placeholder": "Dienstleistungen suchen..."
-      },
-      "notes": "Interne Notizen & Optionen",
-      "title": "Dienstleistungen",
-      "uncategorized": "Ohne Kategorie",
-      "dynamic_pricing": "Dynamische Preise",
-      "extras": "Zusatz",
-      "duration": "Dauer",
-      "add_service": "Dienstleistung hinzufügen"
+      }
     },
     "settings": {
       "activation": "Aktivierung",
