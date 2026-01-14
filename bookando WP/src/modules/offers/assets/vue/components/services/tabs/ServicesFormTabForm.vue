@@ -1,44 +1,34 @@
-<!-- ServicesFormTabForm.vue -->
 <template>
-  <section
-    class="services-form__panel"
-    role="tabpanel"
-    tabindex="0"
-  >
-    <AppServicesFormSection
-      icon="check-square"
-      :title="t('mod.services.form') || 'Buchungsformular'"
-      :description="t('mod.services.form_hint') || 'Wähle ein Buchungsformular aus, das bei der Buchung angezeigt werden soll.'"
-      layout="stack"
-      compact
-    >
-      <BookandoField
-        id="booking_form_id"
-        v-model="form.booking_form_id"
-        type="dropdown"
-        searchable
-        clearable
-        :label="t('mod.services.booking_form') || 'Buchungsformular'"
-        :options="bookingForms"
-        option-label="name"
-        option-value="id"
-      />
-      <p class="services-form__hint">
-        {{ t('mod.services.form_hint_secondary') || 'Tipp: Buchungsformulare können unter Werkzeuge → Buchungsformulare verwaltet werden.' }}
-      </p>
-    </AppServicesFormSection>
-  </section>
+  <div class="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4">
+    <div class="bg-white rounded-xl shadow-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto">
+      <div class="p-6 border-b border-slate-200">
+        <div class="flex items-center justify-between">
+          <h2 class="text-xl font-bold text-slate-900">{{ $t('common.form_in_development') }}</h2>
+          <button @click="$emit('close')" class="p-2 hover:bg-slate-100 rounded-lg transition-colors">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+            </svg>
+          </button>
+        </div>
+      </div>
+      <div class="p-12 text-center text-slate-500">
+        <p>{{ $t('common.form_implementation_pending') }}</p>
+      </div>
+    </div>
+  </div>
 </template>
 
 <script setup lang="ts">
-import { computed } from 'vue'
 import { useI18n } from 'vue-i18n'
-import BookandoField from '@core/Design/components/BookandoField.vue'
-import AppServicesFormSection from '../ui/AppServicesFormSection.vue'
-import type { ServiceFormVm } from '../ServicesForm.vue'
 
-const { t } = useI18n()
-const model = defineModel<ServiceFormVm>({ local: false })
-const form = computed({ get: () => model.value!, set: v => (model.value = v) })
-const props = defineProps<{ bookingForms: Array<{ id:number; name:string }> }>()
+defineProps<{
+  [key: string]: any
+}>()
+
+defineEmits<{
+  close: []
+  saved: []
+}>()
+
+const { t: $t } = useI18n()
 </script>
