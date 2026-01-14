@@ -3,7 +3,6 @@ import { createApp } from 'vue'
 import { createI18n } from 'vue-i18n'
 import SettingsView from './views/SettingsView.vue'
 import { messages as coreMessages } from '@core/Design/i18n'
-import '../css/admin.scss' // Admin-UI-CSS kommt zentral aus PHP
 
 import BookandoUI from '@core/Design/assets/vue/ui.js'
 import { bootLocaleFromBridge, initLocaleBridge } from '@core/Locale/bridge'

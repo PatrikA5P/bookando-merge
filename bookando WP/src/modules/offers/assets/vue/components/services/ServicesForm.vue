@@ -99,7 +99,6 @@ import AppForm from '@core/Design/components/AppForm.vue'
 import AppButton from '@core/Design/components/AppButton.vue'
 import AppTabs from '@core/Design/components/AppTabs.vue'
 
-import './services-form.scss'
 
 type Id = number
 type Category   = { id:Id; name:string }

@@ -7,7 +7,6 @@ import { messages as coreMessages } from '@core/Design/i18n'
 import { bootLocaleFromBridge, initLocaleBridge } from '@core/Locale/bridge'
 import { mergeI18nMessages } from '@core/Locale/messages'
 
-import '../css/admin.scss'
 import BookandoUI from '@core/Design/assets/vue/ui.js'
 
 const localModules = import.meta.glob('./i18n.local.{ts,js}', { eager: true })
