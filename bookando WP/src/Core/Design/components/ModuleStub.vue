@@ -5,9 +5,7 @@
       <!-- Hero Section -->
       <div class="bg-gradient-to-br from-purple-700 to-indigo-900 text-white p-8 rounded-xl shadow-lg mb-6">
         <div class="flex items-center gap-4 mb-3">
-          <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />
-          </svg>
+          <Package class="w-8 h-8" />
           <h1 class="text-2xl font-bold">{{ $t(titleKey) }}</h1>
         </div>
         <p class="text-white/80 text-sm">{{ $t(descriptionKey) }}</p>
@@ -16,9 +14,7 @@
       <!-- Coming Soon Message -->
       <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-12 text-center">
         <div class="max-w-md mx-auto">
-          <svg class="w-16 h-16 mx-auto mb-4 text-slate-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />
-          </svg>
+          <Package class="w-16 h-16 mx-auto mb-4 text-slate-300" />
           <h2 class="text-xl font-bold text-slate-800 mb-2">{{ $t('common.coming_soon') }}</h2>
           <p class="text-slate-600 mb-6">
             {{ $t('common.module_in_development') }}
@@ -34,6 +30,7 @@
 
 <script setup lang="ts">
 import { useI18n } from 'vue-i18n'
+import { Package } from 'lucide-vue-next'
 
 defineProps<{
   moduleName: string
