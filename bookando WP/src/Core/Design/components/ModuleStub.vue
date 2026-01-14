@@ -5,7 +5,7 @@
       <!-- Hero Section -->
       <div class="bg-gradient-to-br from-purple-700 to-indigo-900 text-white p-8 rounded-xl shadow-lg mb-6">
         <div class="flex items-center gap-4 mb-3">
-          <component :is="iconComponent" class="w-8 h-8" />
+          <Package class="w-8 h-8" />
           <h1 class="text-2xl font-bold">{{ $t(titleKey) }}</h1>
         </div>
         <p class="text-white/80 text-sm">{{ $t(descriptionKey) }}</p>
@@ -14,7 +14,7 @@
       <!-- Coming Soon Message -->
       <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-12 text-center">
         <div class="max-w-md mx-auto">
-          <component :is="iconComponent" class="w-16 h-16 mx-auto mb-4 text-slate-300" />
+          <Package class="w-16 h-16 mx-auto mb-4 text-slate-300" />
           <h2 class="text-xl font-bold text-slate-800 mb-2">{{ $t('common.coming_soon') }}</h2>
           <p class="text-slate-600 mb-6">
             {{ $t('common.module_in_development') }}
@@ -29,14 +29,10 @@
 </template>
 
 <script setup lang="ts">
-import { computed } from 'vue'
 import { useI18n } from 'vue-i18n'
-import {
-  Users, Calendar, DollarSign, Settings,
-  Package, Briefcase, GraduationCap, Wrench, Clock
-} from 'lucide-vue-next'
+import { Package } from 'lucide-vue-next'
 
-const props = defineProps<{
+defineProps<{
   moduleName: string
   titleKey: string
   descriptionKey: string
@@ -44,20 +40,4 @@ const props = defineProps<{
 }>()
 
 const { t: $t } = useI18n()
-
-// Map icon names to lucide components
-const iconMap: Record<string, any> = {
-  partnerhub: Briefcase,
-  appointments: Calendar,
-  employees: Users,
-  offers: Package,
-  resources: Package,
-  finance: DollarSign,
-  settings: Settings,
-  tools: Wrench,
-  workday: Clock,
-  academy: GraduationCap
-}
-
-const iconComponent = computed(() => iconMap[props.icon || props.moduleName] || Package)
 </script>
