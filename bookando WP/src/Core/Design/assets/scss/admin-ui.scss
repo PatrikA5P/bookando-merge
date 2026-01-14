@@ -1,72 +1,240 @@
 /* ========================================================== */
-/* 📦 Bookando Admin UI – zentrales Entry-Stylesheet für das Plugin */
-/* Struktur: Tokens → Mixins → Controls → Layout → Komponenten */
+/* 📦 Bookando Admin UI – Minimal WordPress Admin Bar Styles */
+/* Design System: Tailwind CSS (inline classes in Vue components) */
+/* This file: WordPress admin bar compatibility only */
 /* ========================================================== */
 
 /* ---------------------------------- */
-/* 📁 DESIGN-TOKENS + BASIS-UTILS */
+/* 🎨 BRAND COLORS (CSS Custom Properties) */
 /* ---------------------------------- */
-@use 'sass:map';
-@use 'custom-properties' as *;  // 🎨 CSS Custom Properties für Runtime-Theming
-@use 'variables' as *;
-@use 'mixins' as *;         // 💡 Muss vor allen Komponenten kommen, die Mixins nutzen
-@use 'animations' as *;     // 🎬 Animation Utilities & Keyframes
+:root {
+  /* Primary Brand Colors */
+  --bookando-brand-50: #e3fbf3;
+  --bookando-brand-100: #c7f7e8;
+  --bookando-brand-500: #12de9d;
+  --bookando-brand-600: #0fb87f;
+  --bookando-brand-700: #0c9465;
+  --bookando-brand-900: #064c32;
+
+  /* Status Colors */
+  --bookando-success: #10b981;
+  --bookando-warning: #f59e0b;
+  --bookando-danger: #ef4444;
+  --bookando-info: #3b82f6;
+
+  /* Neutral Palette */
+  --bookando-slate-50: #f8fafc;
+  --bookando-slate-100: #f1f5f9;
+  --bookando-slate-200: #e2e8f0;
+  --bookando-slate-300: #cbd5e1;
+  --bookando-slate-400: #94a3b8;
+  --bookando-slate-500: #64748b;
+  --bookando-slate-600: #475569;
+  --bookando-slate-700: #334155;
+  --bookando-slate-800: #1e293b;
+  --bookando-slate-900: #0f172a;
+
+  /* Spacing Scale */
+  --bookando-space-xs: 4px;
+  --bookando-space-sm: 8px;
+  --bookando-space-md: 16px;
+  --bookando-space-lg: 24px;
+  --bookando-space-xl: 32px;
+  --bookando-space-2xl: 48px;
+
+  /* Border Radius */
+  --bookando-radius-sm: 8px;
+  --bookando-radius-md: 12px;
+  --bookando-radius-lg: 16px;
+  --bookando-radius-xl: 20px;
+  --bookando-radius-full: 9999px;
+
+  /* Shadows */
+  --bookando-shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+  --bookando-shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+  --bookando-shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+  --bookando-shadow-xl: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
+
+  /* Z-Index Scale */
+  --bookando-z-base: 1;
+  --bookando-z-dropdown: 100;
+  --bookando-z-sticky: 200;
+  --bookando-z-modal: 1000;
+  --bookando-z-popover: 1100;
+  --bookando-z-toast: 1200;
+}
 
 /* ---------------------------------- */
-/* 🎯 FELDLAYOUTS (zentrale UI-Komponenten) */
+/* 🔧 WORDPRESS ADMIN BAR ADJUSTMENTS */
 /* ---------------------------------- */
-@use 'field' as *;          // .bookando-field → Input, Select etc.
-@use 'form' as *;           // Formularstruktur, Grid, Fehler etc.
+
+/* Admin Bar Present: Add top offset */
+body.admin-bar {
+  #wpadminbar {
+    z-index: 99999;
+  }
+
+  /* Adjust fixed headers for admin bar */
+  .bookando-fixed-header {
+    top: 32px;
+  }
+}
+
+/* Mobile Admin Bar (< 783px) */
+@media screen and (max-width: 782px) {
+  body.admin-bar .bookando-fixed-header {
+    top: 46px;
+  }
+}
 
 /* ---------------------------------- */
-/* 🧩 KOMPONENTEN (modular & wiederverwendbar) */
+/* 🎯 BOOKANDO PLUGIN ROOT CONTAINER */
 /* ---------------------------------- */
-@use 'avatar' as *;
-@use 'button' as *;
-@use 'icons' as *;
-@use 'table' as *;
-@use 'table-cards' as *;
-@use 'grid-list' as *;
-@use 'modal' as *;
-@use 'alert' as *;
-@use 'badge' as *;
-@use 'progress' as *;
-@use 'stepper' as *;
-@use 'breadcrumb' as *;
-@use 'card' as *;
-@use 'tabs' as *;
-@use 'tooltip' as *;
-@use 'vue-datepicker' as *;      // 📅 Date/Time Styles
+
+/* Main plugin wrapper - Tailwind takes over from here */
+.bookando-admin-page {
+  min-height: 100vh;
+  background-color: var(--bookando-slate-50);
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
 
 /* ---------------------------------- */
-/* 📐 LAYOUT-GRUNDLAGEN */
+/* 📱 RESPONSIVE BREAKPOINTS (Reference) */
 /* ---------------------------------- */
-@use 'base' as *;
-@use 'layout' as *;
-@use 'container' as *;
-@use 'page-layout' as *;    // 📄 AppPageLayout component styles
+/* Use Tailwind responsive classes in Vue components:
+ * sm: 640px   → sm:class
+ * md: 768px   → md:class
+ * lg: 1024px  → lg:class
+ * xl: 1280px  → xl:class
+ * 2xl: 1536px → 2xl:class
+ */
 
 /* ---------------------------------- */
-/* 🧪 SPEZIAL UI-BLÖCKE */
+/* 🌐 LOADING STATE (Minimal) */
 /* ---------------------------------- */
-@use 'toolbar' as *;
-@use 'bulk' as *;
-@use 'toast' as *;
-@use 'slider' as *;
-@use 'upload' as *;
-@use 'toggle' as *;
-@use 'states' as *;
-@use 'error' as *;
+
+.bookando-loader {
+  display: inline-block;
+  width: 20px;
+  height: 20px;
+  border: 2px solid var(--bookando-slate-200);
+  border-top-color: var(--bookando-brand-600);
+  border-radius: var(--bookando-radius-full);
+  animation: bookando-spin 0.6s linear infinite;
+}
+
+@keyframes bookando-spin {
+  to { transform: rotate(360deg); }
+}
 
 /* ---------------------------------- */
-/* 📋 MODULE LAYOUTS */
+/* 🎨 UTILITY CLASSES (Minimal) */
 /* ---------------------------------- */
-@use 'module-layout' as *;  // Wiederverwendbare Layouts für Customers, Employees etc.
-@use 'crm-split-view' as *; // CRM/HRM Split-View System
+
+/* Hide visually but keep accessible */
+.bookando-sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border-width: 0;
+}
+
+/* Prevent text selection */
+.bookando-select-none {
+  user-select: none;
+}
+
+/* Smooth scrolling */
+.bookando-scroll-smooth {
+  scroll-behavior: smooth;
+}
 
 /* ---------------------------------- */
-/* 🔧 UTILITIES & HELPER */
+/* 🔤 TYPOGRAPHY RESET */
 /* ---------------------------------- */
-@use 'helpers' as *;
-@use 'utilities' as *;
-@include bookando-export-css-vars();
+
+.bookando-admin-page {
+  /* Reset WordPress admin typography conflicts */
+  h1, h2, h3, h4, h5, h6 {
+    font-family: inherit;
+    font-weight: inherit;
+    line-height: inherit;
+    margin: 0;
+  }
+
+  p {
+    margin: 0;
+  }
+
+  a {
+    color: inherit;
+    text-decoration: inherit;
+  }
+
+  button {
+    font-family: inherit;
+    font-size: inherit;
+    line-height: inherit;
+    margin: 0;
+    padding: 0;
+    background: none;
+    border: none;
+    cursor: pointer;
+  }
+
+  input, textarea, select {
+    font-family: inherit;
+    font-size: inherit;
+    line-height: inherit;
+    margin: 0;
+  }
+
+  /* Remove WordPress default focus styles - Tailwind handles this */
+  *:focus {
+    outline: none;
+    box-shadow: none;
+  }
+
+  /* Remove list styles */
+  ul, ol {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+}
+
+/* ---------------------------------- */
+/* ⚡ FOCUS VISIBLE (Accessibility) */
+/* ---------------------------------- */
+
+.bookando-admin-page {
+  *:focus-visible {
+    outline: 2px solid var(--bookando-brand-500);
+    outline-offset: 2px;
+  }
+}
+
+/* ---------------------------------- */
+/* 🎭 DARK MODE SUPPORT (Future) */
+/* ---------------------------------- */
+
+/* @media (prefers-color-scheme: dark) {
+ *   :root {
+ *     --bookando-slate-50: #0f172a;
+ *     --bookando-slate-900: #f8fafc;
+ *     // ... invert palette
+ *   }
+ * }
+ */
+
+/* ========================================================== */
+/* ✅ END OF ADMIN UI STYLES */
+/* All component styling is done via Tailwind classes in Vue */
+/* ========================================================== */
