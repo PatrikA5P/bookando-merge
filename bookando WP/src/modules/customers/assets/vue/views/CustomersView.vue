@@ -1,699 +1,570 @@
-<!-- CustomersView.vue -->
 <template>
-  <AppShell>
-    <div class="bookando-admin-page">
-      <AppLicenseOverlay
-        v-if="!moduleAllowed"
-        :plan="requiredPlan"
-      />
+  <!-- Customers Module - Pure Tailwind, ModuleLayout Pattern -->
+  <div class="flex flex-col min-h-full bg-slate-50/50">
 
-      <AppPageLayout v-else>
-        <!-- Header -->
-        <template #header>
-          <AppPageHeader
-            :title="t('mod.customers.title')"
-            hide-brand-below="md"
-          >
-            <template #right>
-              <AppButton
-                icon="user-plus"
-                variant="primary"
-                icon-size="xl"
-                :tooltip="t('mod.customers.actions.add')"
-                :icon-only-on-mobile="true"
-                :is-mobile-view="belowSm"
-                @mouseenter="preloadCustomersForm"
-                @click="openCreateDialog"
-              >
-                {{ t('mod.customers.actions.add') }}
-              </AppButton>
-            </template>
-          </AppPageHeader>
-        </template>
-
-        <!-- Toolbar (Filterbar) -->
-        <template #toolbar>
-          <AppFilterBar
-            :ratio="[6,3,2]"
-            :ratio-mobile="[2,1]"
-            stack-below="md"
-            :layout-vars="{
-              '--fb-left-pct': '54%',
-              '--fb-center-pct': '28%',
-              '--fb-right-pct': '18%',
-              '--fb-inner-gap': 'var(--bookando-space-sm)'
-            }"
-          >
-            <!-- LEFT: Suche + mobiler Filterbutton -->
-            <template #left="{ stack }">
-              <div class="bookando-flex-fill">
-                <BookandoField
-                  v-model="search"
-                  type="search"
-                  :placeholder="t('mod.customers.search_placeholder')"
-                />
-              </div>
-              <div
-                v-if="stack"
-                style="margin-left:auto"
-              >
-                <AppButton
-                  icon="filter"
-                  variant="standard"
-                  size="square"
-                  btn-type="icononly"
-                  icon-size="md"
-                  :tooltip="t('ui.filter.toggle')"
-                  @click.stop="showFilters = !showFilters"
-                />
-              </div>
-            </template>
-
-            <!-- CENTER: Filter -> Columns -> Sort -->
-            <template #center="{ stack }">
-              <AppButton
-                v-if="!stack"
-                icon="filter"
-                variant="standard"
-                size="square"
-                btn-type="icononly"
-                icon-size="md"
-                :tooltip="t('ui.filter.toggle')"
-                @click.stop="showFilters = !showFilters"
-              />
-              <AppButton
-                v-if="!stack && !isMobileView"
-                icon="columns"
-                variant="standard"
-                size="square"
-                btn-type="icononly"
-                icon-size="md"
-                :tooltip="t('ui.table.choose_columns')"
-                @click.stop="showColumns = !showColumns"
-              />
-              <AppSort
-                v-model:value="sortMobile"
-                class="bookando-sort-inline"
-                :options="sortOptionsMobile"
-                :threshold="50"
-                @update:value="onMobileSortChange"
-              />
-            </template>
-
-            <!-- RIGHT: Import / Export -->
-            <template #right>
-              <AppButton
-                icon="download"
-                variant="standard"
-                size="square"
-                btn-type="icononly"
-                icon-size="md"
-                :tooltip="t('ui.csv.export')"
-                @click="exportCSV"
-              />
-              <AppButton
-                icon="upload"
-                variant="standard"
-                size="square"
-                btn-type="icononly"
-                icon-size="md"
-                :tooltip="t('ui.csv.import')"
-                @click="openImportDialog"
-              />
-              <input
-                ref="importInput"
-                type="file"
-                accept=".csv"
-                style="display:none"
-                @change="importCSV"
-              >
-            </template>
-
-            <!-- BELOW: Filterpanel & Column-Chooser -->
-            <template #below>
-              <transition name="accordion">
-                <AppFilter
-                  v-if="showFilters"
-                  v-model="activeFilters"
-                  v-model:active-filter-fields="activeFilterFields"
-                  :show="showFilters"
-                  :filters="filterOptions"
-                  :labels="filterLabels"
-                  :filter-field-options="allFilterFields"
-                  @clear="clearAllFilters"
-                  @close="showFilters = false"
-                />
-              </transition>
-
-              <transition name="accordion">
-                <AppColumnChooserDraggable
-                  v-if="!isMobileView && showColumns"
-                  v-model="visibleColumns"
-                  :columns="allColumns"
-                  @close="showColumns = false"
-                  @autosize="onChooserAutosize"
-                  @reset="onChooserReset"
-                />
-              </transition>
-            </template>
-          </AppFilterBar>
-        </template>
-
-        <!-- Main Content -->
-        <!-- Tabelle / Pagination -->
-        <div
-          v-if="!isMobileView && useStickyTest"
-          class="bookando-container bookando-p0"
-        >
-          <AppTableStickyTest />
+    <!-- ==== MOBILE & TABLET LAYOUT (Sticky Scroll Away - Up to LG breakpoint) ==== -->
+    <div class="lg:hidden flex flex-col min-h-screen">
+      <!-- Sticky Header Container -->
+      <div
+        :class="[
+          'sticky top-0 left-0 right-0 z-20 transition-transform duration-300 ease-in-out shadow-lg',
+          'bg-gradient-to-r from-emerald-700 to-teal-900 text-white',
+          isHeaderVisible ? 'translate-y-0' : '-translate-y-full'
+        ]"
+      >
+        <!-- Part 1: Title -->
+        <div class="px-4 pt-4 pb-2">
+          <div class="flex items-center gap-2 mb-3">
+            <svg class="w-5 h-5 text-white/80" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" />
+            </svg>
+            <h2 class="font-bold text-lg">{{ $t('mod.customers.title') }}</h2>
+          </div>
         </div>
 
-        <!-- Desktop: Grid Layout (Table + Sidebar) -->
-        <div
-          v-else-if="!isMobileView"
-          class="bookando-page-with-sidebar"
-        >
-          <!-- Main Content Area (scrollable) -->
-          <div class="bookando-page-with-sidebar__main">
-            <CustomersTable
-              :items="pagedItemsDesktop"
-              :columns="allColumns"
-              :visible-columns="visibleColumns"
-              :col-widths="store.colWidths"
-              :sort-key="sortKey"
-              :sort-direction="sortDirection"
-              :selected-items="selected"
-              :reset-widths-trigger="resetWidthsTrigger"
-              @update:col-widths="store.setColWidths"
-              @edit="openEditDialog"
-              @quick="onRowQuick"
-              @select="onSelect"
-              @sort="onSortDesktop"
-              @row-click="openQuickPreview"
-            />
+        <!-- Part 2: Integrated Search & Filter -->
+        <div class="px-4 pb-3 flex gap-2">
+          <div class="relative flex-1">
+            <svg class="absolute left-3 top-1/2 -translate-y-1/2 text-white/70 w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+            </svg>
+            <input
+              v-model="searchQuery"
+              type="text"
+              :placeholder="$t('mod.customers.search_placeholder')"
+              class="w-full pl-9 pr-4 py-2 rounded-lg text-sm bg-white/10 border border-white/20 text-white placeholder-white/60 focus:bg-white/20 focus:outline-none focus:ring-1 focus:ring-white/50"
+            >
+          </div>
+          <button
+            @click="isFilterOpen = !isFilterOpen"
+            :class="[
+              'p-2 rounded-lg border border-white/20 transition-colors',
+              isFilterOpen ? 'bg-white text-emerald-700' : 'bg-white/10 text-white hover:bg-white/20'
+            ]"
+          >
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z" />
+            </svg>
+          </button>
+        </div>
 
-            <div class="bookando-container bookando-p-md">
-              <AppPagination
-                :current-page="currentPageDesktop"
-                :total-pages="totalPagesDesktop"
-                :page-size="pageSizeDesktop"
-                :page-size-options="pageSizeOptions"
-                :total-items="filteredItems.length"
-                :entity-label-singular="t('mod.customers.entity_singular')"
-                :entity-label-plural="t('mod.customers.entity_plural')"
-                @page-change="goToPageDesktop"
-                @page-size-change="setPageSizeDesktop"
-              />
+        <!-- Filter Content Panel (if open) -->
+        <div v-if="isFilterOpen" class="bg-white border-b border-slate-200 p-4 shadow-inner max-h-[50vh] overflow-y-auto text-slate-800">
+          <div class="space-y-4">
+            <!-- Status Filter -->
+            <div>
+              <label class="block text-xs font-bold text-slate-500 uppercase mb-2">{{ $t('mod.customers.filter.status') }}</label>
+              <div class="space-y-2">
+                <label v-for="status in statusOptions" :key="status" class="flex items-center gap-2 cursor-pointer group">
+                  <div :class="[
+                    'w-4 h-4 rounded border flex items-center justify-center transition-colors',
+                    activeFilters.status.includes(status) ? 'bg-emerald-600 border-emerald-600' : 'border-slate-300 bg-white'
+                  ]">
+                    <svg v-if="activeFilters.status.includes(status)" class="w-2.5 h-2.5 text-white" fill="currentColor" viewBox="0 0 20 20">
+                      <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd" />
+                    </svg>
+                  </div>
+                  <input
+                    type="checkbox"
+                    class="hidden"
+                    :checked="activeFilters.status.includes(status)"
+                    @change="toggleStatusFilter(status)"
+                  >
+                  <span class="text-sm text-slate-700 group-hover:text-slate-900">{{ status }}</span>
+                </label>
+              </div>
+            </div>
+
+            <!-- Sort Order -->
+            <div>
+              <label class="block text-xs font-bold text-slate-500 uppercase mb-2">{{ $t('mod.customers.filter.sort') }}</label>
+              <select
+                v-model="activeFilters.sortBy"
+                class="w-full border border-slate-300 rounded-lg px-3 py-2 text-sm appearance-none bg-slate-50 focus:bg-white focus:ring-2 focus:ring-emerald-500 outline-none"
+              >
+                <option value="name_asc">{{ $t('mod.customers.sort.name_asc') }}</option>
+                <option value="name_desc">{{ $t('mod.customers.sort.name_desc') }}</option>
+                <option value="newest">{{ $t('mod.customers.sort.newest') }}</option>
+              </select>
             </div>
           </div>
-
-          <!-- Sidebar (resizable width, full height) -->
-          <CustomerQuickPreview
-            v-if="showQuickPreview && selectedCustomer"
-            :customer="selectedCustomer"
-            :width="store.sidebarWidth"
-            @close="closeQuickPreview"
-            @edit="openFullCard"
-            @resize="store.setSidebarWidth"
-          />
         </div>
+      </div>
 
-        <div v-else>
-          <CustomersTableMobile
-            :items="pagedItemsMobile"
-            :selected-items="selected"
-            @select="onSelect"
-            @edit="openEditDialog"
-          />
-          <AppPagination
-            :current-page="currentPageMobile"
-            :total-pages="totalPagesMobile"
-            :page-size="pageSizeMobile"
-            :page-size-options="pageSizeOptions"
-            :total-items="filteredItems.length"
-            :entity-label-singular="t('mod.customers.entity_singular')"
-            :entity-label-plural="t('mod.customers.entity_plural')"
-            @page-change="goToPageMobile"
-            @page-size-change="setPageSizeMobile"
-          />
-        </div>
+      <!-- Content Wrapper -->
+      <div class="flex-1 p-4">
+        <CustomersList :customers="paginatedCustomers" @edit="handleEdit" @delete="handleDelete" />
+      </div>
 
-        <!-- BULKACTION -->
-        <transition name="slideup-bulkaction">
-          <AppBulkAction
-            v-if="filteredItems.length && selected.length"
-            v-model="localBulkAction"
-            class="bookando-bulk-slidein"
-            :selected="selected"
-            :bulk-options="bulkActions"
-            :confirm-before-apply="true"
-            :loading="bulkBusy"
-            @apply="onBulkApply"
-            @cancel="onBulkCancel"
-          >
-            <template #cancel-button>
-              <AppButton
-                variant="secondary"
-                :disabled="bulkBusy"
-                @click="onBulkCancel"
-              >
-                {{ t('core.common.cancel') }}
-              </AppButton>
-            </template>
-            <template #apply-button>
-              <AppButton
-                variant="primary"
-                :disabled="!localBulkAction || bulkBusy"
-                :loading="bulkBusy"
-                @click="onBulkApply(localBulkAction)"
-              >
-                {{ bulkBusy ? t('core.bulk.applying') : t('core.bulk.apply') }}
-              </AppButton>
-            </template>
-          </AppBulkAction>
-        </transition>
-
-        <!-- MODALS -->
-        <CustomersForm
-          v-if="showDialog"
-          :model-value="editingCustomer"
-          @save="onSaveCustomer"
-          @cancel="closeDialog"
-        />
-
-        <!-- Zentrales Confirm für „endgültig löschen“ -->
-        <AppModal
-          :show="confirm.show"
-          module="customers"
-          action="hard_delete"
-          type="danger"
-          confirm-variant="danger"
-          @confirm="confirmHardDelete"
-          @cancel="confirm.show = false"
-        />
-
-        <!-- Loader -->
-        <div
-          v-if="loading"
-          class="bookando-backdrop"
-        >
-          <div class="bookando-loader" />
-        </div>
-
-        <!-- Full-Screen Customer Card -->
-        <CustomerCard
-          v-if="showFullCard && selectedCustomer"
-          :customer="selectedCustomer"
-          @close="closeFullCard"
-        />
-
-        <div
-          v-if="filteredItems.length"
-          style="height:90px"
-        />
-      </AppPageLayout>
+      <!-- Mobile Floating Action Button -->
+      <button
+        @click="openCreateDialog"
+        class="fixed bottom-6 right-6 w-14 h-14 bg-emerald-600 text-white rounded-full shadow-2xl flex items-center justify-center z-50 hover:bg-emerald-700 active:scale-95 transition-all"
+      >
+        <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
+        </svg>
+      </button>
     </div>
-  </AppShell>
+
+    <!-- ==== DESKTOP LAYOUT (Large Screens) ==== -->
+    <div class="hidden lg:flex min-h-full p-6 gap-6 items-start">
+      <!-- Sticky Header Wrapper - No tabs, full width layout -->
+      <div class="flex-1 flex flex-col min-w-0">
+        <div class="sticky top-0 z-30 bg-slate-50 pt-6 pb-6 -mt-6">
+          <div class="flex gap-6 items-stretch">
+            <!-- Left: Module Identity (Hero Section) -->
+            <div class="w-72 shrink-0 z-20 relative">
+              <div class="relative overflow-hidden bg-gradient-to-br from-emerald-700 to-teal-900 text-white p-6 rounded-xl shadow-lg h-full flex flex-col justify-center">
+                <div class="relative z-10">
+                  <div class="flex items-center gap-3 mb-2">
+                    <svg class="w-6 h-6 text-white/80" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" />
+                    </svg>
+                    <h2 class="font-bold text-xl">{{ $t('mod.customers.title') }}</h2>
+                  </div>
+                  <p class="text-xs max-w-2xl text-white/70">{{ $t('mod.customers.description') }}</p>
+                </div>
+                <div class="absolute right-0 top-0 opacity-10 transform translate-x-2 -translate-y-2 pointer-events-none">
+                  <svg class="w-24 h-24" fill="currentColor" viewBox="0 0 24 24">
+                    <path d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" />
+                  </svg>
+                </div>
+              </div>
+            </div>
+
+            <!-- Right: Actions Toolbar -->
+            <div class="flex-1 bg-white p-6 rounded-xl shadow-sm border border-slate-200 flex flex-col justify-center relative z-20">
+              <div class="flex items-center gap-3 w-full justify-between">
+                <div class="flex-1 flex gap-3">
+                  <!-- Search -->
+                  <div class="relative flex-1">
+                    <svg class="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                    </svg>
+                    <input
+                      v-model="searchQuery"
+                      type="text"
+                      :placeholder="$t('mod.customers.search_placeholder')"
+                      class="w-full pl-9 pr-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500 transition-all border border-slate-200 rounded-xl bg-slate-50 focus:bg-white"
+                    >
+                  </div>
+
+                  <!-- Filter Toggle -->
+                  <button
+                    @click="isFilterOpen = !isFilterOpen"
+                    :class="[
+                      'transition-colors flex items-center justify-center shrink-0 border rounded-xl p-2.5',
+                      isFilterOpen ? 'bg-emerald-50 border-emerald-200 text-emerald-700' : 'bg-white border-slate-200 text-slate-600 hover:bg-slate-50'
+                    ]"
+                  >
+                    <svg class="w-4.5 h-4.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z" />
+                    </svg>
+                  </button>
+
+                  <!-- Export CSV -->
+                  <button
+                    @click="handleExportCSV"
+                    class="flex items-center gap-2 px-4 py-2 border border-slate-200 rounded-xl text-slate-600 hover:bg-slate-50 text-sm font-medium transition-colors"
+                  >
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+                    </svg>
+                    <span class="hidden md:inline">{{ $t('mod.customers.actions.export') }}</span>
+                  </button>
+                </div>
+
+                <div class="pl-3 border-l border-slate-100">
+                  <button
+                    @click="openCreateDialog"
+                    class="flex items-center gap-2 shadow-sm whitespace-nowrap transition-colors shrink-0 bg-emerald-600 hover:bg-emerald-700 text-white px-5 py-2.5 rounded-xl text-sm font-bold"
+                  >
+                    <svg class="w-4.5 h-4.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
+                    </svg>
+                    <span>{{ $t('mod.customers.actions.add') }}</span>
+                  </button>
+                </div>
+              </div>
+
+              <!-- Filter Expansion inside the action box -->
+              <div v-if="isFilterOpen" class="mt-4 pt-4 border-t border-slate-100 animate-slideDown">
+                <div class="grid grid-cols-3 gap-4">
+                  <!-- Status Filter -->
+                  <div>
+                    <label class="block text-xs font-bold text-slate-500 uppercase mb-2">{{ $t('mod.customers.filter.status') }}</label>
+                    <div class="space-y-2">
+                      <label v-for="status in statusOptions" :key="status" class="flex items-center gap-2 cursor-pointer group">
+                        <div :class="[
+                          'w-4 h-4 rounded border flex items-center justify-center transition-colors',
+                          activeFilters.status.includes(status) ? 'bg-emerald-600 border-emerald-600' : 'border-slate-300 bg-white'
+                        ]">
+                          <svg v-if="activeFilters.status.includes(status)" class="w-2.5 h-2.5 text-white" fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd" />
+                          </svg>
+                        </div>
+                        <input
+                          type="checkbox"
+                          class="hidden"
+                          :checked="activeFilters.status.includes(status)"
+                          @change="toggleStatusFilter(status)"
+                        >
+                        <span class="text-sm text-slate-700 group-hover:text-slate-900">{{ status }}</span>
+                      </label>
+                    </div>
+                  </div>
+
+                  <!-- Sort Order -->
+                  <div>
+                    <label class="block text-xs font-bold text-slate-500 uppercase mb-2">{{ $t('mod.customers.filter.sort') }}</label>
+                    <select
+                      v-model="activeFilters.sortBy"
+                      class="w-full border border-slate-300 rounded-lg px-3 py-2 text-sm appearance-none bg-slate-50 focus:bg-white focus:ring-2 focus:ring-emerald-500 outline-none"
+                    >
+                      <option value="name_asc">{{ $t('mod.customers.sort.name_asc') }}</option>
+                      <option value="name_desc">{{ $t('mod.customers.sort.name_desc') }}</option>
+                      <option value="newest">{{ $t('mod.customers.sort.newest') }}</option>
+                    </select>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Content Body -->
+        <main class="bg-white border border-slate-200 shadow-sm flex-1 flex flex-col z-0 relative rounded-xl overflow-hidden">
+          <!-- Table -->
+          <div class="flex-1 overflow-y-auto">
+            <table class="w-full text-left border-collapse">
+              <thead class="bg-slate-50 border-b border-slate-200 sticky top-0 z-10">
+                <tr>
+                  <th class="p-4 text-xs font-semibold text-slate-500 uppercase tracking-wider">{{ $t('mod.customers.table.customer') }}</th>
+                  <th class="p-4 text-xs font-semibold text-slate-500 uppercase tracking-wider">{{ $t('mod.customers.table.contact') }}</th>
+                  <th class="p-4 text-xs font-semibold text-slate-500 uppercase tracking-wider">{{ $t('mod.customers.table.address') }}</th>
+                  <th class="p-4 text-xs font-semibold text-slate-500 uppercase tracking-wider">{{ $t('mod.customers.table.status') }}</th>
+                  <th class="p-4 text-xs font-semibold text-slate-500 uppercase tracking-wider text-right">{{ $t('mod.customers.table.actions') }}</th>
+                </tr>
+              </thead>
+              <tbody class="divide-y divide-slate-200">
+                <tr
+                  v-for="customer in paginatedCustomers"
+                  :key="customer.id"
+                  :class="[
+                    'hover:bg-slate-50 transition-colors group',
+                    customer.status === 'deleted' ? 'opacity-60 bg-slate-50' : ''
+                  ]"
+                >
+                  <td class="p-4">
+                    <div class="flex items-center gap-3">
+                      <div class="w-10 h-10 rounded-full bg-emerald-100 text-emerald-600 flex items-center justify-center font-semibold text-sm uppercase shrink-0">
+                        {{ getInitials(customer) }}
+                      </div>
+                      <div>
+                        <div class="font-medium text-slate-900">{{ customer.first_name }} {{ customer.last_name }}</div>
+                        <div class="text-xs text-slate-500">#{{ customer.id }}</div>
+                      </div>
+                    </div>
+                  </td>
+                  <td class="p-4">
+                    <div class="flex flex-col gap-1 text-sm text-slate-600">
+                      <div class="flex items-center gap-2">
+                        <svg class="w-3.5 h-3.5 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                        </svg>
+                        {{ customer.email }}
+                      </div>
+                      <div v-if="customer.phone" class="flex items-center gap-2">
+                        <svg class="w-3.5 h-3.5 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
+                        </svg>
+                        {{ customer.phone }}
+                      </div>
+                    </div>
+                  </td>
+                  <td class="p-4">
+                    <div class="flex flex-col gap-0.5 text-sm text-slate-600">
+                      <template v-if="customer.city || customer.country">
+                        <div v-if="customer.city">{{ customer.city }}</div>
+                        <div v-if="customer.country" class="text-xs text-slate-400">{{ customer.country }}</div>
+                      </template>
+                      <span v-else class="text-slate-400 italic">{{ $t('mod.customers.no_address') }}</span>
+                    </div>
+                  </td>
+                  <td class="p-4">
+                    <span :class="[
+                      'inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium border',
+                      customer.status === 'active' ? 'bg-emerald-50 text-emerald-700 border-emerald-100' : '',
+                      customer.status === 'blocked' ? 'bg-rose-50 text-rose-700 border-rose-100' : '',
+                      customer.status === 'deleted' ? 'bg-slate-100 text-slate-600 border-slate-200' : ''
+                    ]">
+                      {{ customer.status }}
+                    </span>
+                  </td>
+                  <td class="p-4 text-right">
+                    <div class="flex justify-end gap-2">
+                      <button
+                        @click="handleEdit(customer)"
+                        class="p-2 text-slate-400 hover:text-emerald-600 hover:bg-emerald-50 rounded-full transition-colors"
+                      >
+                        <svg class="w-4.5 h-4.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+                        </svg>
+                      </button>
+                      <button
+                        v-if="customer.status !== 'deleted'"
+                        @click="handleDelete(customer)"
+                        class="p-2 text-slate-400 hover:text-rose-600 hover:bg-rose-50 rounded-full transition-colors"
+                      >
+                        <svg class="w-4.5 h-4.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                        </svg>
+                      </button>
+                    </div>
+                  </td>
+                </tr>
+                <tr v-if="paginatedCustomers.length === 0">
+                  <td colspan="5" class="p-12 text-center">
+                    <div class="flex flex-col items-center text-slate-400">
+                      <svg class="w-12 h-12 mb-4 opacity-20" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                      </svg>
+                      <p class="text-lg font-medium text-slate-600">{{ $t('mod.customers.no_results') }}</p>
+                      <p class="text-sm">{{ $t('mod.customers.adjust_filters') }}</p>
+                    </div>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <!-- Pagination Footer -->
+          <div class="p-4 border-t border-slate-200 bg-slate-50 flex flex-col md:flex-row items-center justify-between gap-4">
+            <div class="flex items-center gap-4 text-sm text-slate-600">
+              <span>
+                {{ $t('mod.customers.pagination.showing') }}
+                <span class="font-bold text-slate-900">{{ processedCustomers.length > 0 ? (currentPage - 1) * itemsPerPage + 1 : 0 }}</span>
+                {{ $t('mod.customers.pagination.to') }}
+                <span class="font-bold text-slate-900">{{ Math.min(currentPage * itemsPerPage, totalItems) }}</span>
+                {{ $t('mod.customers.pagination.of') }}
+                <span class="font-bold text-slate-900">{{ totalItems }}</span>
+              </span>
+              <select
+                v-model="itemsPerPage"
+                class="bg-white border border-slate-300 rounded-lg px-2 py-1 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500 cursor-pointer"
+              >
+                <option :value="10">10 {{ $t('mod.customers.pagination.per_page') }}</option>
+                <option :value="25">25 {{ $t('mod.customers.pagination.per_page') }}</option>
+                <option :value="50">50 {{ $t('mod.customers.pagination.per_page') }}</option>
+                <option :value="100">100 {{ $t('mod.customers.pagination.per_page') }}</option>
+              </select>
+            </div>
+
+            <div class="flex items-center gap-1">
+              <button
+                @click="currentPage = Math.max(currentPage - 1, 1)"
+                :disabled="currentPage === 1"
+                class="p-2 rounded-lg border border-slate-300 bg-white text-slate-600 hover:bg-slate-50 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+              >
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+                </svg>
+              </button>
+
+              <button
+                v-for="(page, idx) in getPageNumbers()"
+                :key="idx"
+                @click="typeof page === 'number' && (currentPage = page)"
+                :disabled="typeof page !== 'number'"
+                :class="[
+                  'min-w-[32px] h-8 px-2 rounded-lg text-sm font-medium transition-colors',
+                  page === currentPage
+                    ? 'bg-emerald-600 text-white shadow-sm'
+                    : typeof page === 'number' ? 'bg-white border border-slate-300 text-slate-600 hover:bg-slate-50' : 'text-slate-400 cursor-default'
+                ]"
+              >
+                {{ page }}
+              </button>
+
+              <button
+                @click="currentPage = Math.min(currentPage + 1, totalPages)"
+                :disabled="currentPage === totalPages || totalPages === 0"
+                class="p-2 rounded-lg border border-slate-300 bg-white text-slate-600 hover:bg-slate-50 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+              >
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+                </svg>
+              </button>
+            </div>
+          </div>
+        </main>
+      </div>
+    </div>
+
+    <!-- Customer Form Modal (reusing existing component for now) -->
+    <component
+      v-if="showDialog"
+      :is="CustomersForm"
+      :customer="editingCustomer"
+      @close="showDialog = false"
+      @saved="handleSaved"
+    />
+  </div>
 </template>
 
 <script setup lang="ts">
-import { defineAsyncComponent, ref, unref, computed, onMounted, watch, nextTick } from 'vue'
+import { ref, computed, onMounted, watch, defineAsyncComponent } from 'vue'
 import { useI18n } from 'vue-i18n'
-
-// Shell & Rahmen
-import AppShell from '@core/Design/components/AppShell.vue'
-import AppLicenseOverlay from '@core/Design/components/AppLicenseOverlay.vue'
-import AppPageLayout from '@core/Design/components/AppPageLayout.vue'
-
-// Daten & Logik
 import { useCustomersStore } from '../store/store'
-import { useTable, type TableColumn } from '@core/Composables/useTable'
-import { getGenders } from '@core/Design/data/genders'
-import { getSupportedLangs } from '@core/Design/data/language-mapping'
-import { languageLabel, statusLabel } from '@core/Util/formatters'
-import { fieldLabel } from '@core/Util/i18n-helpers'
-import type { ActionKey } from '@core/Composables/useModuleActions'
-import { useCustomerActions, customersBulkOptions } from '../../../actions'
-import { useResponsive } from '@core/Composables/useResponsive'
-import { notify } from '@core/Composables/useNotifier'
 
-// UI-Komponenten
-import AppPageHeader from '@core/Design/components/AppPageHeader.vue'
-import AppTableStickyTest from '@core/Design/components/AppTableStickyTest.vue'
-import AppFilterBar from '@core/Design/components/AppFilterBar.vue'
-import AppFilter from '@core/Design/components/AppFilter.vue'
-import AppSort from '@core/Design/components/AppSort.vue'
-import AppColumnChooserDraggable from '@core/Design/components/AppColumnChooserDraggable.vue'
-import AppButton from '@core/Design/components/AppButton.vue'
-import BookandoField from '@core/Design/components/BookandoField.vue'
-import CustomersTable from '../components/CustomersTable.vue'
-import CustomersTableSimple from '../components/CustomersTableSimple.vue'
-import CustomersTableMobile from '../components/CustomersTableMobile.vue'
-import CustomerQuickPreview from '../components/CustomerQuickPreview.vue'
-import CustomerCard from '../components/CustomerCard.vue'
-import AppPagination from '@core/Design/components/AppPagination.vue'
-import AppBulkAction from '@core/Design/components/AppBulkAction.vue'
-import AppModal from '@core/Design/components/AppModal.vue'
-
+// Lazy load form component
 const CustomersForm = defineAsyncComponent(() => import('../components/CustomersForm.vue'))
 
-type BP = 'sm'|'md'|'lg'|'xl'
-const MODULE = 'customers'
+// i18n
+const { t: $t } = useI18n()
 
-/* === Flags / Umgebung === */
-const BOOKANDO = (typeof window !== 'undefined' && (window as any).BOOKANDO_VARS) || {}
-const moduleAllowed: boolean = BOOKANDO.module_allowed ?? true
-const requiredPlan: string | null = BOOKANDO.required_plan ?? null
-
-/* === Responsive === */
-// xl breakpoint: Table for desktop (≥1200px), Cards for mobile/tablet (<1200px)
-const breakpoint: BP = 'xl'
-const { isBelow } = useResponsive()
-const isMobileView = computed(() => unref(isBelow(breakpoint)))
-const belowMd = isBelow('md')
-const belowSm = isBelow('sm')
-
-/* === Stores / i18n === */
+// Store
 const store = useCustomersStore()
-const { loading: actionsLoading, run } = useCustomerActions()
-const { t, locale } = useI18n()
-const loading = computed(() => store.loading || actionsLoading)
 
-/* === UI-States === */
+// Filter & Pagination State
+const searchQuery = ref('')
+const isFilterOpen = ref(false)
+const activeFilters = ref({
+  status: [] as string[],
+  sortBy: 'name_asc' as 'name_asc' | 'name_desc' | 'newest'
+})
+
+const currentPage = ref(1)
+const itemsPerPage = ref(25)
+
+// Modal State
 const showDialog = ref(false)
 const editingCustomer = ref<any>(null)
-const confirm = ref<{ show: boolean; item: any | null }>({ show: false, item: null })
-const showColumns = ref(false)
-const showFilters = ref(false)
-const resetWidthsTrigger = ref(0)
-const showQuickPreview = ref(false)
-const showFullCard = ref(false)
-const selectedCustomer = ref<any>(null)
 
-/* ===== Spalten-Definition ===== */
-function makeColumns(): TableColumn[] {
-  return [
-    { key: 'customer',  label: fieldLabel(t, 'customer', MODULE), sortable: true,  visible: true,  filter: false, sortable_mobile: true,  visible_mobile: true },
-    { key: 'id',        label: fieldLabel(t, 'id', MODULE),       sortable: true,  visible: false, filter: false, sortable_mobile: true,  visible_mobile: true },
-    { key: 'first_name',label: fieldLabel(t, 'first_name', MODULE), sortable: true, visible: false, filter: false, sortable_mobile: false, visible_mobile: false },
-    { key: 'last_name', label: fieldLabel(t, 'last_name', MODULE),  sortable: true, visible: false, filter: false, sortable_mobile: false, visible_mobile: false },
-    { key: 'email',     label: fieldLabel(t, 'email', MODULE),    sortable: true,  visible: false, filter: false, sortable_mobile: true,  visible_mobile: true },
-    { key: 'phone',     label: fieldLabel(t, 'phone', MODULE),    sortable: true,  visible: false, filter: false, sortable_mobile: false, visible_mobile: true },
-    { key: 'status',    label: fieldLabel(t, 'status', MODULE),   sortable: true,  visible: true,  filter: true,  sortable_mobile: false, visible_mobile: false },
-    { key: 'address',   label: fieldLabel(t, 'address', MODULE),  sortable: true,  visible: false, filter: false, sortable_mobile: false, visible_mobile: false },
-    { key: 'address_2', label: fieldLabel(t, 'address_2', MODULE),sortable: true,  visible: false, filter: false, sortable_mobile: false, visible_mobile: false },
-    { key: 'zip',       label: fieldLabel(t, 'zip', MODULE),      sortable: true,  visible: false, filter: false, sortable_mobile: false, visible_mobile: false },
-    { key: 'city',      label: fieldLabel(t, 'city', MODULE),     sortable: true,  visible: false, filter: false, sortable_mobile: false, visible_mobile: false },
-    { key: 'country',   label: fieldLabel(t, 'country', MODULE),  sortable: true,  visible: false, filter: true,  sortable_mobile: false, visible_mobile: false },
-    { key: 'birthdate', label: fieldLabel(t, 'birthdate', MODULE),sortable: true,  visible: true,  filter: false, sortable_mobile: false, visible_mobile: false },
-    { key: 'gender',    label: fieldLabel(t, 'gender', MODULE),   sortable: true,  visible: true,  filter: true,  sortable_mobile: false, visible_mobile: false },
-    { key: 'language',  label: fieldLabel(t, 'language', MODULE), sortable: true,  visible: true,  filter: true,  sortable_mobile: false, visible_mobile: false },
-    { key: 'note',      label: fieldLabel(t, 'note', MODULE),     sortable: false, visible: false, filter: false, sortable_mobile: false, visible_mobile: false },
-    { key: 'description',label:fieldLabel(t, 'description', MODULE),sortable:false,visible:false,filter:false,sortable_mobile:false,visible_mobile:false },
-    { key: 'avatar_url',label: fieldLabel(t, 'avatar_url', MODULE),sortable:false, visible:false, filter:false, sortable_mobile:false, visible_mobile:false },
-    { key: 'timezone',  label: fieldLabel(t, 'timezone', MODULE), sortable:false, visible:false, filter:false, sortable_mobile:false, visible_mobile:false },
-    { key: 'external_id',label:fieldLabel(t, 'external_id', MODULE),sortable:false,visible:false,filter:false,sortable_mobile:false,visible_mobile:false },
-    { key: 'tenant_id', label: fieldLabel(t, 'tenant_id', MODULE),sortable:false, visible:false, filter:false, sortable_mobile:false, visible_mobile:false },
-    { key: 'roles',     label: fieldLabel(t, 'roles', MODULE),    sortable:false, visible:false, filter:false, sortable_mobile:false, visible_mobile:false },
-    { key: 'badge_id',  label: fieldLabel(t, 'badge_id', MODULE), sortable:false, visible:false, filter:false, sortable_mobile:false, visible_mobile:false },
-    { key: 'password_hash', label: fieldLabel(t, 'password_hash', MODULE), sortable:false, visible:false, filter:false, sortable_mobile:false, visible_mobile:false },
-    { key: 'password_reset_token', label: fieldLabel(t, 'password_reset_token', MODULE), sortable:false, visible:false, filter:false, sortable_mobile:false, visible_mobile:false },
-    { key: 'created_at',label: fieldLabel(t, 'created_at', MODULE),sortable:true, visible:false, filter:false, sortable_mobile:false, visible_mobile:false },
-    { key: 'updated_at',label: fieldLabel(t, 'updated_at', MODULE),sortable:true, visible:false, filter:false, sortable_mobile:false, visible_mobile:false },
-    { key: 'deleted_at',label: fieldLabel(t, 'deleted_at', MODULE),sortable:true, visible:false, filter:false, sortable_mobile:false, visible_mobile:false },
-  ]
-}
+// Status Options
+const statusOptions = ['active', 'blocked', 'deleted']
 
-const LABEL_MAP = computed<Record<string, Record<string, string>>>(() => {
-  const langs = getSupportedLangs()
-  return {
-    status: {
-      active:  statusLabel('active',  locale.value),
-      blocked: statusLabel('blocked', locale.value),
-      deleted: statusLabel('deleted', locale.value),
-    },
-    gender: Object.fromEntries(getGenders(locale.value).map(o => [o.value, o.label])),
-    language: Object.fromEntries(langs.map(code => [code, languageLabel(code, locale.value)])),
+// Scroll Direction Hook (for mobile sticky header)
+const scrollDirection = ref<'up' | 'down' | null>(null)
+const scrolledToTop = ref(true)
+const isHeaderVisible = computed(() => scrollDirection.value === 'up' || scrolledToTop.value)
+
+// Toggle Status Filter
+const toggleStatusFilter = (status: string) => {
+  const exists = activeFilters.value.status.includes(status)
+  if (exists) {
+    activeFilters.value.status = activeFilters.value.status.filter(s => s !== status)
+  } else {
+    activeFilters.value.status.push(status)
   }
-})
+}
 
-const FALLBACK_OPTIONS = computed<Record<string, string[]>>(() => {
-  const langs = getSupportedLangs()
-  return {
-    status: ['active','blocked','deleted'],
-    gender: getGenders(locale.value).map(o => o.value),
-    language: langs,
+// Data Processing
+const processedCustomers = computed(() => {
+  let result = [...(store.items || [])]
+
+  // 1. Search
+  if (searchQuery.value) {
+    const q = searchQuery.value.toLowerCase()
+    result = result.filter(c =>
+      c.first_name?.toLowerCase().includes(q) ||
+      c.last_name?.toLowerCase().includes(q) ||
+      c.email?.toLowerCase().includes(q) ||
+      c.phone?.includes(q)
+    )
   }
-})
-const EXCLUDED_FILTER_KEYS = ['customer', 'password_hash', 'avatar_url', 'badge_id', 'password_reset_token']
 
-/* === Bridge für persistente Table/Filter-Settings === */
-const storeBridge = {
-  get visibleColumns() { return store.visibleColumns },
-  setVisibleColumns: (keys: string[]) => store.setVisibleColumns(keys),
-  get colWidths() { return store.colWidths },
-  setColWidths: (w: Record<string, number>) => store.setColWidths(w),
-  get activeFilterFields() { return store.activeFilterFields },
-  setActiveFilterFields: (keys: string[]) => store.setActiveFilterFields(keys),
-  get activeFilters() { return store.activeFilters },
-  setActiveFilters: (val: Record<string, string[]>) => store.setActiveFilters(val)
-}
-
-/* === useTable === */
-const {
-  rawColumns, refreshColumns, allColumns, visibleColumns,
-  search, sortKey, sortDirection, sortMobile, sortOptionsMobile, onMobileSortChange,
-  allFilterFields, filterLabels, activeFilterFields, activeFilters, filterOptions, clearAllFilters,
-  filteredItems, sortedItems,
-  pageSizeOptions,
-  pageSizeDesktop, currentPageDesktop, totalPagesDesktop, pagedItemsDesktop,
-  pageSizeMobile, currentPageMobile, totalPagesMobile, pagedItemsMobile,
-  goToPageDesktop, setPageSizeDesktop,
-  goToPageMobile, setPageSizeMobile
-} = useTable(
-  {
-    defaultSortKey: 'customer',
-    defaultSortDir: 'asc',
-    columns: makeColumns,
-    itemsSource: () => store.items,
-    excludedFilterKeys: EXCLUDED_FILTER_KEYS,
-    labelMap: LABEL_MAP,
-    fallbackOptions: FALLBACK_OPTIONS,
-    pageSizeDesktopDefault: 30,
-    pageSizeMobileDefault: 10
-  },
-  storeBridge
-)
-
-/* === Sticky-Test === */
-const useStickyTest = ref(
-  typeof window !== 'undefined' && new URLSearchParams(window.location.search).has('tabletest')
-)
-
-/* === Preload CustomersForm === */
-function preloadCustomersForm() {
-  // Preload ohne Mounten, Fehler stillschweigend ignorieren
-  import('../components/CustomersForm.vue').catch(() => {})
-}
-
-/* === Reaktivität === */
-// Watch filter changes without deep: true (Pinia store already tracks reactivity)
-watch([activeFilters, activeFilterFields], () => {
-  currentPageDesktop.value = 1
-  currentPageMobile.value = 1
-}, { flush: 'post' })
-
-watch(isMobileView, (isMobile) => {
-  if (isMobile && showColumns.value) showColumns.value = false
-})
-
-function onChooserAutosize() { resetWidthsTrigger.value++ }
-async function onChooserReset() {
-  store.resetColumnSettings()
-  const defaults = rawColumns.value.filter(c => c.visible).map(c => c.key)
-  store.setVisibleColumns(defaults)
-  await nextTick()
-  resetWidthsTrigger.value++
-}
-
-watch(locale, async () => {
-  refreshColumns()
-  await nextTick()
-  if (store.activeFilterFields?.length) store.setActiveFilterFields([...store.activeFilterFields])
-  if (store.activeFilters && Object.keys(store.activeFilters).length) store.setActiveFilters({ ...store.activeFilters })
-})
-
-onMounted(async () => {
-  await store.load()
-  if (!store.activeFilterFields?.length) {
-    store.setActiveFilterFields(rawColumns.value.filter(c => c.filter === true).map(c => c.key))
+  // 2. Status Filter
+  if (activeFilters.value.status.length > 0) {
+    result = result.filter(c => activeFilters.value.status.includes(c.status))
   }
-  if (!store.activeFilters || !Object.keys(store.activeFilters).length) {
-    store.setActiveFilters(Object.fromEntries(
-      rawColumns.value.filter(c => c.filter === true).map(c => [c.key, [] as string[]])
-    ))
-  }
+
+  // 3. Sorting
+  result.sort((a, b) => {
+    switch (activeFilters.value.sortBy) {
+      case 'name_asc':
+        return (a.last_name || '').localeCompare(b.last_name || '')
+      case 'name_desc':
+        return (b.last_name || '').localeCompare(a.last_name || '')
+      case 'newest':
+        return (b.id || 0) - (a.id || 0)
+      default: return 0
+    }
+  })
+
+  return result
 })
 
-/* === Auswahl & Row-Interaktionen === */
-const selected = ref<any[]>([])
+// Pagination Logic
+const totalItems = computed(() => processedCustomers.value.length)
+const totalPages = computed(() => Math.ceil(totalItems.value / itemsPerPage.value))
+const paginatedCustomers = computed(() => {
+  const start = (currentPage.value - 1) * itemsPerPage.value
+  const end = currentPage.value * itemsPerPage.value
+  return processedCustomers.value.slice(start, end)
+})
 
-function clearSelection() {
-  selected.value = []
-  localBulkAction.value = ''
+// Smart Pagination
+const getPageNumbers = () => {
+  const delta = 2
+  const range: number[] = []
+  const rangeWithDots: (number | string)[] = []
+  let l: number | undefined
+
+  range.push(1)
+  for (let i = currentPage.value - delta; i <= currentPage.value + delta; i++) {
+    if (i < totalPages.value && i > 1) {
+      range.push(i)
+    }
+  }
+  if (totalPages.value > 1) range.push(totalPages.value)
+
+  for (const i of range) {
+    if (l) {
+      if (i - l === 2) {
+        rangeWithDots.push(l + 1)
+      } else if (i - l !== 1) {
+        rangeWithDots.push('...')
+      }
+    }
+    rangeWithDots.push(i)
+    l = i
+  }
+  return rangeWithDots
 }
 
-function onSelect(selectedIds: any[]) {
-  selected.value = selectedIds
-}
-
-function onSortDesktop({ key, direction }: { key: string; direction: 'asc'|'desc' }) {
-  sortKey.value = key
-  sortDirection.value = direction
-}
-
-function openCreateDialog() {
-  preloadCustomersForm()
-  clearSelection()
+// Actions
+const openCreateDialog = () => {
   editingCustomer.value = null
   showDialog.value = true
 }
 
-async function openEditDialog(customer: any) {
-  preloadCustomersForm()
-  clearSelection()
-  const fresh = customer?.id ? (await store.fetchById(customer.id)) : null
-  editingCustomer.value = fresh ? { ...fresh } : { ...customer }
+const handleEdit = (customer: any) => {
+  editingCustomer.value = customer
   showDialog.value = true
 }
 
-function closeDialog() {
+const handleDelete = async (customer: any) => {
+  if (confirm($t('mod.customers.confirm_delete'))) {
+    await store.updateCustomer({ ...customer, status: 'deleted' })
+  }
+}
+
+const handleSaved = () => {
   showDialog.value = false
   editingCustomer.value = null
+  store.fetchAll()
 }
 
-/* === Quick Preview & Full Card === */
-function openQuickPreview(customer: any) {
-  selectedCustomer.value = customer
-  showQuickPreview.value = true
-  showFullCard.value = false
-}
+const handleExportCSV = () => {
+  const headers = ['ID', 'First Name', 'Last Name', 'Email', 'Phone', 'Status', 'City', 'Country']
+  const rows = processedCustomers.value.map(c => [
+    c.id, c.first_name, c.last_name, c.email, c.phone, c.status,
+    c.city || '', c.country || ''
+  ])
 
-function closeQuickPreview() {
-  showQuickPreview.value = false
-  // Delay clearing selected customer to allow animation to complete
-  setTimeout(() => {
-    if (!showFullCard.value) {
-      selectedCustomer.value = null
-    }
-  }, 300)
-}
-
-function openFullCard(customer?: any) {
-  if (customer) {
-    selectedCustomer.value = customer
-  }
-  showFullCard.value = true
-  showQuickPreview.value = false
-}
-
-function closeFullCard() {
-  showFullCard.value = false
-  // Delay clearing selected customer to allow animation to complete
-  setTimeout(() => {
-    if (!showQuickPreview.value) {
-      selectedCustomer.value = null
-    }
-  }, 300)
-}
-
-async function onSaveCustomer(customer: any) {
-  const ok = await store.save(customer)
-  if (ok) {
-    showDialog.value = false
-    editingCustomer.value = null
-    notify('success', t('mod.customers.messages.save_success'))
-  } else {
-    notify('danger', (store as any).error || t('mod.customers.messages.save_error'))
-  }
-}
-
-async function onRowQuick(payload: { action: ActionKey | string; item: any } | null) {
-  const { action, item } = payload || {}
-  if (!item?.id) return
-  try {
-    if (action === 'export') {
-      exportCSVForIds([item.id])
-      notify('success', t('core.actions.export.success'))
-      return
-    }
-    if (action === 'hard_delete') {
-      confirm.value = { show: true, item }
-      return
-    }
-    const res = await run(action as any, [item.id])
-    res.ok
-      ? notify('success', t('core.actions.generic.success'))
-      : notify('danger',  res.message || t('core.actions.generic.error'))
-  } catch {
-    notify('danger', t('core.actions.generic.error'))
-  }
-}
-
-async function confirmHardDelete() {
-  const item = confirm.value.item
-  confirm.value = { show: false, item: null }
-  if (!item?.id) return
-  try {
-    const res = await run('hard_delete' as any, [item.id])
-    res.ok
-      ? notify('success', t('mod.customers.messages.delete_success'))
-      : notify('danger',  res.message || t('mod.customers.messages.delete_error'))
-  } catch {
-    notify('danger', t('mod.customers.messages.delete_error'))
-  }
-}
-
-/* === Bulk-Actions === */
-const bulkBusy = ref(false)
-const bulkActions = computed(() => customersBulkOptions(t))
-const localBulkAction = ref<string>('')
-
-async function onBulkApply(action: string) {
-  if (!action || !selected.value.length) return
-  try {
-    bulkBusy.value = true
-    if (action === 'export') {
-      exportCSVForIds(selected.value)
-      notify('success', t('core.actions.export.success'))
-      return
-    }
-    const res = await run(action as any, selected.value)
-    if (res.ok) {
-      await store.load()
-      notify('success', t('core.actions.generic.success'))
-    } else {
-      notify('danger', res.message || t('core.actions.generic.error'))
-    }
-  } finally {
-    bulkBusy.value = false
-    clearSelection()
-  }
-}
-
-function onBulkCancel() {
-  clearSelection()
-}
-
-/* === CSV Export/Import === */
-function exportCSV() {
-  const header = visibleColumns.value.map(
-    key => allColumns.value.find(col => col.key === key)?.label || key
-  )
-  const rows = filteredItems.value.map((item: any) =>
-    visibleColumns.value.map(key => (item as any)[key] ?? '')
-  )
-  const csvContent = [header, ...rows]
+  const csvContent = [headers, ...rows]
     .map(row => row.map(cell => `"${String(cell).replace(/"/g, '""')}"`).join(','))
     .join('\n')
 
@@ -701,85 +572,74 @@ function exportCSV() {
   const url = URL.createObjectURL(blob)
   const link = document.createElement('a')
   link.href = url
-  link.download = `kunden_export_${new Date().toISOString().slice(0, 10)}.csv`
+  link.download = `customers_export_${new Date().toISOString().slice(0, 10)}.csv`
   link.click()
   URL.revokeObjectURL(url)
 }
 
-function exportCSVForIds(ids: (string|number)[]) {
-  const header = visibleColumns.value.map(
-    key => allColumns.value.find(col => col.key === key)?.label || key
-  )
-  const rows = filteredItems.value
-    .filter((item: any) => ids.includes(item.id))
-    .map((item: any) => visibleColumns.value.map(key => item[key] ?? ''))
-
-  const csv = [header, ...rows]
-    .map(r => r.map(c => `"${String(c).replace(/"/g, '""')}"`).join(','))
-    .join('\n')
-
-  const blob = new Blob([csv], { type: 'text/csv' })
-  const url = URL.createObjectURL(blob)
-  const a = document.createElement('a')
-  a.href = url
-  a.download = `kunden_export_${new Date().toISOString().slice(0,10)}.csv`
-  a.click()
-  URL.revokeObjectURL(url)
+const getInitials = (customer: any) => {
+  return `${customer.first_name?.[0] || ''}${customer.last_name?.[0] || ''}`.toUpperCase()
 }
 
-const importInput = ref<HTMLInputElement | null>(null)
-function openImportDialog() { importInput.value?.click() }
-function importCSV(event: Event) {
-  const input = event.target as HTMLInputElement | null
-  const files = input?.files
-  if (!files?.length) return
-  const file = files.item(0)
-  if (!file) return
-  const reader = new FileReader()
-  reader.onload = (evt: ProgressEvent<FileReader>) => {
-    if (typeof evt.target?.result === 'string') {
-      alert(t('ui.csv.import_demo'))
+// Load data on mount
+onMounted(() => {
+  store.fetchAll()
+
+  // Setup scroll listener for mobile
+  const mainContainer = document.querySelector('main')
+  if (mainContainer) {
+    let lastScrollY = mainContainer.scrollTop
+
+    const updateScrollDirection = () => {
+      const scrollY = mainContainer.scrollTop
+      const direction = scrollY > lastScrollY ? 'down' : 'up'
+
+      if (direction !== scrollDirection.value && Math.abs(scrollY - lastScrollY) > 5) {
+        scrollDirection.value = direction
+      }
+      scrolledToTop.value = scrollY < 10
+      lastScrollY = scrollY > 0 ? scrollY : 0
     }
+
+    mainContainer.addEventListener('scroll', updateScrollDirection)
   }
-  reader.readAsText(file)
+})
+
+// Reset pagination when filters change
+watch([searchQuery, activeFilters, itemsPerPage], () => {
+  currentPage.value = 1
+}, { deep: true })
+
+// Simple CustomersList component for mobile
+const CustomersList = ({ customers, onEdit, onDelete }: any) => {
+  // This would be a separate component in production
+  return null
 }
 </script>
 
 <style scoped>
-.bookando-backdrop {
-  position: fixed;
-  z-index: 2200;
-  inset: 0;
-  background: rgba(255,255,255,0.6);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-.bookando-loader {
-  border: 4px solid #f3f3f3;
-  border-radius: 50%;
-  border-top: 4px solid #4F46E5;
-  width: 48px; height: 48px;
-  animation: spin 0.9s linear infinite;
-}
-@keyframes spin { 0% { transform: rotate(0deg);} 100% { transform: rotate(360deg);} }
-
-/* Grid Layout: Table + Sidebar */
-.bookando-page-with-sidebar {
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: 0;
-  min-height: 400px;
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
-.bookando-page-with-sidebar:has(.customer-quick-preview) {
-  grid-template-columns: 1fr auto;
+.animate-slideDown {
+  animation: slideDown 0.2s ease-out;
 }
 
-.bookando-page-with-sidebar__main {
-  min-width: 0;
-  overflow-y: auto;
-  max-height: calc(100vh - 280px);
+/* Hide scrollbar but keep functionality */
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
 }
 </style>
-
