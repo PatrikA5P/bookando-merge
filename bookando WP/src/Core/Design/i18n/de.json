@@ -168,19 +168,26 @@
       "actions": {
         "add": "Kunde hinzufügen",
         "delete": "Kunde löschen",
-        "edit": "Kunde bearbeiten"
+        "edit": "Kunde bearbeiten",
+        "export": "Exportieren"
       },
       "add_customer": "Kunde hinzufügen",
       "additional_info": "Zusätzliche Informationen",
       "address_info": "Adressinformationen",
+      "adjust_filters": "Filter anpassen",
       "alerts": {
         "blocked": "Dieser Kunde ist blockiert.",
         "will_be_deleted": "Dieser Kunde wird gelöscht."
       },
       "confirm_delete": "Soll dieser Kunde wirklich gelöscht werden?",
+      "description": "Verwalten Sie Ihre Kundendaten",
       "edit_customer": "Kunde bearbeiten",
       "entity_plural": "Kunden",
       "entity_singular": "Kunde",
+      "filter": {
+        "status": "Status",
+        "sort": "Sortierung"
+      },
       "form_description": "Geben Sie die Kundendaten ein",
       "messages": {
         "delete_error": "Fehler beim Löschen!",
@@ -188,16 +195,36 @@
         "save_error": "Fehler beim Speichern!",
         "save_success": "Kunde erfolgreich gespeichert!"
       },
+      "no_address": "Keine Adresse",
+      "no_results": "Keine Kunden gefunden",
+      "pagination": {
+        "of": "von",
+        "per_page": "pro Seite",
+        "showing": "Zeige",
+        "to": "bis"
+      },
       "personal_info": "Persönliche Informationen",
       "search_placeholder": "Kunden suchen...",
       "sections": {
         "data": "Daten",
         "history": "Termine & Historie"
       },
+      "sort": {
+        "name_asc": "Name A-Z",
+        "name_desc": "Name Z-A",
+        "newest": "Neueste zuerst"
+      },
       "stats": {
         "last_appointment": "Letzter Termin",
         "next_appointment": "Nächster Termin",
         "total_appointments": "Anzahl Termine"
+      },
+      "table": {
+        "actions": "Aktionen",
+        "address": "Adresse",
+        "contact": "Kontakt",
+        "customer": "Kunde",
+        "status": "Status"
       },
       "tabs": {
         "activity": "Kundenaktivität",

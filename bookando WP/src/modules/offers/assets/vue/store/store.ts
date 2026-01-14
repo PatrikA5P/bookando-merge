@@ -34,9 +34,11 @@ export const useOffersStore = defineStore('offers', () => {
     loading.value = true
     error.value = null
     try {
-      if (entity.id) await api.update(entity.id, entity)
-      else await api.create(entity)
-
+      if (entity.id) {
+        await api.update(entity.id, entity)
+      } else {
+        await api.create(entity)
+      }
       await load()
       return true
     } catch (_e: any) {
