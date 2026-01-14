@@ -128,7 +128,6 @@ import BookandoField from '@core/Design/components/BookandoField.vue'
 import AppButton from '@core/Design/components/AppButton.vue'
 import AppIcon from '@core/Design/components/AppIcon.vue'
 
-import '../offers-simple.scss'
 
 type Id = number
 

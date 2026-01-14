@@ -6,7 +6,6 @@ import { bootLocaleFromBridge, initLocaleBridge } from '@core/Locale/bridge'
 import { mergeI18nMessages } from '@core/Locale/messages'
 import BookandoUI from '@core/Design/assets/vue/ui.js'
 
-import '../css/admin.scss'
 
 import AcademyView from './views/AcademyView.vue'
 

@@ -195,7 +195,6 @@ import BookandoField from '@core/Design/components/BookandoField.vue'
 import AppRichTextField from '@core/Design/components/AppRichTextField.vue'
 import AppServicesFormSection from '../services/ui/AppServicesFormSection.vue'
 
-import '../services/services-form.scss'
 
 type Id = number
 
