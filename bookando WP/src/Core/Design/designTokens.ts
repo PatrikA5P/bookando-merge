@@ -225,12 +225,194 @@ export const BADGE_STYLES = {
 } as const;
 
 export const TABLE_STYLES = {
-  container: 'w-full overflow-hidden rounded-xl border border-slate-200 shadow-sm',
-  thead: 'bg-slate-50 border-b border-slate-200',
-  th: 'px-6 py-3 text-left text-xs font-semibold text-slate-700 uppercase tracking-wider',
-  tbody: 'bg-white divide-y divide-slate-200',
+  // Container Styles
+  container: 'bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden',
+  containerWithScroll: 'bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden overflow-x-auto',
+
+  // Base Table
+  table: 'w-full text-left border-collapse',
+
+  // Header Styles
+  thead: 'bg-slate-50 border-b border-slate-200 sticky top-0 z-10',
+  theadAlt: 'bg-slate-100 border-b border-slate-300',
+  th: 'p-4 text-xs font-semibold text-slate-500 uppercase tracking-wider',
+  thSortable: 'p-4 text-xs font-semibold text-slate-500 uppercase tracking-wider cursor-pointer hover:bg-slate-100 transition-colors',
+
+  // Body Styles
+  tbody: 'divide-y divide-slate-200',
+  tbodyAlt: 'divide-y divide-slate-100',
+
+  // Row Styles
   tr: 'hover:bg-slate-50 transition-colors',
-  td: 'px-6 py-4 text-sm text-slate-900',
+  trClickable: 'hover:bg-slate-50 transition-colors cursor-pointer',
+  trSelected: 'bg-brand-50 hover:bg-brand-100',
+  trDisabled: 'opacity-60 bg-slate-50',
+
+  // Cell Styles
+  td: 'p-4 text-sm text-slate-700',
+  tdCompact: 'p-3 text-sm text-slate-700',
+  tdMuted: 'p-4 text-sm text-slate-500',
+  tdBold: 'p-4 text-sm text-slate-900 font-medium',
+
+  // Pagination
+  pagination: 'flex items-center justify-between px-6 py-4 border-t border-slate-200 bg-slate-50',
+  paginationButton: 'p-2 rounded-lg border border-slate-300 bg-white text-slate-600 hover:bg-slate-50 disabled:opacity-50 disabled:cursor-not-allowed transition-colors',
+  paginationPageButton: 'min-w-[32px] h-8 px-2 rounded-lg text-sm font-medium transition-colors',
+  paginationPageActive: 'bg-brand-600 text-white shadow-sm',
+  paginationPageInactive: 'bg-white border border-slate-300 text-slate-600 hover:bg-slate-50',
+} as const;
+
+// ============================================================================
+// ADVANCED CARD STYLES
+// ============================================================================
+
+export const CARD_STYLES_ADVANCED = {
+  // Base Card Containers
+  base: 'bg-white rounded-xl border border-slate-200 shadow-sm',
+  baseHover: 'bg-white rounded-xl border border-slate-200 shadow-sm hover:shadow-lg transition-all duration-300',
+  baseClickable: 'bg-white rounded-xl border border-slate-200 shadow-sm hover:shadow-lg hover:border-brand-200 transition-all duration-300 cursor-pointer',
+
+  // Card Header/Title Sections
+  header: 'p-6 border-b border-slate-200',
+  headerCompact: 'p-4 border-b border-slate-100',
+  headerGradient: 'p-6 bg-gradient-to-r from-slate-50 to-white border-b border-slate-200',
+
+  // Card Body/Content
+  body: 'p-6',
+  bodyCompact: 'p-4',
+  bodySpaced: 'p-6 space-y-4',
+
+  // Card Footer
+  footer: 'p-6 border-t border-slate-200 bg-slate-50',
+  footerActions: 'p-4 border-t border-slate-100 flex justify-end gap-3',
+
+  // Special Card Variants
+  elevated: 'bg-white rounded-xl border border-slate-200 shadow-md',
+  flat: 'bg-white rounded-xl border border-slate-200',
+  ghost: 'bg-slate-50 rounded-xl border border-slate-100',
+
+  // Grid Card (for grid layouts)
+  gridItem: 'bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden group hover:shadow-md transition-all duration-300 flex flex-col',
+
+  // List Card (for list layouts)
+  listItem: 'bg-white rounded-lg border border-slate-200 shadow-sm p-4 hover:shadow-md transition-shadow',
+
+  // Card with Banner (like Employee cards)
+  withBanner: {
+    container: 'bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden group hover:shadow-md transition-all duration-300 flex flex-col',
+    banner: 'h-24 bg-gradient-to-r relative',
+    content: 'p-6 flex-1',
+    footer: 'p-4 border-t border-slate-100 bg-slate-50',
+  },
+
+  // Empty State Card
+  empty: 'border-2 border-dashed border-slate-300 rounded-xl p-6 flex flex-col items-center justify-center text-slate-400 hover:border-brand-400 hover:text-brand-600 hover:bg-slate-50 transition-all',
+
+  // Stat Card (for dashboards)
+  stat: 'bg-white rounded-xl border border-slate-200 shadow-sm p-6 hover:shadow-md transition-shadow',
+} as const;
+
+// ============================================================================
+// CARD COMPONENT UTILITIES
+// ============================================================================
+
+export const CARD_ELEMENTS = {
+  // Avatar Sizes
+  avatar: {
+    sm: 'w-8 h-8 rounded-full',
+    md: 'w-10 h-10 rounded-full',
+    lg: 'w-12 h-12 rounded-full',
+    xl: 'w-16 h-16 rounded-full',
+  },
+
+  // Avatar Initials (with background)
+  avatarInitials: {
+    sm: 'w-8 h-8 rounded-full bg-brand-100 text-brand-600 flex items-center justify-center font-semibold text-xs uppercase',
+    md: 'w-10 h-10 rounded-full bg-brand-100 text-brand-600 flex items-center justify-center font-semibold text-sm uppercase',
+    lg: 'w-12 h-12 rounded-full bg-brand-100 text-brand-600 flex items-center justify-center font-semibold text-base uppercase',
+    xl: 'w-16 h-16 rounded-full bg-brand-100 text-brand-600 flex items-center justify-center font-bold text-xl uppercase',
+  },
+
+  // Card Title
+  title: {
+    sm: 'text-base font-bold text-slate-900',
+    md: 'text-lg font-bold text-slate-900',
+    lg: 'text-xl font-bold text-slate-900',
+  },
+
+  // Card Subtitle
+  subtitle: {
+    sm: 'text-xs text-slate-500',
+    md: 'text-sm text-slate-500',
+    lg: 'text-base text-slate-500',
+  },
+
+  // Icon Container
+  iconContainer: {
+    sm: 'p-2 rounded-lg',
+    md: 'p-3 rounded-lg',
+    lg: 'p-4 rounded-xl',
+  },
+
+  // Meta Info (e.g., date, author)
+  meta: 'text-xs text-slate-400',
+  metaBold: 'text-xs text-slate-500 font-medium',
+
+  // Divider
+  divider: 'border-t border-slate-200 my-4',
+  dividerDotted: 'border-t border-dashed border-slate-200 my-4',
+} as const;
+
+// ============================================================================
+// LIST STYLES
+// ============================================================================
+
+export const LIST_STYLES = {
+  container: 'space-y-3',
+  containerDense: 'space-y-2',
+
+  item: 'flex items-center justify-between p-4 bg-white border border-slate-200 rounded-lg hover:shadow-sm transition-shadow',
+  itemClickable: 'flex items-center justify-between p-4 bg-white border border-slate-200 rounded-lg hover:shadow-md hover:border-brand-200 transition-all cursor-pointer',
+
+  itemActive: 'flex items-center justify-between p-4 bg-brand-50 border border-brand-200 rounded-lg shadow-sm',
+} as const;
+
+// ============================================================================
+// GRID STYLES
+// ============================================================================
+
+export const GRID_STYLES = {
+  // Standard Grid Layouts
+  cols1: 'grid grid-cols-1 gap-6',
+  cols2: 'grid grid-cols-1 md:grid-cols-2 gap-6',
+  cols3: 'grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6',
+  cols4: 'grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6',
+
+  // Dense Grid (smaller gaps)
+  cols2Dense: 'grid grid-cols-1 md:grid-cols-2 gap-4',
+  cols3Dense: 'grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4',
+  cols4Dense: 'grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-4',
+
+  // Auto-fit Grid (responsive columns)
+  autoFit: 'grid grid-cols-[repeat(auto-fit,minmax(300px,1fr))] gap-6',
+  autoFitDense: 'grid grid-cols-[repeat(auto-fit,minmax(250px,1fr))] gap-4',
+} as const;
+
+// ============================================================================
+// STATUS COLORS
+// ============================================================================
+
+export const STATUS_COLORS = {
+  active: { bg: 'bg-emerald-100', text: 'text-emerald-700', border: 'border-emerald-200' },
+  inactive: { bg: 'bg-slate-100', text: 'text-slate-700', border: 'border-slate-200' },
+  pending: { bg: 'bg-amber-100', text: 'text-amber-700', border: 'border-amber-200' },
+  approved: { bg: 'bg-emerald-100', text: 'text-emerald-700', border: 'border-emerald-200' },
+  rejected: { bg: 'bg-red-100', text: 'text-red-700', border: 'border-red-200' },
+  cancelled: { bg: 'bg-slate-100', text: 'text-slate-700', border: 'border-slate-200' },
+  completed: { bg: 'bg-blue-100', text: 'text-blue-700', border: 'border-blue-200' },
+  inProgress: { bg: 'bg-brand-100', text: 'text-brand-700', border: 'border-brand-200' },
+  overdue: { bg: 'bg-red-100', text: 'text-red-700', border: 'border-red-200' },
+  draft: { bg: 'bg-slate-100', text: 'text-slate-500', border: 'border-slate-200' },
 } as const;
 
 // ============================================================================
@@ -263,4 +445,73 @@ export function getModuleGradient(moduleName: string): string {
 export function getModuleAccent(moduleName: string): string {
   const design = getModuleDesign(moduleName);
   return `text-${design.accentColor}`;
+}
+
+/**
+ * Check if a module design exists
+ */
+export function moduleDesignExists(moduleName: string): boolean {
+  const normalized = moduleName.toLowerCase().replace(/\s+/g, '');
+  return normalized in MODULE_DESIGNS;
+}
+
+/**
+ * Get all available module names
+ */
+export function getAllModuleNames(): string[] {
+  return Object.keys(MODULE_DESIGNS);
+}
+
+/**
+ * Generate combined Card classes for different variants
+ */
+export function getCardClasses(
+  variant: 'base' | 'hover' | 'clickable' | 'elevated' | 'flat' | 'ghost' | 'grid' | 'list' = 'base',
+  additionalClasses: string = ''
+): string {
+  const baseClass = variant === 'grid' ? CARD_STYLES_ADVANCED.gridItem :
+                    variant === 'list' ? CARD_STYLES_ADVANCED.listItem :
+                    variant === 'hover' ? CARD_STYLES_ADVANCED.baseHover :
+                    variant === 'clickable' ? CARD_STYLES_ADVANCED.baseClickable :
+                    variant === 'elevated' ? CARD_STYLES_ADVANCED.elevated :
+                    variant === 'flat' ? CARD_STYLES_ADVANCED.flat :
+                    variant === 'ghost' ? CARD_STYLES_ADVANCED.ghost :
+                    CARD_STYLES_ADVANCED.base;
+
+  return additionalClasses ? `${baseClass} ${additionalClasses}` : baseClass;
+}
+
+/**
+ * Generate Table classes with optional variants
+ */
+export function getTableClasses(options?: {
+  compact?: boolean;
+  alternateHeader?: boolean;
+  thinDividers?: boolean;
+}): {
+  container: string;
+  table: string;
+  thead: string;
+  tbody: string;
+  th: string;
+  td: string;
+  tr: string;
+} {
+  return {
+    container: TABLE_STYLES.container,
+    table: TABLE_STYLES.table,
+    thead: options?.alternateHeader ? TABLE_STYLES.theadAlt : TABLE_STYLES.thead,
+    tbody: options?.thinDividers ? TABLE_STYLES.tbodyAlt : TABLE_STYLES.tbody,
+    th: TABLE_STYLES.th,
+    td: options?.compact ? TABLE_STYLES.tdCompact : TABLE_STYLES.td,
+    tr: TABLE_STYLES.tr,
+  };
+}
+
+/**
+ * Get colors for a status
+ */
+export function getStatusColors(status: string) {
+  const normalized = status.toLowerCase().replace(/\s+/g, '');
+  return STATUS_COLORS[normalized as keyof typeof STATUS_COLORS] || STATUS_COLORS.inactive;
 }
