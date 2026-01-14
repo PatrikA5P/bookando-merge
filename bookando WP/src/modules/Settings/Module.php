@@ -1,0 +1,62 @@
+<?php
+declare(strict_types=1);
+
+namespace Bookando\Modules\Settings;
+
+use Bookando\Core\Base\BaseModule;
+use Bookando\Modules\settings\Admin\Admin;
+use Bookando\Modules\settings\Api\Api;
+use Bookando\Modules\settings\Capabilities;
+
+class Module extends BaseModule
+{
+    private const OPTION_KEY = 'bookando_module_installed_at_settings';
+    private const LEGACY_OPTION_KEY = 'bookando_module_installed_at_customers';
+
+    public static function install(): void
+    {
+        // später: Installer::install(); (wenn wirklich gebraucht)
+        if (class_exists(Capabilities::class) && method_exists(Capabilities::class, 'register')) {
+            Capabilities::register(); // idempotent
+        }
+
+        self::migrateInstalledOption();
+
+        if (get_option(self::OPTION_KEY, null) === null) {
+            update_option(self::OPTION_KEY, time(), false);
+        }
+    }
+
+    public function register(): void
+    {
+        $this->registerCapabilities(Capabilities::class);
+
+        $this->registerAdminHooks(function (): void {
+            add_action('bookando_register_module_menus', [Admin::class, 'register_menu']);
+            add_action('admin_enqueue_scripts', [$this, 'enqueue_admin_assets']);
+        });
+
+        Api::register();
+        $this->registerRestRoutes([Api::class, 'registerRoutes']);
+    }
+
+    public function enqueue_admin_assets(): void
+    {
+        $this->enqueue_module_assets();
+    }
+
+    private static function migrateInstalledOption(): void
+    {
+        $legacyValue = get_option(self::LEGACY_OPTION_KEY, null);
+        if ($legacyValue === null) {
+            return;
+        }
+
+        if (get_option(self::OPTION_KEY, null) === null) {
+            update_option(self::OPTION_KEY, $legacyValue, false);
+        }
+
+        delete_option(self::LEGACY_OPTION_KEY);
+    }
+}
+

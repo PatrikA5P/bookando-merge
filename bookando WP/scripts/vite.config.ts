@@ -32,7 +32,7 @@ function getModuleEntries() {
       .filter((d) => d.isDirectory())
       .forEach((d) => {
         const slug = d.name.toLowerCase()
-        const entry = path.join(modulesPath, slug, 'assets/vue/main.ts')
+        const entry = path.join(modulesPath, d.name, 'assets/vue/main.ts')
         if (fs.existsSync(entry)) entries[slug] = entry
       })
   }
@@ -62,8 +62,8 @@ if (fs.existsSync(modulesPath)) {
     .filter((d) => d.isDirectory())
     .forEach((d) => {
       const slug = d.name.toLowerCase()
-      alias[`/${slug}/main.ts`] = path.resolve(modulesPath, slug, 'assets/vue/main.ts')
-      alias[`/${slug}/main.css`] = path.resolve(modulesPath, slug, 'assets/css/admin.scss')
+      alias[`/${slug}/main.ts`] = path.resolve(modulesPath, d.name, 'assets/vue/main.ts')
+      alias[`/${slug}/main.css`] = path.resolve(modulesPath, d.name, 'assets/css/admin.scss')
     })
 }
 
