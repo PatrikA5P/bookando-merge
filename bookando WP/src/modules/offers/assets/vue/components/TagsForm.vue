@@ -1,114 +1,34 @@
-<!-- TagsForm.vue -->
 <template>
-  <div
-    class="bookando-dialog-wrapper active"
-    role="dialog"
-    aria-modal="true"
-    aria-labelledby="tag-title"
-  >
-    <div
-      class="bookando-form-overlay active"
-      tabindex="-1"
-      @click="onCancel"
-    />
-
-    <AppForm>
-      <template #header>
-        <h2 id="tag-title">
-          {{ form.id ? t('mod.tags.edit') || 'Schlagwort bearbeiten' : t('mod.tags.add') || 'Schlagwort hinzufügen' }}
-        </h2>
-        <AppButton
-          icon="x"
-          btn-type="icononly"
-          variant="standard"
-          size="square"
-          icon-size="md"
-          @click="onCancel"
-        />
-      </template>
-
-      <template #default>
-        <form
-          :id="formId"
-          class="bookando-form"
-          novalidate
-          autocomplete="off"
-          @submit.prevent="onSubmit"
-        >
-          <BookandoField
-            id="name"
-            v-model="form.name"
-            type="text"
-            :label="t('fields.name') || 'Name'"
-            required
-          />
-          <div class="bookando-grid two-columns">
-            <BookandoField
-              id="slug"
-              v-model="form.slug"
-              type="text"
-              :label="t('fields.slug') || 'Slug'"
-              placeholder="sprechende-url"
-            />
-            <BookandoField
-              id="status"
-              v-model="form.status"
-              type="dropdown"
-              :label="t('fields.status') || 'Status'"
-              :options="[ { label: t('core.status.active') || 'Aktiv', value:'active' }, { label: t('core.status.hidden') || 'Versteckt', value:'hidden' } ]"
-              option-label="label"
-              option-value="value"
-              mode="basic"
-              clearable
-            />
-          </div>
-        </form>
-      </template>
-
-      <template #footer>
-        <div class="bookando-form-buttons bookando-form-buttons--split">
-          <AppButton
-            btn-type="textonly"
-            variant="secondary"
-            size="dynamic"
-            type="button"
-            @click="onCancel"
-          >
-            {{ t('core.common.cancel') }}
-          </AppButton>
-          <AppButton
-            btn-type="full"
-            variant="primary"
-            size="dynamic"
-            type="submit"
-            :form="formId"
-          >
-            {{ t('core.common.save') }}
-          </AppButton>
+  <div class="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4">
+    <div class="bg-white rounded-xl shadow-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto">
+      <div class="p-6 border-b border-slate-200">
+        <div class="flex items-center justify-between">
+          <h2 class="text-xl font-bold text-slate-900">{{ $t('common.form_in_development') }}</h2>
+          <button @click="$emit('close')" class="p-2 hover:bg-slate-100 rounded-lg transition-colors">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+            </svg>
+          </button>
         </div>
-      </template>
-    </AppForm>
+      </div>
+      <div class="p-12 text-center text-slate-500">
+        <p>{{ $t('common.form_implementation_pending') }}</p>
+      </div>
+    </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import { ref, watch } from 'vue'
 import { useI18n } from 'vue-i18n'
-import AppForm from '@core/Design/components/AppForm.vue'
-import AppButton from '@core/Design/components/AppButton.vue'
-import BookandoField from '@core/Design/components/BookandoField.vue'
 
-type Tag = { id:number; name:string; slug?:string; color?:string|null; status?:'active'|'hidden' }
-const { t } = useI18n()
-const props = defineProps<{ modelValue: Tag | null }>()
-const emit = defineEmits<{ (event:'save', value:Tag):void; (event:'cancel'):void }>()
+defineProps<{
+  [key: string]: any
+}>()
 
-const formId = `tag-${Math.random().toString(36).slice(2,8)}`
-const empty:Tag = { id:0, name:'', slug:'', color:null, status:'active' }
-const form = ref<Tag>({ ...empty })
+defineEmits<{
+  close: []
+  saved: []
+}>()
 
-watch(() => props.modelValue, (value) => { form.value = value ? { ...empty, ...value } : { ...empty } }, { immediate:true })
-
-function onSubmit(){ emit('save', { ...form.value }) }
-function onCancel(){ emit('cancel') }
+const { t: $t } = useI18n()
 </script>
