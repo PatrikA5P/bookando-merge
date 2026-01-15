@@ -1,6 +1,14 @@
 // src/modules/customers/assets/vue/main.ts
-const isDev = import.meta.env.DEV
+import { devErrorDisplay } from '@core/Design/assets/ts/dev-error-display'
+import { createVueErrorHandler } from '@core/Design/assets/ts/vue-error-handler'
+
+const isDev = import.meta.env.DEV || (window as any).BOOKANDO_VARS?.debug
 if (isDev) console.log('[Bookando Customers] 🚀 Script loading...')
+
+devErrorDisplay.checkpoint('Script loaded', {
+  isDev,
+  timestamp: new Date().toISOString()
+})
 
 import { createApp } from 'vue'
 import { createPinia } from 'pinia'
@@ -12,73 +20,103 @@ import { mergeI18nMessages } from '@core/Locale/messages'
 
 import BookandoUI from '@core/Design/assets/vue/ui.js'
 
-if (isDev) console.log('[Bookando Customers] ✅ Imports loaded successfully')
+devErrorDisplay.checkpoint('Imports loaded')
 
 try {
   const localModules = import.meta.glob('./i18n.local.{ts,js}', { eager: true })
-  if (isDev) console.log('[Bookando Customers] Local modules loaded')
+  devErrorDisplay.checkpoint('Local i18n modules loaded', {
+    moduleCount: Object.keys(localModules).length
+  })
 
   const messages = mergeI18nMessages(coreMessages, localModules)
-  if (isDev) console.log('[Bookando Customers] Messages merged')
+  devErrorDisplay.checkpoint('i18n messages merged', {
+    languages: Object.keys(messages),
+    totalKeys: Object.keys(messages.de || {}).length
+  })
 
   // 1) Locale booten (setzt <html lang> & dayjs)
   const { i18nLocale } = bootLocaleFromBridge({ available: Object.keys(messages), fallback: 'de' })
-  if (isDev) console.log('[Bookando Customers] Locale booted:', i18nLocale)
+  devErrorDisplay.checkpoint('Locale booted from bridge', {
+    locale: i18nLocale,
+    available: Object.keys(messages)
+  })
 
   // 2) vue-i18n
   const i18n = createI18n({ legacy: false, locale: i18nLocale, fallbackLocale: 'de', messages })
-  if (isDev) console.log('[Bookando Customers] i18n instance created')
+  devErrorDisplay.checkpoint('Vue i18n instance created')
 
   // 3) mounten
   const slug = (window as any).BOOKANDO_VARS?.slug || 'customers'
   const root = document.querySelector(`#bookando-${slug}-root`) as HTMLElement | null
 
-  if (isDev) console.log('[Bookando Customers] Mount check:', {
+  // Initialize dev error display with root element
+  devErrorDisplay.init(slug, root)
+
+  devErrorDisplay.checkpoint('DOM mount point check', {
     slug,
     rootFound: !!root,
-    rootElement: root,
-    hasDataVApp: root?.hasAttribute('data-v-app')
+    hasDataVApp: root?.hasAttribute('data-v-app'),
+    bookandoVars: (window as any).BOOKANDO_VARS
   })
 
-  if (root && !root.hasAttribute('data-v-app')) {
-    if (isDev) console.log('[Bookando Customers] Creating Vue app...')
-    const app = createApp(CustomersView)
-    if (isDev) console.log('[Bookando Customers] Vue app created')
+  if (!root) {
+    throw new Error(`Root element #bookando-${slug}-root not found in DOM`)
+  }
 
-    if (isDev) console.log('[Bookando Customers] Installing i18n plugin...')
+  if (root.hasAttribute('data-v-app')) {
+    devErrorDisplay.error(
+      'Mount skipped',
+      new Error('Element already has data-v-app attribute'),
+      { element: root.outerHTML.substring(0, 200) }
+    )
+  } else {
+    devErrorDisplay.checkpoint('Creating Vue app instance')
+    const app = createApp(CustomersView)
+
+    // Install error handler first
+    devErrorDisplay.checkpoint('Installing error handler plugin')
+    app.use(createVueErrorHandler({ moduleSlug: slug }))
+
+    devErrorDisplay.checkpoint('Installing i18n plugin')
     app.use(i18n)
 
-    if (isDev) console.log('[Bookando Customers] Installing Pinia plugin...')
+    devErrorDisplay.checkpoint('Installing Pinia plugin')
     app.use(createPinia())
 
-    if (isDev) console.log('[Bookando Customers] Installing BookandoUI plugin...')
+    devErrorDisplay.checkpoint('Installing BookandoUI plugin')
     app.use(BookandoUI)
 
-    if (isDev) console.log('[Bookando Customers] Initializing locale bridge...')
+    devErrorDisplay.checkpoint('Initializing locale bridge')
     initLocaleBridge(i18n)
 
-    if (isDev) console.log('[Bookando Customers] Mounting app to DOM...')
+    devErrorDisplay.checkpoint('Mounting Vue app to DOM')
     app.mount(root)
 
-    if (isDev) console.log('[Bookando Customers] ✅ APP MOUNTED SUCCESSFULLY!')
-  } else {
-    if (!root) {
-      console.error('[Bookando Customers] ❌ Mount failed: Root element not found!')
-    } else if (root.hasAttribute('data-v-app')) {
-      console.warn('[Bookando Customers] ⚠️ Mount skipped: Element already has data-v-app attribute')
+    devErrorDisplay.checkpoint('✅ APP MOUNTED SUCCESSFULLY', {
+      mountedAt: new Date().toISOString(),
+      totalCheckpoints: devErrorDisplay.getCheckpoints().length
+    })
+
+    // Make debug info available in console
+    if (isDev) {
+      console.log('[Bookando Customers] ✅ Module loaded successfully!')
+      console.log('[Bookando Customers] Debug info:', {
+        checkpoints: devErrorDisplay.getCheckpoints(),
+        exportDebugInfo: () => console.log(devErrorDisplay.exportCheckpoints())
+      })
     }
   }
 } catch (error) {
-  console.error('[Bookando Customers] ❌ FATAL ERROR during initialization:', error)
-  if (error instanceof Error) {
-    console.error('[Bookando Customers] Error name:', error.name)
-    console.error('[Bookando Customers] Error message:', error.message)
-    console.error('[Bookando Customers] Error stack:', error.stack)
-    if ('cause' in error) {
-      console.error('[Bookando Customers] Error cause:', error.cause)
-    }
-  }
-  // Log BOOKANDO_VARS for debugging
-  console.error('[Bookando Customers] Debug - BOOKANDO_VARS:', (window as any).BOOKANDO_VARS)
-  console.error('[Bookando Customers] Debug - Document ready state:', document.readyState)
+  const err = error instanceof Error ? error : new Error(String(error))
+
+  devErrorDisplay.error('Fatal initialization error', err, {
+    bookandoVars: (window as any).BOOKANDO_VARS,
+    documentReadyState: document.readyState,
+    location: window.location.href
+  })
+
+  // Also log to console
+  console.error('[Bookando Customers] ❌ FATAL ERROR during initialization:', err)
+  console.error('[Bookando Customers] Stack:', err.stack)
+  console.error('[Bookando Customers] Debug info:', (window as any).BOOKANDO_VARS)
 }
