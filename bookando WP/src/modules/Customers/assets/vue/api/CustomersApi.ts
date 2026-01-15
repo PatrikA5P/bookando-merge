@@ -93,8 +93,8 @@ export async function getCustomers(params: CustomersQuery = {}): Promise<Custome
     include_deleted: 'soft',
     limit: 10000  // Lade alle Kunden auf einmal (Client-side Pagination)
   }
-  // GET /wp-json/bookando/v1/customers/customers
-  const res = await http.get<Customer[] | ApiListResponse<Customer>>('customers', { ...defaults, ...params })
+  // GET /wp-json/bookando/v1/customers (not customers/customers!)
+  const res = await http.get<Customer[] | ApiListResponse<Customer>>('', { ...defaults, ...params })
   // Response Interceptor unwrappt automatisch Response::ok() Format
   // Ergebnis: { data: [...], total: 142, limit: 10000, offset: 0 }
   return Array.isArray(res.data) ? res.data : ((res.data as ApiListResponse<Customer>)?.data ?? [])
@@ -114,8 +114,8 @@ interface DeleteResponse {
 }
 
 export async function getCustomer(id: number): Promise<Customer> {
-  // GET /wp-json/bookando/v1/customers/customers/{id}
-  const res = await http.get<Customer>(`customers/${id}`)
+  // GET /wp-json/bookando/v1/customers/{id}
+  const res = await http.get<Customer>(`${id}`)
   // Response Interceptor unwrappt automatisch
   const data = res.data as Customer
   return {
@@ -125,17 +125,17 @@ export async function getCustomer(id: number): Promise<Customer> {
 }
 
 export async function createCustomer(data: Customer): Promise<CustomerResponse> {
-  const res = await http.post<CustomerResponse>('customers', toPayload(data))
+  const res = await http.post<CustomerResponse>('', toPayload(data))
   return res.data
 }
 
 export async function updateCustomer(id: number, data: Customer): Promise<CustomerResponse> {
-  const res = await http.put<CustomerResponse>(`customers/${id}`, toPayload(data))
+  const res = await http.put<CustomerResponse>(`${id}`, toPayload(data))
   return res.data
 }
 
 export async function deleteCustomer(id: number, opts: { hard?: boolean } = {}): Promise<DeleteResponse> {
   const query = opts.hard ? { hard: 1 } : undefined
-  const res = await http.del<DeleteResponse>(`customers/${id}`, query)
+  const res = await http.del<DeleteResponse>(`${id}`, query)
   return res.data
 }
