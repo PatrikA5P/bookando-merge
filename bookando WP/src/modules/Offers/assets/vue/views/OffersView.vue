@@ -114,7 +114,7 @@
       <!-- Mobile Floating Action Button -->
       <button
         @click="openCreateDialog"
-        class="fixed bottom-6 right-6 w-14 h-14 bg-rose-600 text-white rounded-full shadow-2xl flex items-center justify-center z-50 hover:bg-rose-700 active:scale-95 transition-all"
+        class="fixed bottom-6 right-6 w-14 h-14 bg-accent-600 text-white rounded-full shadow-2xl flex items-center justify-center z-50 hover:bg-accent-700 active:scale-95 transition-all"
       >
         <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
@@ -193,7 +193,7 @@
                 <div class="pl-3 border-l border-slate-100">
                   <button
                     @click="openCreateDialog"
-                    class="flex items-center gap-2 shadow-sm whitespace-nowrap transition-colors shrink-0 bg-rose-600 hover:bg-rose-700 text-white px-5 py-2.5 rounded-xl text-sm font-bold"
+                    class="flex items-center gap-2 shadow-sm whitespace-nowrap transition-colors shrink-0 bg-accent-600 hover:bg-accent-700 text-white px-5 py-2.5 rounded-xl text-sm font-bold"
                   >
                     <svg class="w-4.5 h-4.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
@@ -390,7 +390,7 @@
                 :class="[
                   'min-w-[32px] h-8 px-2 rounded-lg text-sm font-medium transition-colors',
                   page === currentPage
-                    ? 'bg-rose-600 text-white shadow-sm'
+                    ? 'bg-accent-600 text-white shadow-sm'
                     : typeof page === 'number' ? 'bg-white border border-slate-300 text-slate-600 hover:bg-slate-50' : 'text-slate-400 cursor-default'
                 ]"
               >
