@@ -82,6 +82,7 @@ $defaults = [
     'rest_url'       => $restUrl,
     'rest_root'      => rest_url(),
     'origin'         => home_url('/'),
+    'debug'          => defined('WP_DEBUG') && WP_DEBUG,
 ];
 
 if (isset($moduleData['vars']) && is_array($moduleData['vars'])) {
