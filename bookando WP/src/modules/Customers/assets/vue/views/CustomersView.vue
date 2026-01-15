@@ -547,14 +547,14 @@ const handleEdit = (customer: any) => {
 
 const handleDelete = async (customer: any) => {
   if (confirm($t('mod.customers.confirm_delete'))) {
-    await store.updateCustomer({ ...customer, status: 'deleted' })
+    await store.save({ ...customer, status: 'deleted' })
   }
 }
 
 const handleSaved = () => {
   showDialog.value = false
   editingCustomer.value = null
-  store.fetchAll()
+  store.load()
 }
 
 const handleExportCSV = () => {
@@ -583,7 +583,7 @@ const getInitials = (customer: any) => {
 
 // Load data on mount
 onMounted(() => {
-  store.fetchAll()
+  store.load()
 
   // Setup scroll listener for mobile
   const mainContainer = document.querySelector('main')
