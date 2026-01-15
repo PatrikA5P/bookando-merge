@@ -39,7 +39,7 @@
               <input
                 v-model="form.title"
                 type="text"
-                class="w-full px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-rose-500 focus:border-transparent outline-none transition-all"
+                class="w-full px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-brand-500 focus:border-transparent outline-none transition-all"
                 :placeholder="$t('mod.services.name_placeholder')"
               >
             </div>
@@ -52,7 +52,7 @@
               <input
                 v-model="form.category"
                 type="text"
-                class="w-full px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-rose-500 focus:border-transparent outline-none transition-all"
+                class="w-full px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-brand-500 focus:border-transparent outline-none transition-all"
                 :placeholder="$t('mod.services.category_placeholder')"
               >
             </div>
@@ -64,7 +64,7 @@
               </label>
               <select
                 v-model="form.status"
-                class="w-full px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-rose-500 focus:border-transparent outline-none transition-all appearance-none bg-white"
+                class="w-full px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-brand-500 focus:border-transparent outline-none transition-all appearance-none bg-white"
               >
                 <option value="aktiv">{{ $t('core.status.active') }}</option>
                 <option value="inaktiv">{{ $t('core.status.hidden') }}</option>
@@ -80,7 +80,7 @@
               <input
                 v-model="form.duration"
                 type="text"
-                class="w-full px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-rose-500 focus:border-transparent outline-none transition-all"
+                class="w-full px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-brand-500 focus:border-transparent outline-none transition-all"
                 :placeholder="$t('mod.services.duration_placeholder')"
               >
             </div>
@@ -95,7 +95,7 @@
                 type="number"
                 step="0.01"
                 min="0"
-                class="w-full px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-rose-500 focus:border-transparent outline-none transition-all"
+                class="w-full px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-brand-500 focus:border-transparent outline-none transition-all"
                 :placeholder="$t('fields.price_placeholder')"
               >
             </div>
@@ -114,7 +114,7 @@
           <textarea
             v-model="form.description"
             rows="4"
-            class="w-full px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-rose-500 focus:border-transparent outline-none transition-all resize-none"
+            class="w-full px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-brand-500 focus:border-transparent outline-none transition-all resize-none"
             :placeholder="$t('mod.services.description_placeholder')"
           ></textarea>
         </div>
@@ -131,7 +131,7 @@
           <textarea
             v-model="form.notes"
             rows="3"
-            class="w-full px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-rose-500 focus:border-transparent outline-none transition-all resize-none"
+            class="w-full px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-brand-500 focus:border-transparent outline-none transition-all resize-none"
             :placeholder="$t('mod.services.notes_placeholder')"
           ></textarea>
         </div>
@@ -141,7 +141,7 @@
       <div class="sticky bottom-0 bg-slate-50 border-t border-slate-200 px-6 py-4 rounded-b-xl flex items-center justify-between gap-3">
         <button
           @click="$emit('close')"
-          class="px-5 py-2.5 text-sm font-medium text-slate-700 bg-white border border-slate-300 rounded-lg hover:bg-slate-50 transition-colors"
+          class="px-5 py-2.5 text-sm font-medium text-slate-700 bg-white border border-slate-300 rounded-xl hover:bg-slate-50 transition-colors"
         >
           {{ $t('core.common.cancel') }}
         </button>
@@ -150,9 +150,9 @@
           @click="handleSubmit"
           :disabled="!isValid || loading"
           :class="[
-            'px-5 py-2.5 text-sm font-bold text-white rounded-lg transition-all',
+            'px-5 py-2.5 text-sm font-bold text-white rounded-xl transition-all',
             isValid && !loading
-              ? 'bg-rose-600 hover:bg-rose-700 shadow-sm'
+              ? 'bg-accent-600 hover:bg-accent-700 shadow-sm'
               : 'bg-slate-300 cursor-not-allowed'
           ]"
         >

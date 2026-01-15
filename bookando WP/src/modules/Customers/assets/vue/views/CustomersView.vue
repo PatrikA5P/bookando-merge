@@ -80,7 +80,7 @@
               <label class="block text-xs font-bold text-slate-500 uppercase mb-2">{{ $t('mod.customers.filter.sort') }}</label>
               <select
                 v-model="activeFilters.sortBy"
-                class="w-full border border-slate-300 rounded-lg px-3 py-2 text-sm appearance-none bg-slate-50 focus:bg-white focus:ring-2 focus:ring-emerald-500 outline-none"
+                class="w-full border border-slate-300 rounded-lg px-3 py-2 text-sm appearance-none bg-slate-50 focus:bg-white focus:ring-2 focus:ring-brand-500 outline-none"
               >
                 <option value="name_asc">{{ $t('mod.customers.sort.name_asc') }}</option>
                 <option value="name_desc">{{ $t('mod.customers.sort.name_desc') }}</option>
@@ -146,7 +146,7 @@
                       v-model="searchQuery"
                       type="text"
                       :placeholder="$t('mod.customers.search_placeholder')"
-                      class="w-full pl-9 pr-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500 transition-all border border-slate-200 rounded-xl bg-slate-50 focus:bg-white"
+                      class="w-full pl-9 pr-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-brand-500 transition-all border border-slate-200 rounded-xl bg-slate-50 focus:bg-white"
                     >
                   </div>
 
@@ -220,7 +220,7 @@
                     <label class="block text-xs font-bold text-slate-500 uppercase mb-2">{{ $t('mod.customers.filter.sort') }}</label>
                     <select
                       v-model="activeFilters.sortBy"
-                      class="w-full border border-slate-300 rounded-lg px-3 py-2 text-sm appearance-none bg-slate-50 focus:bg-white focus:ring-2 focus:ring-emerald-500 outline-none"
+                      class="w-full border border-slate-300 rounded-lg px-3 py-2 text-sm appearance-none bg-slate-50 focus:bg-white focus:ring-2 focus:ring-brand-500 outline-none"
                     >
                       <option value="name_asc">{{ $t('mod.customers.sort.name_asc') }}</option>
                       <option value="name_desc">{{ $t('mod.customers.sort.name_desc') }}</option>
@@ -352,7 +352,7 @@
               </span>
               <select
                 v-model="itemsPerPage"
-                class="bg-white border border-slate-300 rounded-lg px-2 py-1 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500 cursor-pointer"
+                class="bg-white border border-slate-300 rounded-lg px-2 py-1 text-sm focus:outline-none focus:ring-2 focus:ring-brand-500 cursor-pointer"
               >
                 <option :value="10">10 {{ $t('mod.customers.pagination.per_page') }}</option>
                 <option :value="25">25 {{ $t('mod.customers.pagination.per_page') }}</option>

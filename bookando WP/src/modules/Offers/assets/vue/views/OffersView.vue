@@ -56,7 +56,7 @@
               <label class="block text-xs font-bold text-slate-500 uppercase mb-2">{{ $t('mod.services.category.label') }}</label>
               <select
                 v-model="activeFilters.category"
-                class="w-full border border-slate-300 rounded-lg px-3 py-2 text-sm appearance-none bg-slate-50 focus:bg-white focus:ring-2 focus:ring-rose-500 outline-none"
+                class="w-full border border-slate-300 rounded-lg px-3 py-2 text-sm appearance-none bg-slate-50 focus:bg-white focus:ring-2 focus:ring-brand-500 outline-none"
               >
                 <option value="">{{ $t('core.common.all') }}</option>
                 <option v-for="cat in categories" :key="cat" :value="cat">{{ cat }}</option>
@@ -92,7 +92,7 @@
               <label class="block text-xs font-bold text-slate-500 uppercase mb-2">{{ $t('ui.table.sort_by') }}</label>
               <select
                 v-model="activeFilters.sortBy"
-                class="w-full border border-slate-300 rounded-lg px-3 py-2 text-sm appearance-none bg-slate-50 focus:bg-white focus:ring-2 focus:ring-rose-500 outline-none"
+                class="w-full border border-slate-300 rounded-lg px-3 py-2 text-sm appearance-none bg-slate-50 focus:bg-white focus:ring-2 focus:ring-brand-500 outline-none"
               >
                 <option value="name_asc">{{ $t('ui.table.sort_name') }} A-Z</option>
                 <option value="name_desc">{{ $t('ui.table.sort_name') }} Z-A</option>
@@ -161,7 +161,7 @@
                       v-model="searchQuery"
                       type="text"
                       :placeholder="$t('mod.services.list.search_placeholder')"
-                      class="w-full pl-9 pr-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-rose-500 transition-all border border-slate-200 rounded-xl bg-slate-50 focus:bg-white"
+                      class="w-full pl-9 pr-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-brand-500 transition-all border border-slate-200 rounded-xl bg-slate-50 focus:bg-white"
                     >
                   </div>
 
@@ -211,7 +211,7 @@
                     <label class="block text-xs font-bold text-slate-500 uppercase mb-2">{{ $t('mod.services.category.label') }}</label>
                     <select
                       v-model="activeFilters.category"
-                      class="w-full border border-slate-300 rounded-lg px-3 py-2 text-sm appearance-none bg-slate-50 focus:bg-white focus:ring-2 focus:ring-rose-500 outline-none"
+                      class="w-full border border-slate-300 rounded-lg px-3 py-2 text-sm appearance-none bg-slate-50 focus:bg-white focus:ring-2 focus:ring-brand-500 outline-none"
                     >
                       <option value="">{{ $t('core.common.all') }}</option>
                       <option v-for="cat in categories" :key="cat" :value="cat">{{ cat }}</option>
@@ -247,7 +247,7 @@
                     <label class="block text-xs font-bold text-slate-500 uppercase mb-2">{{ $t('ui.table.sort_by') }}</label>
                     <select
                       v-model="activeFilters.sortBy"
-                      class="w-full border border-slate-300 rounded-lg px-3 py-2 text-sm appearance-none bg-slate-50 focus:bg-white focus:ring-2 focus:ring-rose-500 outline-none"
+                      class="w-full border border-slate-300 rounded-lg px-3 py-2 text-sm appearance-none bg-slate-50 focus:bg-white focus:ring-2 focus:ring-brand-500 outline-none"
                     >
                       <option value="name_asc">{{ $t('ui.table.sort_name') }} A-Z</option>
                       <option value="name_desc">{{ $t('ui.table.sort_name') }} Z-A</option>
@@ -362,7 +362,7 @@
               </span>
               <select
                 v-model="itemsPerPage"
-                class="bg-white border border-slate-300 rounded-lg px-2 py-1 text-sm focus:outline-none focus:ring-2 focus:ring-rose-500 cursor-pointer"
+                class="bg-white border border-slate-300 rounded-lg px-2 py-1 text-sm focus:outline-none focus:ring-2 focus:ring-brand-500 cursor-pointer"
               >
                 <option :value="10">10 {{ $t('ui.pagination.per_page') }}</option>
                 <option :value="25">25 {{ $t('ui.pagination.per_page') }}</option>
