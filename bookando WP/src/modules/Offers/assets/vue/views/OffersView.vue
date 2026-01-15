@@ -193,7 +193,7 @@
                 <div class="pl-3 border-l border-slate-100">
                   <button
                     @click="openCreateDialog"
-                    class="flex items-center gap-2 shadow-sm whitespace-nowrap transition-colors shrink-0 bg-accent-600 hover:bg-accent-700 text-white px-5 py-2.5 rounded-xl text-sm font-bold"
+                    class="flex items-center gap-2 shadow-sm whitespace-nowrap transition-colors shrink-0 bg-accent-500 hover:bg-accent-700 text-white px-5 py-2.5 rounded-xl text-sm font-bold"
                   >
                     <svg class="w-4.5 h-4.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
