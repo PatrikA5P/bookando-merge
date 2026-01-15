@@ -33,7 +33,7 @@ use function strtotime;
 /**
  * Duty scheduler with shift templates and availability.
  *
- * @deprecated Use Bookando\Modules\workday\Services\DutySchedulerService instead
+ * @deprecated Use Bookando\Modules\Workday\Services\DutySchedulerService instead
  * @todo Remove in next major version - functionality moved to workday module
  */
 class DutySchedulerService

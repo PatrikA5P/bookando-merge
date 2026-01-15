@@ -2,11 +2,11 @@
 
 namespace Bookando\Tests\Unit\Modules\Customers;
 
-use Bookando\Modules\customers\CustomerRepository;
-use Bookando\Modules\customers\CustomerService;
-use Bookando\Modules\customers\CustomerValidationError;
-use Bookando\Modules\customers\CustomerValidationResult;
-use Bookando\Modules\customers\CustomerValidator;
+use Bookando\Modules\Customers\CustomerRepository;
+use Bookando\Modules\Customers\CustomerService;
+use Bookando\Modules\Customers\CustomerValidationError;
+use Bookando\Modules\Customers\CustomerValidationResult;
+use Bookando\Modules\Customers\CustomerValidator;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use RuntimeException;

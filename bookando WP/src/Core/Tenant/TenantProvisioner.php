@@ -398,7 +398,7 @@ class TenantProvisioner
     {
         // Standard-Ressourcen (z.B. via Resources-Modul)
         if (class_exists('Bookando\\Modules\\resources\\StateRepository')) {
-            \Bookando\Modules\resources\StateRepository::seedDefaultsForTenant($tenantId, true);
+            \Bookando\Modules\Resources\StateRepository::seedDefaultsForTenant($tenantId, true);
         }
 
         // Weitere Modul-Defaults können hier initialisiert werden

@@ -5,13 +5,13 @@ use WP_REST_Request;
 use WP_REST_Response;
 use Bookando\Core\Licensing\LicenseManager;
 use Bookando\Core\Tenant\TenantManager;
-use Bookando\Modules\academy\RestHandler as AcademyRestHandler;
-use Bookando\Modules\appointments\RestHandler as AppointmentsRestHandler;
-use Bookando\Modules\customers\RestHandler as CustomersRestHandler;
-use Bookando\Modules\finance\RestHandler as FinanceRestHandler;
-use Bookando\Modules\offers\RestHandler as OffersRestHandler;
-use Bookando\Modules\resources\RestHandler as ResourcesRestHandler;
-use Bookando\Modules\settings\RestHandler as SettingsRestHandler;
+use Bookando\Modules\Academy\RestHandler as AcademyRestHandler;
+use Bookando\Modules\Appointments\RestHandler as AppointmentsRestHandler;
+use Bookando\Modules\Customers\RestHandler as CustomersRestHandler;
+use Bookando\Modules\Finance\RestHandler as FinanceRestHandler;
+use Bookando\Modules\Offers\RestHandler as OffersRestHandler;
+use Bookando\Modules\Resources\RestHandler as ResourcesRestHandler;
+use Bookando\Modules\Settings\RestHandler as SettingsRestHandler;
 
 class ModuleResponseSmokeTest extends \WP_UnitTestCase
 {

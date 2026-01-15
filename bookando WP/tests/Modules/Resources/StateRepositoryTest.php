@@ -2,7 +2,7 @@
 declare(strict_types=1);
 
 use Bookando\Core\Tenant\TenantManager;
-use Bookando\Modules\resources\StateRepository;
+use Bookando\Modules\Resources\StateRepository;
 
 if (!function_exists('__')) {
     function __($text, $domain = null)

@@ -472,7 +472,7 @@ class RestHandler
                 return Response::error(__('Employee ID is required', 'bookando'), 400);
             }
 
-            $result = \Bookando\Modules\workday\Services\BreakService::startBreak($userId, $body);
+            $result = \Bookando\Modules\Workday\Services\BreakService::startBreak($userId, $body);
 
             return Response::ok([
                 'success' => true,
@@ -497,7 +497,7 @@ class RestHandler
                 return Response::error(__('Employee ID is required', 'bookando'), 400);
             }
 
-            $result = \Bookando\Modules\workday\Services\BreakService::endBreak($userId);
+            $result = \Bookando\Modules\Workday\Services\BreakService::endBreak($userId);
 
             return Response::ok([
                 'success' => true,
@@ -521,7 +521,7 @@ class RestHandler
                 return Response::error(__('Time entry ID is required', 'bookando'), 400);
             }
 
-            $breaks = \Bookando\Modules\workday\Services\BreakService::getBreaksForTimeEntry($timeEntryId);
+            $breaks = \Bookando\Modules\Workday\Services\BreakService::getBreaksForTimeEntry($timeEntryId);
 
             return Response::ok([
                 'success' => true,
@@ -552,7 +552,7 @@ class RestHandler
                 'location_id' => $request->get_param('location_id') ? (int) $request->get_param('location_id') : null,
             ];
 
-            $shifts = \Bookando\Modules\workday\Services\ShiftService::getShifts(
+            $shifts = \Bookando\Modules\Workday\Services\ShiftService::getShifts(
                 $startDate,
                 $endDate,
                 array_filter($filters)
@@ -575,7 +575,7 @@ class RestHandler
         try {
             $body = $request->get_json_params() ?? [];
 
-            $shift = \Bookando\Modules\workday\Services\ShiftService::createShift($body);
+            $shift = \Bookando\Modules\Workday\Services\ShiftService::createShift($body);
 
             return Response::ok([
                 'success' => true,
@@ -600,7 +600,7 @@ class RestHandler
                 return Response::error(__('Shift ID is required', 'bookando'), 400);
             }
 
-            $shift = \Bookando\Modules\workday\Services\ShiftService::updateShift($shiftId, $body);
+            $shift = \Bookando\Modules\Workday\Services\ShiftService::updateShift($shiftId, $body);
 
             return Response::ok([
                 'success' => true,
@@ -624,7 +624,7 @@ class RestHandler
                 return Response::error(__('Shift ID is required', 'bookando'), 400);
             }
 
-            $result = \Bookando\Modules\workday\Services\ShiftService::deleteShift($shiftId);
+            $result = \Bookando\Modules\Workday\Services\ShiftService::deleteShift($shiftId);
 
             return Response::ok([
                 'success' => true,
@@ -648,7 +648,7 @@ class RestHandler
                 return Response::error(__('No shift IDs provided', 'bookando'), 400);
             }
 
-            $result = \Bookando\Modules\workday\Services\ShiftService::publishShifts(
+            $result = \Bookando\Modules\Workday\Services\ShiftService::publishShifts(
                 $shiftIds,
                 get_current_user_id()
             );
@@ -680,7 +680,7 @@ class RestHandler
                 return Response::error(__('Employee ID is required', 'bookando'), 400);
             }
 
-            $balance = \Bookando\Modules\workday\Services\VacationBalanceService::getBalance($userId, $year);
+            $balance = \Bookando\Modules\Workday\Services\VacationBalanceService::getBalance($userId, $year);
 
             return Response::ok([
                 'success' => true,
@@ -705,7 +705,7 @@ class RestHandler
                 return Response::error(__('Employee ID is required', 'bookando'), 400);
             }
 
-            $balance = \Bookando\Modules\workday\Services\VacationBalanceService::updateBalance(
+            $balance = \Bookando\Modules\Workday\Services\VacationBalanceService::updateBalance(
                 $userId,
                 $year,
                 $body
@@ -734,7 +734,7 @@ class RestHandler
                 return Response::error(__('Employee ID is required', 'bookando'), 400);
             }
 
-            $statistics = \Bookando\Modules\workday\Services\VacationBalanceService::getStatistics($userId, $year);
+            $statistics = \Bookando\Modules\Workday\Services\VacationBalanceService::getStatistics($userId, $year);
 
             return Response::ok([
                 'success' => true,

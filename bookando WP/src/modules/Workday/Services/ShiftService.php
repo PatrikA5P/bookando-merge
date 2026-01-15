@@ -13,7 +13,7 @@ use Exception;
  *
  * Manages shift creation, updating, and conflict detection.
  *
- * @package Bookando\Modules\workday\Services
+ * @package Bookando\Modules\Workday\Services
  */
 class ShiftService
 {

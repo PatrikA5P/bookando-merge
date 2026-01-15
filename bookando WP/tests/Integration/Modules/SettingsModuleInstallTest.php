@@ -2,7 +2,7 @@
 
 namespace Bookando\Tests\Integration\Modules;
 
-use Bookando\Modules\settings\Module;
+use Bookando\Modules\Settings\Module;
 
 class SettingsModuleInstallTest extends \WP_UnitTestCase
 {

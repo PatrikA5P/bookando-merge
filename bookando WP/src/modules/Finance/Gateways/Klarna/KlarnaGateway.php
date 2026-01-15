@@ -12,7 +12,7 @@ use Bookando\Modules\Finance\Gateways\AbstractGateway;
  * Klarna payment gateway implementation.
  * Note: Klarna Checkout requires server-to-server integration.
  *
- * @package Bookando\Modules\finance\Gateways\Klarna
+ * @package Bookando\Modules\Finance\Gateways\Klarna
  */
 class KlarnaGateway extends AbstractGateway
 {

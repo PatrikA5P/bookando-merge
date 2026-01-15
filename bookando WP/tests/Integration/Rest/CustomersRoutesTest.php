@@ -4,11 +4,11 @@ namespace Bookando\Tests\Integration\Rest;
 use PHPUnit\Framework\TestCase;
 use RuntimeException;
 use WP_Error;
-use Bookando\Modules\customers\CustomerService;
-use Bookando\Modules\customers\CustomerValidationError;
-use Bookando\Modules\customers\CustomerValidationResult;
-use Bookando\Modules\customers\CustomerRepository;
-use Bookando\Modules\customers\CustomerValidator;
+use Bookando\Modules\Customers\CustomerService;
+use Bookando\Modules\Customers\CustomerValidationError;
+use Bookando\Modules\Customers\CustomerValidationResult;
+use Bookando\Modules\Customers\CustomerRepository;
+use Bookando\Modules\Customers\CustomerValidator;
 
 if (!class_exists('WP_Error')) {
     require_once __DIR__ . '/../../bootstrap.php';

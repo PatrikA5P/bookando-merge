@@ -13,7 +13,7 @@ use function update_option;
  *
  * Manages all payment gateways and their configurations.
  *
- * @package Bookando\Modules\finance\Gateways
+ * @package Bookando\Modules\Finance\Gateways
  */
 class GatewayManager
 {

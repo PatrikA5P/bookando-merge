@@ -6,8 +6,8 @@ use WP_REST_Request;
 use Bookando\Core\Dispatcher\RestModuleGuard;
 use Bookando\Core\Licensing\LicenseManager;
 use Bookando\Core\Tenant\TenantManager;
-use Bookando\Modules\resources\Capabilities;
-use Bookando\Modules\resources\RestHandler;
+use Bookando\Modules\Resources\Capabilities;
+use Bookando\Modules\Resources\RestHandler;
 
 class ResourcesPermissionsTest extends \WP_UnitTestCase
 {

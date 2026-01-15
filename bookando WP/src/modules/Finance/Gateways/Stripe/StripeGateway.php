@@ -18,7 +18,7 @@ use Stripe\Exception\SignatureVerificationException;
  *
  * Stripe payment gateway implementation (PCI-DSS compliant via Stripe Checkout).
  *
- * @package Bookando\Modules\finance\Gateways\Stripe
+ * @package Bookando\Modules\Finance\Gateways\Stripe
  */
 class StripeGateway extends AbstractGateway
 {

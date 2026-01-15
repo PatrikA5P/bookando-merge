@@ -99,20 +99,20 @@ class ServiceProvider
     {
         // Customers Module
         $container->singleton(
-            \Bookando\Modules\customers\CustomerRepository::class,
-            fn($c) => new \Bookando\Modules\customers\CustomerRepository()
+            \Bookando\Modules\Customers\CustomerRepository::class,
+            fn($c) => new \Bookando\Modules\Customers\CustomerRepository()
         );
 
         $container->singleton(
-            \Bookando\Modules\customers\CustomerValidator::class,
-            fn($c) => new \Bookando\Modules\customers\CustomerValidator()
+            \Bookando\Modules\Customers\CustomerValidator::class,
+            fn($c) => new \Bookando\Modules\Customers\CustomerValidator()
         );
 
         $container->singleton(
-            \Bookando\Modules\customers\CustomerService::class,
-            fn($c) => new \Bookando\Modules\customers\CustomerService(
-                $c->get(\Bookando\Modules\customers\CustomerRepository::class),
-                $c->get(\Bookando\Modules\customers\CustomerValidator::class)
+            \Bookando\Modules\Customers\CustomerService::class,
+            fn($c) => new \Bookando\Modules\Customers\CustomerService(
+                $c->get(\Bookando\Modules\Customers\CustomerRepository::class),
+                $c->get(\Bookando\Modules\Customers\CustomerValidator::class)
             )
         );
 

@@ -13,7 +13,7 @@ use Exception;
  *
  * Manages break tracking for time entries and active timers.
  *
- * @package Bookando\Modules\workday\Services
+ * @package Bookando\Modules\Workday\Services
  */
 class BreakService
 {

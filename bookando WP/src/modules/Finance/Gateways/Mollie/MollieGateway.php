@@ -14,7 +14,7 @@ use Mollie\Api\Exceptions\ApiException;
  * Mollie payment gateway implementation.
  * Popular in Netherlands, Belgium, Germany - supports iDEAL, Bancontact, SEPA, etc.
  *
- * @package Bookando\Modules\finance\Gateways\Mollie
+ * @package Bookando\Modules\Finance\Gateways\Mollie
  */
 class MollieGateway extends AbstractGateway
 {

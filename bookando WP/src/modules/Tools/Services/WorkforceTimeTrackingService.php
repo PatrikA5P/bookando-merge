@@ -14,7 +14,7 @@ use function wp_timezone;
 /**
  * Enhanced Time Tracking Service integrated with Employee module.
  *
- * @deprecated Use Bookando\Modules\workday\Services\WorkforceTimeTrackingService instead
+ * @deprecated Use Bookando\Modules\Workday\Services\WorkforceTimeTrackingService instead
  * @todo Remove in next major version - functionality moved to workday module
  *
  * Features:

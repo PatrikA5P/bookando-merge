@@ -19,7 +19,7 @@ use PayPalHttp\HttpException;
  *
  * PayPal payment gateway implementation using PayPal Checkout.
  *
- * @package Bookando\Modules\finance\Gateways\PayPal
+ * @package Bookando\Modules\Finance\Gateways\PayPal
  */
 class PayPalGateway extends AbstractGateway
 {

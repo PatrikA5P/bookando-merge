@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Bookando\Tests\Unit\Modules\Resources;
 
 use Bookando\Core\Tenant\TenantManager;
-use Bookando\Modules\resources\ResourcesRepository;
+use Bookando\Modules\Resources\ResourcesRepository;
 use Bookando\Tests\Support\Resources\ResourceFactory;
 use PHPUnit\Framework\TestCase;
 
