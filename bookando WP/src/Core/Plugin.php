@@ -492,10 +492,19 @@ class Plugin
                 }
             }
 
-            if ($entryKey !== null && !empty($manifest[$entryKey]['css'])) {
-                $cssList = is_array($manifest[$entryKey]['css'])
-                    ? $manifest[$entryKey]['css']
-                    : [$manifest[$entryKey]['css']];
+            if ($entryKey !== null) {
+                // CSS-only entries haben 'file' direkt, JS-entries haben 'css' array
+                $cssList = [];
+
+                if (!empty($manifest[$entryKey]['css'])) {
+                    // JS Entry mit CSS-Dateien
+                    $cssList = is_array($manifest[$entryKey]['css'])
+                        ? $manifest[$entryKey]['css']
+                        : [$manifest[$entryKey]['css']];
+                } elseif (!empty($manifest[$entryKey]['file']) && str_ends_with($manifest[$entryKey]['file'], '.css')) {
+                    // CSS-only Entry
+                    $cssList = [$manifest[$entryKey]['file']];
+                }
 
                 foreach (array_values($cssList) as $i => $rel) {
                     $rel  = ltrim($rel, '/');
