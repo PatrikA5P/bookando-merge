@@ -1,8 +1,14 @@
 /* ========================================================== */
-/* 📦 Bookando Admin UI – Minimal WordPress Admin Bar Styles */
-/* Design System: Tailwind CSS (inline classes in Vue components) */
-/* This file: WordPress admin bar compatibility only */
+/* 📦 Bookando Admin UI – Tailwind CSS + WordPress Admin Bar Styles */
 /* ========================================================== */
+
+/* ---------------------------------- */
+/* 🎨 TAILWIND CSS IMPORTS */
+/* ---------------------------------- */
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 
 /* ---------------------------------- */
 /* 🎨 BRAND COLORS (CSS Custom Properties) */
