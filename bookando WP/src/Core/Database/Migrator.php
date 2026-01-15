@@ -168,6 +168,16 @@ class Migrator
     }
 
     /**
+     * Runs migration 004 (Module Slug StudlyCase Conversion).
+     *
+     * @return bool
+     */
+    public static function runMigration004(): bool
+    {
+        return Migration004_ModuleSlugStudlyCase::up();
+    }
+
+    /**
      * Run all pending migrations.
      *
      * @return array Results of each migration
@@ -180,6 +190,7 @@ class Migrator
         $migrations = [
             '002' => 'runMigration002',
             '003' => 'runMigration003',
+            '004' => 'runMigration004',
         ];
 
         foreach ($migrations as $number => $method) {

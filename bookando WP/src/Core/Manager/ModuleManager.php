@@ -70,10 +70,24 @@ class ModuleManager
                 ActivityLogger::info('modules.manager', 'Legacy module skipped', ['slug' => $slug]);
                 continue;
             }
-            $manifestFile = BOOKANDO_PLUGIN_DIR . "/src/modules/{$slug}/module.json";
+            // Try StudlyCase first (new format), then lowercase (legacy format)
+            $slugVariants = [$slug, ucfirst(strtolower($slug))];
+            $manifestFile = null;
 
-            if (!file_exists($manifestFile)) {
-                ActivityLogger::warning('modules.manager', 'Module skipped: manifest missing', ['slug' => $slug]);
+            foreach ($slugVariants as $variant) {
+                $path = BOOKANDO_PLUGIN_DIR . "/src/modules/{$variant}/module.json";
+                if (file_exists($path)) {
+                    $manifestFile = $path;
+                    $slug = $variant; // Use the variant that exists
+                    break;
+                }
+            }
+
+            if (!$manifestFile) {
+                ActivityLogger::warning('modules.manager', 'Module skipped: manifest missing', [
+                    'slug' => $slug,
+                    'tried' => $slugVariants
+                ]);
                 continue;
             }
 

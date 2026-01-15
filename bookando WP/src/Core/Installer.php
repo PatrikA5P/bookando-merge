@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Bookando\Core;
 
+use Bookando\Core\Database\Migrator;
 use Bookando\Core\Manager\ModuleManager;
 use Bookando\Core\Manager\ModuleStateRepository;
 use Bookando\Core\Service\ActivityLogger;
@@ -26,6 +27,7 @@ final class Installer
 
         self::installCoreTables();
         self::migrateLegacyModuleTables();
+        self::runDatabaseMigrations();
         self::installModules();
 
         ActivityLogger::log(
@@ -1067,6 +1069,47 @@ final class Installer
             [
                 'table'  => $legacyTable,
                 'backup' => $backupTable,
+            ],
+            ActivityLogger::LEVEL_INFO,
+            null,
+            'core'
+        );
+    }
+
+    /**
+     * Führt alle registrierten Datenbankmigrationen aus.
+     */
+    protected static function runDatabaseMigrations(): void
+    {
+        ActivityLogger::log(
+            'installer.migrations',
+            'Starting database migrations',
+            [],
+            ActivityLogger::LEVEL_INFO,
+            null,
+            'core'
+        );
+
+        $results = Migrator::runAllMigrations();
+
+        foreach ($results as $migration => $success) {
+            ActivityLogger::log(
+                'installer.migrations',
+                $success ? 'Migration completed successfully' : 'Migration failed',
+                ['migration' => $migration],
+                $success ? ActivityLogger::LEVEL_INFO : ActivityLogger::LEVEL_ERROR,
+                null,
+                'core'
+            );
+        }
+
+        ActivityLogger::log(
+            'installer.migrations',
+            'Database migrations finished',
+            [
+                'total' => count($results),
+                'successful' => count(array_filter($results)),
+                'failed' => count(array_filter($results, fn($r) => !$r)),
             ],
             ActivityLogger::LEVEL_INFO,
             null,
