@@ -8,8 +8,8 @@ use WP_REST_Request;
 use Bookando\Core\Dispatcher\RestDispatcher;
 use Bookando\Core\Licensing\LicenseManager;
 use Bookando\Core\Tenant\TenantManager;
-use Bookando\Modules\employees\RestHandler as EmployeesRestHandler;
-use Bookando\Modules\settings\RestHandler as SettingsRestHandler;
+use Bookando\Modules\Employees\RestHandler as EmployeesRestHandler;
+use Bookando\Modules\Settings\RestHandler as SettingsRestHandler;
 
 class RestDispatcherPermissionTest extends \WP_UnitTestCase
 {

@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace Bookando\Tests\Unit\Modules\Resources;
 
 use Bookando\Core\Tenant\TenantManager;
-use Bookando\Modules\resources\ResourcesRepository;
-use Bookando\Modules\resources\ResourcesService;
+use Bookando\Modules\Resources\ResourcesRepository;
+use Bookando\Modules\Resources\ResourcesService;
 use Bookando\Tests\Support\Resources\ResourceFactory;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
@@ -204,7 +204,7 @@ final class ResourcesServiceTest extends TestCase
         $this->assertSame(['locations' => []], $result);
 namespace Bookando\Tests\Unit\Modules\Resources;
 
-use Bookando\Modules\resources\ResourcesService;
+use Bookando\Modules\Resources\ResourcesService;
 use PHPUnit\Framework\TestCase;
 use WP_Error;
 

@@ -2,8 +2,8 @@
 
 namespace Bookando\Tests\Unit\Modules\Finance;
 
-use Bookando\Modules\finance\Installer;
-use Bookando\Modules\finance\StateRepository;
+use Bookando\Modules\Finance\Installer;
+use Bookando\Modules\Finance\StateRepository;
 use PHPUnit\Framework\TestCase;
 
 final class InstallerTest extends TestCase

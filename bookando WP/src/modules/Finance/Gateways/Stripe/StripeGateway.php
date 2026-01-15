@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Bookando\Modules\Finance\Gateways\Stripe;
 
-use Bookando\Modules\finance\Gateways\AbstractGateway;
+use Bookando\Modules\Finance\Gateways\AbstractGateway;
 use Stripe\Stripe;
 use Stripe\Checkout\Session;
 use Stripe\PaymentIntent;
@@ -18,7 +18,7 @@ use Stripe\Exception\SignatureVerificationException;
  *
  * Stripe payment gateway implementation (PCI-DSS compliant via Stripe Checkout).
  *
- * @package Bookando\Modules\finance\Gateways\Stripe
+ * @package Bookando\Modules\Finance\Gateways\Stripe
  */
 class StripeGateway extends AbstractGateway
 {

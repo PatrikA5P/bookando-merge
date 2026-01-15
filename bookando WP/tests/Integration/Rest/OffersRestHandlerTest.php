@@ -3,7 +3,7 @@
 namespace Bookando\Tests\Integration\Rest;
 
 use Bookando\Core\Tenant\TenantManager;
-use Bookando\Modules\offers\RestHandler;
+use Bookando\Modules\Offers\RestHandler;
 use WP_REST_Request;
 use WP_REST_Response;
 

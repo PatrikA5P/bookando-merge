@@ -3,7 +3,7 @@ namespace Bookando\Tests\Integration\Rest;
 
 use Bookando\Core\Licensing\LicenseManager;
 use Bookando\Core\Tenant\TenantManager;
-use Bookando\Modules\customers\Api\Api as CustomersApi;
+use Bookando\Modules\Customers\Api\Api as CustomersApi;
 use WP_REST_Request;
 
 class CustomersRoutesWpTest extends \WP_UnitTestCase

@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Bookando\Modules\Finance\Gateways\Klarna;
 
-use Bookando\Modules\finance\Gateways\AbstractGateway;
+use Bookando\Modules\Finance\Gateways\AbstractGateway;
 
 /**
  * Class KlarnaGateway
@@ -12,7 +12,7 @@ use Bookando\Modules\finance\Gateways\AbstractGateway;
  * Klarna payment gateway implementation.
  * Note: Klarna Checkout requires server-to-server integration.
  *
- * @package Bookando\Modules\finance\Gateways\Klarna
+ * @package Bookando\Modules\Finance\Gateways\Klarna
  */
 class KlarnaGateway extends AbstractGateway
 {

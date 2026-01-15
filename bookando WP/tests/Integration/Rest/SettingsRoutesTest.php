@@ -3,8 +3,8 @@ namespace Bookando\Tests\Integration\Rest;
 
 use WP_Error;
 use WP_REST_Request;
-use Bookando\Modules\settings\Api\Api as SettingsApi;
-use Bookando\Modules\settings\RestHandler;
+use Bookando\Modules\Settings\Api\Api as SettingsApi;
+use Bookando\Modules\Settings\RestHandler;
 
 class SettingsRoutesTest extends \WP_UnitTestCase
 {

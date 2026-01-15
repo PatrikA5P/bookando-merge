@@ -6,8 +6,8 @@ namespace Bookando\Modules\Offers;
 
 use Bookando\Core\Api\Response;
 use Bookando\Core\Util\Sanitizer;
-use Bookando\Modules\offers\Api\Api;
-use Bookando\Modules\offers\Model;
+use Bookando\Modules\Offers\Api\Api;
+use Bookando\Modules\Offers\Model;
 use WP_Error;
 use WP_REST_Request;
 use WP_REST_Response;

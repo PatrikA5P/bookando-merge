@@ -9,7 +9,7 @@ use WP_REST_Server;
 use Bookando\Core\Api\Response;
 use Bookando\Core\Base\BaseApi;
 use Bookando\Core\Dispatcher\RestPermissions;
-use Bookando\Modules\customers\RestHandler;
+use Bookando\Modules\Customers\RestHandler;
 use function __;
 use function _x;
 

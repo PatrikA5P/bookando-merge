@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Bookando\Modules\Tools\Services;
 
-use Bookando\Modules\offers\Model as OffersModel;
+use Bookando\Modules\Offers\Model as OffersModel;
 use DateInterval;
 use DatePeriod;
 use DateTimeImmutable;

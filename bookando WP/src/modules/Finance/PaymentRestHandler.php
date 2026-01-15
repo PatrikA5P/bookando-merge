@@ -6,7 +6,7 @@ namespace Bookando\Modules\Finance;
 
 use Bookando\Core\Api\Response;
 use Bookando\Core\Tenant\TenantManager;
-use Bookando\Modules\finance\Gateways\GatewayManager;
+use Bookando\Modules\Finance\Gateways\GatewayManager;
 use WP_REST_Request;
 use WP_REST_Response;
 use function __;

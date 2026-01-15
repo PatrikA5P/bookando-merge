@@ -3,8 +3,8 @@
 namespace Bookando\Tests\Integration\Rest;
 
 use Bookando\Core\Tenant\TenantManager;
-use Bookando\Modules\resources\RestHandler;
-use Bookando\Modules\resources\StateRepository;
+use Bookando\Modules\Resources\RestHandler;
+use Bookando\Modules\Resources\StateRepository;
 use WP_REST_Request;
 use WP_REST_Response;
 

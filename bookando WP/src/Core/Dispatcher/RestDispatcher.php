@@ -745,42 +745,42 @@ class RestDispatcher
     public static function employeesWorkdaySets($request)
     {
         $params = self::safeParams($request);
-        return \Bookando\Modules\employees\RestHandler::workdaySets($params, $request);
+        return \Bookando\Modules\Employees\RestHandler::workdaySets($params, $request);
     }
 
     public static function employeesCalendarIcs($request)
     {
         $params = self::safeParams($request);
-        return \Bookando\Modules\employees\RestHandler::calendarIcs($params, $request);
+        return \Bookando\Modules\Employees\RestHandler::calendarIcs($params, $request);
     }
 
     public static function employeesCalendarsList($request)
     {
         $params = self::safeParams($request);
-        return \Bookando\Modules\employees\RestHandler::calendars($params, $request);
+        return \Bookando\Modules\Employees\RestHandler::calendars($params, $request);
     }
 
     public static function employeesCalendarsUpdate($request)
     {
         $params = self::safeParams($request);
         $params['calId'] = self::getRequestParam($request, 'calId');
-        return \Bookando\Modules\employees\RestHandler::calendars($params, $request);
+        return \Bookando\Modules\Employees\RestHandler::calendars($params, $request);
     }
 
     public static function employeesCalendarInvite($request)
     {
         $params = self::safeParams($request);
-        return \Bookando\Modules\employees\RestHandler::calendarInvite($params, $request);
+        return \Bookando\Modules\Employees\RestHandler::calendarInvite($params, $request);
     }
 
     public static function employeesDaysOff($request) {
         $params = self::safeParams($request);
-        return \Bookando\Modules\employees\RestHandler::daysOff($params, $request);
+        return \Bookando\Modules\Employees\RestHandler::daysOff($params, $request);
     }
 
     public static function employeesSpecialDaySets($request) {
         $params = self::safeParams($request);
-        return \Bookando\Modules\employees\RestHandler::specialDaySets($params, $request);
+        return \Bookando\Modules\Employees\RestHandler::specialDaySets($params, $request);
     }
 
 

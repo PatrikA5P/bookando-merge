@@ -8,8 +8,8 @@ use WP_REST_Request;
 use WP_REST_Server;
 use Bookando\Core\Base\BaseApi;
 use Bookando\Core\Dispatcher\RestModuleGuard;
-use Bookando\Modules\resources\Capabilities;
-use Bookando\Modules\resources\RestHandler;
+use Bookando\Modules\Resources\Capabilities;
+use Bookando\Modules\Resources\RestHandler;
 
 class Api extends BaseApi
 {

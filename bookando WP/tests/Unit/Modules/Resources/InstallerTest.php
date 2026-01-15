@@ -3,8 +3,8 @@
 namespace Bookando\Tests\Unit\Modules\Resources;
 
 use Bookando\Core\Tenant\TenantManager;
-use Bookando\Modules\resources\Installer;
-use Bookando\Modules\resources\StateRepository;
+use Bookando\Modules\Resources\Installer;
+use Bookando\Modules\Resources\StateRepository;
 use PHPUnit\Framework\TestCase;
 
 final class InstallerTest extends TestCase

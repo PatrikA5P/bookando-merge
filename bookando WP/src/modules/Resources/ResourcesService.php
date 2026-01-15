@@ -6,7 +6,7 @@ namespace Bookando\Modules\Resources;
 
 use Bookando\Core\Auth\Gate;
 use Bookando\Core\Util\Sanitizer;
-use Bookando\Modules\resources\Capabilities;
+use Bookando\Modules\Resources\Capabilities;
 use DateTimeImmutable;
 use WP_Error;
 use function __;

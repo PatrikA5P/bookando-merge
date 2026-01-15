@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Bookando\Modules\Academy;
 
-use Bookando\Modules\academy\Models\CourseModel;
-use Bookando\Modules\academy\Models\TrainingCardModel;
+use Bookando\Modules\Academy\Models\CourseModel;
+use Bookando\Modules\Academy\Models\TrainingCardModel;
 
 /**
  * StateRepository für Academy-Modul.

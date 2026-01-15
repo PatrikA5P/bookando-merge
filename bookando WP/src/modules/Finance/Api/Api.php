@@ -6,8 +6,8 @@ namespace Bookando\Modules\Finance\Api;
 
 use WP_REST_Server;
 use Bookando\Core\Base\BaseApi;
-use Bookando\Modules\finance\RestHandler;
-use Bookando\Modules\finance\PaymentRestHandler;
+use Bookando\Modules\Finance\RestHandler;
+use Bookando\Modules\Finance\PaymentRestHandler;
 
 class Api extends BaseApi
 {

@@ -4,10 +4,10 @@ declare(strict_types=1);
 namespace Bookando\Modules\Finance;
 
 use Bookando\Core\Base\BaseModule;
-use Bookando\Modules\finance\Admin\Admin;
-use Bookando\Modules\finance\Api\Api;
-use Bookando\Modules\finance\Capabilities;
-use Bookando\Modules\finance\Installer;
+use Bookando\Modules\Finance\Admin\Admin;
+use Bookando\Modules\Finance\Api\Api;
+use Bookando\Modules\Finance\Capabilities;
+use Bookando\Modules\Finance\Installer;
 
 class Module extends BaseModule
 {

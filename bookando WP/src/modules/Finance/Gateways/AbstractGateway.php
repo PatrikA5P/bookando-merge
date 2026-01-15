@@ -11,7 +11,7 @@ use Bookando\Core\Service\ActivityLogger;
  *
  * Base class for all payment gateways providing common functionality.
  *
- * @package Bookando\Modules\finance\Gateways
+ * @package Bookando\Modules\Finance\Gateways
  */
 abstract class AbstractGateway implements GatewayInterface
 {

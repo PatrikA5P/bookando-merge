@@ -208,11 +208,11 @@ echo "┌───────────────────────�
 echo "│ 5️⃣  Repository-Test (CustomerService)                        │\n";
 echo "└─────────────────────────────────────────────────────────────┘\n";
 
-$serviceExists = class_exists('Bookando\Modules\customers\CustomerService');
+$serviceExists = class_exists('Bookando\Modules\Customers\CustomerService');
 echo "CustomerService existiert: " . ($serviceExists ? '✓ ja' : '❌ nein') . "\n";
 
 if ($serviceExists) {
-    $service = new \Bookando\Modules\customers\CustomerService();
+    $service = new \Bookando\Modules\Customers\CustomerService();
 
     echo "\nRufe CustomerService::listCustomers() auf...\n";
     echo "   mit tenant_id = " . ($effectiveTenantId !== null ? $effectiveTenantId : 'NULL') . "\n";

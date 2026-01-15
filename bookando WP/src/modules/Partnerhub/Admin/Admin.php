@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Bookando\Modules\Partnerhub\Admin;
 
 use Bookando\Core\Base\BaseAdmin;
-use Bookando\Modules\partnerhub\Capabilities;
+use Bookando\Modules\Partnerhub\Capabilities;
 use function __;
 
 class Admin extends BaseAdmin

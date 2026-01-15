@@ -4,7 +4,7 @@ namespace Bookando\Tests\Integration\Rest;
 use WP_Error;
 use WP_REST_Request;
 use Bookando\Core\Licensing\LicenseManager;
-use Bookando\Modules\employees\Api\Api as EmployeesApi;
+use Bookando\Modules\Employees\Api\Api as EmployeesApi;
 
 class EmployeesRoutesTest extends \WP_UnitTestCase
 {

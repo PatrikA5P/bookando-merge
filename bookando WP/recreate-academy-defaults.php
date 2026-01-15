@@ -38,7 +38,7 @@ echo "   Migration-Flag zurückgesetzt\n\n";
 // 3. Erstelle neue Defaults
 echo "3. Erstelle neue Defaults...\n";
 require_once __DIR__ . '/src/modules/academy/StateRepository.php';
-$state = \Bookando\Modules\academy\StateRepository::getState();
+$state = \Bookando\Modules\Academy\StateRepository::getState();
 
 echo "   Kurse erstellt: " . count($state['courses']) . "\n";
 echo "   Training Cards erstellt: " . count($state['training_cards']) . "\n\n";

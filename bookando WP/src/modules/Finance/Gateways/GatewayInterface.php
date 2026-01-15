@@ -10,7 +10,7 @@ namespace Bookando\Modules\Finance\Gateways;
  * Defines the contract for all payment gateways in Bookando.
  * All payment providers must implement this interface.
  *
- * @package Bookando\Modules\finance\Gateways
+ * @package Bookando\Modules\Finance\Gateways
  */
 interface GatewayInterface
 {

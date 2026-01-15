@@ -11,7 +11,7 @@ use Exception;
  *
  * Manages vacation entitlements, balances, and calculations.
  *
- * @package Bookando\Modules\workday\Services
+ * @package Bookando\Modules\Workday\Services
  */
 class VacationBalanceService
 {

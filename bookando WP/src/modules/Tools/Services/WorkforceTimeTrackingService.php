@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Bookando\Modules\Tools\Services;
 
-use Bookando\Modules\employees\Model as EmployeesModel;
+use Bookando\Modules\Employees\Model as EmployeesModel;
 use DateTimeImmutable;
 use DateTimeZone;
 use Exception;
@@ -14,7 +14,7 @@ use function wp_timezone;
 /**
  * Enhanced Time Tracking Service integrated with Employee module.
  *
- * @deprecated Use Bookando\Modules\workday\Services\WorkforceTimeTrackingService instead
+ * @deprecated Use Bookando\Modules\Workday\Services\WorkforceTimeTrackingService instead
  * @todo Remove in next major version - functionality moved to workday module
  *
  * Features:

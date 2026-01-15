@@ -3,14 +3,14 @@
 namespace Bookando\Tests\Integration\Rest;
 
 use WP_UnitTestCase;
-use Bookando\Modules\academy\Api\Api as AcademyApi;
-use Bookando\Modules\appointments\Api\Api as AppointmentsApi;
-use Bookando\Modules\customers\Api\Api as CustomersApi;
-use Bookando\Modules\employees\Api\Api as EmployeesApi;
-use Bookando\Modules\finance\Api\Api as FinanceApi;
-use Bookando\Modules\offers\Api\Api as OffersApi;
-use Bookando\Modules\resources\Api\Api as ResourcesApi;
-use Bookando\Modules\settings\Api\Api as SettingsApi;
+use Bookando\Modules\Academy\Api\Api as AcademyApi;
+use Bookando\Modules\Appointments\Api\Api as AppointmentsApi;
+use Bookando\Modules\Customers\Api\Api as CustomersApi;
+use Bookando\Modules\Employees\Api\Api as EmployeesApi;
+use Bookando\Modules\Finance\Api\Api as FinanceApi;
+use Bookando\Modules\Offers\Api\Api as OffersApi;
+use Bookando\Modules\Resources\Api\Api as ResourcesApi;
+use Bookando\Modules\Settings\Api\Api as SettingsApi;
 
 class RouteSnapshotTest extends WP_UnitTestCase
 {

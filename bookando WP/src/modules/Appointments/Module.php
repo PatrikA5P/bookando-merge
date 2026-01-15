@@ -4,9 +4,9 @@ declare(strict_types=1);
 namespace Bookando\Modules\Appointments;
 
 use Bookando\Core\Base\BaseModule;
-use Bookando\Modules\appointments\Admin\Admin;
-use Bookando\Modules\appointments\Api\Api;
-use Bookando\Modules\appointments\Capabilities;
+use Bookando\Modules\Appointments\Admin\Admin;
+use Bookando\Modules\Appointments\Api\Api;
+use Bookando\Modules\Appointments\Capabilities;
 
 class Module extends BaseModule
 {

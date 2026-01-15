@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Bookando\Modules\Finance\Gateways\Mollie;
 
-use Bookando\Modules\finance\Gateways\AbstractGateway;
+use Bookando\Modules\Finance\Gateways\AbstractGateway;
 use Mollie\Api\MollieApiClient;
 use Mollie\Api\Exceptions\ApiException;
 
@@ -14,7 +14,7 @@ use Mollie\Api\Exceptions\ApiException;
  * Mollie payment gateway implementation.
  * Popular in Netherlands, Belgium, Germany - supports iDEAL, Bancontact, SEPA, etc.
  *
- * @package Bookando\Modules\finance\Gateways\Mollie
+ * @package Bookando\Modules\Finance\Gateways\Mollie
  */
 class MollieGateway extends AbstractGateway
 {

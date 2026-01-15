@@ -6,7 +6,7 @@ namespace Bookando\Modules\Tools\Api;
 
 use WP_REST_Server;
 use Bookando\Core\Base\BaseApi;
-use Bookando\Modules\tools\RestHandler;
+use Bookando\Modules\Tools\RestHandler;
 
 class Api extends BaseApi
 {

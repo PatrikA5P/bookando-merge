@@ -5,9 +5,9 @@ declare(strict_types=1);
 namespace Bookando\Modules\Workday;
 
 use Bookando\Core\Base\BaseModule;
-use Bookando\Modules\workday\Admin\Admin;
-use Bookando\Modules\workday\Api\Api;
-use Bookando\Modules\workday\Capabilities;
+use Bookando\Modules\Workday\Admin\Admin;
+use Bookando\Modules\Workday\Api\Api;
+use Bookando\Modules\Workday\Capabilities;
 
 class Module extends BaseModule
 {

@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Bookando\Modules\Finance\Gateways\Twint;
 
-use Bookando\Modules\finance\Gateways\AbstractGateway;
+use Bookando\Modules\Finance\Gateways\AbstractGateway;
 
 /**
  * Class TwintGateway
@@ -12,7 +12,7 @@ use Bookando\Modules\finance\Gateways\AbstractGateway;
  * Twint payment gateway implementation (Swiss mobile payment solution).
  * Uses Twint Merchant API (requires contract with Twint/Swiss Payment Provider).
  *
- * @package Bookando\Modules\finance\Gateways\Twint
+ * @package Bookando\Modules\Finance\Gateways\Twint
  */
 class TwintGateway extends AbstractGateway
 {
