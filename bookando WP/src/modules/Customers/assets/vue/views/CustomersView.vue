@@ -80,7 +80,7 @@
               <label class="block text-xs font-bold text-slate-500 uppercase mb-2">{{ $t('mod.customers.filter.sort') }}</label>
               <select
                 v-model="activeFilters.sortBy"
-                class="w-full border border-slate-300 rounded-lg px-3 py-2 text-sm appearance-none bg-slate-50 focus:bg-white focus:ring-2 focus:ring-emerald-500 outline-none"
+                class="w-full border border-slate-300 rounded-lg px-3 py-2 text-sm appearance-none bg-slate-50 focus:bg-white focus:ring-2 focus:ring-brand-500 outline-none"
               >
                 <option value="name_asc">{{ $t('mod.customers.sort.name_asc') }}</option>
                 <option value="name_desc">{{ $t('mod.customers.sort.name_desc') }}</option>
@@ -99,7 +99,7 @@
       <!-- Mobile Floating Action Button -->
       <button
         @click="openCreateDialog"
-        class="fixed bottom-6 right-6 w-14 h-14 bg-emerald-600 text-white rounded-full shadow-2xl flex items-center justify-center z-50 hover:bg-emerald-700 active:scale-95 transition-all"
+        class="fixed bottom-6 right-6 w-14 h-14 bg-accent-600 text-white rounded-full shadow-2xl flex items-center justify-center z-50 hover:bg-accent-700 active:scale-95 transition-all"
       >
         <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
@@ -146,7 +146,7 @@
                       v-model="searchQuery"
                       type="text"
                       :placeholder="$t('mod.customers.search_placeholder')"
-                      class="w-full pl-9 pr-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500 transition-all border border-slate-200 rounded-xl bg-slate-50 focus:bg-white"
+                      class="w-full pl-9 pr-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-brand-500 transition-all border border-slate-200 rounded-xl bg-slate-50 focus:bg-white"
                     >
                   </div>
 
@@ -178,7 +178,7 @@
                 <div class="pl-3 border-l border-slate-100">
                   <button
                     @click="openCreateDialog"
-                    class="flex items-center gap-2 shadow-sm whitespace-nowrap transition-colors shrink-0 bg-emerald-600 hover:bg-emerald-700 text-white px-5 py-2.5 rounded-xl text-sm font-bold"
+                    class="flex items-center gap-2 shadow-sm whitespace-nowrap transition-colors shrink-0 bg-accent-600 hover:bg-accent-700 text-white px-5 py-2.5 rounded-xl text-sm font-bold"
                   >
                     <svg class="w-4.5 h-4.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
@@ -220,7 +220,7 @@
                     <label class="block text-xs font-bold text-slate-500 uppercase mb-2">{{ $t('mod.customers.filter.sort') }}</label>
                     <select
                       v-model="activeFilters.sortBy"
-                      class="w-full border border-slate-300 rounded-lg px-3 py-2 text-sm appearance-none bg-slate-50 focus:bg-white focus:ring-2 focus:ring-emerald-500 outline-none"
+                      class="w-full border border-slate-300 rounded-lg px-3 py-2 text-sm appearance-none bg-slate-50 focus:bg-white focus:ring-2 focus:ring-brand-500 outline-none"
                     >
                       <option value="name_asc">{{ $t('mod.customers.sort.name_asc') }}</option>
                       <option value="name_desc">{{ $t('mod.customers.sort.name_desc') }}</option>
@@ -352,7 +352,7 @@
               </span>
               <select
                 v-model="itemsPerPage"
-                class="bg-white border border-slate-300 rounded-lg px-2 py-1 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500 cursor-pointer"
+                class="bg-white border border-slate-300 rounded-lg px-2 py-1 text-sm focus:outline-none focus:ring-2 focus:ring-brand-500 cursor-pointer"
               >
                 <option :value="10">10 {{ $t('mod.customers.pagination.per_page') }}</option>
                 <option :value="25">25 {{ $t('mod.customers.pagination.per_page') }}</option>
@@ -380,7 +380,7 @@
                 :class="[
                   'min-w-[32px] h-8 px-2 rounded-lg text-sm font-medium transition-colors',
                   page === currentPage
-                    ? 'bg-emerald-600 text-white shadow-sm'
+                    ? 'bg-accent-600 text-white shadow-sm'
                     : typeof page === 'number' ? 'bg-white border border-slate-300 text-slate-600 hover:bg-slate-50' : 'text-slate-400 cursor-default'
                 ]"
               >
