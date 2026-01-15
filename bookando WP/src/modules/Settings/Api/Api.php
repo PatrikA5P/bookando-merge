@@ -6,7 +6,7 @@ namespace Bookando\Modules\Settings\Api;
 
 use Bookando\Core\Api\Response;
 use Bookando\Core\Base\BaseApi;
-use Bookando\Modules\settings\RestHandler;
+use Bookando\Modules\Settings\RestHandler;
 use WP_REST_Request;
 use function _x;
 

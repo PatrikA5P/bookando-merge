@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Bookando\Modules\Finance\Gateways\Mollie;
 
-use Bookando\Modules\finance\Gateways\AbstractGateway;
+use Bookando\Modules\Finance\Gateways\AbstractGateway;
 use Mollie\Api\MollieApiClient;
 use Mollie\Api\Exceptions\ApiException;
 

@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Bookando\Modules\Finance\Gateways\Klarna;
 
-use Bookando\Modules\finance\Gateways\AbstractGateway;
+use Bookando\Modules\Finance\Gateways\AbstractGateway;
 
 /**
  * Class KlarnaGateway

@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Bookando\Modules\Finance;
 
-use Bookando\Modules\finance\Gateways\GatewayManager;
+use Bookando\Modules\Finance\Gateways\GatewayManager;
 use Bookando\Core\Service\ActivityLogger;
 
 /**

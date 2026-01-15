@@ -9,7 +9,7 @@ use WP_REST_Request;
 use WP_REST_Server;
 use Bookando\Core\Base\BaseApi;
 use Bookando\Core\Licensing\LicenseManager;
-use Bookando\Modules\offers\RestHandler;
+use Bookando\Modules\Offers\RestHandler;
 
 class Api extends BaseApi
 {

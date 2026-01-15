@@ -7,9 +7,9 @@ namespace Bookando\Modules\Workday;
 use WP_REST_Request;
 use WP_REST_Response;
 use Bookando\Core\Api\Response;
-use Bookando\Modules\workday\Services\WorkforceTimeTrackingService;
-use Bookando\Modules\workday\Services\VacationRequestService;
-use Bookando\Modules\workday\Services\DutySchedulerService;
+use Bookando\Modules\Workday\Services\WorkforceTimeTrackingService;
+use Bookando\Modules\Workday\Services\VacationRequestService;
+use Bookando\Modules\Workday\Services\DutySchedulerService;
 use Throwable;
 use function __;
 

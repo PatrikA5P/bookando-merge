@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Bookando\Modules\Finance\Gateways\PayPal;
 
-use Bookando\Modules\finance\Gateways\AbstractGateway;
+use Bookando\Modules\Finance\Gateways\AbstractGateway;
 use PayPalCheckoutSdk\Core\PayPalHttpClient;
 use PayPalCheckoutSdk\Core\SandboxEnvironment;
 use PayPalCheckoutSdk\Core\ProductionEnvironment;

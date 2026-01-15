@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Bookando\Modules\Workday\Services;
 
-use Bookando\Modules\employees\Model as EmployeesModel;
+use Bookando\Modules\Employees\Model as EmployeesModel;
 use DateTimeImmutable;
 use DateTimeZone;
 use Exception;
