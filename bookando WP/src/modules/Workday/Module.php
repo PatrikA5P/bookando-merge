@@ -15,9 +15,10 @@ class Module extends BaseModule
     {
         $this->registerCapabilities(Capabilities::class);
 
-        $this->registerAdminHooks(function (): void {
+        $module = $this; // Capture $this for use in closure
+        $this->registerAdminHooks(function () use ($module): void {
             add_action('bookando_register_module_menus', [Admin::class, 'register_menu']);
-            add_action('admin_enqueue_scripts', [$this, 'enqueue_admin_assets']);
+            add_action('admin_enqueue_scripts', [$module, 'enqueue_admin_assets']);
         });
 
         Api::register();
