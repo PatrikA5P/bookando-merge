@@ -152,7 +152,7 @@
           :class="[
             'px-5 py-2.5 text-sm font-bold text-white rounded-xl transition-all',
             isValid && !loading
-              ? 'bg-accent-600 hover:bg-accent-700 shadow-sm'
+              ? 'bg-accent-500 hover:bg-accent-700 shadow-sm'
               : 'bg-slate-300 cursor-not-allowed'
           ]"
         >
