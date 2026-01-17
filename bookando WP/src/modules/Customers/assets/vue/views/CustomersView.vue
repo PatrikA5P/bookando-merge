@@ -47,9 +47,12 @@
             </svg>
           </button>
         </div>
+      </div>
 
+      <!-- Content Wrapper -->
+      <div class="flex-1">
         <!-- Filter Content Panel (if open) -->
-        <div v-if="isFilterOpen" class="bg-white border-b border-slate-200 p-4 shadow-inner max-h-[50vh] overflow-y-auto text-slate-800">
+        <div v-if="isFilterOpen" class="bg-white border-b border-slate-200 p-4 shadow-inner max-h-[50vh] overflow-y-auto text-slate-800 animate-slideDown">
           <div class="space-y-4">
             <!-- Status Filter -->
             <div>
@@ -58,10 +61,10 @@
                 <label v-for="status in statusOptions" :key="status" class="flex items-center gap-2 cursor-pointer group">
                   <div :class="[
                     'w-4 h-4 rounded border flex items-center justify-center transition-colors',
-                    activeFilters.status.includes(status) ? 'bg-brand-600 border-brand-600' : 'border-slate-300 bg-white'
+                    activeFilters.status.includes(status) ? 'bg-accent-500 border-accent-500' : 'border-slate-300 bg-white'
                   ]">
                     <svg v-if="activeFilters.status.includes(status)" class="w-2.5 h-2.5 text-white" fill="currentColor" viewBox="0 0 20 20">
-                      <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd" />
+                      <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4 a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd" />
                     </svg>
                   </div>
                   <input
@@ -89,17 +92,16 @@
             </div>
           </div>
         </div>
-      </div>
 
-      <!-- Content Wrapper -->
-      <div class="flex-1 p-4">
-        <CustomersList :customers="paginatedCustomers" @edit="handleEdit" @delete="handleDelete" />
+        <div class="p-4">
+          <CustomersList :customers="paginatedCustomers" @edit="handleEdit" @delete="handleDelete" />
+        </div>
       </div>
 
       <!-- Mobile Floating Action Button -->
       <button
         @click="openCreateDialog"
-        class="fixed bottom-6 right-6 w-14 h-14 bg-brand-600 text-white rounded-full shadow-2xl flex items-center justify-center z-50 hover:bg-brand-700 active:scale-95 transition-all"
+        class="fixed bottom-6 right-6 w-14 h-14 bg-accent-500 text-white rounded-full shadow-2xl flex items-center justify-center z-50 hover:bg-accent-700 active:scale-95 transition-all"
       >
         <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
@@ -155,7 +157,7 @@
                     @click="isFilterOpen = !isFilterOpen"
                     :class="[
                       'transition-colors flex items-center justify-center shrink-0 border rounded-xl p-2.5',
-                      isFilterOpen ? 'bg-brand-50 border-brand-200 text-brand-700' : 'bg-white border-slate-200 text-slate-600 hover:bg-slate-50'
+                      isFilterOpen ? 'bg-accent-50 border-accent-200 text-accent-700' : 'bg-white border-slate-200 text-slate-600 hover:bg-slate-50'
                     ]"
                   >
                     <svg class="w-4.5 h-4.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -178,7 +180,7 @@
                 <div class="pl-3 border-l border-slate-100">
                   <button
                     @click="openCreateDialog"
-                    class="flex items-center gap-2 shadow-sm whitespace-nowrap transition-colors shrink-0 bg-brand-600 hover:bg-brand-700 text-white px-5 py-2.5 rounded-xl text-sm font-bold"
+                    class="flex items-center gap-2 shadow-sm whitespace-nowrap transition-colors shrink-0 bg-accent-500 hover:bg-accent-700 text-white px-5 py-2.5 rounded-xl text-sm font-bold"
                   >
                     <svg class="w-4.5 h-4.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
@@ -187,54 +189,54 @@
                   </button>
                 </div>
               </div>
-
-              <!-- Filter Expansion inside the action box -->
-              <div v-if="isFilterOpen" class="mt-4 pt-4 border-t border-slate-100 animate-slideDown">
-                <div class="grid grid-cols-3 gap-4">
-                  <!-- Status Filter -->
-                  <div>
-                    <label class="block text-xs font-bold text-slate-500 uppercase mb-2">{{ $t('mod.customers.filter.status') }}</label>
-                    <div class="space-y-2">
-                      <label v-for="status in statusOptions" :key="status" class="flex items-center gap-2 cursor-pointer group">
-                        <div :class="[
-                          'w-4 h-4 rounded border flex items-center justify-center transition-colors',
-                          activeFilters.status.includes(status) ? 'bg-brand-600 border-brand-600' : 'border-slate-300 bg-white'
-                        ]">
-                          <svg v-if="activeFilters.status.includes(status)" class="w-2.5 h-2.5 text-white" fill="currentColor" viewBox="0 0 20 20">
-                            <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd" />
-                          </svg>
-                        </div>
-                        <input
-                          type="checkbox"
-                          class="hidden"
-                          :checked="activeFilters.status.includes(status)"
-                          @change="toggleStatusFilter(status)"
-                        >
-                        <span class="text-sm text-slate-700 group-hover:text-slate-900">{{ status }}</span>
-                      </label>
-                    </div>
-                  </div>
-
-                  <!-- Sort Order -->
-                  <div>
-                    <label class="block text-xs font-bold text-slate-500 uppercase mb-2">{{ $t('mod.customers.filter.sort') }}</label>
-                    <select
-                      v-model="activeFilters.sortBy"
-                      class="w-full border border-slate-300 rounded-lg px-3 py-2 text-sm appearance-none bg-slate-50 focus:bg-white focus:ring-2 focus:ring-brand-500 outline-none"
-                    >
-                      <option value="name_asc">{{ $t('mod.customers.sort.name_asc') }}</option>
-                      <option value="name_desc">{{ $t('mod.customers.sort.name_desc') }}</option>
-                      <option value="newest">{{ $t('mod.customers.sort.newest') }}</option>
-                    </select>
-                  </div>
-                </div>
-              </div>
             </div>
           </div>
         </div>
 
         <!-- Content Body -->
         <main class="bg-white border border-slate-200 shadow-sm flex-1 flex flex-col z-0 relative rounded-xl overflow-hidden">
+          <!-- Filter Expansion inside the content container -->
+          <div v-if="isFilterOpen" class="p-4 border-b border-slate-200 bg-slate-50 animate-slideDown">
+            <div class="grid grid-cols-3 gap-4">
+              <!-- Status Filter -->
+              <div>
+                <label class="block text-xs font-bold text-slate-500 uppercase mb-2">{{ $t('mod.customers.filter.status') }}</label>
+                <div class="space-y-2">
+                  <label v-for="status in statusOptions" :key="status" class="flex items-center gap-2 cursor-pointer group">
+                    <div :class="[
+                      'w-4 h-4 rounded border flex items-center justify-center transition-colors',
+                      activeFilters.status.includes(status) ? 'bg-accent-500 border-accent-500' : 'border-slate-300 bg-white'
+                    ]">
+                      <svg v-if="activeFilters.status.includes(status)" class="w-2.5 h-2.5 text-white" fill="currentColor" viewBox="0 0 20 20">
+                        <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd" />
+                      </svg>
+                    </div>
+                    <input
+                      type="checkbox"
+                      class="hidden"
+                      :checked="activeFilters.status.includes(status)"
+                      @change="toggleStatusFilter(status)"
+                    >
+                    <span class="text-sm text-slate-700 group-hover:text-slate-900">{{ status }}</span>
+                  </label>
+                </div>
+              </div>
+
+              <!-- Sort Order -->
+              <div>
+                <label class="block text-xs font-bold text-slate-500 uppercase mb-2">{{ $t('mod.customers.filter.sort') }}</label>
+                <select
+                  v-model="activeFilters.sortBy"
+                  class="w-full border border-slate-300 rounded-lg px-3 py-2 text-sm appearance-none bg-slate-50 focus:bg-white focus:ring-2 focus:ring-brand-500 outline-none"
+                >
+                  <option value="name_asc">{{ $t('mod.customers.sort.name_asc') }}</option>
+                  <option value="name_desc">{{ $t('mod.customers.sort.name_desc') }}</option>
+                  <option value="newest">{{ $t('mod.customers.sort.newest') }}</option>
+                </select>
+              </div>
+            </div>
+          </div>
+
           <!-- Table -->
           <div class="flex-1 overflow-y-auto">
             <table class="w-full text-left border-collapse">
@@ -380,7 +382,7 @@
                 :class="[
                   'min-w-[32px] h-8 px-2 rounded-lg text-sm font-medium transition-colors',
                   page === currentPage
-                    ? 'bg-brand-600 text-white shadow-sm'
+                    ? 'bg-accent-500 text-white shadow-sm'
                     : typeof page === 'number' ? 'bg-white border border-slate-300 text-slate-600 hover:bg-slate-50' : 'text-slate-400 cursor-default'
                 ]"
               >
