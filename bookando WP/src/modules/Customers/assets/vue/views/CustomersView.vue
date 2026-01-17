@@ -58,7 +58,7 @@
                 <label v-for="status in statusOptions" :key="status" class="flex items-center gap-2 cursor-pointer group">
                   <div :class="[
                     'w-4 h-4 rounded border flex items-center justify-center transition-colors',
-                    activeFilters.status.includes(status) ? 'bg-emerald-600 border-emerald-600' : 'border-slate-300 bg-white'
+                    activeFilters.status.includes(status) ? 'bg-brand-600 border-brand-600' : 'border-slate-300 bg-white'
                   ]">
                     <svg v-if="activeFilters.status.includes(status)" class="w-2.5 h-2.5 text-white" fill="currentColor" viewBox="0 0 20 20">
                       <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd" />
@@ -99,7 +99,7 @@
       <!-- Mobile Floating Action Button -->
       <button
         @click="openCreateDialog"
-        class="fixed bottom-6 right-6 w-14 h-14 bg-accent-500 text-white rounded-full shadow-2xl flex items-center justify-center z-50 hover:bg-accent-700 active:scale-95 transition-all"
+        class="fixed bottom-6 right-6 w-14 h-14 bg-brand-600 text-white rounded-full shadow-2xl flex items-center justify-center z-50 hover:bg-brand-700 active:scale-95 transition-all"
       >
         <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
@@ -121,7 +121,7 @@
                     <svg class="w-6 h-6 text-white/80" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" />
                     </svg>
-                    <h2 class="font-bold text-xl">{{ $t('mod.customers.title') }}</h2>
+                    <h2 class="font-bold text-xl text-white">{{ $t('mod.customers.title') }}</h2>
                   </div>
                   <p class="text-xs max-w-2xl text-white/70">{{ $t('mod.customers.description') }}</p>
                 </div>
@@ -155,7 +155,7 @@
                     @click="isFilterOpen = !isFilterOpen"
                     :class="[
                       'transition-colors flex items-center justify-center shrink-0 border rounded-xl p-2.5',
-                      isFilterOpen ? 'bg-emerald-50 border-emerald-200 text-emerald-700' : 'bg-white border-slate-200 text-slate-600 hover:bg-slate-50'
+                      isFilterOpen ? 'bg-brand-50 border-brand-200 text-brand-700' : 'bg-white border-slate-200 text-slate-600 hover:bg-slate-50'
                     ]"
                   >
                     <svg class="w-4.5 h-4.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -178,7 +178,7 @@
                 <div class="pl-3 border-l border-slate-100">
                   <button
                     @click="openCreateDialog"
-                    class="flex items-center gap-2 shadow-sm whitespace-nowrap transition-colors shrink-0 bg-accent-500 hover:bg-accent-700 text-white px-5 py-2.5 rounded-xl text-sm font-bold"
+                    class="flex items-center gap-2 shadow-sm whitespace-nowrap transition-colors shrink-0 bg-brand-600 hover:bg-brand-700 text-white px-5 py-2.5 rounded-xl text-sm font-bold"
                   >
                     <svg class="w-4.5 h-4.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
@@ -198,7 +198,7 @@
                       <label v-for="status in statusOptions" :key="status" class="flex items-center gap-2 cursor-pointer group">
                         <div :class="[
                           'w-4 h-4 rounded border flex items-center justify-center transition-colors',
-                          activeFilters.status.includes(status) ? 'bg-emerald-600 border-emerald-600' : 'border-slate-300 bg-white'
+                          activeFilters.status.includes(status) ? 'bg-brand-600 border-brand-600' : 'border-slate-300 bg-white'
                         ]">
                           <svg v-if="activeFilters.status.includes(status)" class="w-2.5 h-2.5 text-white" fill="currentColor" viewBox="0 0 20 20">
                             <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd" />
@@ -380,7 +380,7 @@
                 :class="[
                   'min-w-[32px] h-8 px-2 rounded-lg text-sm font-medium transition-colors',
                   page === currentPage
-                    ? 'bg-accent-500 text-white shadow-sm'
+                    ? 'bg-brand-600 text-white shadow-sm'
                     : typeof page === 'number' ? 'bg-white border border-slate-300 text-slate-600 hover:bg-slate-50' : 'text-slate-400 cursor-default'
                 ]"
               >
