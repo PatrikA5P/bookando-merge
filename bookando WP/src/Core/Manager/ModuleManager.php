@@ -30,7 +30,26 @@ class ModuleManager
      */
     private function getActiveSlugs(): array
     {
-        return $this->stateRepository->getActiveSlugs();
+        $activeSlugs = $this->stateRepository->getActiveSlugs();
+        $alwaysActive = $this->getAlwaysActiveSlugs();
+
+        return array_values(array_unique(array_merge($activeSlugs, $alwaysActive)));
+    }
+
+    /**
+     * @return list<string>
+     */
+    private function getAlwaysActiveSlugs(): array
+    {
+        $slugs = [];
+
+        foreach (ModuleManifest::all() as $slug => $manifest) {
+            if ($manifest->isAlwaysActive()) {
+                $slugs[] = $slug;
+            }
+        }
+
+        return $slugs;
     }
 
     /**
