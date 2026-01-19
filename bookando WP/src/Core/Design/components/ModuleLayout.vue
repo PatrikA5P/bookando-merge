@@ -8,7 +8,7 @@
       <div
         :class="[
           'sticky top-0 left-0 right-0 z-20 transition-transform duration-300 ease-in-out shadow-lg text-white',
-          heroGradient,
+          getMobileGradient(),
           isHeaderVisible ? 'translate-y-0' : '-translate-y-full'
         ]"
       >
@@ -63,19 +63,16 @@
             </svg>
           </button>
         </div>
+
+        <!-- Filter Content Panel (inside sticky header, drops down from blue header) -->
+        <div v-if="isFilterOpen && $slots.filterContent" class="bg-white border-b border-slate-200 p-4 shadow-inner max-h-[50vh] overflow-y-auto text-slate-800">
+          <slot name="filterContent"></slot>
+        </div>
       </div>
 
       <!-- Content Wrapper -->
       <div class="flex-1">
-        <!-- Filter Content Panel (if open) - Mobile -->
-        <div v-if="isFilterOpen && $slots.filterContent" class="bg-white border-b border-slate-200 p-4 shadow-inner max-h-[50vh] overflow-y-auto text-slate-800 animate-slideDown">
-          <slot name="filterContent"></slot>
-        </div>
-
-        <!-- Main Content -->
-        <div class="p-4">
-          <slot></slot>
-        </div>
+        <slot></slot>
       </div>
 
       <!-- Mobile Floating Action Button -->
@@ -199,21 +196,18 @@
                     </button>
                   </div>
                 </div>
+
+                <!-- Filter Expansion inside the action box -->
+                <div v-if="isFilterOpen && $slots.filterContent" class="mt-4 pt-4 border-t border-slate-100 animate-slideDown">
+                  <slot name="filterContent"></slot>
+                </div>
               </div>
             </div>
           </div>
 
           <!-- Content Body -->
           <main class="bg-white border border-slate-200 shadow-sm flex-1 flex flex-col z-0 relative rounded-xl overflow-hidden">
-            <!-- Filter Panel inside content -->
-            <div v-if="isFilterOpen && $slots.filterContent" class="p-4 border-b border-slate-200 bg-slate-50 animate-slideDown">
-              <slot name="filterContent"></slot>
-            </div>
-
-            <!-- Main Content -->
-            <div class="flex-1 overflow-y-auto">
-              <slot></slot>
-            </div>
+            <slot></slot>
           </main>
         </div>
 
@@ -373,6 +367,11 @@ const getActiveTabLabel = () => {
   if (!props.tabs || props.tabs.length === 0) return props.heroTitle
   const activeTabObj = props.tabs.find(t => t.id === props.activeTab)
   return activeTabObj ? activeTabObj.label : props.heroTitle
+}
+
+const getMobileGradient = () => {
+  // Convert bg-gradient-to-br to bg-gradient-to-r for mobile header
+  return props.heroGradient.replace('bg-gradient-to-br', 'bg-gradient-to-r')
 }
 
 // Setup scroll listener for mobile

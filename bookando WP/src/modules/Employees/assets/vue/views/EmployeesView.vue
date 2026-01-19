@@ -3,7 +3,7 @@
     hero-title="Employees"
     :hero-description="$t('mod.employees.description')"
     :hero-icon="BriefcaseIcon"
-    hero-gradient="bg-gradient-to-br from-indigo-700 to-purple-900"
+    hero-gradient="bg-gradient-to-br from-slate-700 to-slate-900"
     :show-search="true"
     v-model:search-query="searchQuery"
     :search-placeholder="$t('mod.employees.search_placeholder')"
