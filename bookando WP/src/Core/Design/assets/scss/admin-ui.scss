@@ -6,9 +6,226 @@
 /* 🎨 TAILWIND CSS IMPORTS */
 /* ---------------------------------- */
 
-@tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+/* ---------------------------------- */
+/* 🧼 SCOPED BASE RESET (Plugin only) */
+/* ---------------------------------- */
+@layer base {
+  .bookando-admin-page {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    line-height: 1.5;
+    -webkit-text-size-adjust: 100%;
+    tab-size: 4;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  .bookando-admin-page *,
+  .bookando-admin-page *::before,
+  .bookando-admin-page *::after {
+    box-sizing: border-box;
+    border-width: 0;
+    border-style: solid;
+    border-color: #e5e7eb;
+  }
+
+  .bookando-admin-page ::before,
+  .bookando-admin-page ::after {
+    --tw-content: "";
+  }
+
+  .bookando-admin-page body {
+    margin: 0;
+    line-height: inherit;
+  }
+
+  .bookando-admin-page hr {
+    height: 0;
+    color: inherit;
+    border-top-width: 1px;
+  }
+
+  .bookando-admin-page abbr[title] {
+    text-decoration: underline dotted;
+  }
+
+  .bookando-admin-page h1,
+  .bookando-admin-page h2,
+  .bookando-admin-page h3,
+  .bookando-admin-page h4,
+  .bookando-admin-page h5,
+  .bookando-admin-page h6 {
+    font-size: inherit;
+    font-weight: inherit;
+  }
+
+  .bookando-admin-page a {
+    color: inherit;
+    text-decoration: inherit;
+  }
+
+  .bookando-admin-page b,
+  .bookando-admin-page strong {
+    font-weight: bolder;
+  }
+
+  .bookando-admin-page code,
+  .bookando-admin-page pre {
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+    font-size: 1em;
+  }
+
+  .bookando-admin-page small {
+    font-size: 80%;
+  }
+
+  .bookando-admin-page sub,
+  .bookando-admin-page sup {
+    font-size: 75%;
+    line-height: 0;
+    position: relative;
+    vertical-align: baseline;
+  }
+
+  .bookando-admin-page sub {
+    bottom: -0.25em;
+  }
+
+  .bookando-admin-page sup {
+    top: -0.5em;
+  }
+
+  .bookando-admin-page table {
+    text-indent: 0;
+    border-color: inherit;
+    border-collapse: collapse;
+  }
+
+  .bookando-admin-page button,
+  .bookando-admin-page input,
+  .bookando-admin-page optgroup,
+  .bookando-admin-page select,
+  .bookando-admin-page textarea {
+    font-family: inherit;
+    font-size: 100%;
+    font-weight: inherit;
+    line-height: inherit;
+    letter-spacing: inherit;
+    color: inherit;
+    margin: 0;
+    padding: 0;
+  }
+
+  .bookando-admin-page button,
+  .bookando-admin-page select {
+    text-transform: none;
+  }
+
+  .bookando-admin-page button,
+  .bookando-admin-page input[type='button'],
+  .bookando-admin-page input[type='reset'],
+  .bookando-admin-page input[type='submit'] {
+    appearance: button;
+    background-color: transparent;
+    background-image: none;
+  }
+
+  .bookando-admin-page progress {
+    vertical-align: baseline;
+  }
+
+  .bookando-admin-page ::-webkit-inner-spin-button,
+  .bookando-admin-page ::-webkit-outer-spin-button {
+    height: auto;
+  }
+
+  .bookando-admin-page [type='search'] {
+    appearance: textfield;
+    outline-offset: -2px;
+  }
+
+  .bookando-admin-page ::-webkit-search-decoration {
+    appearance: none;
+  }
+
+  .bookando-admin-page ::-webkit-file-upload-button {
+    appearance: button;
+    font: inherit;
+  }
+
+  .bookando-admin-page summary {
+    display: list-item;
+  }
+
+  .bookando-admin-page blockquote,
+  .bookando-admin-page dl,
+  .bookando-admin-page dd,
+  .bookando-admin-page h1,
+  .bookando-admin-page h2,
+  .bookando-admin-page h3,
+  .bookando-admin-page h4,
+  .bookando-admin-page h5,
+  .bookando-admin-page h6,
+  .bookando-admin-page hr,
+  .bookando-admin-page figure,
+  .bookando-admin-page p,
+  .bookando-admin-page pre {
+    margin: 0;
+  }
+
+  .bookando-admin-page legend {
+    padding: 0;
+  }
+
+  .bookando-admin-page ol,
+  .bookando-admin-page ul,
+  .bookando-admin-page menu {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  .bookando-admin-page dialog {
+    padding: 0;
+  }
+
+  .bookando-admin-page textarea {
+    resize: vertical;
+  }
+
+  .bookando-admin-page input::placeholder,
+  .bookando-admin-page textarea::placeholder {
+    opacity: 1;
+    color: #9ca3af;
+  }
+
+  .bookando-admin-page button,
+  .bookando-admin-page [role='button'] {
+    cursor: pointer;
+  }
+
+  .bookando-admin-page img,
+  .bookando-admin-page svg,
+  .bookando-admin-page video,
+  .bookando-admin-page audio,
+  .bookando-admin-page iframe,
+  .bookando-admin-page embed,
+  .bookando-admin-page object {
+    display: block;
+    vertical-align: middle;
+  }
+
+  .bookando-admin-page img,
+  .bookando-admin-page video {
+    max-width: 100%;
+    height: auto;
+  }
+
+  .bookando-admin-page [hidden]:not([hidden='until-found']) {
+    display: none;
+  }
+}
 
 /* ---------------------------------- */
 /* 🎨 BRAND COLORS (CSS Custom Properties) */

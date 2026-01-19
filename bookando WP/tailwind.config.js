@@ -1,6 +1,9 @@
 /** @type {import('tailwindcss').Config} */
 export default {
   important: '.bookando-admin-page',
+  corePlugins: {
+    preflight: false,
+  },
   content: [
     './src/**/*.{vue,js,ts,jsx,tsx}',
     './src/**/*.php',
