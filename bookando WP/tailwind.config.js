@@ -10,20 +10,31 @@ export default {
   ],
   theme: {
     extend: {
+      fontFamily: {
+        sans: ['Inter', 'sans-serif'],
+      },
+      fontSize: {
+        xs: 'clamp(0.7rem, 0.65rem + 0.2vw, 0.75rem)',
+        sm: 'clamp(0.8rem, 0.75rem + 0.25vw, 0.875rem)',
+        base: 'clamp(0.9rem, 0.85rem + 0.25vw, 1rem)',
+        lg: 'clamp(1.05rem, 1rem + 0.3vw, 1.125rem)',
+        xl: 'clamp(1.15rem, 1.1rem + 0.4vw, 1.25rem)',
+        '2xl': 'clamp(1.35rem, 1.25rem + 0.5vw, 1.5rem)',
+        '3xl': 'clamp(1.75rem, 1.5rem + 1vw, 2rem)',
+        '4xl': 'clamp(2.25rem, 2rem + 1.5vw, 2.75rem)',
+      },
       colors: {
-        // Brand/Primary Colors (bookando WP existing)
+        // Brand/Primary Colors (Original Design)
         brand: {
-          50: '#e3fbf3',
-          100: '#c7f7e8',
-          200: '#90eed0',
-          300: '#58e6b9',
-          400: '#21dda1',
-          500: '#12DE9D', // Primary
-          600: '#0FB87F', // Primary Dark
-          700: '#0c9465',
-          800: '#09704b',
-          900: '#064c32',
-          950: '#033818',
+          50: '#f0f9ff',
+          100: '#e0f2fe',
+          500: '#0ea5e9',
+          600: '#0284c7',
+          700: '#0369a1',
+          900: '#0c4a6e',
+        },
+        slate: {
+          850: '#15202b',
         },
         // Status Colors
         success: {
@@ -56,53 +67,12 @@ export default {
         },
         // Accent Blue
         accent: {
-          DEFAULT: '#0087E2',
-          50: '#e6f4ff',
-          100: '#cce9ff',
-          500: '#0087E2',
-          700: '#006bb3',
+          DEFAULT: '#0ea5e9',
+          50: '#f0f9ff',
+          100: '#e0f2fe',
+          500: '#0ea5e9',
+          700: '#0369a1',
         },
-      },
-      borderRadius: {
-        'sm': '8px',   // Inputs
-        'md': '12px',  // Cards
-        'lg': '16px',
-        'xl': '20px',
-        '2xl': '24px',
-      },
-      boxShadow: {
-        'sm': '0 1px 4px rgba(0, 0, 0, 0.05)',
-        'DEFAULT': '0 2px 8px rgba(0, 0, 0, 0.08)',
-        'md': '0 4px 16px rgba(0, 0, 0, 0.10)',
-        'lg': '0 6px 20px rgba(0, 0, 0, 0.12)',
-        'xl': '0 8px 32px rgba(0, 0, 0, 0.15)',
-      },
-      spacing: {
-        'xs': '4px',
-        'sm': '8px',
-        'md': '12px',
-        'lg': '16px',
-        'xl': '24px',
-        '2xl': '32px',
-        '3xl': '48px',
-        '4xl': '64px',
-      },
-      fontSize: {
-        'xs': '0.75rem',    // 12px
-        'sm': '0.875rem',   // 14px
-        'base': '1rem',     // 16px
-        'lg': '1.125rem',   // 18px
-        'xl': '1.25rem',    // 20px
-        '2xl': '1.5rem',    // 24px
-        '3xl': '1.875rem',  // 30px
-        '4xl': '2.25rem',   // 36px
-      },
-      fontWeight: {
-        'normal': '400',
-        'medium': '500',
-        'semibold': '600',
-        'bold': '700',
-        'extrabold': '800',
       },
     },
   },
