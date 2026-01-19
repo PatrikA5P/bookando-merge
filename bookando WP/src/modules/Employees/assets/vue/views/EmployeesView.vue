@@ -118,7 +118,7 @@
           <p class="text-slate-600 mb-6">{{ $t('mod.employees.no_results_desc') }}</p>
           <button
             @click="openCreateDialog"
-            class="inline-flex items-center gap-2 px-5 py-2.5 bg-accent-500 hover:bg-accent-700 text-white rounded-xl font-bold transition-colors"
+            class="inline-flex items-center gap-2 px-5 py-2.5 bg-brand-600 hover:bg-brand-700 text-white rounded-xl font-bold transition-colors"
           >
             <PlusIcon :size="18" />
             {{ $t('mod.employees.actions.add') }}
@@ -142,7 +142,7 @@
 import { ref, computed, onMounted, defineAsyncComponent } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useEmployeesStore } from '../store/store'
-import ModuleLayout from '@/Core/Design/components/ModuleLayout.vue'
+import ModuleLayout from '@core/Design/components/ModuleLayout.vue'
 import {
   Briefcase as BriefcaseIcon,
   Plus as PlusIcon,
