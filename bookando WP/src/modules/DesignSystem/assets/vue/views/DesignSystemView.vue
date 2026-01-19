@@ -117,20 +117,6 @@
                     {{ $t('mod.design_system.layout.header_split') }}
                   </button>
                 </div>
-                <div
-                  v-if="showFilter"
-                  class="grid grid-cols-1 sm:grid-cols-3 gap-4 bg-slate-50 border border-slate-200 rounded-xl p-4"
-                >
-                  <select class="input-field">
-                    <option>{{ $t('mod.design_system.filters.all_categories') }}</option>
-                  </select>
-                  <select class="input-field">
-                    <option>{{ $t('mod.design_system.filters.all_types') }}</option>
-                  </select>
-                  <select class="input-field">
-                    <option>{{ $t('mod.design_system.filters.active_only') }}</option>
-                  </select>
-                </div>
               </div>
             </div>
           </div>
@@ -248,20 +234,6 @@
                   {{ $t('mod.design_system.layout.header_split') }}
                 </button>
               </div>
-              <div
-                v-if="showFilter"
-                class="grid grid-cols-1 sm:grid-cols-3 gap-4 bg-slate-50 border border-slate-200 rounded-xl p-4"
-              >
-                <select class="input-field">
-                  <option>{{ $t('mod.design_system.filters.all_categories') }}</option>
-                </select>
-                <select class="input-field">
-                  <option>{{ $t('mod.design_system.filters.all_types') }}</option>
-                </select>
-                <select class="input-field">
-                  <option>{{ $t('mod.design_system.filters.active_only') }}</option>
-                </select>
-              </div>
             </div>
           </div>
         </div>
@@ -297,6 +269,28 @@
         </nav>
 
         <div class="flex-1 flex flex-col">
+          <div
+            v-if="showFilter"
+            class="bg-white border border-slate-200 rounded-2xl shadow-sm p-4 md:p-6 mb-4"
+          >
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+              <select
+                class="w-full rounded-xl border border-slate-200 bg-white px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-brand-500"
+              >
+                <option>{{ $t('mod.design_system.filters.all_categories') }}</option>
+              </select>
+              <select
+                class="w-full rounded-xl border border-slate-200 bg-white px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-brand-500"
+              >
+                <option>{{ $t('mod.design_system.filters.all_types') }}</option>
+              </select>
+              <select
+                class="w-full rounded-xl border border-slate-200 bg-white px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-brand-500"
+              >
+                <option>{{ $t('mod.design_system.filters.active_only') }}</option>
+              </select>
+            </div>
+          </div>
           <div class="p-2 md:p-6 flex-1">
             <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 gap-2 md:gap-6">
               <div
@@ -425,16 +419,6 @@
       </div>
     </div>
 
-    <style>
-      .input-field {
-        width: 100%;
-        border: 1px solid #e2e8f0;
-        border-radius: 0.5rem;
-        padding: 0.5rem;
-        font-size: 0.875rem;
-        background-color: white;
-      }
-    </style>
   </div>
 </template>
 
