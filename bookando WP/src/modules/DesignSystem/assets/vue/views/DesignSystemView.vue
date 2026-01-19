@@ -274,13 +274,19 @@
             class="bg-white border border-slate-200 rounded-2xl shadow-sm p-4 md:p-6 mb-4"
           >
             <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
-              <select class="input-field">
+              <select
+                class="w-full rounded-xl border border-slate-200 bg-white px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-brand-500"
+              >
                 <option>{{ $t('mod.design_system.filters.all_categories') }}</option>
               </select>
-              <select class="input-field">
+              <select
+                class="w-full rounded-xl border border-slate-200 bg-white px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-brand-500"
+              >
                 <option>{{ $t('mod.design_system.filters.all_types') }}</option>
               </select>
-              <select class="input-field">
+              <select
+                class="w-full rounded-xl border border-slate-200 bg-white px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-brand-500"
+              >
                 <option>{{ $t('mod.design_system.filters.active_only') }}</option>
               </select>
             </div>
