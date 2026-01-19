@@ -1163,6 +1163,29 @@
       "license_key": "Lizenzschlüssel",
       "permissions_coming_soon": "Die Berechtigungsverwaltung wird in Kürze verfügbar sein.",
       "users_assigned": "Benutzer zugewiesen"
+    },
+    "appointments": {
+      "title": "Termine",
+      "description": "Terminverwaltung und Kalender",
+      "search_placeholder": "Termine durchsuchen...",
+      "new_appointment": "Neuer Termin",
+      "edit_appointment": "Termin bearbeiten",
+      "calendar_view": "Kalenderansicht",
+      "list_view": "Listenansicht",
+      "week_view": "Wochenansicht",
+      "today": "Heute",
+      "all_status": "Alle Status",
+      "confirmed": "Bestätigt",
+      "pending": "Ausstehend",
+      "completed": "Abgeschlossen",
+      "cancelled": "Storniert",
+      "all_employees": "Alle Mitarbeiter",
+      "customer": "Kunde",
+      "date_time": "Datum & Zeit",
+      "date": "Datum",
+      "time": "Uhrzeit",
+      "service": "Dienstleistung",
+      "employee": "Mitarbeiter"
     }
   },
   "ui": {
