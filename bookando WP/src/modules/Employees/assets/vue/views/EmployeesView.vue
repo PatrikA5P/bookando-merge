@@ -1,127 +1,196 @@
 <template>
-  <!-- Employees Module - Pure Tailwind, ModuleLayout Pattern -->
-  <div class="flex flex-col min-h-full bg-slate-50/50">
-
-    <!-- ==== MOBILE & TABLET LAYOUT (< LG) ==== -->
-    <div class="lg:hidden flex flex-col min-h-screen">
-      <!-- Sticky Header -->
-      <div
-        :class="[
-          'sticky top-0 left-0 right-0 z-20 transition-transform duration-300 ease-in-out shadow-lg',
-          'bg-gradient-to-r from-indigo-700 to-purple-900 text-white',
-          isHeaderVisible ? 'translate-y-0' : '-translate-y-full'
-        ]"
-      >
-        <div class="px-4 pt-4 pb-2">
-          <div class="flex items-center gap-2 mb-3">
-            <svg class="w-5 h-5 text-white/80" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" />
-            </svg>
-            <h2 class="font-bold text-lg">{{ $t('mod.employees.title') }}</h2>
-          </div>
-        </div>
-
-        <div class="px-4 pb-3 flex gap-2">
-          <div class="relative flex-1">
-            <svg class="absolute left-3 top-1/2 -translate-y-1/2 text-white/70 w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-            </svg>
-            <input
-              v-model="searchQuery"
-              type="text"
-              :placeholder="$t('mod.employees.search_placeholder')"
-              class="w-full pl-9 pr-4 py-2 rounded-lg text-sm bg-white/10 border border-white/20 text-white placeholder-white/60 focus:bg-white/20 focus:outline-none focus:ring-1 focus:ring-white/50"
-            >
-          </div>
-        </div>
-      </div>
-
-      <div class="flex-1 p-4">
-        <div class="text-center py-12 text-slate-500">
-          <p>{{ $t('common.module_in_development') }}</p>
-        </div>
-      </div>
-
+  <ModuleLayout
+    hero-title="Employees"
+    :hero-description="$t('mod.employees.description')"
+    :hero-icon="BriefcaseIcon"
+    hero-gradient="bg-gradient-to-br from-indigo-700 to-purple-900"
+    :show-search="true"
+    v-model:search-query="searchQuery"
+    :search-placeholder="$t('mod.employees.search_placeholder')"
+    :show-primary-action="true"
+    :primary-action-label="$t('mod.employees.actions.add')"
+    :primary-action-icon="PlusIcon"
+    @primary-action="openCreateDialog"
+  >
+    <template #actions>
       <button
-        @click="openCreateDialog"
-        class="fixed bottom-6 right-6 w-14 h-14 bg-indigo-600 text-white rounded-full shadow-2xl flex items-center justify-center z-50 hover:bg-indigo-700"
+        @click="handleExportCSV"
+        class="flex items-center gap-2 px-4 py-2 border border-slate-200 rounded-xl text-slate-600 hover:bg-slate-50 text-sm font-medium transition-colors"
       >
-        <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
-        </svg>
+        <DownloadIcon :size="16" />
+        <span class="hidden md:inline">{{ $t('common.export') }}</span>
       </button>
-    </div>
+    </template>
 
-    <!-- ==== DESKTOP LAYOUT (≥ LG) ==== -->
-    <div class="hidden lg:flex min-h-full p-6 gap-6">
-      <div class="flex-1">
-        <div class="sticky top-0 z-30 bg-slate-50 pt-6 pb-6 -mt-6">
-          <div class="flex gap-6">
-            <div class="w-72 bg-gradient-to-br from-indigo-700 to-purple-900 text-white p-6 rounded-xl shadow-lg">
-              <div class="flex items-center gap-3 mb-2">
-                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" />
-                </svg>
-                <h2 class="font-bold text-xl">{{ $t('mod.employees.title') }}</h2>
+    <!-- Grid View - Employee Cards -->
+    <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6 p-6">
+      <div
+        v-for="employee in filteredEmployees"
+        :key="employee.id"
+        class="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden group hover:shadow-md transition-all duration-300 flex flex-col"
+      >
+        <!-- Card Header / Banner -->
+        <div class="h-24 bg-gradient-to-r from-slate-800 to-slate-900 relative">
+          <div class="absolute top-4 right-4">
+            <span :class="[
+              'px-2.5 py-1 text-[10px] font-bold uppercase rounded-full shadow-sm border border-white/10',
+              employee.status === 'active' ? 'bg-emerald-500 text-white' :
+              employee.status === 'vacation' ? 'bg-amber-500 text-white' : 'bg-slate-500 text-white'
+            ]">
+              {{ employee.status }}
+            </span>
+          </div>
+        </div>
+
+        <!-- Card Content -->
+        <div class="px-6 flex-1 flex flex-col relative">
+          <!-- Avatar - Overlapping Header -->
+          <div class="-mt-12 mb-3 flex justify-between items-end">
+            <div class="w-24 h-24 rounded-xl border-4 border-white shadow-md bg-white overflow-hidden flex items-center justify-center relative">
+              <img
+                v-if="employee.avatar"
+                :src="employee.avatar"
+                alt="Avatar"
+                class="w-full h-full object-cover"
+              >
+              <div
+                v-else
+                class="w-full h-full bg-brand-100 text-brand-600 flex items-center justify-center text-3xl font-bold"
+              >
+                {{ getInitials(employee) }}
               </div>
-              <p class="text-xs text-white/70">{{ $t('mod.employees.description') }}</p>
             </div>
+            <div class="mb-1">
+              <button
+                @click="handleEdit(employee)"
+                class="p-2 text-slate-400 hover:text-brand-600 hover:bg-brand-50 rounded-lg transition-colors"
+              >
+                <Edit2Icon :size="18" />
+              </button>
+            </div>
+          </div>
 
-            <div class="flex-1 bg-white p-6 rounded-xl shadow-sm border border-slate-200">
-              <div class="flex items-center justify-between">
-                <input
-                  v-model="searchQuery"
-                  type="text"
-                  :placeholder="$t('mod.employees.search_placeholder')"
-                  class="flex-1 px-4 py-2.5 border border-slate-200 rounded-xl bg-slate-50 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
-                >
-                <button
-                  @click="openCreateDialog"
-                  class="ml-3 bg-indigo-600 hover:bg-indigo-700 text-white px-5 py-2.5 rounded-xl text-sm font-bold"
-                >
-                  {{ $t('mod.employees.actions.add') }}
-                </button>
+          <!-- Info -->
+          <div class="mb-6">
+            <h3 class="font-bold text-lg text-slate-900 truncate">
+              {{ employee.first_name }} {{ employee.last_name }}
+            </h3>
+            <p class="text-brand-600 font-medium text-sm">{{ employee.position || 'Employee' }}</p>
+
+            <div class="mt-4 space-y-2.5">
+              <div class="flex items-center gap-3 text-sm text-slate-600">
+                <MailIcon :size="16" class="text-slate-400 shrink-0" />
+                <span class="truncate">{{ employee.email }}</span>
+              </div>
+              <div v-if="employee.department" class="flex items-center gap-3 text-sm text-slate-600">
+                <BriefcaseIcon :size="16" class="text-slate-400 shrink-0" />
+                <span class="truncate">{{ employee.department }}</span>
+              </div>
+              <div v-if="employee.phone" class="flex items-center gap-3 text-sm text-slate-600">
+                <PhoneIcon :size="16" class="text-slate-400 shrink-0" />
+                <span class="truncate">{{ employee.phone }}</span>
               </div>
             </div>
           </div>
         </div>
 
-        <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-12 text-center">
-          <p class="text-slate-500">{{ $t('common.module_in_development') }}</p>
+        <!-- Footer -->
+        <div class="px-6 py-4 bg-slate-50 border-t border-slate-100 flex justify-between items-center mt-auto">
+          <div class="flex flex-col">
+            <span class="text-[10px] uppercase tracking-wider text-slate-400 font-semibold">
+              {{ $t('mod.employees.joined') }}
+            </span>
+            <span class="text-xs font-medium text-slate-700">
+              {{ employee.hire_date || 'N/A' }}
+            </span>
+          </div>
+          <div v-if="employee.role" class="flex items-center gap-1.5 px-2 py-1 rounded bg-indigo-50 border border-indigo-100 text-indigo-700 text-xs font-bold">
+            <ShieldIcon :size="12" /> {{ employee.role }}
+          </div>
+        </div>
+      </div>
+
+      <!-- Empty State -->
+      <div v-if="filteredEmployees.length === 0" class="col-span-full">
+        <div class="bg-white rounded-xl border border-slate-200 p-12 text-center">
+          <BriefcaseIcon :size="48" class="mx-auto mb-4 text-slate-300" />
+          <h3 class="text-lg font-bold text-slate-800 mb-2">{{ $t('mod.employees.no_results') }}</h3>
+          <p class="text-slate-600 mb-6">{{ $t('mod.employees.no_results_desc') }}</p>
+          <button
+            @click="openCreateDialog"
+            class="inline-flex items-center gap-2 px-5 py-2.5 bg-accent-500 hover:bg-accent-700 text-white rounded-xl font-bold transition-colors"
+          >
+            <PlusIcon :size="18" />
+            {{ $t('mod.employees.actions.add') }}
+          </button>
         </div>
       </div>
     </div>
+  </ModuleLayout>
 
-    <component
-      v-if="showDialog"
-      :is="EmployeesForm"
-      :employee="editingEmployee"
-      @close="showDialog = false"
-      @saved="handleSaved"
-    />
-  </div>
+  <!-- Employee Form Modal -->
+  <component
+    v-if="showDialog"
+    :is="EmployeesForm"
+    :employee="editingEmployee"
+    @close="showDialog = false"
+    @saved="handleSaved"
+  />
 </template>
 
 <script setup lang="ts">
-import { ref, computed, defineAsyncComponent } from 'vue'
+import { ref, computed, onMounted, defineAsyncComponent } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useEmployeesStore } from '../store/store'
+import ModuleLayout from '@/Core/Design/components/ModuleLayout.vue'
+import {
+  Briefcase as BriefcaseIcon,
+  Plus as PlusIcon,
+  Download as DownloadIcon,
+  Mail as MailIcon,
+  Phone as PhoneIcon,
+  Edit2 as Edit2Icon,
+  Shield as ShieldIcon
+} from 'lucide-vue-next'
 
 const EmployeesForm = defineAsyncComponent(() => import('../components/EmployeesForm.vue'))
 
 const { t: $t } = useI18n()
 const store = useEmployeesStore()
 
+// State
 const searchQuery = ref('')
 const showDialog = ref(false)
 const editingEmployee = ref<any>(null)
 
-const scrollDirection = ref<'up' | 'down' | null>(null)
-const scrolledToTop = ref(true)
-const isHeaderVisible = computed(() => scrollDirection.value === 'up' || scrolledToTop.value)
+// Computed
+const filteredEmployees = computed(() => {
+  const query = searchQuery.value.toLowerCase()
+  if (!query) return store.items || []
+
+  return (store.items || []).filter((employee: any) =>
+    employee.first_name?.toLowerCase().includes(query) ||
+    employee.last_name?.toLowerCase().includes(query) ||
+    employee.email?.toLowerCase().includes(query) ||
+    employee.position?.toLowerCase().includes(query) ||
+    employee.department?.toLowerCase().includes(query)
+  )
+})
+
+// Methods
+const getInitials = (employee: any) => {
+  const first = employee.first_name?.[0] || ''
+  const last = employee.last_name?.[0] || ''
+  return `${first}${last}`.toUpperCase()
+}
 
 const openCreateDialog = () => {
   editingEmployee.value = null
+  showDialog.value = true
+}
+
+const handleEdit = (employee: any) => {
+  editingEmployee.value = employee
   showDialog.value = true
 }
 
@@ -130,4 +199,36 @@ const handleSaved = () => {
   editingEmployee.value = null
   store.fetchAll()
 }
+
+const handleExportCSV = () => {
+  const headers = ['ID', 'First Name', 'Last Name', 'Email', 'Phone', 'Position', 'Department', 'Status', 'Hire Date']
+  const rows = filteredEmployees.value.map((e: any) => [
+    e.id,
+    e.first_name,
+    e.last_name,
+    e.email,
+    e.phone || '',
+    e.position || '',
+    e.department || '',
+    e.status,
+    e.hire_date || ''
+  ])
+
+  const csvContent = [headers, ...rows]
+    .map(row => row.map(cell => `"${String(cell).replace(/"/g, '""')}"`).join(','))
+    .join('\n')
+
+  const blob = new Blob([csvContent], { type: 'text/csv' })
+  const url = URL.createObjectURL(blob)
+  const link = document.createElement('a')
+  link.href = url
+  link.download = `employees_export_${new Date().toISOString().slice(0, 10)}.csv`
+  link.click()
+  URL.revokeObjectURL(url)
+}
+
+// Lifecycle
+onMounted(() => {
+  store.fetchAll()
+})
 </script>
