@@ -15,7 +15,7 @@
         <!-- Part 1: Title & Tabs -->
         <div class="px-4 pt-4 pb-2">
           <div class="flex items-center gap-2 mb-3">
-            <component :is="heroIcon" class="w-5 h-5 text-white/80" />
+            <component :is="heroIcon" :size="20" class="text-white/80" />
             <h2 class="font-bold text-lg">{{ heroTitle }}</h2>
           </div>
 
@@ -39,9 +39,7 @@
         <!-- Part 2: Integrated Search & Filter -->
         <div class="px-4 pb-3 flex gap-2">
           <div v-if="showSearch" class="relative flex-1">
-            <svg class="absolute left-3 top-1/2 -translate-y-1/2 text-white/70 w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-            </svg>
+            <Search class="absolute left-3 top-1/2 -translate-y-1/2 text-white/70" :size="16" />
             <input
               v-model="internalSearchQuery"
               type="text"
@@ -58,9 +56,7 @@
               isFilterOpen ? 'bg-white text-brand-700' : 'bg-white/10 text-white hover:bg-white/20'
             ]"
           >
-            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z" />
-            </svg>
+            <Filter :size="20" />
           </button>
         </div>
 
@@ -81,7 +77,7 @@
         @click="$emit('primaryAction')"
         class="fixed bottom-6 right-6 w-14 h-14 bg-brand-600 text-white rounded-full shadow-2xl flex items-center justify-center z-50 hover:bg-brand-700 active:scale-95 transition-all"
       >
-        <component :is="primaryActionIcon" class="w-7 h-7" />
+        <component :is="primaryActionIcon" :size="28" />
       </button>
     </div>
 
@@ -94,7 +90,7 @@
         <div :class="['relative overflow-hidden shrink-0 transition-all text-white p-6 shadow-lg rounded-xl flex flex-col justify-center', heroGradient]">
           <div class="relative z-10">
             <div class="flex items-center gap-3 mb-2">
-              <component :is="heroIcon" class="w-6 h-6 text-white/80" />
+              <component :is="heroIcon" :size="24" class="text-white/80" />
               <h2 class="font-bold text-xl">{{ heroTitle }}</h2>
             </div>
             <p class="text-xs max-w-2xl text-white/70">{{ heroDescription }}</p>
@@ -138,7 +134,7 @@
                 <div :class="['relative overflow-hidden shrink-0 transition-all text-white p-6 rounded-xl shadow-lg h-full flex flex-col justify-center', heroGradient]">
                   <div class="relative z-10">
                     <div class="flex items-center gap-3 mb-2">
-                      <component :is="heroIcon" class="w-6 h-6 text-white/80" />
+                      <component :is="heroIcon" :size="24" class="text-white/80" />
                       <h2 class="font-bold text-xl">{{ heroTitle }}</h2>
                     </div>
                     <p class="text-xs max-w-2xl text-white/70">{{ heroDescription }}</p>
@@ -155,9 +151,7 @@
                   <div class="flex-1 flex gap-3">
                     <!-- Search -->
                     <div v-if="showSearch" class="relative flex-1">
-                      <svg class="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-                      </svg>
+                      <Search class="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" :size="16" />
                       <input
                         v-model="internalSearchQuery"
                         type="text"
@@ -176,9 +170,7 @@
                         isFilterOpen ? 'bg-brand-50 border-brand-200 text-brand-700' : 'bg-white border-slate-200 text-slate-600 hover:bg-slate-50'
                       ]"
                     >
-                      <svg class="w-4.5 h-4.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z" />
-                      </svg>
+                      <Filter :size="18" />
                     </button>
 
                     <!-- Extra Actions Slot -->
@@ -191,7 +183,7 @@
                       @click="$emit('primaryAction')"
                       class="flex items-center gap-2 shadow-sm whitespace-nowrap transition-colors shrink-0 bg-brand-600 hover:bg-brand-700 text-white px-5 py-2.5 rounded-xl text-sm font-bold"
                     >
-                      <component :is="primaryActionIcon" class="w-4.5 h-4.5" />
+                      <component :is="primaryActionIcon" :size="18" />
                       <span>{{ primaryActionLabel }}</span>
                     </button>
                   </div>
@@ -228,9 +220,7 @@
               <div class="order-3 w-full xl:order-2 xl:w-auto xl:flex-1 xl:flex xl:justify-end gap-3 flex items-center mt-4 xl:mt-0">
                 <!-- Search -->
                 <div v-if="showSearch" class="relative flex-1 min-w-0 xl:w-auto xl:min-w-[240px] xl:flex-none">
-                  <svg class="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-                  </svg>
+                  <Search class="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" :size="16" />
                   <input
                     v-model="internalSearchQuery"
                     type="text"
@@ -249,9 +239,7 @@
                     isFilterOpen ? 'bg-brand-50 border-brand-200 text-brand-700' : 'bg-white border-slate-200 text-slate-600 hover:bg-slate-50'
                   ]"
                 >
-                  <svg class="w-4.5 h-4.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z" />
-                  </svg>
+                  <Filter :size="18" />
                 </button>
 
                 <!-- Extra Actions -->
@@ -264,7 +252,7 @@
                   @click="$emit('primaryAction')"
                   class="flex items-center gap-2 shadow-sm whitespace-nowrap transition-colors shrink-0 bg-brand-600 hover:bg-brand-700 text-white px-5 py-2.5 rounded-xl text-sm font-bold"
                 >
-                  <component :is="primaryActionIcon" class="w-4.5 h-4.5" />
+                  <component :is="primaryActionIcon" :size="18" />
                   <span>{{ primaryActionLabel }}</span>
                 </button>
               </div>
@@ -288,6 +276,7 @@
 
 <script setup lang="ts">
 import { ref, computed, onMounted, watch } from 'vue'
+import { Search, Filter } from 'lucide-vue-next'
 
 interface Tab {
   id: string
