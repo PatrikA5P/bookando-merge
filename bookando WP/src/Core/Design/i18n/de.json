@@ -953,6 +953,80 @@
         "openSlot": "Offene Position",
         "noRoster": "Noch kein Dienstplan erstellt. Klicken Sie auf 'Dienstplan erstellen', um zu beginnen."
       }
+    },
+    "resources": {
+      "title": "Ressourcen",
+      "description": "Standorte, Räume und Ausstattung verwalten",
+      "tabs": {
+        "locations": "Standorte",
+        "rooms": "Räume",
+        "equipment": "Ausstattung"
+      },
+      "locations": {
+        "title": "Standorte",
+        "add_location": "Neuer Standort",
+        "rooms_configured": "Räume konfiguriert",
+        "manage_details": "Details verwalten",
+        "open": "Geöffnet",
+        "closed": "Geschlossen"
+      },
+      "rooms": {
+        "title": "Räume & Bereiche",
+        "capacity": "Kapazität",
+        "people": "Personen",
+        "status": "Status",
+        "available": "Verfügbar",
+        "in_use": "In Benutzung",
+        "maintenance": "Wartung",
+        "features": "Ausstattung"
+      },
+      "equipment": {
+        "title": "Ausstattung",
+        "item_name": "Artikelname",
+        "category": "Kategorie",
+        "availability": "Verfügbarkeit",
+        "available": "Verfügbar",
+        "condition": "Zustand",
+        "good": "Gut",
+        "fair": "Befriedigend",
+        "needs_repair": "Reparaturbedürftig",
+        "total": "Gesamt",
+        "action": "Aktion"
+      }
+    },
+    "partnerhub": {
+      "title": "Partner Hub",
+      "description": "Partner-Netzwerk und DSGVO-Compliance verwalten",
+      "tabs": {
+        "network": "Netzwerk",
+        "gdpr": "DSGVO",
+        "api": "API",
+        "settings": "Einstellungen"
+      },
+      "connected_partners": "Verbundene Partner",
+      "sync_all": "Alle synchronisieren",
+      "company": "Unternehmen",
+      "type": "Typ",
+      "gdpr_status": "DSGVO-Status",
+      "rev_share": "Umsatzbeteiligung",
+      "signed_avv": "AVV unterzeichnet",
+      "pending": "Ausstehend",
+      "compliance_article_28": "DSGVO-Compliance (Art. 28)",
+      "avv_title": "Auftragsverarbeitungsvertrag (AVV)",
+      "avv_description": "Standardvertrag für DSGVO-konforme Datenweitergabe an Partner.",
+      "view_template": "Vorlage anzeigen",
+      "data_minimization": "Datenminimierung",
+      "data_minimization_desc": "Nur notwendige Daten werden an Partner übermittelt.",
+      "audit_trail": "Audit-Protokoll",
+      "api_developers": "API für Entwickler",
+      "new_key": "Neuer Schlüssel",
+      "active_api_keys": "Aktive API-Schlüssel",
+      "prefix": "Präfix",
+      "last_used": "Zuletzt verwendet",
+      "webhooks": "Webhooks",
+      "active": "Aktiv",
+      "settings_title": "Partner-Einstellungen",
+      "settings_description": "Konfigurieren Sie Partner-spezifische Einstellungen und Berechtigungen."
     }
   },
   "ui": {
