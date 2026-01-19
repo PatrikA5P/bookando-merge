@@ -1,5 +1,5 @@
 <template>
-  <div class="bookando-admin flex flex-col min-h-full bg-slate-50">
+  <div class="bookando-admin bookando-admin-page flex flex-col min-h-full bg-slate-50">
     <div class="flex flex-col gap-6 p-4 sm:p-6 lg:p-8">
       <div class="flex flex-col gap-4">
         <div
@@ -34,14 +34,14 @@
                       v-model="searchQuery"
                       type="text"
                       :placeholder="$t('mod.design_system.search_placeholder')"
-                      class="w-full pl-9 pr-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-brand-500 transition-all border border-slate-200 rounded-xl bg-slate-50 focus:bg-white"
+                      class="w-full pl-9 pr-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-brand-500 transition-all border border-slate-200 rounded-[7px] bg-slate-50 focus:bg-white"
                     />
                   </div>
                   <button
                     type="button"
                     @click="toggleFilter"
                     :class="[
-                      'transition-colors flex items-center justify-center shrink-0 border rounded-xl px-3 py-2.5 text-sm font-medium',
+                      'transition-colors flex items-center justify-center shrink-0 border rounded-[7px] px-3 py-2 text-sm font-medium',
                       showFilter
                         ? 'bg-blue-50 border-blue-200 text-blue-700'
                         : 'bg-white border-slate-200 text-slate-600 hover:bg-slate-50'
@@ -53,7 +53,7 @@
                   </button>
                   <button
                     type="button"
-                    class="flex items-center gap-2 shadow-sm whitespace-nowrap transition-colors shrink-0 bg-blue-600 hover:bg-blue-700 text-white px-5 py-2.5 rounded-xl text-sm font-bold"
+                    class="flex items-center gap-2 shadow-sm whitespace-nowrap transition-colors shrink-0 bg-brand-600 hover:bg-brand-700 text-white px-4 py-2 rounded-[7px] text-sm font-bold"
                     @click="triggerPrimaryAction"
                   >
                     <Plus :size="16" />
@@ -151,14 +151,14 @@
                     v-model="searchQuery"
                     type="text"
                     :placeholder="$t('mod.design_system.search_placeholder')"
-                    class="w-full pl-9 pr-4 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-brand-500 transition-all border border-slate-200 rounded-xl bg-slate-50 focus:bg-white"
+                    class="w-full pl-9 pr-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-brand-500 transition-all border border-slate-200 rounded-[7px] bg-slate-50 focus:bg-white"
                   />
                 </div>
                 <button
                   type="button"
                   @click="toggleFilter"
                   :class="[
-                    'transition-colors flex items-center justify-center shrink-0 border rounded-xl px-3 py-2.5 text-sm font-medium',
+                    'transition-colors flex items-center justify-center shrink-0 border rounded-[7px] px-3 py-2 text-sm font-medium',
                     showFilter
                       ? 'bg-blue-50 border-blue-200 text-blue-700'
                       : 'bg-white border-slate-200 text-slate-600 hover:bg-slate-50'
@@ -170,7 +170,7 @@
                 </button>
                 <button
                   type="button"
-                  class="flex items-center gap-2 shadow-sm whitespace-nowrap transition-colors shrink-0 bg-blue-600 hover:bg-blue-700 text-white px-5 py-2.5 rounded-xl text-sm font-bold"
+                  class="flex items-center gap-2 shadow-sm whitespace-nowrap transition-colors shrink-0 bg-brand-600 hover:bg-brand-700 text-white px-4 py-2 rounded-[7px] text-sm font-bold"
                   @click="triggerPrimaryAction"
                 >
                   <Plus :size="16" />
@@ -256,8 +256,8 @@
               'flex items-center gap-3 transition-all whitespace-nowrap',
               tabsLayout === 'left'
                 ? activeTab === tab.id
-                  ? 'w-full text-left px-4 py-2.5 rounded-lg text-sm font-bold bg-slate-100 text-slate-900 shadow-sm'
-                  : 'w-full text-left px-4 py-2.5 rounded-lg text-sm font-medium text-slate-600 hover:bg-slate-50'
+                  ? 'w-full text-left px-3 py-2.5 rounded-[7px] text-sm font-bold bg-slate-100 text-slate-900 shadow-sm'
+                  : 'w-full text-left px-3 py-2.5 rounded-[7px] text-sm font-medium text-slate-600 hover:bg-slate-50'
                 : activeTab === tab.id
                   ? 'px-5 py-2.5 rounded-full text-sm font-bold border bg-slate-900 text-white border-slate-900 shadow-lg'
                   : 'px-5 py-2.5 rounded-full text-sm font-bold border bg-white text-slate-600 border-slate-200'
