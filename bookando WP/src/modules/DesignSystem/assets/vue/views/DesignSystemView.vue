@@ -1,5 +1,5 @@
 <template>
-  <div class="flex flex-col min-h-full bg-slate-50">
+  <div class="bookando-admin flex flex-col min-h-full bg-slate-50">
     <div class="flex flex-col gap-6 p-4 sm:p-6 lg:p-8">
       <div class="flex flex-col gap-4">
         <div
@@ -663,3 +663,33 @@ watch([searchQuery, itemsPerPage], () => {
   currentPage.value = 1
 })
 </script>
+
+<style>
+.bookando-admin input[type='text'],
+.bookando-admin select,
+.bookando-admin textarea {
+  font-family: inherit;
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+  border-radius: 0.75rem;
+  border: 1px solid #e2e8f0;
+  background-color: #fff;
+  color: #0f172a;
+  box-shadow: none;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease, background-color 0.2s ease;
+}
+
+.bookando-admin input[type='text']:focus,
+.bookando-admin select:focus,
+.bookando-admin textarea:focus {
+  border-color: #12de9d;
+  box-shadow: 0 0 0 2px rgba(18, 222, 157, 0.2);
+  outline: none;
+}
+
+.bookando-admin .input-field {
+  width: 100%;
+  padding: 0.5rem 0.75rem;
+  background-color: #fff;
+}
+</style>
