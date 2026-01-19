@@ -136,6 +136,26 @@ export const MODULE_DESIGNS: Record<string, ModuleDesignConfig> = {
     activeBorder: 'border-slate-300',
     hoverBg: 'hover:bg-slate-100'
   },
+
+  // Design System - Brand Colors
+  designsystem: {
+    gradient: 'from-blue-900 to-slate-800',
+    accentColor: 'brand-600',
+    activeBg: 'bg-brand-50',
+    activeText: 'text-brand-700',
+    activeBorder: 'border-brand-200',
+    hoverBg: 'hover:bg-brand-50'
+  },
+
+  // Design Frontend - Brand Colors
+  designfrontend: {
+    gradient: 'from-brand-600 to-brand-800',
+    accentColor: 'brand-600',
+    activeBg: 'bg-brand-50',
+    activeText: 'text-brand-700',
+    activeBorder: 'border-brand-200',
+    hoverBg: 'hover:bg-brand-50'
+  }
 };
 
 // ============================================================================
@@ -224,6 +244,10 @@ export const BADGE_STYLES = {
   brand: 'px-2 py-1 rounded-full text-xs font-medium bg-brand-100 text-brand-700',
 } as const;
 
+// ============================================================================
+// TABLE STYLES (Zentrale Tabellen-Definitionen)
+// ============================================================================
+
 export const TABLE_STYLES = {
   // Container Styles
   container: 'bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden',
@@ -263,7 +287,7 @@ export const TABLE_STYLES = {
 } as const;
 
 // ============================================================================
-// ADVANCED CARD STYLES
+// CARD STYLES (Zentrale Card-Definitionen)
 // ============================================================================
 
 export const CARD_STYLES_ADVANCED = {
@@ -313,7 +337,7 @@ export const CARD_STYLES_ADVANCED = {
 } as const;
 
 // ============================================================================
-// CARD COMPONENT UTILITIES
+// CARD COMPONENT UTILITIES (Wiederverwendbare Card-Elemente)
 // ============================================================================
 
 export const CARD_ELEMENTS = {
@@ -364,7 +388,7 @@ export const CARD_ELEMENTS = {
 } as const;
 
 // ============================================================================
-// LIST STYLES
+// LIST STYLES (für Listen-Ansichten)
 // ============================================================================
 
 export const LIST_STYLES = {
@@ -378,7 +402,7 @@ export const LIST_STYLES = {
 } as const;
 
 // ============================================================================
-// GRID STYLES
+// GRID STYLES (für Grid-Layouts)
 // ============================================================================
 
 export const GRID_STYLES = {
@@ -399,7 +423,7 @@ export const GRID_STYLES = {
 } as const;
 
 // ============================================================================
-// STATUS COLORS
+// STATUS FARBEN (für gemeinsame Verwendung)
 // ============================================================================
 
 export const STATUS_COLORS = {
@@ -420,35 +444,29 @@ export const STATUS_COLORS = {
 // ============================================================================
 
 /**
- * Get module-specific design configuration
+ * Holt die Design-Konfiguration für ein Modul
+ * @param moduleName - Name des Moduls (lowercase)
+ * @returns ModuleDesignConfig
  */
 export function getModuleDesign(moduleName: string): ModuleDesignConfig {
-  const design = MODULE_DESIGNS[moduleName.toLowerCase()];
-  if (!design) {
-    // Fallback to dashboard design
-    return MODULE_DESIGNS.dashboard;
-  }
-  return design;
+  const normalized = moduleName.toLowerCase().replace(/\s+/g, '');
+  return MODULE_DESIGNS[normalized] || MODULE_DESIGNS.dashboard;
 }
 
 /**
- * Generate hero gradient classes for module
+ * Generiert einen Gradient-String für inline styles
+ * @param moduleName - Name des Moduls
+ * @returns CSS gradient string
  */
 export function getModuleGradient(moduleName: string): string {
   const design = getModuleDesign(moduleName);
-  return `bg-gradient-to-br ${design.gradient}`;
+  return design.gradient;
 }
 
 /**
- * Generate accent color class for module
- */
-export function getModuleAccent(moduleName: string): string {
-  const design = getModuleDesign(moduleName);
-  return `text-${design.accentColor}`;
-}
-
-/**
- * Check if a module design exists
+ * Prüft ob ein Modul existiert
+ * @param moduleName - Name des Moduls
+ * @returns boolean
  */
 export function moduleDesignExists(moduleName: string): boolean {
   const normalized = moduleName.toLowerCase().replace(/\s+/g, '');
@@ -456,14 +474,17 @@ export function moduleDesignExists(moduleName: string): boolean {
 }
 
 /**
- * Get all available module names
+ * Gibt alle verfügbaren Modul-Namen zurück
+ * @returns Array of module names
  */
 export function getAllModuleNames(): string[] {
   return Object.keys(MODULE_DESIGNS);
 }
 
 /**
- * Generate combined Card classes for different variants
+ * Generiert kombinierte Card-Klassen für verschiedene Varianten
+ * @param variant - Card-Variante
+ * @param additionalClasses - Zusätzliche Klassen
  */
 export function getCardClasses(
   variant: 'base' | 'hover' | 'clickable' | 'elevated' | 'flat' | 'ghost' | 'grid' | 'list' = 'base',
@@ -482,7 +503,7 @@ export function getCardClasses(
 }
 
 /**
- * Generate Table classes with optional variants
+ * Generiert Table-Klassen mit optionalen Varianten
  */
 export function getTableClasses(options?: {
   compact?: boolean;
@@ -509,7 +530,9 @@ export function getTableClasses(options?: {
 }
 
 /**
- * Get colors for a status
+ * Holt die Farben für einen Status
+ * @param status - Status name
+ * @returns Status color config
  */
 export function getStatusColors(status: string) {
   const normalized = status.toLowerCase().replace(/\s+/g, '');
