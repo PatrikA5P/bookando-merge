@@ -431,6 +431,131 @@
       "hire_date": "Einstellungsdatum",
       "role": "Rolle"
     },
+    "design_frontend": {
+      "title": "Design Studio",
+      "description": "Gestalten Sie Ihre Buchungswidgets und Portale",
+      "context_selector": {
+        "title": "Design Studio",
+        "subtitle": "Wählen Sie aus, was Sie anpassen möchten",
+        "widget": {
+          "title": "Buchungs-Widget",
+          "description": "Passen Sie das eingebettete Buchungs-Widget für Ihre Website an"
+        },
+        "offer_form": {
+          "title": "Angebotsformular",
+          "description": "Gestalten Sie individuelle Buchungsformulare für bestimmte Dienstleistungen"
+        },
+        "customer": {
+          "title": "Kundenportal",
+          "description": "Personalisieren Sie das Kunden-Selbstbedienungsportal"
+        },
+        "employee": {
+          "title": "Mitarbeiter-Hub",
+          "description": "Konfigurieren Sie den Arbeitsbereich und die Tools für Mitarbeiter"
+        }
+      },
+      "preset_dashboard": {
+        "manage": "Verwalten Sie Ihre Design-Presets",
+        "import_export": "Import/Export",
+        "create_new": "Neu erstellen",
+        "no_presets": "Noch keine Presets vorhanden",
+        "no_presets_desc": "Erstellen Sie Ihr erstes Design-Preset, um loszulegen",
+        "create_first": "Erstes Preset erstellen",
+        "created": "Erstellt",
+        "edit": "Bearbeiten",
+        "duplicate": "Duplizieren",
+        "delete": "Löschen",
+        "widget_designs": "Buchungs-Widget Designs",
+        "offer_form_designs": "Angebotsformular Designs",
+        "customer_portal_designs": "Kundenportal Designs",
+        "employee_hub_designs": "Mitarbeiter-Hub Designs"
+      },
+      "editor": {
+        "save": "Speichern",
+        "device_preview": "Gerätevorschau",
+        "desktop": "Desktop",
+        "tablet": "Tablet",
+        "mobile": "Mobil",
+        "tabs": {
+          "colors": "Farben",
+          "typography": "Typografie",
+          "shape": "Form",
+          "layout": "Layout"
+        },
+        "colors": {
+          "primary": "Primär",
+          "secondary": "Sekundär",
+          "background": "Hintergrund",
+          "surface": "Oberfläche",
+          "text": "Text",
+          "textMuted": "Text gedämpft",
+          "border": "Rahmen",
+          "success": "Erfolg",
+          "danger": "Fehler"
+        },
+        "typography": {
+          "font_family": "Schriftart",
+          "scale": "Skalierung (%)"
+        },
+        "shape": {
+          "radius": "Rahmenradius (px)",
+          "border_width": "Rahmenbreite (px)",
+          "shadow": "Schatten",
+          "shadow_options": {
+            "none": "Kein",
+            "sm": "Klein",
+            "md": "Mittel",
+            "lg": "Groß",
+            "xl": "Extra Groß"
+          }
+        },
+        "layout": {
+          "show_sidebar": "Seitenleiste anzeigen",
+          "show_footer": "Fußzeile anzeigen",
+          "compact_mode": "Kompaktmodus",
+          "show_user_avatar": "Benutzer-Avatar anzeigen",
+          "show_search": "Suche anzeigen",
+          "show_filters": "Filter anzeigen",
+          "enable_animations": "Animationen aktivieren"
+        }
+      },
+      "import_export": {
+        "title": "Import / Export Designs",
+        "description": "Teilen Sie Ihre Design-Presets oder importieren Sie welche von anderen",
+        "export_tab": "Exportieren",
+        "import_tab": "Importieren",
+        "export_desc": "Kopieren Sie das untenstehende JSON, um Ihre Design-Presets mit anderen zu teilen oder zu sichern.",
+        "import_desc": "Fügen Sie das erhaltene JSON ein oder laden Sie eine Datei hoch, um Design-Presets zu importieren.",
+        "copy": "Kopieren",
+        "copied": "Kopiert!",
+        "download_file": "Als Datei herunterladen",
+        "upload_file": "Datei hochladen",
+        "paste_json": "JSON hier einfügen...",
+        "import_presets": "Presets importieren",
+        "invalid_json": "Ungültiges JSON.",
+        "import_success": "Importiert {count} Design(s).",
+        "import_failed": "JSON konnte nicht geparst werden."
+      },
+      "preview": {
+        "book_service": "Buchen Sie Ihren Service",
+        "choose_services": "Wählen Sie aus unseren verfügbaren Dienstleistungen",
+        "service": "Dienstleistung",
+        "continue_booking": "Weiter zur Buchung",
+        "premium_member": "Premium-Mitglied",
+        "upcoming_appointments": "Anstehende Termine",
+        "confirmed": "Bestätigt",
+        "employee_dashboard": "Mitarbeiter-Dashboard",
+        "todays_schedule": "Heutiger Zeitplan",
+        "client_appointment": "Kundentermin",
+        "service_booking": "Service-Buchung",
+        "full_name": "Vollständiger Name",
+        "email": "E-Mail",
+        "book_now": "Jetzt buchen",
+        "appointments": "Termine",
+        "hours": "Stunden",
+        "points": "Punkte"
+      }
+    },
     "license": {
       "not_in_plan": "Dieses Modul ist im aktuellen Plan nicht enthalten.",
       "required": "ist erforderlich",
