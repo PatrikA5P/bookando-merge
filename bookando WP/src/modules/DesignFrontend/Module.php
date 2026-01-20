@@ -28,11 +28,16 @@ class Module extends BaseModule
 
     public static function init(): void
     {
-        // Register shortcodes
-        add_shortcode('bookando_offers', [ShortcodeHandler::class, 'renderOffers']);
+        // Register shortcodes (Amelia-inspired flexible system)
+        add_shortcode('bookando_booking', [ShortcodeHandler::class, 'renderBooking']);     // Step-by-step wizard
+        add_shortcode('bookando_catalog', [ShortcodeHandler::class, 'renderCatalog']);     // Catalog view
+        add_shortcode('bookando_list', [ShortcodeHandler::class, 'renderList']);           // List view
+        add_shortcode('bookando_calendar', [ShortcodeHandler::class, 'renderCalendar']);   // Calendar view
         add_shortcode('bookando_customer_portal', [ShortcodeHandler::class, 'renderCustomerPortal']);
         add_shortcode('bookando_employee_portal', [ShortcodeHandler::class, 'renderEmployeePortal']);
-        add_shortcode('bookando_booking', [ShortcodeHandler::class, 'renderBooking']);
+
+        // Legacy shortcode (backward compatibility)
+        add_shortcode('bookando_offers', [ShortcodeHandler::class, 'renderOffers']);
 
         // Register REST API
         add_action('rest_api_init', [Api\Api::class, 'registerRoutes']);
@@ -107,17 +112,20 @@ class Module extends BaseModule
         global $post;
 
         // Check for shortcodes in content
-        if ($post && has_shortcode($post->post_content, 'bookando_offers')) {
-            return true;
-        }
-        if ($post && has_shortcode($post->post_content, 'bookando_customer_portal')) {
-            return true;
-        }
-        if ($post && has_shortcode($post->post_content, 'bookando_employee_portal')) {
-            return true;
-        }
-        if ($post && has_shortcode($post->post_content, 'bookando_booking')) {
-            return true;
+        $shortcodes = [
+            'bookando_booking',
+            'bookando_catalog',
+            'bookando_list',
+            'bookando_calendar',
+            'bookando_customer_portal',
+            'bookando_employee_portal',
+            'bookando_offers', // Legacy
+        ];
+
+        foreach ($shortcodes as $shortcode) {
+            if ($post && has_shortcode($post->post_content, $shortcode)) {
+                return true;
+            }
         }
 
         // Check for SaaS routes
