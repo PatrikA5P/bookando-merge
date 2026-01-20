@@ -48,6 +48,29 @@ class RestHandler
     }
 
     /**
+     * Auth: Register
+     */
+    public static function authRegister(WP_REST_Request $request): WP_REST_Response
+    {
+        $data = [
+            'email' => $request->get_param('email'),
+            'password' => $request->get_param('password'),
+            'first_name' => $request->get_param('first_name'),
+            'last_name' => $request->get_param('last_name'),
+            'phone' => $request->get_param('phone'),
+            'role' => $request->get_param('role') ?: 'customer',
+        ];
+
+        $result = AuthHandler::registerUser($data);
+
+        if (is_wp_error($result)) {
+            return Response::error(['message' => $result->get_error_message()], 400);
+        }
+
+        return Response::created($result);
+    }
+
+    /**
      * Auth: Email login
      */
     public static function authEmailLogin(WP_REST_Request $request): WP_REST_Response
@@ -246,10 +269,21 @@ class RestHandler
             return false;
         }
 
-        $userId = self::getUserIdFromRequest($request);
-        $user = get_userdata($userId);
+        $user = self::getUserFromRequest($request);
 
-        return in_array('bookando_instructor', $user->roles) || in_array('administrator', $user->roles);
+        return $user && $user['role'] === 'employee';
+    }
+
+    /**
+     * Get user from request
+     */
+    protected static function getUserFromRequest(WP_REST_Request $request): ?array
+    {
+        $token = $request->get_header('Authorization');
+        $token = str_replace('Bearer ', '', $token);
+
+        $user = AuthHandler::validateSession($token);
+        return $user ?: null;
     }
 
     /**
@@ -257,10 +291,8 @@ class RestHandler
      */
     protected static function getUserIdFromRequest(WP_REST_Request $request): int
     {
-        $token = $request->get_header('Authorization');
-        $token = str_replace('Bearer ', '', $token);
-
-        return (int)AuthHandler::validateSession($token);
+        $user = self::getUserFromRequest($request);
+        return $user ? (int)$user['id'] : 0;
     }
 
     /**

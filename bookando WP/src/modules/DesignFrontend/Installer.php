@@ -17,6 +17,30 @@ class Installer
 
         $tables = [
             // =========================================================
+            // Frontend Users (WordPress-unabhängig)
+            // =========================================================
+            "CREATE TABLE {$prefix}users (
+                id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+                email VARCHAR(255) NOT NULL UNIQUE,
+                password_hash VARCHAR(255) DEFAULT NULL,
+                first_name VARCHAR(100),
+                last_name VARCHAR(100),
+                phone VARCHAR(50),
+                role VARCHAR(50) DEFAULT 'customer', -- customer, employee
+                auth_provider VARCHAR(50) DEFAULT 'email', -- email, google, apple
+                provider_user_id VARCHAR(255),
+                email_verified BOOLEAN DEFAULT 0,
+                status VARCHAR(50) DEFAULT 'active',
+                metadata JSON,
+                created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+                updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+                INDEX idx_email (email),
+                INDEX idx_role (role),
+                INDEX idx_status (status),
+                INDEX idx_provider (auth_provider, provider_user_id)
+            ) $charset;",
+
+            // =========================================================
             // Frontend Pages (Custom Landing Pages)
             // =========================================================
             "CREATE TABLE {$prefix}pages (
@@ -181,6 +205,7 @@ class Installer
             "{$prefix}auth_sessions",
             "{$prefix}shortcodes",
             "{$prefix}pages",
+            "{$prefix}users",
         ];
 
         foreach ($tables as $table) {

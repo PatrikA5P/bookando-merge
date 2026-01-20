@@ -31,6 +31,13 @@ class Api extends BaseApi
             'permission_callback' => '__return_true', // Public
         ]);
 
+        // Auth: Register
+        static::registerRoute('auth/register', [
+            'methods'             => WP_REST_Server::CREATABLE,
+            'callback'            => [RestHandler::class, 'authRegister'],
+            'permission_callback' => '__return_true',
+        ]);
+
         // Auth: Email login
         static::registerRoute('auth/email/login', [
             'methods'             => WP_REST_Server::CREATABLE,
