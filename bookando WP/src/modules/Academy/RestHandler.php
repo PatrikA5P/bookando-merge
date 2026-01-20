@@ -194,6 +194,55 @@ class RestHandler
         return new WP_REST_Response(['deleted' => $deleted]);
     }
 
+    public static function packages(array $params, WP_REST_Request $request): WP_REST_Response
+    {
+        if ($error = self::ensureModuleAllowed()) {
+            return $error;
+        }
+
+        $method = strtoupper($request->get_method());
+        if ($method === 'POST') {
+            return self::savePackage($request);
+        }
+
+        if ($method === 'GET') {
+            $state = StateRepository::getState();
+            return Response::ok($state['packages'] ?? []);
+        }
+
+        return Response::error([
+            'code'    => 'method_not_allowed',
+            'message' => __('Methode nicht unterstützt.', 'bookando'),
+        ], 405);
+    }
+
+    public static function savePackage(WP_REST_Request $request): WP_REST_Response
+    {
+        $payload = json_decode($request->get_body(), true);
+        if (!is_array($payload)) {
+            $payload = $request->get_json_params();
+        }
+        if (!is_array($payload)) {
+            return Response::error([
+                'code'    => 'invalid_payload',
+                'message' => __('Ungültige Paketdaten übermittelt.', 'bookando'),
+            ], 400);
+        }
+
+        $package = StateRepository::upsertPackage($payload);
+        return Response::created($package);
+    }
+
+    public static function deletePackage(WP_REST_Request $request): WP_REST_Response
+    {
+        $id = (string) $request->get_param('id');
+        $deleted = StateRepository::deletePackage($id);
+        return Response::ok([
+            'deleted' => (bool) $deleted,
+            'id'      => $id,
+        ]);
+    }
+
     /**
      * @return bool|WP_Error
      */

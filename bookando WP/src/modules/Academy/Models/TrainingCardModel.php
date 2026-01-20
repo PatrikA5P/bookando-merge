@@ -176,6 +176,9 @@ class TrainingCardModel
         // Convert und decode
         foreach ($lessons as &$lesson) {
             $lesson['completed'] = (bool)$lesson['completed'];
+            $lesson['instructor_rating'] = isset($lesson['instructor_rating']) ? (int)$lesson['instructor_rating'] : null;
+            $lesson['course_lesson_id'] = isset($lesson['course_lesson_id']) ? (int)$lesson['course_lesson_id'] : null;
+
             if (!empty($lesson['resources'])) {
                 $lesson['resources'] = json_decode($lesson['resources'], true) ?: [];
             } else {
@@ -233,24 +236,49 @@ class TrainingCardModel
 
     /**
      * Lesson speichern.
+     *
+     * Hinweis: Training Card Lektionen werden NICHT automatisch abgerechnet.
+     * Die Abrechnung erfolgt ausschließlich über gebuchte Items (Appointments, Kurse).
+     * Während einer Fahrstunde können mehrere Themen/Lektionen durchgenommen werden.
      */
     protected function saveLesson(int $topicId, array $lessonData, int $orderIndex): int
     {
+        $wasCompleted = !empty($lessonData['completed']);
+
         $lessonData['topic_id'] = $topicId;
         $lessonData['order_index'] = $orderIndex;
         $lessonData['title'] = sanitize_text_field($lessonData['title'] ?? '');
         $lessonData['completed'] = !empty($lessonData['completed']) ? 1 : 0;
         $lessonData['completed_at'] = !empty($lessonData['completed_at']) ?
             sanitize_text_field($lessonData['completed_at']) : null;
-        $lessonData['notes'] = sanitize_textarea_field($lessonData['notes'] ?? '');
+
+        // Bewertung und Notizen
+        $lessonData['instructor_rating'] = isset($lessonData['instructor_rating']) ?
+            (int)$lessonData['instructor_rating'] : null;
+        $lessonData['instructor_notes'] = sanitize_textarea_field($lessonData['instructor_notes'] ?? '');
+        $lessonData['student_notes'] = sanitize_textarea_field($lessonData['student_notes'] ?? '');
+
+        // Kursverknüpfung
+        $lessonData['course_lesson_id'] = isset($lessonData['course_lesson_id']) ?
+            (int)$lessonData['course_lesson_id'] : null;
+
+        // Resources (Bilder mit Annotationen, Videos, Links)
         $lessonData['resources'] = !empty($lessonData['resources']) ?
             wp_json_encode($lessonData['resources']) : '[]';
+
         $lessonData['created_at'] = current_time('mysql');
         $lessonData['updated_at'] = $lessonData['created_at'];
 
+        // Setze completed_at automatisch, wenn Lektion gerade abgeschlossen wurde
+        if ($wasCompleted && empty($lessonData['completed_at'])) {
+            $lessonData['completed_at'] = current_time('mysql');
+        }
+
         unset($lessonData['id']); // Ignore alte IDs
         $this->db->insert($this->lessonsTable, $lessonData);
-        return (int)$this->db->insert_id;
+        $lessonId = (int)$this->db->insert_id;
+
+        return $lessonId;
     }
 
     /**
@@ -261,9 +289,11 @@ class TrainingCardModel
         return [
             'id' => !empty($data['id']) ? (int)$data['id'] : null,
             'student' => sanitize_text_field($data['student'] ?? ''),
+            'customer_id' => isset($data['customer_id']) ? (int)$data['customer_id'] : null,
             'instructor' => sanitize_text_field($data['instructor'] ?? ''),
             'program' => sanitize_text_field($data['program'] ?? ''),
             'category' => in_array($data['category'] ?? '', ['A', 'B']) ? $data['category'] : null,
+            'package_id' => isset($data['package_id']) ? (int)$data['package_id'] : null,
             'progress' => (float)($data['progress'] ?? 0),
             'notes' => sanitize_textarea_field($data['notes'] ?? ''),
             'status' => sanitize_text_field($data['status'] ?? 'active'),

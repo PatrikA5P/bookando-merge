@@ -64,5 +64,23 @@ class Api extends BaseApi
             'callback'            => [RestHandler::class, 'updateProgress'],
             'permission_callback' => [RestHandler::class, 'canManage'],
         ]);
+
+        static::registerRoute('packages', [
+            'methods'             => [WP_REST_Server::READABLE, WP_REST_Server::CREATABLE],
+            'callback'            => [RestHandler::class, 'packages'],
+            'permission_callback' => [RestHandler::class, 'canManage'],
+        ]);
+
+        static::registerRoute('packages/(?P<id>[a-zA-Z0-9-]+)', [
+            'methods'             => WP_REST_Server::DELETABLE,
+            'callback'            => [RestHandler::class, 'deletePackage'],
+            'permission_callback' => [RestHandler::class, 'canManage'],
+            'args'                => [
+                'id' => [
+                    'type'     => 'string',
+                    'required' => true,
+                ],
+            ],
+        ]);
     }
 }
