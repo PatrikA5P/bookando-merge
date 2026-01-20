@@ -422,7 +422,14 @@
         },
         "empty": "Keine Mitarbeiter gefunden."
       },
-      "title": "Mitarbeiter"
+      "title": "Mitarbeiter",
+      "joined": "Eingestellt",
+      "personal_info": "Persönliche Informationen",
+      "employment": "Beschäftigung",
+      "position": "Position",
+      "department": "Abteilung",
+      "hire_date": "Einstellungsdatum",
+      "role": "Rolle"
     },
     "license": {
       "not_in_plan": "Dieses Modul ist im aktuellen Plan nicht enthalten.",
