@@ -8,7 +8,7 @@ namespace Bookando\Modules\DesignFrontend;
  * Authentication Handler
  *
  * Handles authentication for frontend portals (Customer & Employee)
- * Uses SEPARATE frontend user system (WordPress-independent)
+ * Uses bookando_users table (WordPress-independent, shared with core)
  * Supports: Email, Google OAuth, Apple Sign In
  */
 class AuthHandler
@@ -17,12 +17,12 @@ class AuthHandler
      * Register new user (Email + Password)
      *
      * @param array $data ['email', 'password', 'first_name', 'last_name', 'phone', 'role']
-     * @return array|WP_Error
+     * @return array|\WP_Error
      */
     public static function registerUser(array $data)
     {
         global $wpdb;
-        $table = $wpdb->prefix . 'bookando_frontend_users';
+        $table = $wpdb->prefix . 'bookando_users';
 
         $email = sanitize_email($data['email'] ?? '');
         $password = $data['password'] ?? '';
@@ -37,13 +37,19 @@ class AuthHandler
 
         // Check if user exists
         $exists = $wpdb->get_var($wpdb->prepare(
-            "SELECT id FROM {$table} WHERE email = %s",
+            "SELECT id FROM {$table} WHERE email = %s AND deleted_at IS NULL",
             $email
         ));
 
         if ($exists) {
             return new \WP_Error('user_exists', 'Benutzer existiert bereits');
         }
+
+        // Determine role
+        $role = in_array($data['role'] ?? '', ['customer', 'employee', 'admin', 'teacher'])
+            ? $data['role']
+            : 'customer';
+        $roles = wp_json_encode(["bookando_{$role}"]);
 
         // Create user
         $inserted = $wpdb->insert($table, [
@@ -52,11 +58,10 @@ class AuthHandler
             'first_name' => sanitize_text_field($data['first_name'] ?? ''),
             'last_name' => sanitize_text_field($data['last_name'] ?? ''),
             'phone' => sanitize_text_field($data['phone'] ?? ''),
-            'role' => in_array($data['role'] ?? '', ['customer', 'employee']) ? $data['role'] : 'customer',
-            'auth_provider' => 'email',
-            'email_verified' => 0,
-            'status' => 'active',
+            'roles' => $roles,
+            'status' => 'pending_verification', // Will be 'active' after email verification
             'created_at' => current_time('mysql'),
+            'updated_at' => current_time('mysql'),
         ]);
 
         if (!$inserted) {
@@ -80,15 +85,15 @@ class AuthHandler
      *
      * @param string $email
      * @param string $password
-     * @return array|WP_Error User data or error
+     * @return array|\WP_Error User data or error
      */
     public static function authenticateEmail(string $email, string $password)
     {
         global $wpdb;
-        $table = $wpdb->prefix . 'bookando_frontend_users';
+        $table = $wpdb->prefix . 'bookando_users';
 
         $user = $wpdb->get_row($wpdb->prepare(
-            "SELECT * FROM {$table} WHERE email = %s AND status = 'active'",
+            "SELECT * FROM {$table} WHERE email = %s AND deleted_at IS NULL",
             $email
         ), ARRAY_A);
 
@@ -96,12 +101,13 @@ class AuthHandler
             return new \WP_Error('invalid_credentials', 'Ungültige Anmeldedaten');
         }
 
-        if (!password_verify($password, $user['password_hash'])) {
+        if (!$user['password_hash'] || !password_verify($password, $user['password_hash'])) {
             return new \WP_Error('invalid_credentials', 'Ungültige Anmeldedaten');
         }
 
-        if (!$user['email_verified']) {
-            return new \WP_Error('email_not_verified', 'E-Mail-Adresse noch nicht verifiziert');
+        // Allow login even if status is pending_verification (optional: enforce verification)
+        if ($user['status'] !== 'active' && $user['status'] !== 'pending_verification') {
+            return new \WP_Error('account_inactive', 'Konto ist inaktiv');
         }
 
         return self::createSession((int)$user['id'], 'email', $user);
@@ -112,26 +118,20 @@ class AuthHandler
      *
      * @param string $email
      * @param int $userId
-     * @return bool|WP_Error
+     * @return bool|\WP_Error
      */
     public static function sendVerificationEmail(string $email, int $userId)
     {
         global $wpdb;
-        $table = $wpdb->prefix . 'bookando_frontend_email_verifications';
+        $userTable = $wpdb->prefix . 'bookando_users';
 
-        // Generate token
+        // Generate token and store in password_reset_token field (reuse for verification)
         $token = bin2hex(random_bytes(32));
-        $expires_at = date('Y-m-d H:i:s', strtotime('+24 hours'));
 
-        // Store token
-        $wpdb->insert($table, [
-            'email' => $email,
-            'token' => $token,
-            'user_id' => $userId,
-            'verified' => 0,
-            'expires_at' => $expires_at,
-            'created_at' => current_time('mysql'),
-        ]);
+        $wpdb->update($userTable, [
+            'password_reset_token' => $token,
+            'updated_at' => current_time('mysql'),
+        ], ['id' => $userId]);
 
         // Send email
         $verification_url = add_query_arg([
@@ -141,7 +141,7 @@ class AuthHandler
 
         $subject = 'Email-Verifizierung | ' . get_bloginfo('name');
         $message = sprintf(
-            "Hallo,\n\nBitte verifizieren Sie Ihre E-Mail-Adresse:\n%s\n\nDieser Link ist 24 Stunden gültig.\n\nVielen Dank!",
+            "Hallo,\n\nBitte verifizieren Sie Ihre E-Mail-Adresse:\n%s\n\nVielen Dank!",
             $verification_url
         );
 
@@ -152,42 +152,38 @@ class AuthHandler
      * Verify email token
      *
      * @param string $token
-     * @return bool|WP_Error
+     * @return bool|\WP_Error
      */
     public static function verifyEmailToken(string $token)
     {
         global $wpdb;
-        $verTable = $wpdb->prefix . 'bookando_frontend_email_verifications';
-        $userTable = $wpdb->prefix . 'bookando_frontend_users';
+        $userTable = $wpdb->prefix . 'bookando_users';
 
-        $verification = $wpdb->get_row($wpdb->prepare(
-            "SELECT * FROM {$verTable} WHERE token = %s AND verified = 0 AND expires_at > NOW()",
+        $user = $wpdb->get_row($wpdb->prepare(
+            "SELECT * FROM {$userTable} WHERE password_reset_token = %s AND deleted_at IS NULL",
             $token
         ), ARRAY_A);
 
-        if (!$verification) {
-            return new \WP_Error('invalid_token', 'Ungültiger oder abgelaufener Token');
+        if (!$user) {
+            return new \WP_Error('invalid_token', 'Ungültiger Token');
         }
 
         // Mark as verified
-        $wpdb->update($verTable, ['verified' => 1], ['id' => $verification['id']]);
-        $wpdb->update($userTable, ['email_verified' => 1], ['id' => $verification['user_id']]);
-
-        // Get user
-        $user = $wpdb->get_row($wpdb->prepare(
-            "SELECT * FROM {$userTable} WHERE id = %d",
-            $verification['user_id']
-        ), ARRAY_A);
+        $wpdb->update($userTable, [
+            'status' => 'active',
+            'password_reset_token' => null,
+            'updated_at' => current_time('mysql'),
+        ], ['id' => $user['id']]);
 
         // Create session
-        return self::createSession((int)$verification['user_id'], 'email', $user);
+        return self::createSession((int)$user['id'], 'email', $user);
     }
 
     /**
      * Authenticate with Google OAuth
      *
      * @param string $googleToken Google ID Token
-     * @return array|WP_Error
+     * @return array|\WP_Error
      */
     public static function authenticateGoogle(string $googleToken)
     {
@@ -229,7 +225,7 @@ class AuthHandler
      * Authenticate with Apple Sign In
      *
      * @param string $appleToken Apple ID Token
-     * @return array|WP_Error
+     * @return array|\WP_Error
      */
     public static function authenticateApple(string $appleToken)
     {
@@ -268,55 +264,85 @@ class AuthHandler
     protected static function findOrCreateOAuthUser(string $email, string $providerId, string $provider, array $extra = [])
     {
         global $wpdb;
-        $table = $wpdb->prefix . 'bookando_frontend_users';
+        $userTable = $wpdb->prefix . 'bookando_users';
+        $oauthTable = $wpdb->prefix . 'bookando_frontend_oauth_links';
 
-        // Try to find by provider ID first
-        $user = $wpdb->get_row($wpdb->prepare(
-            "SELECT * FROM {$table} WHERE auth_provider = %s AND provider_user_id = %s",
+        // Try to find by OAuth link
+        $oauthLink = $wpdb->get_row($wpdb->prepare(
+            "SELECT * FROM {$oauthTable} WHERE provider = %s AND provider_user_id = %s",
             $provider,
             $providerId
         ), ARRAY_A);
 
-        if ($user) {
-            return $user;
+        if ($oauthLink) {
+            // Get user
+            $user = $wpdb->get_row($wpdb->prepare(
+                "SELECT * FROM {$userTable} WHERE id = %d AND deleted_at IS NULL",
+                $oauthLink['user_id']
+            ), ARRAY_A);
+
+            if ($user) {
+                return $user;
+            }
         }
 
         // Try to find by email
         $user = $wpdb->get_row($wpdb->prepare(
-            "SELECT * FROM {$table} WHERE email = %s",
+            "SELECT * FROM {$userTable} WHERE email = %s AND deleted_at IS NULL",
             $email
         ), ARRAY_A);
 
         if ($user) {
-            // Update with OAuth info
-            $wpdb->update($table, [
-                'auth_provider' => $provider,
+            // Create OAuth link
+            $wpdb->replace($oauthTable, [
+                'user_id' => $user['id'],
+                'provider' => $provider,
                 'provider_user_id' => $providerId,
-                'email_verified' => 1, // OAuth emails are pre-verified
-            ], ['id' => $user['id']]);
-            return $wpdb->get_row($wpdb->prepare("SELECT * FROM {$table} WHERE id = %d", $user['id']), ARRAY_A);
+                'provider_email' => $email,
+                'created_at' => current_time('mysql'),
+                'updated_at' => current_time('mysql'),
+            ]);
+
+            // Activate account if pending
+            if ($user['status'] === 'pending_verification') {
+                $wpdb->update($userTable, ['status' => 'active'], ['id' => $user['id']]);
+                $user['status'] = 'active';
+            }
+
+            return $user;
         }
 
         // Create new user
-        $inserted = $wpdb->insert($table, [
+        $roles = wp_json_encode(['bookando_customer']);
+        $inserted = $wpdb->insert($userTable, [
             'email' => $email,
             'first_name' => sanitize_text_field($extra['first_name'] ?? ''),
             'last_name' => sanitize_text_field($extra['last_name'] ?? ''),
-            'role' => 'customer',
-            'auth_provider' => $provider,
-            'provider_user_id' => $providerId,
-            'email_verified' => 1, // OAuth emails are pre-verified
-            'status' => 'active',
+            'roles' => $roles,
+            'status' => 'active', // OAuth emails are pre-verified
             'created_at' => current_time('mysql'),
+            'updated_at' => current_time('mysql'),
         ]);
 
         if (!$inserted) {
             return new \WP_Error('user_creation_failed', 'Benutzer konnte nicht erstellt werden');
         }
 
+        $userId = (int)$wpdb->insert_id;
+
+        // Create OAuth link
+        $wpdb->insert($oauthTable, [
+            'user_id' => $userId,
+            'provider' => $provider,
+            'provider_user_id' => $providerId,
+            'provider_email' => $email,
+            'created_at' => current_time('mysql'),
+            'updated_at' => current_time('mysql'),
+        ]);
+
         return $wpdb->get_row($wpdb->prepare(
-            "SELECT * FROM {$table} WHERE id = %d",
-            $wpdb->insert_id
+            "SELECT * FROM {$userTable} WHERE id = %d",
+            $userId
         ), ARRAY_A);
     }
 
@@ -346,6 +372,10 @@ class AuthHandler
             'created_at' => current_time('mysql'),
         ]);
 
+        // Parse roles from JSON
+        $roles = !empty($user['roles']) ? json_decode($user['roles'], true) : [];
+        $primaryRole = is_array($roles) && !empty($roles) ? str_replace('bookando_', '', $roles[0]) : 'customer';
+
         return [
             'token' => $token,
             'expires_at' => $expires_at,
@@ -354,7 +384,8 @@ class AuthHandler
                 'email' => $user['email'],
                 'first_name' => $user['first_name'] ?? '',
                 'last_name' => $user['last_name'] ?? '',
-                'role' => $user['role'],
+                'role' => $primaryRole,
+                'roles' => $roles,
             ],
         ];
     }
@@ -369,12 +400,12 @@ class AuthHandler
     {
         global $wpdb;
         $sessionTable = $wpdb->prefix . 'bookando_frontend_auth_sessions';
-        $userTable = $wpdb->prefix . 'bookando_frontend_users';
+        $userTable = $wpdb->prefix . 'bookando_users';
 
         $session = $wpdb->get_row($wpdb->prepare(
             "SELECT s.*, u.* FROM {$sessionTable} s
              INNER JOIN {$userTable} u ON s.user_id = u.id
-             WHERE s.session_token = %s AND s.expires_at > NOW() AND u.status = 'active'",
+             WHERE s.session_token = %s AND s.expires_at > NOW() AND u.status = 'active' AND u.deleted_at IS NULL",
             $token
         ), ARRAY_A);
 
