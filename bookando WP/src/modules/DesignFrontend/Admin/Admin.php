@@ -37,6 +37,16 @@ class Admin
             [ShortcodeGeneratorPage::class, 'render']
         );
 
+        // Link Generator (SaaS/UTM)
+        add_submenu_page(
+            'bookando-frontend',
+            'Link Generator',
+            'Link Generator',
+            'manage_options',
+            'bookando-frontend-links',
+            [LinkGeneratorPage::class, 'render']
+        );
+
         // OAuth Settings
         add_submenu_page(
             'bookando-frontend',

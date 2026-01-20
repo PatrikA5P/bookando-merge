@@ -114,5 +114,75 @@ class Api extends BaseApi
             'callback'            => [RestHandler::class, 'createBooking'],
             'permission_callback' => [RestHandler::class, 'isAuthenticated'],
         ]);
+
+        // Link Generator: Generate link
+        static::registerRoute('links/generate', [
+            'methods'             => WP_REST_Server::CREATABLE,
+            'callback'            => [RestHandler::class, 'generateLink'],
+            'permission_callback' => 'current_user_can:manage_options',
+        ]);
+
+        // Link Generator: Get all links
+        static::registerRoute('links', [
+            'methods'             => WP_REST_Server::READABLE,
+            'callback'            => [RestHandler::class, 'getLinks'],
+            'permission_callback' => 'current_user_can:manage_options',
+        ]);
+
+        // Link Generator: Analytics
+        static::registerRoute('links/analytics', [
+            'methods'             => WP_REST_Server::READABLE,
+            'callback'            => [RestHandler::class, 'getLinksAnalytics'],
+            'permission_callback' => 'current_user_can:manage_options',
+        ]);
+
+        // Templates: Get all
+        static::registerRoute('templates', [
+            'methods'             => WP_REST_Server::READABLE,
+            'callback'            => [RestHandler::class, 'getTemplates'],
+            'permission_callback' => 'current_user_can:manage_options',
+        ]);
+
+        // Templates: Create
+        static::registerRoute('templates', [
+            'methods'             => WP_REST_Server::CREATABLE,
+            'callback'            => [RestHandler::class, 'createTemplate'],
+            'permission_callback' => 'current_user_can:manage_options',
+        ]);
+
+        // Templates: Update
+        static::registerRoute('templates/(?P<id>[0-9]+)', [
+            'methods'             => WP_REST_Server::EDITABLE,
+            'callback'            => [RestHandler::class, 'updateTemplate'],
+            'permission_callback' => 'current_user_can:manage_options',
+        ]);
+
+        // Templates: Delete
+        static::registerRoute('templates/(?P<id>[0-9]+)', [
+            'methods'             => WP_REST_Server::DELETABLE,
+            'callback'            => [RestHandler::class, 'deleteTemplate'],
+            'permission_callback' => 'current_user_can:manage_options',
+        ]);
+
+        // A/B Tests: Get all
+        static::registerRoute('ab-tests', [
+            'methods'             => WP_REST_Server::READABLE,
+            'callback'            => [RestHandler::class, 'getABTests'],
+            'permission_callback' => 'current_user_can:manage_options',
+        ]);
+
+        // A/B Tests: Create
+        static::registerRoute('ab-tests', [
+            'methods'             => WP_REST_Server::CREATABLE,
+            'callback'            => [RestHandler::class, 'createABTest'],
+            'permission_callback' => 'current_user_can:manage_options',
+        ]);
+
+        // A/B Tests: Stop
+        static::registerRoute('ab-tests/(?P<id>[0-9]+)/stop', [
+            'methods'             => WP_REST_Server::CREATABLE,
+            'callback'            => [RestHandler::class, 'stopABTest'],
+            'permission_callback' => 'current_user_can:manage_options',
+        ]);
     }
 }

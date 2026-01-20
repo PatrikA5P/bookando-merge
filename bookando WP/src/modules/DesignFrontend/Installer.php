@@ -220,6 +220,9 @@ class Installer
 
         // Create default auth providers
         self::createDefaultAuthProviders();
+
+        // Create default shortcode presets
+        ShortcodeTemplateManager::createDefaultPresets();
     }
 
     /**

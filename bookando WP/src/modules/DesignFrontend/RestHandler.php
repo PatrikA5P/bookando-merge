@@ -397,4 +397,84 @@ class RestHandler
         // Placeholder - to be implemented
         return new \WP_Error('not_implemented', 'Booking creation not yet implemented');
     }
+
+    // ================================================================
+    // Link Generator Endpoints
+    // ================================================================
+
+    public static function generateLink(WP_REST_Request $request): WP_REST_Response
+    {
+        $data = $request->get_json_params();
+        $result = LinkManager::generateLink($data);
+        return Response::ok($result);
+    }
+
+    public static function getLinks(WP_REST_Request $request): WP_REST_Response
+    {
+        $links = LinkManager::getLinks();
+        return Response::ok(['links' => $links]);
+    }
+
+    public static function getLinksAnalytics(WP_REST_Request $request): WP_REST_Response
+    {
+        $analytics = LinkManager::getAnalytics();
+        return Response::ok($analytics);
+    }
+
+    // ================================================================
+    // Template Endpoints
+    // ================================================================
+
+    public static function getTemplates(WP_REST_Request $request): WP_REST_Response
+    {
+        $type = $request->get_param('type');
+        $templates = ShortcodeTemplateManager::getTemplates($type);
+        return Response::ok(['templates' => $templates]);
+    }
+
+    public static function createTemplate(WP_REST_Request $request): WP_REST_Response
+    {
+        $data = $request->get_json_params();
+        $id = ShortcodeTemplateManager::createTemplate($data);
+        return Response::ok(['id' => $id]);
+    }
+
+    public static function updateTemplate(WP_REST_Request $request): WP_REST_Response
+    {
+        $id = (int)$request->get_param('id');
+        $data = $request->get_json_params();
+        $success = ShortcodeTemplateManager::updateTemplate($id, $data);
+        return $success ? Response::ok(['success' => true]) : Response::error(['message' => 'Update failed']);
+    }
+
+    public static function deleteTemplate(WP_REST_Request $request): WP_REST_Response
+    {
+        $id = (int)$request->get_param('id');
+        $success = ShortcodeTemplateManager::deleteTemplate($id);
+        return $success ? Response::ok(['success' => true]) : Response::error(['message' => 'Delete failed']);
+    }
+
+    // ================================================================
+    // A/B Test Endpoints
+    // ================================================================
+
+    public static function getABTests(WP_REST_Request $request): WP_REST_Response
+    {
+        $tests = ABTestHandler::getAllTests();
+        return Response::ok(['tests' => $tests]);
+    }
+
+    public static function createABTest(WP_REST_Request $request): WP_REST_Response
+    {
+        $data = $request->get_json_params();
+        $id = ABTestHandler::createTest($data);
+        return Response::ok(['id' => $id]);
+    }
+
+    public static function stopABTest(WP_REST_Request $request): WP_REST_Response
+    {
+        $id = (int)$request->get_param('id');
+        ABTestHandler::stopTest($id);
+        return Response::ok(['success' => true]);
+    }
 }
