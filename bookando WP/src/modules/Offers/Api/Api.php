@@ -60,6 +60,66 @@ class Api extends BaseApi
             'callback'            => [RestHandler::class, 'bulk'],
             'permission_callback' => static::permissionWithFeature('rest_api_write'),
         ]);
+
+        // Offer Types
+        static::registerRoute('types', [
+            'methods'             => WP_REST_Server::READABLE,
+            'callback'            => [RestHandler::class, 'getOfferTypes'],
+            'permission_callback' => static::permissionWithFeature(),
+        ]);
+
+        // Get offers by type
+        static::registerRoute('by-type/(?P<type>[a-z]+)', [
+            'methods'             => WP_REST_Server::READABLE,
+            'callback'            => [RestHandler::class, 'getByType'],
+            'permission_callback' => '__return_true', // Public endpoint
+        ]);
+
+        // Calendar Views
+        static::registerRoute('calendar/month', [
+            'methods'             => WP_REST_Server::READABLE,
+            'callback'            => [RestHandler::class, 'getCalendarMonth'],
+            'permission_callback' => '__return_true', // Public endpoint
+        ]);
+
+        static::registerRoute('calendar/week', [
+            'methods'             => WP_REST_Server::READABLE,
+            'callback'            => [RestHandler::class, 'getCalendarWeek'],
+            'permission_callback' => '__return_true', // Public endpoint
+        ]);
+
+        static::registerRoute('calendar/date', [
+            'methods'             => WP_REST_Server::READABLE,
+            'callback'            => [RestHandler::class, 'getCalendarDate'],
+            'permission_callback' => '__return_true', // Public endpoint
+        ]);
+
+        static::registerRoute('calendar/range', [
+            'methods'             => WP_REST_Server::READABLE,
+            'callback'            => [RestHandler::class, 'getDateRange'],
+            'permission_callback' => '__return_true', // Public endpoint
+        ]);
+
+        // Upcoming courses
+        static::registerRoute('upcoming', [
+            'methods'             => WP_REST_Server::READABLE,
+            'callback'            => [RestHandler::class, 'getUpcoming'],
+            'permission_callback' => '__return_true', // Public endpoint
+        ]);
+
+        // Search courses
+        static::registerRoute('search', [
+            'methods'             => WP_REST_Server::CREATABLE,
+            'callback'            => [RestHandler::class, 'searchCourses'],
+            'permission_callback' => '__return_true', // Public endpoint
+        ]);
+
+        // Check availability
+        static::registerRoute('offers/(?P<id>\d+)/availability', [
+            'methods'             => WP_REST_Server::READABLE,
+            'callback'            => [RestHandler::class, 'checkAvailability'],
+            'permission_callback' => '__return_true', // Public endpoint
+        ]);
     }
 
     private static function permissionWithFeature(?string $feature = null): callable
