@@ -176,13 +176,14 @@ class TrainingCardModel
         // Convert und decode
         foreach ($lessons as &$lesson) {
             $lesson['completed'] = (bool)$lesson['completed'];
+            $lesson['instructor_rating'] = isset($lesson['instructor_rating']) ? (int)$lesson['instructor_rating'] : null;
+            $lesson['course_lesson_id'] = isset($lesson['course_lesson_id']) ? (int)$lesson['course_lesson_id'] : null;
+
             if (!empty($lesson['resources'])) {
                 $lesson['resources'] = json_decode($lesson['resources'], true) ?: [];
             } else {
                 $lesson['resources'] = [];
             }
-            // Konvertiere numerische Felder
-            $lesson['price'] = isset($lesson['price']) ? (float)$lesson['price'] : 0;
         }
 
         return $lessons;
@@ -235,11 +236,14 @@ class TrainingCardModel
 
     /**
      * Lesson speichern.
+     *
+     * Hinweis: Training Card Lektionen werden NICHT automatisch abgerechnet.
+     * Die Abrechnung erfolgt ausschließlich über gebuchte Items (Appointments, Kurse).
+     * Während einer Fahrstunde können mehrere Themen/Lektionen durchgenommen werden.
      */
     protected function saveLesson(int $topicId, array $lessonData, int $orderIndex): int
     {
         $wasCompleted = !empty($lessonData['completed']);
-        $hadInvoice = !empty($lessonData['invoice_id']);
 
         $lessonData['topic_id'] = $topicId;
         $lessonData['order_index'] = $orderIndex;
@@ -247,14 +251,21 @@ class TrainingCardModel
         $lessonData['completed'] = !empty($lessonData['completed']) ? 1 : 0;
         $lessonData['completed_at'] = !empty($lessonData['completed_at']) ?
             sanitize_text_field($lessonData['completed_at']) : null;
-        $lessonData['notes'] = sanitize_textarea_field($lessonData['notes'] ?? '');
+
+        // Bewertung und Notizen
+        $lessonData['instructor_rating'] = isset($lessonData['instructor_rating']) ?
+            (int)$lessonData['instructor_rating'] : null;
+        $lessonData['instructor_notes'] = sanitize_textarea_field($lessonData['instructor_notes'] ?? '');
+        $lessonData['student_notes'] = sanitize_textarea_field($lessonData['student_notes'] ?? '');
+
+        // Kursverknüpfung
+        $lessonData['course_lesson_id'] = isset($lessonData['course_lesson_id']) ?
+            (int)$lessonData['course_lesson_id'] : null;
+
+        // Resources (Bilder mit Annotationen, Videos, Links)
         $lessonData['resources'] = !empty($lessonData['resources']) ?
             wp_json_encode($lessonData['resources']) : '[]';
-        $lessonData['price'] = isset($lessonData['price']) ? (float)$lessonData['price'] : 0;
-        $lessonData['invoice_id'] = !empty($lessonData['invoice_id']) ?
-            sanitize_text_field($lessonData['invoice_id']) : null;
-        $lessonData['payment_status'] = in_array($lessonData['payment_status'] ?? '', ['paid', 'unpaid', 'partial']) ?
-            $lessonData['payment_status'] : 'unpaid';
+
         $lessonData['created_at'] = current_time('mysql');
         $lessonData['updated_at'] = $lessonData['created_at'];
 
@@ -267,52 +278,7 @@ class TrainingCardModel
         $this->db->insert($this->lessonsTable, $lessonData);
         $lessonId = (int)$this->db->insert_id;
 
-        // Auto-Invoice: Erstelle Rechnung wenn Lektion abgeschlossen wurde
-        if ($wasCompleted && !$hadInvoice && $lessonData['price'] > 0) {
-            $this->createInvoiceForLesson($lessonId, $lessonData);
-        }
-
         return $lessonId;
-    }
-
-    /**
-     * Erstellt eine Rechnung für eine abgeschlossene Lektion (wenn Auto-Invoice aktiviert).
-     */
-    protected function createInvoiceForLesson(int $lessonId, array $lessonData): void
-    {
-        // Lade die zugehörige Training Card
-        $topicId = (int)$lessonData['topic_id'];
-        $topic = $this->db->get_row(
-            $this->db->prepare("SELECT card_id FROM {$this->topicsTable} WHERE id = %d", $topicId),
-            ARRAY_A
-        );
-
-        if (!$topic) {
-            return;
-        }
-
-        $cardId = (int)$topic['card_id'];
-        $card = $this->find($cardId);
-
-        if (!$card) {
-            return;
-        }
-
-        // Verwende FinanceIntegration
-        require_once __DIR__ . '/../FinanceIntegration.php';
-        $invoiceNumber = \Bookando\Modules\Academy\FinanceIntegration::createInvoiceForLesson(
-            array_merge($lessonData, ['id' => $lessonId]),
-            $card
-        );
-
-        // Aktualisiere Lektion mit Rechnungsnummer
-        if ($invoiceNumber) {
-            $this->db->update(
-                $this->lessonsTable,
-                ['invoice_id' => $invoiceNumber],
-                ['id' => $lessonId]
-            );
-        }
     }
 
     /**

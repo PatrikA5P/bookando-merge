@@ -175,19 +175,18 @@ class Installer
                 title VARCHAR(255) NOT NULL,
                 completed BOOLEAN DEFAULT 0,
                 completed_at DATETIME NULL,
-                notes TEXT,
+                instructor_rating INT DEFAULT NULL,
+                instructor_notes TEXT,
+                student_notes TEXT,
                 resources JSON,
-                price DECIMAL(10,2) DEFAULT 0,
-                invoice_id VARCHAR(50) DEFAULT NULL,
-                payment_status VARCHAR(50) DEFAULT 'unpaid',
+                course_lesson_id BIGINT UNSIGNED DEFAULT NULL,
                 order_index INT DEFAULT 0,
                 created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
                 updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
                 FOREIGN KEY (topic_id) REFERENCES {$prefix}training_topics(id) ON DELETE CASCADE,
                 INDEX idx_topic (topic_id),
                 INDEX idx_completed (completed),
-                INDEX idx_payment_status (payment_status),
-                INDEX idx_invoice (invoice_id),
+                INDEX idx_course_lesson (course_lesson_id),
                 INDEX idx_order (order_index)
             ) $charset;",
         ];
@@ -212,7 +211,7 @@ class Installer
 
         $current_version = get_option('bookando_academy_db_version', '0.0.0');
 
-        // Migration von 1.0.0 zu 2.0.0: Finanz-Integration
+        // Migration von 1.0.0 zu 2.0.0: Finance-Integration & Training Card Verbesserungen
         if (version_compare($current_version, '2.0.0', '<')) {
             $prefix = $wpdb->prefix . 'bookando_academy_';
 
@@ -230,12 +229,12 @@ class Installer
                 "ALTER TABLE {$prefix}training_cards ADD INDEX IF NOT EXISTS idx_customer (customer_id)",
                 "ALTER TABLE {$prefix}training_cards ADD INDEX IF NOT EXISTS idx_package (package_id)",
 
-                // Training Lessons Tabelle
-                "ALTER TABLE {$prefix}training_lessons ADD COLUMN IF NOT EXISTS price DECIMAL(10,2) DEFAULT 0",
-                "ALTER TABLE {$prefix}training_lessons ADD COLUMN IF NOT EXISTS invoice_id VARCHAR(50) DEFAULT NULL",
-                "ALTER TABLE {$prefix}training_lessons ADD COLUMN IF NOT EXISTS payment_status VARCHAR(50) DEFAULT 'unpaid'",
-                "ALTER TABLE {$prefix}training_lessons ADD INDEX IF NOT EXISTS idx_payment_status (payment_status)",
-                "ALTER TABLE {$prefix}training_lessons ADD INDEX IF NOT EXISTS idx_invoice (invoice_id)",
+                // Training Lessons Tabelle - Neue Felder für Bewertung und Kursverknüpfung
+                "ALTER TABLE {$prefix}training_lessons ADD COLUMN IF NOT EXISTS instructor_rating INT DEFAULT NULL",
+                "ALTER TABLE {$prefix}training_lessons ADD COLUMN IF NOT EXISTS instructor_notes TEXT",
+                "ALTER TABLE {$prefix}training_lessons ADD COLUMN IF NOT EXISTS student_notes TEXT",
+                "ALTER TABLE {$prefix}training_lessons ADD COLUMN IF NOT EXISTS course_lesson_id BIGINT UNSIGNED DEFAULT NULL",
+                "ALTER TABLE {$prefix}training_lessons ADD INDEX IF NOT EXISTS idx_course_lesson (course_lesson_id)",
             ];
 
             foreach ($columns_to_add as $sql) {

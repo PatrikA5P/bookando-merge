@@ -122,16 +122,28 @@ export interface TrainingLesson {
   title: string;
   completed: boolean;
   completedAt?: string;
-  notes?: string;
+  instructorRating?: number; // 1-5 Sterne
+  instructorNotes?: string;
+  studentNotes?: string;
   resources?: {
-    images?: string[];
+    images?: {
+      url: string;
+      annotations?: Annotation[];
+    }[];
     videos?: string[];
     courseLinks?: string[];
   };
-  price?: number;
-  invoiceId?: string;
-  paymentStatus?: 'paid' | 'unpaid' | 'partial';
+  courseLessonId?: string; // Verknüpfung zu Course Lesson
   orderIndex: number;
+}
+
+export interface Annotation {
+  id: string;
+  type: 'arrow' | 'circle' | 'rectangle' | 'text' | 'freehand';
+  color: string;
+  points: { x: number; y: number }[];
+  text?: string;
+  strokeWidth?: number;
 }
 
 export interface TrainingCard extends BaseEntity {
