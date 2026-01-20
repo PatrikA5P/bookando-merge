@@ -17,27 +17,28 @@ class Installer
 
         $tables = [
             // =========================================================
-            // Frontend Users (WordPress-unabhängig)
+            // HINWEIS: Wir verwenden die existierende bookando_users Tabelle!
+            // Keine separate frontend_users Tabelle nötig.
             // =========================================================
-            "CREATE TABLE {$prefix}users (
+
+            // =========================================================
+            // OAuth Provider Verknüpfungen (Google, Apple Sign In)
+            // =========================================================
+            "CREATE TABLE {$prefix}oauth_links (
                 id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
-                email VARCHAR(255) NOT NULL UNIQUE,
-                password_hash VARCHAR(255) DEFAULT NULL,
-                first_name VARCHAR(100),
-                last_name VARCHAR(100),
-                phone VARCHAR(50),
-                role VARCHAR(50) DEFAULT 'customer', -- customer, employee
-                auth_provider VARCHAR(50) DEFAULT 'email', -- email, google, apple
-                provider_user_id VARCHAR(255),
-                email_verified BOOLEAN DEFAULT 0,
-                status VARCHAR(50) DEFAULT 'active',
+                user_id BIGINT UNSIGNED NOT NULL,
+                provider VARCHAR(50) NOT NULL, -- google, apple
+                provider_user_id VARCHAR(255) NOT NULL,
+                provider_email VARCHAR(255),
+                access_token TEXT,
+                refresh_token TEXT,
+                expires_at DATETIME,
                 metadata JSON,
                 created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
                 updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-                INDEX idx_email (email),
-                INDEX idx_role (role),
-                INDEX idx_status (status),
-                INDEX idx_provider (auth_provider, provider_user_id)
+                UNIQUE KEY uq_provider_user (provider, provider_user_id),
+                INDEX idx_user_id (user_id),
+                INDEX idx_provider (provider)
             ) $charset;",
 
             // =========================================================
@@ -63,23 +64,26 @@ class Installer
             ) $charset;",
 
             // =========================================================
-            // Shortcode Configurations
+            // Shortcode Templates & Presets
             // =========================================================
-            "CREATE TABLE {$prefix}shortcodes (
+            "CREATE TABLE {$prefix}shortcode_templates (
                 id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
-                shortcode_id VARCHAR(100) NOT NULL UNIQUE,
-                type VARCHAR(50) NOT NULL, -- offers, customer_portal, employee_portal, booking
-                config JSON,
-                filters JSON, -- category, tags, etc.
-                display_options JSON, -- grid/list, columns, etc.
+                name VARCHAR(255) NOT NULL,
+                description TEXT,
+                shortcode_type VARCHAR(50) NOT NULL, -- booking, catalog, list, calendar, etc.
+                config JSON, -- Alle Parameter
+                is_preset BOOLEAN DEFAULT 0, -- System-Presets vs. User-Templates
+                created_by BIGINT UNSIGNED,
+                usage_count INT DEFAULT 0,
                 created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
                 updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-                INDEX idx_shortcode_id (shortcode_id),
-                INDEX idx_type (type)
+                INDEX idx_shortcode_type (shortcode_type),
+                INDEX idx_is_preset (is_preset),
+                INDEX idx_created_by (created_by)
             ) $charset;",
 
             // =========================================================
-            // Auth Sessions (für Email/Google/Apple Login)
+            // Auth Sessions (Session-Token Management)
             // =========================================================
             "CREATE TABLE {$prefix}auth_sessions (
                 id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
@@ -114,22 +118,6 @@ class Installer
             ) $charset;",
 
             // =========================================================
-            // Email Verification Tokens
-            // =========================================================
-            "CREATE TABLE {$prefix}email_verifications (
-                id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
-                email VARCHAR(255) NOT NULL,
-                token VARCHAR(255) NOT NULL UNIQUE,
-                user_id BIGINT UNSIGNED DEFAULT NULL,
-                verified BOOLEAN DEFAULT 0,
-                expires_at DATETIME NOT NULL,
-                created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
-                INDEX idx_email (email),
-                INDEX idx_token (token),
-                INDEX idx_expires_at (expires_at)
-            ) $charset;",
-
-            // =========================================================
             // Offer Display Settings (für öffentliche Angebote)
             // =========================================================
             "CREATE TABLE {$prefix}offer_displays (
@@ -152,6 +140,75 @@ class Installer
                 INDEX idx_featured (featured),
                 INDEX idx_display_order (display_order)
             ) $charset;",
+
+            // =========================================================
+            // A/B Testing für Shortcodes
+            // =========================================================
+            "CREATE TABLE {$prefix}ab_tests (
+                id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+                name VARCHAR(255) NOT NULL,
+                shortcode_type VARCHAR(50) NOT NULL,
+                variant_a_config JSON,
+                variant_b_config JSON,
+                split_percentage INT DEFAULT 50, -- 0-100
+                status VARCHAR(50) DEFAULT 'active', -- active, paused, completed
+                winner VARCHAR(10), -- a, b, null
+                impressions_a INT DEFAULT 0,
+                impressions_b INT DEFAULT 0,
+                conversions_a INT DEFAULT 0,
+                conversions_b INT DEFAULT 0,
+                started_at DATETIME,
+                ended_at DATETIME,
+                created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+                updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+                INDEX idx_status (status),
+                INDEX idx_shortcode_type (shortcode_type)
+            ) $charset;",
+
+            // =========================================================
+            // Shortcode Analytics (Usage & Performance)
+            // =========================================================
+            "CREATE TABLE {$prefix}shortcode_analytics (
+                id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+                shortcode_id VARCHAR(100), -- Optional: wenn mit Template verknüpft
+                shortcode_type VARCHAR(50) NOT NULL,
+                page_url VARCHAR(500),
+                impressions INT DEFAULT 0,
+                interactions INT DEFAULT 0, -- Clicks, hovers, etc.
+                conversions INT DEFAULT 0, -- Completed bookings
+                avg_load_time_ms INT DEFAULT 0,
+                date DATE NOT NULL,
+                created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+                updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+                UNIQUE KEY uq_shortcode_date (shortcode_id, shortcode_type, page_url(191), date),
+                INDEX idx_shortcode_type (shortcode_type),
+                INDEX idx_date (date)
+            ) $charset;",
+
+            // =========================================================
+            // SaaS Link Generator (UTM-Parameters & Tracking)
+            // =========================================================
+            "CREATE TABLE {$prefix}generated_links (
+                id BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+                link_hash VARCHAR(64) NOT NULL UNIQUE,
+                target_type VARCHAR(50) NOT NULL, -- catalog, booking, calendar, etc.
+                target_config JSON, -- Filter/Parameter
+                utm_source VARCHAR(255),
+                utm_medium VARCHAR(255),
+                utm_campaign VARCHAR(255),
+                utm_term VARCHAR(255),
+                utm_content VARCHAR(255),
+                expires_at DATETIME,
+                created_by BIGINT UNSIGNED,
+                click_count INT DEFAULT 0,
+                conversion_count INT DEFAULT 0,
+                created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+                updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+                INDEX idx_link_hash (link_hash),
+                INDEX idx_target_type (target_type),
+                INDEX idx_created_by (created_by),
+                INDEX idx_expires_at (expires_at)
+            ) $charset;",
         ];
 
         foreach ($tables as $sql) {
@@ -159,7 +216,7 @@ class Installer
         }
 
         // Setze Versions-Flag
-        update_option('bookando_frontend_db_version', '1.0.0');
+        update_option('bookando_frontend_db_version', '2.0.0');
 
         // Create default auth providers
         self::createDefaultAuthProviders();
@@ -199,13 +256,15 @@ class Installer
 
         $prefix = $wpdb->prefix . 'bookando_frontend_';
         $tables = [
+            "{$prefix}generated_links",
+            "{$prefix}shortcode_analytics",
+            "{$prefix}ab_tests",
             "{$prefix}offer_displays",
-            "{$prefix}email_verifications",
             "{$prefix}auth_providers",
             "{$prefix}auth_sessions",
-            "{$prefix}shortcodes",
+            "{$prefix}shortcode_templates",
             "{$prefix}pages",
-            "{$prefix}users",
+            "{$prefix}oauth_links",
         ];
 
         foreach ($tables as $table) {
