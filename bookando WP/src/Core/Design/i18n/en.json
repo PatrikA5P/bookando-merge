@@ -51,7 +51,6 @@
       }
     }
   },
-
   "ui": {
     "filter": {
       "toggle": "Show/hide filters",
@@ -82,7 +81,9 @@
     "dialog": {
       "confirm_title": "Please confirm"
     },
-    "date": { "select": "Select date" },
+    "date": {
+      "select": "Select date"
+    },
     "upload": {
       "only_images": "Images only.",
       "too_large_5mb": "File too large. Maximum 5 MB.",
@@ -93,7 +94,6 @@
       "saveFirst": "Please save first so an avatar can be assigned."
     }
   },
-
   "fields": {
     "customer": "Customer",
     "id": "ID",
@@ -124,7 +124,6 @@
     "updated_at": "Updated at",
     "deleted_at": "Deleted at"
   },
-
   "mod": {
     "customers": {
       "title": "Customer management",
@@ -165,7 +164,6 @@
         "delete_error": "Error while deleting!"
       }
     },
-
     "settings": {
       "title": "Settings",
       "general": "General",
@@ -179,7 +177,6 @@
       "roles": "Role settings",
       "activation": "Activation",
       "api_keys": "API keys",
-
       "company_form": {
         "company_name": "Company name",
         "address": "Address",
@@ -191,7 +188,6 @@
         "choose_logo": "Choose logo",
         "use_logo": "Use logo"
       },
-
       "general_form": {
         "title": "General settings",
         "choose_language": "Choose language",
@@ -204,7 +200,6 @@
         },
         "saved": "Saved!"
       },
-
       "roles_form": {
         "title": "Role settings",
         "tabs": {
@@ -214,7 +209,6 @@
         }
       }
     },
-
     "tools": {
       "title": "Tools",
       "design": {
@@ -262,6 +256,122 @@
         "textColor": "Text Color",
         "titleSettings": "Title Settings",
         "verticalPadding": "Vertical Padding"
+      }
+    },
+    "design_system": {
+      "hero": {
+        "title": "Offers & Catalog",
+        "description": "Manage services, pricing, and sales channels."
+      },
+      "actions": {
+        "primary": "Create Offer",
+        "primary_alert": "Create clicked.",
+        "filter": "Filter",
+        "toggle_filter": "Toggle filter panel"
+      },
+      "layout": {
+        "label": "Layout options",
+        "tabs_left": "Tabs left",
+        "tabs_top": "Tabs top",
+        "header_unified": "Unified Header",
+        "header_split": "Split Header"
+      },
+      "search_placeholder": "Search services...",
+      "filters": {
+        "all_categories": "All Categories",
+        "all_types": "All Types",
+        "active_only": "Active Only"
+      },
+      "tabs": {
+        "catalog": "All Offers",
+        "categories": "Categories",
+        "bundles": "Packages",
+        "vouchers": "Coupons",
+        "forms": "Booking Forms",
+        "tags": "Tags"
+      },
+      "cards": {
+        "service_label": "Service",
+        "edit": "Edit",
+        "delete": "Delete"
+      },
+      "empty_state": "No services found matching \"{query}\"",
+      "pagination": {
+        "summary": "Showing {start} to {end} of {total} results",
+        "per_page": "{count} per page",
+        "previous": "Previous",
+        "next": "Next",
+        "ellipsis": "…"
+      },
+      "currency_code": "USD",
+      "types": {
+        "wellness": "Wellness",
+        "fitness": "Fitness",
+        "health": "Health",
+        "mindfulness": "Mindfulness",
+        "beauty": "Beauty"
+      },
+      "items": {
+        "deep_tissue": {
+          "title": "Deep Tissue Massage",
+          "description": "Relieve tension with this intensive treatment targeting deep muscle layers."
+        },
+        "swedish": {
+          "title": "Swedish Massage",
+          "description": "Relaxing full body massage to improve circulation."
+        },
+        "yoga": {
+          "title": "Yoga Basics",
+          "description": "Introduction to yoga poses and breathing techniques."
+        },
+        "pilates": {
+          "title": "Pilates Reformer",
+          "description": "Strength training using the reformer machine."
+        },
+        "nutrition": {
+          "title": "Nutrition Consultation",
+          "description": "Personalized diet plan and lifestyle assessment."
+        },
+        "acupuncture": {
+          "title": "Acupuncture",
+          "description": "Traditional Chinese medicine to balance energy flow."
+        },
+        "meditation": {
+          "title": "Meditation Circle",
+          "description": "Group meditation session for stress relief."
+        },
+        "hot_stone": {
+          "title": "Hot Stone Therapy",
+          "description": "Therapeutic massage using smooth, heated stones."
+        },
+        "crossfit": {
+          "title": "Crossfit Intro",
+          "description": "High intensity interval training introduction."
+        },
+        "physiotherapy": {
+          "title": "Physiotherapy",
+          "description": "Rehabilitation exercises and manual therapy."
+        },
+        "reiki": {
+          "title": "Reiki Healing",
+          "description": "Energy healing technique to promote relaxation."
+        },
+        "spin": {
+          "title": "Spin Class",
+          "description": "High energy indoor cycling workout."
+        },
+        "facial": {
+          "title": "Facial Treatment",
+          "description": "Rejuvenating skin treatment with organic products."
+        },
+        "manicure": {
+          "title": "Manicure Deluxe",
+          "description": "Complete nail care including hand massage."
+        },
+        "personal_training": {
+          "title": "Personal Training",
+          "description": "One-on-one customized workout session."
+        }
       }
     }
   }

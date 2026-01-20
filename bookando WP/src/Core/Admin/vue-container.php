@@ -134,6 +134,7 @@ $rootAttributes = [
     'id'           => "bookando-{$moduleSlug}-root",
     'data-module'  => $moduleSlug,
     'data-locale'  => $lang,
+    'class'        => 'bookando-admin-page',
 ];
 
 if (isset($moduleData['root_attributes']) && is_array($moduleData['root_attributes'])) {
@@ -141,7 +142,12 @@ if (isset($moduleData['root_attributes']) && is_array($moduleData['root_attribut
         if ($value === null) {
             continue;
         }
-        $rootAttributes[(string) $attr] = $value;
+        $attr = (string) $attr;
+        if ($attr === 'class' && isset($rootAttributes['class']) && $rootAttributes['class'] !== '') {
+            $rootAttributes['class'] = trim($rootAttributes['class'] . ' ' . (string) $value);
+            continue;
+        }
+        $rootAttributes[$attr] = $value;
     }
 }
 

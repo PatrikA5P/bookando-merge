@@ -1535,6 +1535,121 @@
       "time": "Uhrzeit",
       "service": "Dienstleistung",
       "employee": "Mitarbeiter"
+    "design_system": {
+      "hero": {
+        "title": "Angebote & Katalog",
+        "description": "Verwalten Sie Dienstleistungen, Preise und Vertriebskanäle."
+      },
+      "actions": {
+        "primary": "Angebot erstellen",
+        "primary_alert": "Erstellen geklickt.",
+        "filter": "Filter",
+        "toggle_filter": "Filter ein-/ausblenden"
+      },
+      "layout": {
+        "label": "Layout-Optionen",
+        "tabs_left": "Tabs links",
+        "tabs_top": "Tabs oben",
+        "header_unified": "Einheitlicher Header",
+        "header_split": "Geteilter Header"
+      },
+      "search_placeholder": "Dienstleistungen suchen...",
+      "filters": {
+        "all_categories": "Alle Kategorien",
+        "all_types": "Alle Typen",
+        "active_only": "Nur aktiv"
+      },
+      "tabs": {
+        "catalog": "Alle Angebote",
+        "categories": "Kategorien",
+        "bundles": "Pakete",
+        "vouchers": "Gutscheine",
+        "forms": "Buchungsformulare",
+        "tags": "Tags"
+      },
+      "cards": {
+        "service_label": "Service",
+        "edit": "Bearbeiten",
+        "delete": "Löschen"
+      },
+      "empty_state": "Keine Services gefunden für \"{query}\"",
+      "pagination": {
+        "summary": "Zeige {start} bis {end} von {total} Ergebnissen",
+        "per_page": "{count} pro Seite",
+        "previous": "Zurück",
+        "next": "Weiter",
+        "ellipsis": "…"
+      },
+      "currency_code": "USD",
+      "types": {
+        "wellness": "Wellness",
+        "fitness": "Fitness",
+        "health": "Gesundheit",
+        "mindfulness": "Achtsamkeit",
+        "beauty": "Schönheit"
+      },
+      "items": {
+        "deep_tissue": {
+          "title": "Tiefengewebsmassage",
+          "description": "Löst Verspannungen mit intensiver Behandlung der tiefen Muskelschichten."
+        },
+        "swedish": {
+          "title": "Schwedische Massage",
+          "description": "Entspannende Ganzkörpermassage zur Förderung der Durchblutung."
+        },
+        "yoga": {
+          "title": "Yoga Grundlagen",
+          "description": "Einführung in Yoga-Positionen und Atemtechniken."
+        },
+        "pilates": {
+          "title": "Pilates Reformer",
+          "description": "Krafttraining mit dem Reformer-Gerät."
+        },
+        "nutrition": {
+          "title": "Ernährungsberatung",
+          "description": "Personalisierter Ernährungsplan und Lifestyle-Check."
+        },
+        "acupuncture": {
+          "title": "Akupunktur",
+          "description": "Traditionelle chinesische Medizin zur Balance des Energieflusses."
+        },
+        "meditation": {
+          "title": "Meditationsrunde",
+          "description": "Gruppenmeditation zur Stressreduktion."
+        },
+        "hot_stone": {
+          "title": "Hot-Stone-Therapie",
+          "description": "Therapeutische Massage mit glatten, erhitzten Steinen."
+        },
+        "crossfit": {
+          "title": "Crossfit Einführung",
+          "description": "Einführung in hochintensives Intervalltraining."
+        },
+        "physiotherapy": {
+          "title": "Physiotherapie",
+          "description": "Rehabilitation durch Übungen und manuelle Therapie."
+        },
+        "reiki": {
+          "title": "Reiki-Heilung",
+          "description": "Energieheilung zur Förderung der Entspannung."
+        },
+        "spin": {
+          "title": "Spin-Kurs",
+          "description": "Energiegeladenes Indoor-Cycling-Workout."
+        },
+        "facial": {
+          "title": "Gesichtsbehandlung",
+          "description": "Verjüngende Hautbehandlung mit organischen Produkten."
+        },
+        "manicure": {
+          "title": "Maniküre Deluxe",
+          "description": "Komplette Nagelpflege inklusive Handmassage."
+        },
+        "personal_training": {
+          "title": "Personal Training",
+          "description": "Individuelles Training eins zu eins."
+        }
+      }
     }
   },
   "ui": {

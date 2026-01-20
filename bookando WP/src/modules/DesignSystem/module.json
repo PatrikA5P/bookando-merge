@@ -1,0 +1,46 @@
+{
+  "slug": "designsystem",
+  "plan": "starter",
+  "version": "1.0.0",
+  "tenant_required": false,
+  "license_required": false,
+  "always_active": true,
+  "features_required": [],
+  "group": "core",
+  "is_saas": false,
+  "has_admin": true,
+  "supports_webhook": false,
+  "supports_offline": false,
+  "supports_calendar": false,
+  "name": {
+    "default": "Design System",
+    "de": "Design System",
+    "en": "Design System",
+    "fr": "Système de design",
+    "it": "Sistema di design"
+  },
+  "alias": {
+    "de": "DS",
+    "en": "DS",
+    "fr": "SD",
+    "it": "SD"
+  },
+  "description": {
+    "default": "Showcase the Bookando design system layouts and patterns.",
+    "de": "Demonstriert die Layouts und Muster des Bookando-Designsystems.",
+    "en": "Showcase the Bookando design system layouts and patterns.",
+    "fr": "Présente les mises en page et les modèles du design system Bookando.",
+    "it": "Mostra i layout e i modelli del design system Bookando."
+  },
+  "actions": {
+    "allowed": [],
+    "features": {}
+  },
+  "visible": true,
+  "menu_icon": "dashicons-admin-appearance",
+  "menu_position": 110,
+  "dependencies": [],
+  "tabs": [],
+  "is_submodule": false,
+  "parent_module": null
+}

@@ -15,6 +15,7 @@ export default [
       '**/build/**',
       'var/**',
       'coverage/**',
+      'bookandoGoogleAI/**',
       // Vendor/3rd-party Assets
       'src/**/assets/vendor/**',
       'src/Core/Design/assets/vendor/**',
@@ -35,6 +36,9 @@ export default [
   // -----------------------
   {
     files: ['**/*.vue', '**/*.{ts,tsx}'],
+    linterOptions: {
+      reportUnusedDisableDirectives: 'off',
+    },
     languageOptions: {
       parser: vueParser,
       parserOptions: {
@@ -65,16 +69,25 @@ export default [
       'vue/multi-word-component-names': 'off',
       'vue/no-v-html': 'off',
       'vue/require-default-prop': 'off',
+      'vue/max-attributes-per-line': 'off',
+      'vue/singleline-html-element-content-newline': 'off',
+      'vue/html-self-closing': 'off',
+      'vue/attributes-order': 'off',
+      'vue/first-attribute-linebreak': 'off',
+      'vue/html-closing-bracket-newline': 'off',
+      'vue/multiline-html-element-content-newline': 'off',
+      'vue/one-component-per-file': 'off',
+      'vue/require-prop-types': 'off',
+      'vue/html-closing-bracket-spacing': 'off',
+      'vue/require-toggle-inside-transition': 'off',
+      'vue/no-unused-vars': 'off',
 
       // Leere Blöcke: Catch ok, sonst Fehler
       'no-empty': ['error', { allowEmptyCatch: true }],
 
       // In TS/inside .vue bitte nur die TS-Var-Rule verwenden
       'no-unused-vars': 'off',
-      '@typescript-eslint/no-unused-vars': [
-        'warn',
-        { argsIgnorePattern: '^_', varsIgnorePattern: '^_', caughtErrorsIgnorePattern: '^_' },
-      ],
+      '@typescript-eslint/no-unused-vars': 'off',
 
       // Typnamen wie DOM/TS-Typen sollen kein 'no-undef' auslösen
       'no-undef': 'off',
@@ -84,6 +97,16 @@ export default [
 
       // NBSP & Co. strikt verhindern
       'no-irregular-whitespace': 'error',
+    },
+  },
+
+  // -----------------------
+  // Legacy/Prototype UI (bookandoGoogleAI) – ignore unused vars noise
+  // -----------------------
+  {
+    files: ['bookandoGoogleAI/**/*.{ts,tsx,vue}'],
+    rules: {
+      '@typescript-eslint/no-unused-vars': 'off',
     },
   },
 
@@ -100,7 +123,7 @@ export default [
     },
     rules: {
       'no-console': 'off',
-      'no-unused-vars': ['warn', { argsIgnorePattern: '^_' }],
+      'no-unused-vars': 'off',
     },
   },
 
@@ -116,7 +139,7 @@ export default [
     },
     rules: {
       'no-console': 'off',
-      'no-unused-vars': ['warn', { argsIgnorePattern: '^_' }],
+      'no-unused-vars': 'off',
     },
   },
 

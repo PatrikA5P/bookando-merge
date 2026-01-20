@@ -44,6 +44,13 @@ abstract class BaseModule
      */
     protected function registerCapabilities(string $capabilityClass): void
     {
+        if (function_exists('did_action') && did_action('init') > 0) {
+            if (is_callable([$capabilityClass, 'register'])) {
+                $capabilityClass::register();
+            }
+            return;
+        }
+
         add_action('init', static function () use ($capabilityClass): void {
             if (is_callable([$capabilityClass, 'register'])) {
                 $capabilityClass::register();
