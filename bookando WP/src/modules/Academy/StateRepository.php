@@ -6,6 +6,7 @@ namespace Bookando\Modules\Academy;
 
 use Bookando\Modules\Academy\Models\CourseModel;
 use Bookando\Modules\Academy\Models\TrainingCardModel;
+use Bookando\Modules\Academy\Models\PackageModel;
 
 /**
  * StateRepository für Academy-Modul.
@@ -17,6 +18,7 @@ class StateRepository
 {
     private static ?CourseModel $courseModel = null;
     private static ?TrainingCardModel $cardModel = null;
+    private static ?PackageModel $packageModel = null;
 
     /**
      * Lazy-Load CourseModel.
@@ -41,7 +43,18 @@ class StateRepository
     }
 
     /**
-     * Vollständigen State laden (Courses + Training Cards).
+     * Lazy-Load PackageModel.
+     */
+    protected static function packageModel(): PackageModel
+    {
+        if (self::$packageModel === null) {
+            self::$packageModel = new PackageModel();
+        }
+        return self::$packageModel;
+    }
+
+    /**
+     * Vollständigen State laden (Courses + Training Cards + Packages).
      */
     public static function getState(): array
     {
@@ -51,6 +64,7 @@ class StateRepository
         return [
             'courses' => self::courseModel()->all(),
             'training_cards' => self::cardModel()->all(),
+            'packages' => self::packageModel()->all(),
         ];
     }
 
@@ -163,6 +177,61 @@ class StateRepository
     public static function getTrainingCard(int $id): ?array
     {
         return self::cardModel()->find($id);
+    }
+
+    // =========================================================================
+    // Package Operations
+    // =========================================================================
+
+    /**
+     * Paket erstellen oder aktualisieren.
+     */
+    public static function upsertPackage(array $payload): array
+    {
+        $packageId = self::packageModel()->save($payload);
+        $package = self::packageModel()->find($packageId);
+        return $package ?: [];
+    }
+
+    /**
+     * Paket löschen.
+     */
+    public static function deletePackage(string $id): bool
+    {
+        // Validiere und konvertiere ID
+        $numericId = filter_var($id, FILTER_VALIDATE_INT);
+        if ($numericId === false) {
+            error_log('[Bookando Academy] Invalid package ID for deletion: ' . $id);
+            return false;
+        }
+
+        $result = self::packageModel()->delete($numericId);
+        error_log('[Bookando Academy] Delete package ' . $numericId . ': ' . ($result ? 'success' : 'failed'));
+        return $result;
+    }
+
+    /**
+     * Alle Pakete laden.
+     */
+    public static function getAllPackages(): array
+    {
+        return self::packageModel()->all();
+    }
+
+    /**
+     * Paket per ID laden.
+     */
+    public static function getPackage(int $id): ?array
+    {
+        return self::packageModel()->find($id);
+    }
+
+    /**
+     * Pakete nach Kategorie filtern.
+     */
+    public static function getPackagesByCategory(string $category): array
+    {
+        return self::packageModel()->findByCategory($category);
     }
 
     // =========================================================================

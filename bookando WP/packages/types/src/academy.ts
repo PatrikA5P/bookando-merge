@@ -84,4 +84,71 @@ export interface Course extends BaseEntity {
   awardedBadgeId?: string;
   studentsCount: number;
   published: boolean;
+  price?: number;
+  currency?: string;
+  discountEligible?: boolean;
+}
+
+export interface PackageItem {
+  type: 'course' | 'lesson' | 'training_hours';
+  id?: string;
+  title: string;
+  quantity: number;
+  description?: string;
+}
+
+export interface Package extends BaseEntity {
+  title: string;
+  description: string;
+  items: PackageItem[];
+  price: number;
+  originalPrice?: number;
+  discountPercent?: number;
+  currency: string;
+  validityDays?: number;
+  category?: string;
+  status: 'active' | 'inactive' | 'archived';
+}
+
+export interface TrainingTopic {
+  id: string;
+  title: string;
+  lessons: TrainingLesson[];
+  orderIndex: number;
+}
+
+export interface TrainingLesson {
+  id: string;
+  title: string;
+  completed: boolean;
+  completedAt?: string;
+  notes?: string;
+  resources?: {
+    images?: string[];
+    videos?: string[];
+    courseLinks?: string[];
+  };
+  price?: number;
+  invoiceId?: string;
+  paymentStatus?: 'paid' | 'unpaid' | 'partial';
+  orderIndex: number;
+}
+
+export interface TrainingCard extends BaseEntity {
+  student: string;
+  customerId?: string;
+  instructor?: string;
+  program?: string;
+  category?: string;
+  packageId?: string;
+  progress: number;
+  notes?: string;
+  status: 'active' | 'completed' | 'cancelled';
+  topics: TrainingTopic[];
+  milestones?: {
+    id: string;
+    title: string;
+    completed: boolean;
+    completedAt?: string;
+  }[];
 }

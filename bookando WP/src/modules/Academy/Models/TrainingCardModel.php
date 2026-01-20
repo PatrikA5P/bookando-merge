@@ -181,6 +181,8 @@ class TrainingCardModel
             } else {
                 $lesson['resources'] = [];
             }
+            // Konvertiere numerische Felder
+            $lesson['price'] = isset($lesson['price']) ? (float)$lesson['price'] : 0;
         }
 
         return $lessons;
@@ -236,6 +238,9 @@ class TrainingCardModel
      */
     protected function saveLesson(int $topicId, array $lessonData, int $orderIndex): int
     {
+        $wasCompleted = !empty($lessonData['completed']);
+        $hadInvoice = !empty($lessonData['invoice_id']);
+
         $lessonData['topic_id'] = $topicId;
         $lessonData['order_index'] = $orderIndex;
         $lessonData['title'] = sanitize_text_field($lessonData['title'] ?? '');
@@ -245,12 +250,69 @@ class TrainingCardModel
         $lessonData['notes'] = sanitize_textarea_field($lessonData['notes'] ?? '');
         $lessonData['resources'] = !empty($lessonData['resources']) ?
             wp_json_encode($lessonData['resources']) : '[]';
+        $lessonData['price'] = isset($lessonData['price']) ? (float)$lessonData['price'] : 0;
+        $lessonData['invoice_id'] = !empty($lessonData['invoice_id']) ?
+            sanitize_text_field($lessonData['invoice_id']) : null;
+        $lessonData['payment_status'] = in_array($lessonData['payment_status'] ?? '', ['paid', 'unpaid', 'partial']) ?
+            $lessonData['payment_status'] : 'unpaid';
         $lessonData['created_at'] = current_time('mysql');
         $lessonData['updated_at'] = $lessonData['created_at'];
 
+        // Setze completed_at automatisch, wenn Lektion gerade abgeschlossen wurde
+        if ($wasCompleted && empty($lessonData['completed_at'])) {
+            $lessonData['completed_at'] = current_time('mysql');
+        }
+
         unset($lessonData['id']); // Ignore alte IDs
         $this->db->insert($this->lessonsTable, $lessonData);
-        return (int)$this->db->insert_id;
+        $lessonId = (int)$this->db->insert_id;
+
+        // Auto-Invoice: Erstelle Rechnung wenn Lektion abgeschlossen wurde
+        if ($wasCompleted && !$hadInvoice && $lessonData['price'] > 0) {
+            $this->createInvoiceForLesson($lessonId, $lessonData);
+        }
+
+        return $lessonId;
+    }
+
+    /**
+     * Erstellt eine Rechnung für eine abgeschlossene Lektion (wenn Auto-Invoice aktiviert).
+     */
+    protected function createInvoiceForLesson(int $lessonId, array $lessonData): void
+    {
+        // Lade die zugehörige Training Card
+        $topicId = (int)$lessonData['topic_id'];
+        $topic = $this->db->get_row(
+            $this->db->prepare("SELECT card_id FROM {$this->topicsTable} WHERE id = %d", $topicId),
+            ARRAY_A
+        );
+
+        if (!$topic) {
+            return;
+        }
+
+        $cardId = (int)$topic['card_id'];
+        $card = $this->find($cardId);
+
+        if (!$card) {
+            return;
+        }
+
+        // Verwende FinanceIntegration
+        require_once __DIR__ . '/../FinanceIntegration.php';
+        $invoiceNumber = \Bookando\Modules\Academy\FinanceIntegration::createInvoiceForLesson(
+            array_merge($lessonData, ['id' => $lessonId]),
+            $card
+        );
+
+        // Aktualisiere Lektion mit Rechnungsnummer
+        if ($invoiceNumber) {
+            $this->db->update(
+                $this->lessonsTable,
+                ['invoice_id' => $invoiceNumber],
+                ['id' => $lessonId]
+            );
+        }
     }
 
     /**
@@ -261,9 +323,11 @@ class TrainingCardModel
         return [
             'id' => !empty($data['id']) ? (int)$data['id'] : null,
             'student' => sanitize_text_field($data['student'] ?? ''),
+            'customer_id' => isset($data['customer_id']) ? (int)$data['customer_id'] : null,
             'instructor' => sanitize_text_field($data['instructor'] ?? ''),
             'program' => sanitize_text_field($data['program'] ?? ''),
             'category' => in_array($data['category'] ?? '', ['A', 'B']) ? $data['category'] : null,
+            'package_id' => isset($data['package_id']) ? (int)$data['package_id'] : null,
             'progress' => (float)($data['progress'] ?? 0),
             'notes' => sanitize_textarea_field($data['notes'] ?? ''),
             'status' => sanitize_text_field($data['status'] ?? 'active'),

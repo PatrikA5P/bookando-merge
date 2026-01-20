@@ -266,6 +266,10 @@ class CourseModel
             'featured_image' => !empty($data['featured_image']) ? esc_url_raw($data['featured_image']) : '',
             'author' => sanitize_text_field($data['author'] ?? ''),
             'status' => sanitize_text_field($data['status'] ?? 'active'),
+            'price' => isset($data['price']) ? (float)$data['price'] : 0,
+            'currency' => sanitize_text_field($data['currency'] ?? 'CHF'),
+            'discount_eligible' => !empty($data['discount_eligible']) ? 1 : 0,
+            'max_participants' => isset($data['max_participants']) ? (int)$data['max_participants'] : null,
         ];
     }
 }
