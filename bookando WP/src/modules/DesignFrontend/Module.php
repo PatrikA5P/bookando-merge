@@ -37,6 +37,11 @@ class Module extends BaseModule
         // Register REST API
         add_action('rest_api_init', [Api\Api::class, 'registerRoutes']);
 
+        // Initialize Admin
+        if (is_admin()) {
+            Admin\Admin::init();
+        }
+
         // Enqueue frontend scripts
         add_action('wp_enqueue_scripts', [self::class, 'enqueueFrontendScripts']);
 
