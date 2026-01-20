@@ -210,21 +210,32 @@ class ShortcodeHandler
     }
 
     /**
-     * Unified widget renderer
+     * Unified widget renderer with all enhancements
      */
     protected static function renderWidget(string $type, array $atts): string
     {
         // Ensure scripts are loaded
         Module::enqueueFrontendScripts();
 
-        // Parse tags from curly braces {1,2,3} to array
+        // Step 1: Apply Conditional Logic (if_logged_in, if_role, etc.)
+        if (ConditionalLogicParser::hasConditionals($atts)) {
+            $atts = ConditionalLogicParser::apply($atts);
+        }
+
+        // Step 2: Apply Dynamic Filters (auto, current, url:param)
+        $atts = DynamicFilterHelper::resolve($atts);
+
+        // Step 3: Apply A/B Testing
+        $atts = ABTestHandler::applyVariant($type, $atts);
+
+        // Step 4: Parse tags from curly braces {1,2,3} to array
         if (!empty($atts['tag']) && preg_match('/\{([^}]+)\}/', $atts['tag'], $matches)) {
             $atts['tag'] = explode(',', $matches[1]);
         } else {
             $atts['tag'] = !empty($atts['tag']) ? explode(',', $atts['tag']) : [];
         }
 
-        // Parse comma-separated IDs
+        // Step 5: Parse comma-separated IDs
         foreach (['offer', 'category', 'employee', 'location', 'package'] as $key) {
             if (!empty($atts[$key])) {
                 $atts[$key] = array_map('intval', explode(',', $atts[$key]));
@@ -233,14 +244,14 @@ class ShortcodeHandler
             }
         }
 
-        // Convert boolean strings
+        // Step 6: Convert boolean strings
         foreach (['in_dialog', 'featured', 'pagination', 'preselect', 'appointments', 'events', 'invoices', 'progress', 'schedule', 'students', 'profile_hidden'] as $key) {
             if (isset($atts[$key])) {
                 $atts[$key] = in_array($atts[$key], ['1', 'true', 'yes'], true);
             }
         }
 
-        // Theme ID
+        // Step 7: Theme ID
         if (!empty($atts['theme'])) {
             $atts['theme'] = (int)$atts['theme'];
         }
