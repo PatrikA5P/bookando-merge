@@ -26,7 +26,7 @@ class Module extends BaseModule
     protected static string $version = '1.0.0';
     protected static string $license_required = 'professional'; // Requires professional plan
 
-    public static function init(): void
+    public function register(): void
     {
         // Register shortcodes (Amelia-inspired flexible system)
         add_shortcode('bookando_booking', [ShortcodeHandler::class, 'renderBooking']);     // Step-by-step wizard
@@ -40,12 +40,12 @@ class Module extends BaseModule
         add_shortcode('bookando_offers', [ShortcodeHandler::class, 'renderOffers']);
 
         // Register REST API
-        add_action('rest_api_init', [Api\Api::class, 'registerRoutes']);
+        $this->registerRestRoutes([Api\Api::class, 'registerRoutes']);
 
-        // Initialize Admin
-        if (is_admin()) {
+        // Initialize Admin using registerAdminHooks helper
+        $this->registerAdminHooks(function (): void {
             Admin\Admin::init();
-        }
+        });
 
         // Enqueue frontend scripts
         add_action('wp_enqueue_scripts', [self::class, 'enqueueFrontendScripts']);
