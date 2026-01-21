@@ -1,0 +1,49 @@
+{
+  "slug": "designfrontend",
+  "plan": "professional",
+  "version": "1.0.0",
+  "tenant_required": true,
+  "license_required": true,
+  "features_required": [
+    "frontend_design",
+    "shortcode_generator",
+    "oauth_integration"
+  ],
+  "group": "design",
+  "is_saas": true,
+  "has_admin": true,
+  "supports_webhook": false,
+  "supports_offline": false,
+  "supports_calendar": false,
+  "name": {
+    "default": "Design Frontend",
+    "de": "Design Frontend",
+    "en": "Design Frontend",
+    "fr": "Design Frontend",
+    "it": "Design Frontend"
+  },
+  "alias": {
+    "de": "DF",
+    "en": "DF",
+    "fr": "DF",
+    "it": "DF"
+  },
+  "description": {
+    "default": "Shortcode generator and frontend portal configuration.",
+    "de": "Shortcode-Generator und Frontend-Portal-Konfiguration.",
+    "en": "Shortcode generator and frontend portal configuration.",
+    "fr": "Générateur de shortcode et configuration de portail frontend.",
+    "it": "Generatore di shortcode e configurazione del portale frontend."
+  },
+  "actions": {
+    "allowed": ["configure", "generate_shortcode"],
+    "features": {}
+  },
+  "visible": true,
+  "menu_icon": "dashicons-admin-customizer",
+  "menu_position": 90,
+  "dependencies": [],
+  "tabs": [],
+  "is_submodule": false,
+  "parent_module": null
+}
