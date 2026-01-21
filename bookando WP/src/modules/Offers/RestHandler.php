@@ -55,14 +55,17 @@ final class RestHandler
         $pagination = Api::getPaginationParams($request);
         $orderBy    = $request->get_param('order_by');
         $order      = $request->get_param('order');
+        $offerType  = $request->get_param('offer_type');
         $orderBy    = is_string($orderBy) ? Sanitizer::key($orderBy) : null;
         $order      = is_string($order) ? strtoupper($order) : 'DESC';
+        $offerType  = is_string($offerType) && OfferType::isValid($offerType) ? $offerType : null;
 
         $result = $model->getPage(
             (int) $pagination['page'],
             (int) $pagination['per_page'],
             $orderBy ?: null,
-            $order
+            $order,
+            $offerType
         );
 
         return Response::ok(
@@ -363,5 +366,229 @@ final class RestHandler
         }
 
         return is_numeric($raw) ? (int) $raw : 0;
+    }
+
+    /**
+     * Get offers by type
+     */
+    public static function getByType(WP_REST_Request $request): WP_REST_Response
+    {
+        $offerType = $request->get_param('type');
+
+        if (!is_string($offerType) || !OfferType::isValid($offerType)) {
+            return Response::error(new WP_Error(
+                'invalid_offer_type',
+                __('Ungültiger Angebotstyp.', 'bookando'),
+                ['status' => 400]
+            ));
+        }
+
+        $model = new Model();
+        $offers = $model->getByType($offerType);
+
+        return Response::ok([
+            'offers' => $offers,
+            'type' => $offerType,
+            'type_label' => OfferType::getLabel($offerType),
+        ]);
+    }
+
+    /**
+     * Get calendar month view
+     */
+    public static function getCalendarMonth(WP_REST_Request $request): WP_REST_Response
+    {
+        $year = $request->get_param('year');
+        $month = $request->get_param('month');
+
+        if (!is_numeric($year) || !is_numeric($month)) {
+            return Response::error(new WP_Error(
+                'invalid_params',
+                __('Jahr und Monat sind erforderlich.', 'bookando'),
+                ['status' => 400]
+            ));
+        }
+
+        $year = (int)$year;
+        $month = (int)$month;
+
+        if ($month < 1 || $month > 12) {
+            return Response::error(new WP_Error(
+                'invalid_month',
+                __('Monat muss zwischen 1 und 12 liegen.', 'bookando'),
+                ['status' => 400]
+            ));
+        }
+
+        $data = CalendarViewController::getMonthView($year, $month);
+
+        return Response::ok($data);
+    }
+
+    /**
+     * Get calendar week view
+     */
+    public static function getCalendarWeek(WP_REST_Request $request): WP_REST_Response
+    {
+        $startDate = $request->get_param('start_date');
+
+        if (!is_string($startDate) || !strtotime($startDate)) {
+            return Response::error(new WP_Error(
+                'invalid_date',
+                __('Ungültiges Startdatum.', 'bookando'),
+                ['status' => 400]
+            ));
+        }
+
+        $data = CalendarViewController::getWeekView($startDate);
+
+        return Response::ok($data);
+    }
+
+    /**
+     * Get courses for specific date
+     */
+    public static function getCalendarDate(WP_REST_Request $request): WP_REST_Response
+    {
+        $date = $request->get_param('date');
+
+        if (!is_string($date) || !strtotime($date)) {
+            return Response::error(new WP_Error(
+                'invalid_date',
+                __('Ungültiges Datum.', 'bookando'),
+                ['status' => 400]
+            ));
+        }
+
+        $courses = CalendarViewController::getDateView($date);
+
+        return Response::ok([
+            'date' => $date,
+            'courses' => $courses,
+            'count' => count($courses),
+        ]);
+    }
+
+    /**
+     * Get upcoming courses
+     */
+    public static function getUpcoming(WP_REST_Request $request): WP_REST_Response
+    {
+        $limit = $request->get_param('limit');
+        $limit = is_numeric($limit) ? (int)$limit : 20;
+
+        $courses = CalendarViewController::getUpcomingList($limit);
+
+        return Response::ok([
+            'courses' => $courses,
+            'count' => count($courses),
+        ]);
+    }
+
+    /**
+     * Get date range view with grouping
+     */
+    public static function getDateRange(WP_REST_Request $request): WP_REST_Response
+    {
+        $startDate = $request->get_param('start_date');
+        $endDate = $request->get_param('end_date');
+        $groupBy = $request->get_param('group_by');
+
+        if (!is_string($startDate) || !strtotime($startDate)) {
+            return Response::error(new WP_Error(
+                'invalid_start_date',
+                __('Ungültiges Startdatum.', 'bookando'),
+                ['status' => 400]
+            ));
+        }
+
+        if (!is_string($endDate) || !strtotime($endDate)) {
+            return Response::error(new WP_Error(
+                'invalid_end_date',
+                __('Ungültiges Enddatum.', 'bookando'),
+                ['status' => 400]
+            ));
+        }
+
+        $groupBy = is_string($groupBy) ? $groupBy : 'date';
+        if (!in_array($groupBy, ['date', 'week', 'month', 'none'], true)) {
+            $groupBy = 'date';
+        }
+
+        $data = CalendarViewController::getRangeView($startDate, $endDate, $groupBy);
+
+        return Response::ok($data);
+    }
+
+    /**
+     * Search courses with filters
+     */
+    public static function searchCourses(WP_REST_Request $request): WP_REST_Response
+    {
+        $criteria = $request->get_json_params() ?: [];
+
+        $courses = CalendarViewController::searchCourses($criteria);
+
+        return Response::ok([
+            'courses' => $courses,
+            'count' => count($courses),
+            'criteria' => $criteria,
+        ]);
+    }
+
+    /**
+     * Check if offer has available spots
+     */
+    public static function checkAvailability(WP_REST_Request $request): WP_REST_Response
+    {
+        $id = self::resolveOfferId($request);
+        if ($id <= 0) {
+            return Response::error(new WP_Error(
+                'invalid_id',
+                __('Ungültige Angebots-ID.', 'bookando'),
+                ['status' => 400]
+            ));
+        }
+
+        $model = new Model();
+        $offer = $model->find($id);
+
+        if (!$offer) {
+            return Response::error(new WP_Error(
+                'not_found',
+                __('Angebot nicht gefunden.', 'bookando'),
+                ['status' => 404]
+            ));
+        }
+
+        $hasSpots = $model->hasAvailableSpots($id);
+
+        return Response::ok([
+            'id' => $id,
+            'has_available_spots' => $hasSpots,
+            'max_participants' => $offer['max_participants'],
+            'current_participants' => $offer['current_participants'],
+            'remaining_spots' => $offer['max_participants'] !== null
+                ? max(0, (int)$offer['max_participants'] - (int)$offer['current_participants'])
+                : null,
+        ]);
+    }
+
+    /**
+     * Get offer types metadata
+     */
+    public static function getOfferTypes(WP_REST_Request $request): WP_REST_Response
+    {
+        $types = [];
+
+        foreach (OfferType::getAll() as $type) {
+            $types[] = [
+                'value' => $type,
+                'label' => OfferType::getLabel($type),
+                'description' => OfferType::getDescription($type),
+            ];
+        }
+
+        return Response::ok(['types' => $types]);
     }
 }
