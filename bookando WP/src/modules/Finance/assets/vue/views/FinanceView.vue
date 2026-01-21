@@ -32,7 +32,7 @@
 import { ref } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { Wallet as WalletIcon, BarChart3 as BarChart3Icon, FileText as FileTextIcon, Calculator as CalculatorIcon, Users as UsersIcon, Gift as GiftIcon, TrendingUp as TrendingUpIcon } from 'lucide-vue-next'
-import ModuleLayout from '@/Core/Design/components/ModuleLayout.vue'
+import ModuleLayout from '@core/Design/components/ModuleLayout.vue'
 import OverviewTab from '../components/OverviewTab.vue'
 import InvoicingTab from '../components/InvoicingTab.vue'
 import AccountingTab from '../components/AccountingTab.vue'
