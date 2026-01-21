@@ -6,7 +6,7 @@
     hero-gradient="bg-gradient-to-br from-indigo-700 to-purple-900"
     :tabs="tabs"
     :active-tab="activeTab"
-    @tab-change="activeTab = $event"
+    @update:active-tab="handleTabChange"
   >
     <!-- Appointments Tab -->
     <AppointmentsView v-if="activeTab === 'appointments'" />
@@ -29,8 +29,8 @@
 import { ref } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { Clock as ClockIcon, CalendarDays as CalendarDaysIcon, Timer as TimerIcon, Users as UsersIcon, Briefcase as BriefcaseIcon, Layout as LayoutIcon } from 'lucide-vue-next'
-import ModuleLayout from '@core/Design/components/ModuleLayout.vue'
-import AppointmentsView from '../../../Appointments/assets/vue/views/AppointmentsView.vue'
+import ModuleLayout from '@/Core/Design/components/ModuleLayout.vue'
+import AppointmentsView from '../../../../Appointments/assets/vue/views/AppointmentsView.vue'
 import TimeTrackingTab from '../components/TimeTrackingTab.vue'
 import ShiftPlannerTab from '../components/ShiftPlannerTab.vue'
 import AbsenceTab from '../components/AbsenceTab.vue'
@@ -47,4 +47,8 @@ const tabs = [
   { id: 'absences', icon: BriefcaseIcon, label: $t('mod.workday.absences') },
   { id: 'planner', icon: LayoutIcon, label: $t('mod.workday.course_planner') }
 ]
+
+const handleTabChange = (tabId: string) => {
+  activeTab.value = tabId
+}
 </script>

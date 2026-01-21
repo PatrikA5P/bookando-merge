@@ -1,5 +1,15 @@
 <template>
-  <div class="p-6 flex flex-col h-full space-y-6">
+  <!-- Lesson Editor Full Screen -->
+  <LessonEditor
+    v-if="view === 'editor'"
+    :lesson="selectedLesson"
+    :groups="groups"
+    @save="handleSaveLesson"
+    @cancel="handleCancel"
+  />
+
+  <!-- Lesson List -->
+  <div v-else class="p-6 flex flex-col h-full space-y-6">
     <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
       <div>
         <h2 class="text-xl font-bold text-slate-800">{{ $t('mod.academy.lessons_library') }}</h2>
@@ -142,6 +152,7 @@ import {
   Edit2 as Edit2Icon,
   BookOpen as BookOpenIcon
 } from 'lucide-vue-next'
+import LessonEditor from '../editors/LessonEditor.vue'
 
 interface LessonGroup {
   id: string
@@ -163,6 +174,8 @@ const { t: $t } = useI18n()
 const searchTerm = ref('')
 const selectedGroupId = ref('all')
 const isGroupManagerOpen = ref(false)
+const view = ref<'list' | 'editor'>('list')
+const selectedLesson = ref<Lesson | null>(null)
 
 // Mock data
 const groups = ref<LessonGroup[]>([
@@ -214,10 +227,35 @@ const getTotalAttachments = (lesson: Lesson) => {
 }
 
 const handleCreateLesson = () => {
-  alert($t('mod.academy.create_lesson_coming_soon'))
+  selectedLesson.value = {
+    id: `new_${Date.now()}`,
+    title: '',
+    content: '',
+    mediaUrls: [],
+    fileAttachments: [],
+    groupId: ''
+  }
+  view.value = 'editor'
 }
 
 const handleEditLesson = (lesson: Lesson) => {
-  alert(`${$t('mod.academy.edit_lesson')}: ${lesson.title}`)
+  selectedLesson.value = { ...lesson }
+  view.value = 'editor'
+}
+
+const handleSaveLesson = (updatedLesson: Lesson) => {
+  const index = lessons.value.findIndex(l => l.id === updatedLesson.id)
+  if (index !== -1) {
+    lessons.value[index] = updatedLesson
+  } else {
+    lessons.value.push(updatedLesson)
+  }
+  view.value = 'list'
+  selectedLesson.value = null
+}
+
+const handleCancel = () => {
+  view.value = 'list'
+  selectedLesson.value = null
 }
 </script>

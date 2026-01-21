@@ -6,7 +6,7 @@
     hero-gradient="bg-gradient-to-br from-purple-700 to-indigo-900"
     :tabs="tabs"
     :active-tab="activeTab"
-    @tab-change="activeTab = $event"
+    @update:active-tab="handleTabChange"
   >
     <ReportsTab v-if="activeTab === 'reports'" />
     <NotificationsTab v-else-if="activeTab === 'notifications'" />
@@ -41,4 +41,8 @@ const tabs = [
   { id: 'import', icon: UploadIcon, label: $t('mod.tools.import') },
   { id: 'api', icon: CodeIcon, label: $t('mod.tools.api') }
 ]
+
+const handleTabChange = (tabId: string) => {
+  activeTab.value = tabId
+}
 </script>

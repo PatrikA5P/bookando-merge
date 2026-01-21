@@ -6,7 +6,7 @@
     hero-gradient="bg-gradient-to-br from-green-700 to-emerald-900"
     :tabs="tabs"
     :active-tab="activeTab"
-    @tab-change="activeTab = $event"
+    @update:active-tab="handleTabChange"
   >
     <!-- Overview Tab -->
     <OverviewTab v-if="activeTab === 'overview'" />
@@ -52,4 +52,8 @@ const tabs = [
   { id: 'vouchers', icon: GiftIcon, label: $t('mod.finance.vouchers') },
   { id: 'commissions', icon: TrendingUpIcon, label: $t('mod.finance.commissions') }
 ]
+
+const handleTabChange = (tabId: string) => {
+  activeTab.value = tabId
+}
 </script>
