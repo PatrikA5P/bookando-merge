@@ -29,7 +29,7 @@
 import { ref } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { Clock as ClockIcon, CalendarDays as CalendarDaysIcon, Timer as TimerIcon, Users as UsersIcon, Briefcase as BriefcaseIcon, Layout as LayoutIcon } from 'lucide-vue-next'
-import ModuleLayout from '@/Core/Design/components/ModuleLayout.vue'
+import ModuleLayout from '@core/Design/components/ModuleLayout.vue'
 import AppointmentsView from '../../../../Appointments/assets/vue/views/AppointmentsView.vue'
 import TimeTrackingTab from '../components/TimeTrackingTab.vue'
 import ShiftPlannerTab from '../components/ShiftPlannerTab.vue'
