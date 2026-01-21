@@ -21,14 +21,14 @@ final class Installer
             title VARCHAR(191) NOT NULL,
             description TEXT,
 
-            -- Offer Type: termine (individual appointments), kurse (planned courses), online (e-learning)
-            offer_type VARCHAR(32) NOT NULL DEFAULT 'termine',
+            -- Offer Type: dienstleistungen (individual services), kurse (planned courses), online (self-paced)
+            offer_type VARCHAR(32) NOT NULL DEFAULT 'dienstleistungen',
 
             -- Pricing
             price DECIMAL(10,2) DEFAULT NULL,
             currency VARCHAR(3) DEFAULT 'EUR',
 
-            -- Duration (for individual appointments)
+            -- Duration (for individual services/appointments)
             duration_minutes INT DEFAULT NULL,
 
             -- Scheduling (for planned courses)
@@ -41,10 +41,17 @@ final class Installer
             max_participants INT DEFAULT NULL,
             current_participants INT DEFAULT 0,
 
-            -- Online Course Settings
-            access_duration_days INT DEFAULT NULL, -- How long users have access
-            course_url VARCHAR(500) DEFAULT NULL,
-            platform VARCHAR(50) DEFAULT NULL, -- zoom, moodle, custom, etc.
+            -- Academy Integration (requires Academy module license)
+            academy_course_ids JSON, -- Array of course IDs from Academy module
+            academy_access_type VARCHAR(32) DEFAULT 'on_completion', -- immediate, on_completion, manual
+            academy_access_duration_days INT DEFAULT NULL, -- How long after purchase/completion users have access (NULL = lifetime)
+            auto_enroll_academy BOOLEAN DEFAULT 0, -- Auto-enroll in Academy courses on purchase/completion
+            academy_certificate_on_completion BOOLEAN DEFAULT 1, -- Award certificate from Academy course
+
+            -- Online Course Settings (deprecated in favor of Academy integration)
+            access_duration_days INT DEFAULT NULL, -- Legacy: How long users have access
+            course_url VARCHAR(500) DEFAULT NULL, -- Legacy: External course URL
+            platform VARCHAR(50) DEFAULT NULL, -- Legacy: zoom, moodle, custom, etc.
 
             -- Booking Settings
             booking_enabled BOOLEAN DEFAULT 1,

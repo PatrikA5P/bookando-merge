@@ -7,16 +7,16 @@ namespace Bookando\Modules\Offers;
 /**
  * Offer Type Constants
  *
- * Three distinct types of offers:
- * - TERMINE: Individual bookable appointments (driving lessons, haircuts, consultations)
+ * Three distinct types of offers (Sales Layer for Academy):
+ * - DIENSTLEISTUNGEN: Individual bookable services (driving lessons, haircuts, consultations)
  * - KURSE: Planned courses/events with fixed dates (basic courses, workshops, seminars)
- * - ONLINE: Online courses and e-learning content
+ * - ONLINE: Self-paced online courses from Academy (no employee required)
  */
 final class OfferType
 {
-    public const TERMINE = 'termine'; // Individual appointments
-    public const KURSE = 'kurse';     // Planned courses/events
-    public const ONLINE = 'online';   // E-Learning
+    public const DIENSTLEISTUNGEN = 'dienstleistungen'; // Individual services
+    public const KURSE = 'kurse';                       // Planned courses/events
+    public const ONLINE = 'online';                     // Self-paced online courses
 
     /**
      * Get all valid offer types
@@ -26,7 +26,7 @@ final class OfferType
     public static function getAll(): array
     {
         return [
-            self::TERMINE,
+            self::DIENSTLEISTUNGEN,
             self::KURSE,
             self::ONLINE,
         ];
@@ -46,7 +46,7 @@ final class OfferType
     public static function getLabel(string $type): string
     {
         return match ($type) {
-            self::TERMINE => __('Termine', 'bookando'),
+            self::DIENSTLEISTUNGEN => __('Dienstleistungen', 'bookando'),
             self::KURSE => __('Kurse', 'bookando'),
             self::ONLINE => __('Online', 'bookando'),
             default => $type,
@@ -59,9 +59,9 @@ final class OfferType
     public static function getDescription(string $type): string
     {
         return match ($type) {
-            self::TERMINE => __('Individuelle Termine mit wählbarer Zeit (z.B. Fahrstunden, Beratungen)', 'bookando'),
+            self::DIENSTLEISTUNGEN => __('Individuelle Dienstleistungen mit wählbarer Zeit (z.B. Fahrstunden, Beratungen)', 'bookando'),
             self::KURSE => __('Geplante Kurse und Events mit festen Terminen (z.B. Grundkurse, Workshops)', 'bookando'),
-            self::ONLINE => __('Online-Kurse und E-Learning-Inhalte', 'bookando'),
+            self::ONLINE => __('Online-Kurse ohne Mitarbeiter - Kunden absolvieren Academy-Inhalte selbstständig', 'bookando'),
             default => '',
         };
     }

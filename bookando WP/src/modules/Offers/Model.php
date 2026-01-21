@@ -56,6 +56,7 @@ final class Model extends BaseModel
             $row['employee_ids'] = !empty($row['employee_ids']) ? json_decode($row['employee_ids'], true) : [];
             $row['location_ids'] = !empty($row['location_ids']) ? json_decode($row['location_ids'], true) : [];
             $row['recurrence_pattern'] = !empty($row['recurrence_pattern']) ? json_decode($row['recurrence_pattern'], true) : null;
+            $row['academy_course_ids'] = !empty($row['academy_course_ids']) ? json_decode($row['academy_course_ids'], true) : [];
         }
 
         return $row;
@@ -109,6 +110,8 @@ final class Model extends BaseModel
             'booking_enabled', 'requires_approval', 'advance_booking_min',
             'advance_booking_max', 'category_ids', 'tag_ids', 'employee_ids',
             'location_ids', 'featured', 'display_order', 'image_url',
+            'academy_course_ids', 'academy_access_type', 'academy_access_duration_days',
+            'auto_enroll_academy', 'academy_certificate_on_completion',
             'status', 'created_at', 'updated_at'
         ];
 
@@ -129,6 +132,9 @@ final class Model extends BaseModel
         }
         if (isset($filtered['recurrence_pattern']) && is_array($filtered['recurrence_pattern'])) {
             $filtered['recurrence_pattern'] = wp_json_encode($filtered['recurrence_pattern']);
+        }
+        if (isset($filtered['academy_course_ids']) && is_array($filtered['academy_course_ids'])) {
+            $filtered['academy_course_ids'] = wp_json_encode($filtered['academy_course_ids']);
         }
 
         return $filtered;
@@ -184,6 +190,7 @@ final class Model extends BaseModel
             $row['employee_ids'] = !empty($row['employee_ids']) ? json_decode($row['employee_ids'], true) : [];
             $row['location_ids'] = !empty($row['location_ids']) ? json_decode($row['location_ids'], true) : [];
             $row['recurrence_pattern'] = !empty($row['recurrence_pattern']) ? json_decode($row['recurrence_pattern'], true) : null;
+            $row['academy_course_ids'] = !empty($row['academy_course_ids']) ? json_decode($row['academy_course_ids'], true) : [];
         }
 
         return $results;
@@ -218,6 +225,7 @@ final class Model extends BaseModel
             $row['employee_ids'] = !empty($row['employee_ids']) ? json_decode($row['employee_ids'], true) : [];
             $row['location_ids'] = !empty($row['location_ids']) ? json_decode($row['location_ids'], true) : [];
             $row['recurrence_pattern'] = !empty($row['recurrence_pattern']) ? json_decode($row['recurrence_pattern'], true) : null;
+            $row['academy_course_ids'] = !empty($row['academy_course_ids']) ? json_decode($row['academy_course_ids'], true) : [];
         }
 
         return $results;

@@ -24,21 +24,21 @@ class Admin extends BaseAdmin
      */
     public static function register_menu(): void
     {
-        // Main menu: Termine (Individual Appointments)
+        // Main menu: Dienstleistungen (Individual Services)
         \Bookando\Core\Admin\Menu::addModuleSubmenu([
-            'page_title'  => OfferType::getLabel(OfferType::TERMINE),
-            'menu_title'  => OfferType::getLabel(OfferType::TERMINE),
+            'page_title'  => OfferType::getLabel(OfferType::DIENSTLEISTUNGEN),
+            'menu_title'  => OfferType::getLabel(OfferType::DIENSTLEISTUNGEN),
             'capability'  => static::getCapability(),
-            'menu_slug'   => 'bookando_offers_termine',
+            'menu_slug'   => 'bookando_offers_dienstleistungen',
             'module_slug' => static::getModuleSlug(),
-            'callback'    => [static::class, 'renderTerminePage'],
+            'callback'    => [static::class, 'renderDienstleistungenPage'],
             'icon_url'    => static::getMenuIcon(),
             'position'    => static::getMenuPosition(),
         ]);
 
         // Submenu: Kurse (Planned Courses)
         add_submenu_page(
-            'bookando_offers_termine',
+            'bookando_offers_dienstleistungen',
             OfferType::getLabel(OfferType::KURSE),
             OfferType::getLabel(OfferType::KURSE),
             static::getCapability(),
@@ -46,9 +46,9 @@ class Admin extends BaseAdmin
             [static::class, 'renderKursePage']
         );
 
-        // Submenu: Online (E-Learning)
+        // Submenu: Online (Self-Paced Courses)
         add_submenu_page(
-            'bookando_offers_termine',
+            'bookando_offers_dienstleistungen',
             OfferType::getLabel(OfferType::ONLINE),
             OfferType::getLabel(OfferType::ONLINE),
             static::getCapability(),
@@ -57,9 +57,9 @@ class Admin extends BaseAdmin
         );
     }
 
-    public static function renderTerminePage(): void
+    public static function renderDienstleistungenPage(): void
     {
-        self::renderTypePage(OfferType::TERMINE);
+        self::renderTypePage(OfferType::DIENSTLEISTUNGEN);
     }
 
     public static function renderKursePage(): void

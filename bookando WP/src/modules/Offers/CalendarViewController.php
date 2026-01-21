@@ -261,6 +261,7 @@ final class CalendarViewController
             $row['employee_ids'] = !empty($row['employee_ids']) ? json_decode($row['employee_ids'], true) : [];
             $row['location_ids'] = !empty($row['location_ids']) ? json_decode($row['location_ids'], true) : [];
             $row['recurrence_pattern'] = !empty($row['recurrence_pattern']) ? json_decode($row['recurrence_pattern'], true) : null;
+            $row['academy_course_ids'] = !empty($row['academy_course_ids']) ? json_decode($row['academy_course_ids'], true) : [];
         }
 
         return $results ?: [];
