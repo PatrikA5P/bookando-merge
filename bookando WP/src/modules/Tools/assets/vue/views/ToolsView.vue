@@ -21,7 +21,7 @@
 import { ref } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { Settings as SettingsIcon, BarChart2 as BarChart2Icon, Bell as BellIcon, Server as ServerIcon, Palette as PaletteIcon, Upload as UploadIcon, Code as CodeIcon } from 'lucide-vue-next'
-import ModuleLayout from '@/Core/Design/components/ModuleLayout.vue'
+import ModuleLayout from '@core/Design/components/ModuleLayout.vue'
 import ReportsTab from '../components/ReportsTab.vue'
 import NotificationsTab from '../components/NotificationsTab.vue'
 import SystemTab from '../components/SystemTab.vue'
