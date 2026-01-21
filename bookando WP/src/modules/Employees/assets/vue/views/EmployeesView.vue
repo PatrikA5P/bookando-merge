@@ -197,7 +197,7 @@ const handleEdit = (employee: any) => {
 const handleSaved = () => {
   showDialog.value = false
   editingEmployee.value = null
-  store.fetchAll()
+  store.load()
 }
 
 const handleExportCSV = () => {
@@ -229,6 +229,6 @@ const handleExportCSV = () => {
 
 // Lifecycle
 onMounted(() => {
-  store.fetchAll()
+  store.load()
 })
 </script>
