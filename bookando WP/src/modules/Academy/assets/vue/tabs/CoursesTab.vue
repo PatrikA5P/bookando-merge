@@ -1,5 +1,19 @@
 <template>
-  <div class="p-6">
+  <div class="p-6 space-y-6">
+    <!-- Header with Add Button -->
+    <div class="flex justify-between items-center">
+      <div>
+        <h2 class="text-xl font-bold text-slate-800">{{ $t('mod.academy.courses_library') }}</h2>
+        <p class="text-sm text-slate-500">{{ $t('mod.academy.courses_subtitle') }}</p>
+      </div>
+      <button
+        @click="$emit('add-course')"
+        class="bg-brand-600 border border-transparent text-white hover:bg-brand-700 px-4 py-2 rounded-lg shadow-sm flex items-center gap-2 font-medium transition-colors"
+      >
+        <PlusIcon :size="18" /> {{ $t('mod.academy.actions.create_course') }}
+      </button>
+    </div>
+
     <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
       <div
         v-for="course in courses"
@@ -67,7 +81,7 @@
 </template>
 
 <script setup lang="ts">
-import { Users as UsersIcon, List as ListIcon, Image as ImageIcon } from 'lucide-vue-next'
+import { Users as UsersIcon, List as ListIcon, Image as ImageIcon, Plus as PlusIcon } from 'lucide-vue-next'
 import { useI18n } from 'vue-i18n'
 
 interface Course {
@@ -86,6 +100,7 @@ defineProps<{
 }>()
 
 defineEmits<{
+  'add-course': []
   'edit-course': [courseId: string]
 }>()
 

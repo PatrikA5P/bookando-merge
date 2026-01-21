@@ -1,7 +1,9 @@
 <template>
   <ModuleLayout
-    :title="$t('mod.offers.title')"
-    :description="$t('mod.offers.description')"
+    :hero-title="$t('mod.offers.title')"
+    :hero-description="$t('mod.offers.description')"
+    :hero-icon="BriefcaseIcon"
+    hero-gradient="bg-gradient-to-br from-purple-700 to-indigo-900"
     :tabs="tabs"
     :active-tab="activeTab"
     @update:active-tab="handleTabChange"
@@ -41,6 +43,18 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 import { useI18n } from 'vue-i18n'
+import {
+  Briefcase as BriefcaseIcon,
+  Calendar as CalendarIcon,
+  Monitor as MonitorIcon,
+  Folder as FolderIcon,
+  Tag as TagIcon,
+  Package as PackageIcon,
+  PlusCircle as PlusCircleIcon,
+  Gift as GiftIcon,
+  TrendingUp as TrendingUpIcon,
+  FileText as FileTextIcon
+} from 'lucide-vue-next'
 import ModuleLayout from '@core/Design/components/ModuleLayout.vue'
 
 // Tab Components
@@ -63,54 +77,54 @@ const activeTab = ref('dienstleistungen')
 // Tab Configuration
 const tabs = [
   {
-    value: 'dienstleistungen',
+    id: 'dienstleistungen',
     label: $t('mod.offers.tabs.dienstleistungen'),
-    icon: 'briefcase'
+    icon: BriefcaseIcon
   },
   {
-    value: 'kurse',
+    id: 'kurse',
     label: $t('mod.offers.tabs.kurse'),
-    icon: 'calendar'
+    icon: CalendarIcon
   },
   {
-    value: 'online',
+    id: 'online',
     label: $t('mod.offers.tabs.online'),
-    icon: 'monitor'
+    icon: MonitorIcon
   },
   {
-    value: 'categories',
+    id: 'categories',
     label: $t('mod.offers.tabs.categories'),
-    icon: 'folder'
+    icon: FolderIcon
   },
   {
-    value: 'tags',
+    id: 'tags',
     label: $t('mod.offers.tabs.tags'),
-    icon: 'tag'
+    icon: TagIcon
   },
   {
-    value: 'packages',
+    id: 'packages',
     label: $t('mod.offers.tabs.packages'),
-    icon: 'package'
+    icon: PackageIcon
   },
   {
-    value: 'extras',
+    id: 'extras',
     label: $t('mod.offers.tabs.extras'),
-    icon: 'plus-circle'
+    icon: PlusCircleIcon
   },
   {
-    value: 'coupons',
+    id: 'coupons',
     label: $t('mod.offers.tabs.coupons'),
-    icon: 'gift'
+    icon: GiftIcon
   },
   {
-    value: 'pricing',
+    id: 'pricing',
     label: $t('mod.offers.tabs.pricing'),
-    icon: 'trending-up'
+    icon: TrendingUpIcon
   },
   {
-    value: 'forms',
+    id: 'forms',
     label: $t('mod.offers.tabs.forms'),
-    icon: 'file-text'
+    icon: FileTextIcon
   }
 ]
 
