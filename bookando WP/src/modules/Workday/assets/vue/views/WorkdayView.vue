@@ -6,7 +6,7 @@
     hero-gradient="bg-gradient-to-br from-indigo-700 to-purple-900"
     :tabs="tabs"
     :active-tab="activeTab"
-    @tab-change="activeTab = $event"
+    @update:active-tab="handleTabChange"
   >
     <!-- Appointments Tab -->
     <AppointmentsView v-if="activeTab === 'appointments'" />
@@ -47,4 +47,8 @@ const tabs = [
   { id: 'absences', icon: BriefcaseIcon, label: $t('mod.workday.absences') },
   { id: 'planner', icon: LayoutIcon, label: $t('mod.workday.course_planner') }
 ]
+
+const handleTabChange = (tabId: string) => {
+  activeTab.value = tabId
+}
 </script>
