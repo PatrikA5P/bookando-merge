@@ -14,6 +14,7 @@
     <CoursesTab
       v-if="activeTab === 'courses' && view === 'list'"
       :courses="store.courses"
+      @add-course="handleCreateCourse"
       @edit-course="handleEditCourse"
     />
 
