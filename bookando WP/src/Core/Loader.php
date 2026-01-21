@@ -147,6 +147,9 @@ class Loader
         if (file_exists($managerPath)) {
             require_once $managerPath;
 
+            // Auto-activate all modules if none are active (first-time setup)
+            $this->ensureModulesActivated();
+
             $manager = ModuleManager::instance();
             $manager->loadModules();
 
@@ -163,6 +166,44 @@ class Loader
                 'ModuleManager.php nicht gefunden',
                 ['manager_path' => $managerPath]
             );
+        }
+    }
+
+    /**
+     * Ensures modules are activated on first-time setup.
+     * If no modules are active, activates all available modules.
+     */
+    private function ensureModulesActivated(): void
+    {
+        $activeModules = get_option('bookando_active_modules', []);
+
+        // If no modules are active, this is likely first-time setup
+        if (empty($activeModules)) {
+            $modulesPath = plugin_dir_path(BOOKANDO_PLUGIN_FILE) . 'src/modules/';
+            $availableModules = [];
+
+            foreach (glob($modulesPath . '*/module.json') as $jsonPath) {
+                $folder = basename(dirname($jsonPath));
+                $meta = json_decode(file_get_contents($jsonPath), true) ?? [];
+                $slug = $meta['slug'] ?? $folder;
+
+                // Skip legacy modules
+                if (ModuleManager::isLegacySlug($slug) || ModuleManager::isLegacySlug($folder)) {
+                    continue;
+                }
+
+                $availableModules[] = $slug;
+            }
+
+            if (!empty($availableModules)) {
+                update_option('bookando_active_modules', $availableModules, false);
+
+                ActivityLogger::info(
+                    'core.loader.modules',
+                    'Auto-activated all modules on first-time setup',
+                    ['modules' => $availableModules, 'count' => count($availableModules)]
+                );
+            }
         }
     }
 
