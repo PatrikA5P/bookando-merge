@@ -41,7 +41,7 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 import { useI18n } from 'vue-i18n'
-import ModuleLayout from '@/Core/Design/components/ModuleLayout.vue'
+import ModuleLayout from '@core/Design/components/ModuleLayout.vue'
 
 // Tab Components
 import DienstleistungenTab from '../tabs/DienstleistungenTab.vue'
