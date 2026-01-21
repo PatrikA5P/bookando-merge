@@ -1,0 +1,45 @@
+{
+  "slug": "dashboard",
+  "plan": "starter",
+  "version": "1.0.0",
+  "tenant_required": true,
+  "license_required": false,
+  "features_required": [],
+  "group": "core",
+  "is_saas": true,
+  "has_admin": true,
+  "supports_webhook": false,
+  "supports_offline": false,
+  "supports_calendar": false,
+  "name": {
+    "default": "Dashboard",
+    "de": "Dashboard",
+    "en": "Dashboard",
+    "fr": "Tableau de bord",
+    "it": "Cruscotto"
+  },
+  "alias": {
+    "de": "DB",
+    "en": "DB",
+    "fr": "TB",
+    "it": "CR"
+  },
+  "description": {
+    "default": "Overview of your business with customizable widgets",
+    "de": "Übersicht über Ihr Unternehmen mit anpassbaren Widgets",
+    "en": "Overview of your business with customizable widgets",
+    "fr": "Aperçu de votre entreprise avec des widgets personnalisables",
+    "it": "Panoramica della tua attività con widget personalizzabili"
+  },
+  "actions": {
+    "allowed": ["customize"],
+    "features": {}
+  },
+  "visible": true,
+  "menu_icon": "dashicons-dashboard",
+  "menu_position": 5,
+  "dependencies": [],
+  "tabs": [],
+  "is_submodule": false,
+  "parent_module": null
+}
