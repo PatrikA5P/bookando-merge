@@ -16,46 +16,35 @@ class Admin
 
     public static function registerMenus(): void
     {
-        // Main Menu
-        add_menu_page(
-            'Design Frontend',
-            'Design Frontend',
-            'manage_options',
-            'bookando-frontend',
-            [ShortcodeGeneratorPage::class, 'render'],
-            'dashicons-admin-customizer',
-            30
-        );
+        // Register as module submenu in central Bookando menu
+        add_action('bookando_register_module_menus', [self::class, 'register_menu']);
+    }
 
-        // Shortcode Generator (default)
-        add_submenu_page(
-            'bookando-frontend',
-            'Shortcode Generator',
-            'Shortcode Generator',
-            'manage_options',
-            'bookando-frontend', // Same as parent slug
-            [ShortcodeGeneratorPage::class, 'render']
-        );
+    public static function register_menu(): void
+    {
+        \Bookando\Core\Admin\Menu::addModuleSubmenu([
+            'page_title'  => 'Design Frontend',
+            'menu_title'  => 'Design Frontend',
+            'capability'  => 'manage_bookando_designfrontend',
+            'menu_slug'   => 'bookando_designfrontend',
+            'module_slug' => 'designfrontend',
+            'callback'    => [self::class, 'renderPage'],
+            'icon_url'    => 'dashicons-admin-customizer',
+            'position'    => 90
+        ]);
+    }
 
-        // Link Generator (SaaS/UTM)
-        add_submenu_page(
-            'bookando-frontend',
-            'Link Generator',
-            'Link Generator',
-            'manage_options',
-            'bookando-frontend-links',
-            [LinkGeneratorPage::class, 'render']
-        );
+    public static function renderPage(): void
+    {
+        ?>
+        <div class="wrap">
+            <h1>Design Frontend</h1>
+            <p>Shortcode Generator und Frontend-Portal-Konfiguration.</p>
 
-        // OAuth Settings
-        add_submenu_page(
-            'bookando-frontend',
-            'OAuth Einstellungen',
-            'OAuth Einstellungen',
-            'manage_options',
-            'bookando-frontend-oauth',
-            [self::class, 'renderOAuthSettings']
-        );
+            <h2>Coming Soon</h2>
+            <p>Die vollständige Design Frontend Konfiguration wird in Kürze verfügbar sein.</p>
+        </div>
+        <?php
     }
 
     /**

@@ -87,5 +87,178 @@ final class Installer
         dbDelta($sql);
 
         update_option('bookando_offers_db_version', '2.0.0');
+
+        // Create dummy offers for demonstration
+        self::createDummyOffers();
     }
-}
+
+    /**
+     * Create dummy offers for testing and demonstration
+     */
+    private static function createDummyOffers(): void
+    {
+        global $wpdb;
+        $table = $wpdb->prefix . 'bookando_offers';
+
+        // Get tenant ID
+        $tenantId = \Bookando\Core\Tenant\TenantManager::currentTenantId();
+
+        // Check if offers already exist for this tenant
+        $count = $wpdb->get_var($wpdb->prepare(
+            "SELECT COUNT(*) FROM {$table} WHERE tenant_id = %d",
+            $tenantId
+        ));
+
+        // Only create dummy offers if none exist
+        if ((int)$count > 0) {
+            return;
+        }
+
+        $dummyOffers = [
+            // Dienstleistungen (Individual Services)
+            [
+                'title' => 'Fahrlektion Auto (45 Min)',
+                'description' => 'Einzelne Fahrstunde mit erfahrenem Fahrlehrer',
+                'offer_type' => 'dienstleistungen',
+                'price' => 85.00,
+                'currency' => 'CHF',
+                'duration_minutes' => 45,
+                'booking_enabled' => 1,
+                'status' => 'active',
+                'featured' => 1,
+                'display_order' => 1
+            ],
+            [
+                'title' => 'Fahrlektion Motorrad (45 Min)',
+                'description' => 'Motorrad-Fahrstunde für Anfänger und Fortgeschrittene',
+                'offer_type' => 'dienstleistungen',
+                'price' => 95.00,
+                'currency' => 'CHF',
+                'duration_minutes' => 45,
+                'booking_enabled' => 1,
+                'status' => 'active',
+                'display_order' => 2
+            ],
+            [
+                'title' => 'Autobahnfahrt (90 Min)',
+                'description' => 'Training für Autobahnfahrten und schnelles Fahren',
+                'offer_type' => 'dienstleistungen',
+                'price' => 160.00,
+                'currency' => 'CHF',
+                'duration_minutes' => 90,
+                'booking_enabled' => 1,
+                'status' => 'active',
+                'display_order' => 3
+            ],
+
+            // Kurse (Scheduled Courses)
+            [
+                'title' => 'VKU Kurs (8 Lektionen)',
+                'description' => 'Verkehrskunde-Kurs obligatorisch für alle Lernfahrer',
+                'offer_type' => 'kurse',
+                'price' => 250.00,
+                'currency' => 'CHF',
+                'duration_minutes' => 480, // 8 hours total
+                'max_participants' => 12,
+                'current_participants' => 5,
+                'booking_enabled' => 1,
+                'status' => 'active',
+                'featured' => 1,
+                'display_order' => 10
+            ],
+            [
+                'title' => 'Nothelferkurs',
+                'description' => 'Obligatorischer Nothelferkurs für Führerschein-Erwerb',
+                'offer_type' => 'kurse',
+                'price' => 150.00,
+                'currency' => 'CHF',
+                'duration_minutes' => 600, // 10 hours
+                'max_participants' => 15,
+                'current_participants' => 8,
+                'booking_enabled' => 1,
+                'status' => 'active',
+                'featured' => 1,
+                'display_order' => 11
+            ],
+            [
+                'title' => 'Intensivkurs Auto (5 Tage)',
+                'description' => 'Fünftägiger Intensivkurs mit täglich 3 Fahrstunden',
+                'offer_type' => 'kurse',
+                'price' => 1200.00,
+                'currency' => 'CHF',
+                'duration_minutes' => 1350, // 5 days x 4.5 hours
+                'max_participants' => 4,
+                'current_participants' => 2,
+                'booking_enabled' => 1,
+                'status' => 'active',
+                'display_order' => 12
+            ],
+
+            // Online (Self-paced courses)
+            [
+                'title' => 'Theorieprüfung Online-Vorbereitung',
+                'description' => 'Vollständiger Online-Kurs zur Vorbereitung auf die Theorieprüfung',
+                'offer_type' => 'online',
+                'price' => 49.00,
+                'currency' => 'CHF',
+                'access_duration_days' => 90,
+                'booking_enabled' => 1,
+                'status' => 'active',
+                'featured' => 1,
+                'display_order' => 20
+            ],
+            [
+                'title' => 'Verkehrsregeln Online-Training',
+                'description' => 'Interaktives Online-Training zu Schweizer Verkehrsregeln',
+                'offer_type' => 'online',
+                'price' => 29.00,
+                'currency' => 'CHF',
+                'access_duration_days' => 60,
+                'booking_enabled' => 1,
+                'status' => 'active',
+                'display_order' => 21
+            ]
+        ];
+
+        foreach ($dummyOffers as $offer) {
+            $wpdb->insert(
+                $table,
+                [
+                    'tenant_id' => $tenantId,
+                    'title' => $offer['title'],
+                    'description' => $offer['description'],
+                    'offer_type' => $offer['offer_type'],
+                    'price' => $offer['price'],
+                    'currency' => $offer['currency'],
+                    'duration_minutes' => $offer['duration_minutes'] ?? null,
+                    'max_participants' => $offer['max_participants'] ?? null,
+                    'current_participants' => $offer['current_participants'] ?? 0,
+                    'access_duration_days' => $offer['access_duration_days'] ?? null,
+                    'booking_enabled' => $offer['booking_enabled'],
+                    'status' => $offer['status'],
+                    'featured' => $offer['featured'] ?? 0,
+                    'display_order' => $offer['display_order'],
+                    'created_at' => current_time('mysql'),
+                    'updated_at' => current_time('mysql')
+                ],
+                [
+                    '%d', // tenant_id
+                    '%s', // title
+                    '%s', // description
+                    '%s', // offer_type
+                    '%f', // price
+                    '%s', // currency
+                    '%d', // duration_minutes
+                    '%d', // max_participants
+                    '%d', // current_participants
+                    '%d', // access_duration_days
+                    '%d', // booking_enabled
+                    '%s', // status
+                    '%d', // featured
+                    '%d', // display_order
+                    '%s', // created_at
+                    '%s'  // updated_at
+                ]
+            );
+        }
+    }
