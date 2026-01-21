@@ -20,19 +20,22 @@ class Api extends BaseApi
 
     public static function registerRoutes(): void
     {
-        static::registerRoute('offers', [
+        // List all offers
+        static::registerRoute('', [
             'methods'             => WP_REST_Server::READABLE,
             'callback'            => [RestHandler::class, 'list'],
             'permission_callback' => static::permissionWithFeature(),
         ]);
 
-        static::registerRoute('offers', [
+        // Create offer
+        static::registerRoute('', [
             'methods'             => WP_REST_Server::CREATABLE,
             'callback'            => [RestHandler::class, 'create'],
             'permission_callback' => static::permissionWithFeature('rest_api_write'),
         ]);
 
-        static::registerRoute('offers/(?P<id>\d+)', [
+        // Get single offer
+        static::registerRoute('(?P<id>\d+)', [
             'methods'             => WP_REST_Server::READABLE,
             'callback'            => [RestHandler::class, 'get'],
             'permission_callback' => static::permissionWithFeature(),
@@ -43,18 +46,21 @@ class Api extends BaseApi
             ],
         ]);
 
-        static::registerRoute('offers/(?P<id>\d+)', [
+        // Update offer
+        static::registerRoute('(?P<id>\d+)', [
             'methods'             => WP_REST_Server::EDITABLE,
             'callback'            => [RestHandler::class, 'update'],
             'permission_callback' => static::permissionWithFeature('rest_api_write'),
         ]);
 
-        static::registerRoute('offers/(?P<id>\d+)', [
+        // Delete offer
+        static::registerRoute('(?P<id>\d+)', [
             'methods'             => WP_REST_Server::DELETABLE,
             'callback'            => [RestHandler::class, 'delete'],
             'permission_callback' => static::permissionWithFeature('rest_api_write'),
         ]);
 
+        // Bulk operations
         static::registerRoute('bulk', [
             'methods'             => WP_REST_Server::CREATABLE,
             'callback'            => [RestHandler::class, 'bulk'],
