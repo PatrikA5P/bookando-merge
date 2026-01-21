@@ -563,13 +563,20 @@
       "upgrade_required": "Upgrade erforderlich"
     },
     "offers": {
-      "tabs": {
-        "coupons": "Gutscheine",
-        "courses": "Kurse",
-        "packages": "Pakete",
-        "services": "Dienstleistungen"
-      },
       "title": "Angebote",
+      "description": "Verwalten Sie Ihr Dienstleistungsangebot",
+      "tabs": {
+        "dienstleistungen": "Dienstleistungen",
+        "kurse": "Kurse",
+        "online": "Online",
+        "categories": "Kategorien",
+        "tags": "Tags",
+        "packages": "Pakete & Bundles",
+        "extras": "Add-ons & Extras",
+        "coupons": "Gutscheine",
+        "pricing": "Dynamische Preise",
+        "forms": "Buchungsformulare"
+      },
       "courses": {
         "title": "Kurse",
         "add": "Kurs anlegen",
@@ -701,6 +708,134 @@
             "puzzle": "Puzzle"
           }
         }
+      },
+      "dienstleistungen": {
+        "title": "Dienstleistungen",
+        "search_placeholder": "Dienstleistungen suchen...",
+        "filter_by_category": "Nach Kategorie filtern",
+        "filter_by_status": "Nach Status filtern",
+        "all_categories": "Alle Kategorien",
+        "all_statuses": "Alle Status",
+        "toggle_status": "Status umschalten",
+        "services_found": "{count} Dienstleistungen gefunden"
+      },
+      "kurse": {
+        "title": "Kurse",
+        "search_placeholder": "Kurse suchen...",
+        "view_mode": "Ansichtsmodus",
+        "list_view": "Listenansicht",
+        "grouped_view": "Gruppierte Ansicht",
+        "date_from": "Datum von",
+        "date_to": "Datum bis",
+        "all_courses": "Alle Kurse",
+        "course_sessions": "{count} Termine",
+        "participants": "{current} / {max} Teilnehmer",
+        "sessions": "Termine"
+      },
+      "online": {
+        "title": "Online-Kurse",
+        "search_placeholder": "Online-Kurse suchen...",
+        "academy_integrated": "Academy-Integration",
+        "academy_courses_linked": "Academy-Kurse verknüpft",
+        "auto_enroll_enabled": "Auto-Einschreibung aktiviert",
+        "access_duration": "Zugriffsdauer",
+        "certificate_on_completion": "Zertifikat bei Abschluss",
+        "days_access": "{days} Tage Zugriff",
+        "lifetime_access": "Lebenslanger Zugriff",
+        "enrollments": "Einschreibungen",
+        "completion_rate": "Abschlussquote"
+      },
+      "categories": {
+        "title": "Kategorien",
+        "search_placeholder": "Kategorien suchen...",
+        "create_category": "Kategorie erstellen",
+        "edit_category": "Kategorie bearbeiten",
+        "delete_category": "Kategorie löschen",
+        "category_name": "Kategoriename",
+        "category_color": "Kategorie-Farbe",
+        "offers_count": "{count} Angebote",
+        "no_categories": "Keine Kategorien gefunden"
+      },
+      "tags": {
+        "title": "Tags",
+        "search_placeholder": "Tags suchen...",
+        "create_tag": "Tag erstellen",
+        "edit_tag": "Tag bearbeiten",
+        "delete_tag": "Tag löschen",
+        "tag_name": "Tag-Name",
+        "usage_count": "{count} Verwendungen",
+        "no_tags": "Keine Tags gefunden"
+      },
+      "packages": {
+        "title": "Pakete & Bundles",
+        "search_placeholder": "Pakete suchen...",
+        "create_package": "Paket erstellen",
+        "edit_package": "Paket bearbeiten",
+        "delete_package": "Paket löschen",
+        "package_name": "Paketname",
+        "included_items": "{count} enthaltene Artikel",
+        "discount": "Rabatt",
+        "you_save": "Sie sparen {amount}",
+        "no_packages": "Keine Pakete gefunden"
+      },
+      "extras": {
+        "title": "Add-ons & Extras",
+        "search_placeholder": "Extras suchen...",
+        "create_extra": "Extra erstellen",
+        "edit_extra": "Extra bearbeiten",
+        "delete_extra": "Extra löschen",
+        "extra_name": "Extra-Name",
+        "optional": "Optional",
+        "mandatory": "Pflicht",
+        "applicable_to": "Anwendbar auf {count} Angebote",
+        "duration": "Dauer",
+        "no_extras": "Keine Extras gefunden"
+      },
+      "coupons": {
+        "title": "Gutscheine & Geschenkkarten",
+        "search_placeholder": "Gutscheine suchen...",
+        "create_coupon": "Gutschein erstellen",
+        "edit_coupon": "Gutschein bearbeiten",
+        "delete_coupon": "Gutschein löschen",
+        "coupon_code": "Gutscheincode",
+        "discount_type": "Rabattart",
+        "discount_value": "Rabattwert",
+        "expiration_date": "Ablaufdatum",
+        "usage_limit": "Nutzungslimit",
+        "times_used": "{used} / {limit} verwendet",
+        "unlimited_usage": "Unbegrenzte Nutzung",
+        "no_coupons": "Keine Gutscheine gefunden"
+      },
+      "pricing": {
+        "title": "Dynamische Preisgestaltung",
+        "search_placeholder": "Preisregeln suchen...",
+        "create_rule": "Regel erstellen",
+        "edit_rule": "Regel bearbeiten",
+        "delete_rule": "Regel löschen",
+        "rule_name": "Regelname",
+        "conditions": "Bedingungen",
+        "adjustment": "Anpassung",
+        "percentage": "Prozentual",
+        "fixed_amount": "Fester Betrag",
+        "enabled": "Aktiviert",
+        "disabled": "Deaktiviert",
+        "no_rules": "Keine Preisregeln gefunden"
+      },
+      "booking_forms": {
+        "title": "Buchungsformulare",
+        "search_placeholder": "Formulare suchen...",
+        "create": "Formular erstellen",
+        "edit_form": "Formular bearbeiten",
+        "delete_form": "Formular löschen",
+        "form_name": "Formularname",
+        "form_preview": "Formularvorschau",
+        "fields": "Felder",
+        "submissions": "Einreichungen",
+        "more_fields": "weitere Felder",
+        "view_submissions": "Einreichungen ansehen",
+        "no_forms": "Keine Formulare gefunden",
+        "info_title": "Benutzerdefinierte Buchungsformulare",
+        "info_text": "Erstellen Sie maßgeschneiderte Formulare für verschiedene Dienstleistungen und erfassen Sie spezifische Kundeninformationen."
       }
     },
     "services": {

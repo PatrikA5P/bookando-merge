@@ -308,16 +308,19 @@ const handleSubmit = async () => {
   error.value = ''
 
   try {
-    if (props.customer) {
-      // Update existing
-      await store.updateCustomer({ id: props.customer.id, ...form.value })
-    } else {
-      // Create new
-      await store.createCustomer(form.value)
-    }
+    // Use store.save() which handles both create and update
+    const customer = props.customer
+      ? { id: props.customer.id, ...form.value }
+      : form.value
 
-    emit('saved')
-    emit('close')
+    const success = await store.save(customer)
+
+    if (success) {
+      emit('saved')
+      emit('close')
+    } else {
+      error.value = store.error || $t('core.actions.save.error')
+    }
   } catch (e: any) {
     error.value = e.message || $t('core.actions.save.error')
   } finally {

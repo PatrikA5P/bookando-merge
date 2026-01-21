@@ -19,74 +19,24 @@ class Admin extends BaseAdmin
     protected static function getMenuPosition(): int  { return 26; }
 
     /**
-     * Register three separate menu pages for each offer type
-     * NO "All Offers" tab - strict separation by type
+     * Register single menu page "Angebote" with tabs inside Vue component
      */
     public static function register_menu(): void
     {
-        // Main menu: Dienstleistungen (Individual Services)
         \Bookando\Core\Admin\Menu::addModuleSubmenu([
-            'page_title'  => OfferType::getLabel(OfferType::DIENSTLEISTUNGEN),
-            'menu_title'  => OfferType::getLabel(OfferType::DIENSTLEISTUNGEN),
+            'page_title'  => static::getPageTitle(),
+            'menu_title'  => static::getPageTitle(),
             'capability'  => static::getCapability(),
-            'menu_slug'   => 'bookando_offers_dienstleistungen',
+            'menu_slug'   => static::getMenuSlug(),
             'module_slug' => static::getModuleSlug(),
-            'callback'    => [static::class, 'renderDienstleistungenPage'],
+            'callback'    => [static::class, 'renderPage'],
             'icon_url'    => static::getMenuIcon(),
             'position'    => static::getMenuPosition(),
         ]);
-
-        // Submenu: Kurse (Planned Courses)
-        add_submenu_page(
-            'bookando_offers_dienstleistungen',
-            OfferType::getLabel(OfferType::KURSE),
-            OfferType::getLabel(OfferType::KURSE),
-            static::getCapability(),
-            'bookando_offers_kurse',
-            [static::class, 'renderKursePage']
-        );
-
-        // Submenu: Online (Self-Paced Courses)
-        add_submenu_page(
-            'bookando_offers_dienstleistungen',
-            OfferType::getLabel(OfferType::ONLINE),
-            OfferType::getLabel(OfferType::ONLINE),
-            static::getCapability(),
-            'bookando_offers_online',
-            [static::class, 'renderOnlinePage']
-        );
     }
 
-    public static function renderDienstleistungenPage(): void
+    public static function renderPage(): void
     {
-        self::renderTypePage(OfferType::DIENSTLEISTUNGEN);
-    }
-
-    public static function renderKursePage(): void
-    {
-        self::renderTypePage(OfferType::KURSE);
-    }
-
-    public static function renderOnlinePage(): void
-    {
-        self::renderTypePage(OfferType::ONLINE);
-    }
-
-    /**
-     * Render page with offer type context
-     */
-    protected static function renderTypePage(string $offerType): void
-    {
-        // Pass offer type to template
-        $pageContext = [
-            'offer_type' => $offerType,
-            'offer_type_label' => OfferType::getLabel($offerType),
-            'offer_type_description' => OfferType::getDescription($offerType),
-        ];
-
-        // Make context available to template
-        extract($pageContext);
-
         include __DIR__ . '/../Templates/admin-vue-container.php';
     }
 }
