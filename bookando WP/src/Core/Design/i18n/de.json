@@ -1660,6 +1660,7 @@
       "time": "Uhrzeit",
       "service": "Dienstleistung",
       "employee": "Mitarbeiter"
+      },
     "design_system": {
       "hero": {
         "title": "Angebote & Katalog",
