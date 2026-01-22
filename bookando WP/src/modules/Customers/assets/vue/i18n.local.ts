@@ -36,8 +36,10 @@ export const messages = {
           contact: 'Kontakt',
           address: 'Adresse',
           status: 'Status',
+          bookings: 'Buchungen',
           actions: 'Aktionen',
         },
+        bookings: 'Buchungen',
         filter: {
           status: 'Status',
           sort: 'Sortierung',
@@ -112,8 +114,10 @@ export const messages = {
           contact: 'Contact',
           address: 'Address',
           status: 'Status',
+          bookings: 'Bookings',
           actions: 'Actions',
         },
+        bookings: 'Bookings',
         filter: {
           status: 'Status',
           sort: 'Sort',
