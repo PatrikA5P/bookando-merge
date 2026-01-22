@@ -1,5 +1,22 @@
 <template>
   <div class="space-y-6">
+    <!-- Header with Add Button -->
+    <div class="flex items-center justify-between">
+      <div>
+        <h2 class="text-2xl font-bold text-slate-900">{{ $t('mod.offers.tabs.dienstleistungen') }}</h2>
+        <p class="text-sm text-slate-600 mt-1">{{ $t('mod.offers.dienstleistungen.subtitle') }}</p>
+      </div>
+      <button
+        @click="openAddModal"
+        class="flex items-center gap-2 px-5 py-2.5 bg-accent-500 hover:bg-accent-700 text-white rounded-xl font-bold shadow-sm transition-colors"
+      >
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
+        </svg>
+        {{ $t('mod.offers.add_service') }}
+      </button>
+    </div>
+
     <!-- Filter Bar -->
     <div class="bg-white rounded-xl border border-slate-200 p-4 flex items-center gap-4 flex-wrap">
       <div class="flex-1 flex items-center gap-2">
@@ -7,7 +24,7 @@
         <select
           v-model="selectedCategory"
           @change="applyFilter"
-          class="px-3 py-1.5 text-sm border border-slate-300 rounded-lg focus:ring-2 focus:ring-rose-500 focus:border-rose-500"
+          class="px-3 py-1.5 text-sm border border-slate-300 rounded-lg focus:ring-2 focus:ring-brand-500 focus:border-brand-500"
         >
           <option value="">{{ $t('core.common.all') }}</option>
           <option v-for="cat in categories" :key="cat" :value="cat">{{ cat }}</option>
@@ -19,7 +36,7 @@
         <select
           v-model="selectedStatus"
           @change="applyFilter"
-          class="px-3 py-1.5 text-sm border border-slate-300 rounded-lg focus:ring-2 focus:ring-rose-500 focus:border-rose-500"
+          class="px-3 py-1.5 text-sm border border-slate-300 rounded-lg focus:ring-2 focus:ring-brand-500 focus:border-brand-500"
         >
           <option value="">{{ $t('core.common.all') }}</option>
           <option value="active">{{ $t('core.common.active') }}</option>
@@ -96,7 +113,24 @@
         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
       </svg>
       <p class="text-lg font-medium">{{ $t('mod.offers.overview.dienstleistungen.no_services') }}</p>
+      <button
+        @click="openAddModal"
+        class="mt-4 px-5 py-2.5 bg-accent-500 hover:bg-accent-700 text-white rounded-xl font-bold shadow-sm transition-colors inline-flex items-center gap-2"
+      >
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
+        </svg>
+        {{ $t('mod.offers.add_first_service') }}
+      </button>
     </div>
+
+    <!-- Service Form Modal -->
+    <ServicesForm
+      v-if="isModalOpen"
+      :service="editingService"
+      @close="closeModal"
+      @saved="handleSaved"
+    />
   </div>
 </template>
 
@@ -104,6 +138,7 @@
 import { ref, computed, onMounted } from 'vue'
 import { useI18n } from 'vue-i18n'
 import httpBase from '@assets/http'
+import ServicesForm from '../components/ServicesForm.vue'
 
 const { t: $t } = useI18n()
 const http = httpBase.module('offers')
@@ -113,6 +148,8 @@ const loading = ref(false)
 const services = ref<any[]>([])
 const selectedCategory = ref('')
 const selectedStatus = ref('')
+const isModalOpen = ref(false)
+const editingService = ref<any>(null)
 
 // Categories from services
 const categories = computed(() => {
@@ -154,10 +191,25 @@ const toggleStatus = async (service: any) => {
   }
 }
 
-// Actions
+// Modal Actions
+const openAddModal = () => {
+  editingService.value = null
+  isModalOpen.value = true
+}
+
 const editService = (service: any) => {
-  console.log('Edit service:', service)
-  // TODO: Open edit modal
+  editingService.value = service
+  isModalOpen.value = true
+}
+
+const closeModal = () => {
+  isModalOpen.value = false
+  editingService.value = null
+}
+
+const handleSaved = () => {
+  closeModal()
+  loadServices() // Reload list
 }
 
 const viewBookings = (service: any) => {

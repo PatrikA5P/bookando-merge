@@ -3,7 +3,7 @@
     :hero-title="$t('mod.offers.title')"
     :hero-description="$t('mod.offers.description')"
     :hero-icon="BriefcaseIcon"
-    hero-gradient="bg-gradient-to-br from-purple-700 to-indigo-900"
+    hero-gradient="bg-gradient-to-br from-blue-700 to-sky-900"
     :tabs="tabs"
     :active-tab="activeTab"
     @update:active-tab="handleTabChange"
