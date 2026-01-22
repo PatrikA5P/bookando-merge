@@ -127,13 +127,26 @@
             <!-- Street Address -->
             <div>
               <label class="block text-sm font-medium text-slate-700 mb-1.5">
-                {{ $t('fields.address') }}
+                {{ $t('fields.street') }}
               </label>
               <input
-                v-model="form.address"
+                v-model="form.street"
                 type="text"
-                class="w-full px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-brand-500 focus:border-emerald-500 outline-none transition-colors"
-                :placeholder="$t('fields.address')"
+                class="w-full px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-brand-500 focus:border-brand-500 outline-none transition-colors"
+                :placeholder="$t('fields.street_placeholder')"
+              >
+            </div>
+
+            <!-- Address Line 2 (Address Supplement) -->
+            <div>
+              <label class="block text-sm font-medium text-slate-700 mb-1.5">
+                {{ $t('fields.address_line_2') }}
+              </label>
+              <input
+                v-model="form.address_line_2"
+                type="text"
+                class="w-full px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-brand-500 focus:border-brand-500 outline-none transition-colors"
+                :placeholder="$t('fields.address_line_2_placeholder')"
               >
             </div>
 
@@ -192,7 +205,7 @@
               <textarea
                 v-model="form.notes"
                 rows="3"
-                class="w-full px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-brand-500 focus:border-emerald-500 outline-none transition-colors resize-none"
+                class="w-full px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-brand-500 focus:border-brand-500 outline-none transition-colors resize-none"
                 :placeholder="$t('fields.notes_placeholder')"
               ></textarea>
             </div>
@@ -204,13 +217,61 @@
               </label>
               <select
                 v-model="form.status"
-                class="w-full px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-brand-500 focus:border-emerald-500 outline-none transition-colors"
+                class="w-full px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-brand-500 focus:border-brand-500 outline-none transition-colors"
               >
                 <option value="active">{{ $t('core.status.active') }}</option>
                 <option value="blocked">{{ $t('core.status.blocked') }}</option>
                 <option value="deleted">{{ $t('core.status.deleted') }}</option>
               </select>
             </div>
+          </div>
+        </div>
+
+        <!-- Custom Fields -->
+        <div>
+          <h3 class="text-sm font-bold text-slate-700 uppercase mb-4">{{ $t('mod.customers.custom_fields') }}</h3>
+          <div class="space-y-3">
+            <!-- Existing Custom Fields -->
+            <div v-for="(field, index) in form.custom_fields" :key="index" class="flex gap-2">
+              <input
+                v-model="field.key"
+                type="text"
+                class="w-1/3 px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-brand-500 focus:border-brand-500 outline-none transition-colors"
+                :placeholder="$t('fields.custom_field_name')"
+              >
+              <input
+                v-model="field.value"
+                type="text"
+                class="flex-1 px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-brand-500 focus:border-brand-500 outline-none transition-colors"
+                :placeholder="$t('fields.custom_field_value')"
+              >
+              <button
+                type="button"
+                @click="removeCustomField(index)"
+                class="p-2 text-rose-500 hover:bg-rose-50 rounded-lg transition-colors"
+                :aria-label="$t('common.delete')"
+              >
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                </svg>
+              </button>
+            </div>
+
+            <!-- Add Custom Field Button -->
+            <button
+              type="button"
+              @click="addCustomField"
+              class="w-full py-2.5 border-2 border-dashed border-slate-300 rounded-lg text-slate-600 hover:border-brand-500 hover:text-brand-600 font-medium transition-colors flex items-center justify-center gap-2"
+            >
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
+              </svg>
+              {{ $t('mod.customers.add_custom_field') }}
+            </button>
+
+            <p class="text-xs text-slate-500 italic">
+              {{ $t('mod.customers.custom_fields_help') }}
+            </p>
           </div>
         </div>
 
@@ -276,12 +337,14 @@ const form = ref({
   phone: '',
   gender: '',
   birthday: '',
-  address: '',
+  street: '',
+  address_line_2: '',
   zip: '',
   city: '',
   country: '',
   notes: '',
-  status: 'active'
+  status: 'active',
+  custom_fields: [] as Array<{ key: string; value: string }>
 })
 
 onMounted(() => {
@@ -293,15 +356,26 @@ onMounted(() => {
       phone: props.customer.phone || '',
       gender: props.customer.gender || '',
       birthday: props.customer.birthday || '',
-      address: props.customer.address || '',
+      street: props.customer.street || props.customer.address || '', // Fallback für migration
+      address_line_2: props.customer.address_line_2 || '',
       zip: props.customer.zip || '',
       city: props.customer.city || '',
       country: props.customer.country || '',
       notes: props.customer.notes || '',
-      status: props.customer.status || 'active'
+      status: props.customer.status || 'active',
+      custom_fields: props.customer.custom_fields || []
     }
   }
 })
+
+// Custom Fields Management
+const addCustomField = () => {
+  form.value.custom_fields.push({ key: '', value: '' })
+}
+
+const removeCustomField = (index: number) => {
+  form.value.custom_fields.splice(index, 1)
+}
 
 const handleSubmit = async () => {
   loading.value = true

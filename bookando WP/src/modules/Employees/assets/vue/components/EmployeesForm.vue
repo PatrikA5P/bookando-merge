@@ -133,21 +133,49 @@
                 v-model="form.position"
                 type="text"
                 class="w-full px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-brand-500 focus:border-brand-500 outline-none transition-colors"
-                :placeholder="$t('mod.employees.position')"
+                placeholder="e.g. Senior Therapist"
               >
             </div>
 
-            <!-- Badge -->
+            <!-- Department -->
+            <div>
+              <label class="block text-sm font-medium text-slate-700 mb-1.5">
+                {{ $t('mod.employees.department') }}
+              </label>
+              <input
+                v-model="form.department"
+                type="text"
+                class="w-full px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-brand-500 focus:border-brand-500 outline-none transition-colors"
+                placeholder="e.g. Wellness, Fitness"
+              >
+            </div>
+
+            <!-- Badge ID -->
             <div>
               <label class="block text-sm font-medium text-slate-700 mb-1.5">
                 {{ $t('fields.badge') }}
               </label>
               <input
-                v-model="form.badge"
+                v-model="form.badge_id"
                 type="text"
                 class="w-full px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-brand-500 focus:border-brand-500 outline-none transition-colors"
-                :placeholder="$t('fields.badge')"
+                placeholder="e.g. BADGE-001"
               >
+            </div>
+
+            <!-- Role -->
+            <div>
+              <label class="block text-sm font-medium text-slate-700 mb-1.5">
+                {{ $t('mod.employees.role') }}
+              </label>
+              <select
+                v-model="form.role"
+                class="w-full px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-brand-500 focus:border-brand-500 outline-none transition-colors"
+              >
+                <option value="employee">Employee</option>
+                <option value="manager">Manager</option>
+                <option value="admin">Administrator</option>
+              </select>
             </div>
 
             <!-- Hire Date -->
@@ -162,19 +190,50 @@
               >
             </div>
 
-            <!-- Role -->
+            <!-- Exit Date -->
             <div>
               <label class="block text-sm font-medium text-slate-700 mb-1.5">
-                {{ $t('mod.employees.role') }}
+                {{ $t('mod.employees.exit_date') }}
               </label>
-              <select
-                v-model="form.role"
+              <input
+                v-model="form.exit_date"
+                type="date"
                 class="w-full px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-brand-500 focus:border-brand-500 outline-none transition-colors"
               >
-                <option value="employee">{{ $t('fields.roles') }}</option>
-                <option value="admin">Administrator</option>
-                <option value="manager">Manager</option>
+            </div>
+
+            <!-- Status -->
+            <div>
+              <label class="block text-sm font-medium text-slate-700 mb-1.5">
+                {{ $t('fields.status') }}
+                <span class="text-rose-500">*</span>
+              </label>
+              <select
+                v-model="form.status"
+                required
+                class="w-full px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-brand-500 focus:border-brand-500 outline-none transition-colors"
+              >
+                <option value="active">Active</option>
+                <option value="vacation">Vacation</option>
+                <option value="sick_leave">Sick Leave</option>
+                <option value="pause">Pause</option>
+                <option value="terminated">Terminated</option>
               </select>
+            </div>
+
+            <!-- Hub Password -->
+            <div>
+              <label class="block text-sm font-medium text-slate-700 mb-1.5">
+                {{ $t('mod.employees.hub_password') }}
+              </label>
+              <input
+                v-model="form.hub_password"
+                type="password"
+                autocomplete="new-password"
+                class="w-full px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-brand-500 focus:border-brand-500 outline-none transition-colors"
+                placeholder="Partner Hub Access"
+              >
+              <p class="text-xs text-slate-500 mt-1">Password for Partner Hub access</p>
             </div>
           </div>
         </div>
@@ -186,13 +245,26 @@
             <!-- Street Address -->
             <div>
               <label class="block text-sm font-medium text-slate-700 mb-1.5">
-                {{ $t('fields.address') }}
+                {{ $t('fields.street') }}
               </label>
               <input
-                v-model="form.address"
+                v-model="form.street"
                 type="text"
                 class="w-full px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-brand-500 focus:border-brand-500 outline-none transition-colors"
-                :placeholder="$t('fields.address')"
+                placeholder="e.g. 123 Main Street"
+              >
+            </div>
+
+            <!-- Address Line 2 -->
+            <div>
+              <label class="block text-sm font-medium text-slate-700 mb-1.5">
+                {{ $t('fields.address_line_2') }}
+              </label>
+              <input
+                v-model="form.address_line_2"
+                type="text"
+                class="w-full px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-brand-500 focus:border-brand-500 outline-none transition-colors"
+                placeholder="Apartment, suite, etc. (optional)"
               >
             </div>
 
@@ -206,7 +278,7 @@
                   v-model="form.zip"
                   type="text"
                   class="w-full px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-brand-500 focus:border-brand-500 outline-none transition-colors"
-                  :placeholder="$t('fields.zip')"
+                  placeholder="10001"
                 >
               </div>
 
@@ -219,24 +291,83 @@
                   v-model="form.city"
                   type="text"
                   class="w-full px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-brand-500 focus:border-brand-500 outline-none transition-colors"
-                  :placeholder="$t('fields.city')"
+                  placeholder="New York"
                 >
               </div>
+            </div>
+
+            <!-- Country -->
+            <div>
+              <label class="block text-sm font-medium text-slate-700 mb-1.5">
+                {{ $t('fields.country') }}
+              </label>
+              <input
+                v-model="form.country"
+                type="text"
+                class="w-full px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-brand-500 focus:border-brand-500 outline-none transition-colors"
+                placeholder="United States"
+              >
             </div>
           </div>
         </div>
 
-        <!-- Notes -->
+        <!-- Profile & Bio -->
         <div>
-          <label class="block text-sm font-medium text-slate-700 mb-1.5">
-            {{ $t('fields.notes') }}
-          </label>
-          <textarea
-            v-model="form.notes"
-            rows="3"
-            class="w-full px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-brand-500 focus:border-brand-500 outline-none transition-colors resize-none"
-            :placeholder="$t('fields.notes_placeholder')"
-          ></textarea>
+          <h3 class="text-sm font-bold text-slate-700 uppercase mb-4">{{ $t('mod.employees.profile') }}</h3>
+          <div class="space-y-4">
+            <!-- Avatar URL -->
+            <div>
+              <label class="block text-sm font-medium text-slate-700 mb-1.5">
+                {{ $t('fields.avatar') }}
+              </label>
+              <input
+                v-model="form.avatar"
+                type="url"
+                class="w-full px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-brand-500 focus:border-brand-500 outline-none transition-colors"
+                placeholder="https://example.com/avatar.jpg"
+              >
+              <p class="text-xs text-slate-500 mt-1">URL to employee profile picture</p>
+            </div>
+
+            <!-- Description / Bio -->
+            <div>
+              <label class="block text-sm font-medium text-slate-700 mb-1.5">
+                {{ $t('fields.description') }}
+              </label>
+              <textarea
+                v-model="form.description"
+                rows="3"
+                class="w-full px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-brand-500 focus:border-brand-500 outline-none transition-colors resize-none"
+                placeholder="Employee bio, expertise, certifications..."
+              ></textarea>
+            </div>
+
+            <!-- Internal Notes -->
+            <div>
+              <label class="block text-sm font-medium text-slate-700 mb-1.5">
+                {{ $t('fields.notes') }}
+              </label>
+              <textarea
+                v-model="form.notes"
+                rows="2"
+                class="w-full px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-brand-500 focus:border-brand-500 outline-none transition-colors resize-none"
+                placeholder="Internal notes (not visible to customers)"
+              ></textarea>
+            </div>
+          </div>
+        </div>
+
+        <!-- Assigned Services -->
+        <div>
+          <h3 class="text-sm font-bold text-slate-700 uppercase mb-4">{{ $t('mod.employees.assigned_services') }}</h3>
+          <div class="space-y-3">
+            <p class="text-sm text-slate-600">{{ $t('mod.employees.assigned_services_help') }}</p>
+            <!-- TODO: Replace with actual multi-select component or service picker -->
+            <div class="p-4 border-2 border-dashed border-slate-200 rounded-lg text-center text-slate-500">
+              <p class="text-sm">Service assignment will be implemented in Offers module integration</p>
+              <p class="text-xs mt-1">For now, this can be managed via API</p>
+            </div>
+          </div>
         </div>
 
         <!-- Error Message -->
@@ -302,13 +433,22 @@ const form = reactive({
   gender: props.employee?.gender || '',
   birthday: props.employee?.birthday || '',
   position: props.employee?.position || '',
-  badge: props.employee?.badge || '',
+  department: props.employee?.department || '',
+  badge_id: props.employee?.badge_id || props.employee?.badge || '', // Fallback for migration
   hire_date: props.employee?.hire_date || '',
+  exit_date: props.employee?.exit_date || '',
   role: props.employee?.role || 'employee',
-  address: props.employee?.address || '',
+  status: props.employee?.status || 'active',
+  hub_password: props.employee?.hub_password || '',
+  street: props.employee?.street || props.employee?.address || '', // Fallback for migration
+  address_line_2: props.employee?.address_line_2 || '',
   zip: props.employee?.zip || '',
   city: props.employee?.city || '',
-  notes: props.employee?.notes || ''
+  country: props.employee?.country || '',
+  avatar: props.employee?.avatar || '',
+  description: props.employee?.description || '',
+  notes: props.employee?.notes || '',
+  assigned_services: props.employee?.assigned_services || []
 })
 
 // Handle form submission
