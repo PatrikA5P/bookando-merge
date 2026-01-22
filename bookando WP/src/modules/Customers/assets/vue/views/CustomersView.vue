@@ -246,6 +246,7 @@
                   <th class="p-4 text-xs font-semibold text-slate-500 uppercase tracking-wider">{{ $t('mod.customers.table.contact') }}</th>
                   <th class="p-4 text-xs font-semibold text-slate-500 uppercase tracking-wider">{{ $t('mod.customers.table.address') }}</th>
                   <th class="p-4 text-xs font-semibold text-slate-500 uppercase tracking-wider">{{ $t('mod.customers.table.status') }}</th>
+                  <th class="p-4 text-xs font-semibold text-slate-500 uppercase tracking-wider">{{ $t('mod.customers.table.bookings') }}</th>
                   <th class="p-4 text-xs font-semibold text-slate-500 uppercase tracking-wider text-right">{{ $t('mod.customers.table.actions') }}</th>
                 </tr>
               </thead>
@@ -260,35 +261,36 @@
                 >
                   <td class="p-4">
                     <div class="flex items-center gap-3">
-                      <div class="w-10 h-10 rounded-full bg-emerald-100 text-emerald-600 flex items-center justify-center font-semibold text-sm uppercase shrink-0">
+                      <div class="w-10 h-10 rounded-full bg-brand-100 text-brand-600 flex items-center justify-center font-semibold text-sm uppercase shrink-0">
                         {{ getInitials(customer) }}
                       </div>
                       <div>
                         <div class="font-medium text-slate-900">{{ customer.first_name }} {{ customer.last_name }}</div>
-                        <div class="text-xs text-slate-500">#{{ customer.id }}</div>
+                        <div class="text-xs text-slate-500 flex flex-wrap gap-2">
+                          <span>ID: #{{ customer.id }}</span>
+                          <span v-if="customer.birthdate">• {{ customer.birthdate }}</span>
+                        </div>
                       </div>
                     </div>
                   </td>
                   <td class="p-4">
                     <div class="flex flex-col gap-1 text-sm text-slate-600">
                       <div class="flex items-center gap-2">
-                        <svg class="w-3.5 h-3.5 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
-                        </svg>
+                        <MailIcon :size="14" class="text-slate-400" />
                         {{ customer.email }}
                       </div>
                       <div v-if="customer.phone" class="flex items-center gap-2">
-                        <svg class="w-3.5 h-3.5 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
-                        </svg>
+                        <PhoneIcon :size="14" class="text-slate-400" />
                         {{ customer.phone }}
                       </div>
                     </div>
                   </td>
                   <td class="p-4">
                     <div class="flex flex-col gap-0.5 text-sm text-slate-600">
-                      <template v-if="customer.city || customer.country">
-                        <div v-if="customer.city">{{ customer.city }}</div>
+                      <template v-if="customer.address || customer.address_2 || customer.city || customer.country">
+                        <div v-if="customer.address">{{ customer.address }}</div>
+                        <div v-if="customer.address_2">{{ customer.address_2 }}</div>
+                        <div v-if="customer.zip || customer.city">{{ [customer.zip, customer.city].filter(Boolean).join(' ') }}</div>
                         <div v-if="customer.country" class="text-xs text-slate-400">{{ customer.country }}</div>
                       </template>
                       <span v-else class="text-slate-400 italic">{{ $t('mod.customers.no_address') }}</span>
@@ -304,34 +306,36 @@
                       {{ customer.status }}
                     </span>
                   </td>
+                  <td class="p-4 text-sm">
+                    <button
+                      class="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-indigo-50 text-indigo-700 hover:bg-indigo-100 font-medium transition-colors border border-indigo-100"
+                    >
+                      <CalendarIcon :size="15" />
+                      {{ customer.total_appointments ?? 0 }} {{ $t('mod.customers.bookings') }}
+                    </button>
+                  </td>
                   <td class="p-4 text-right">
                     <div class="flex justify-end gap-2">
                       <button
                         @click="handleEdit(customer)"
-                        class="p-2 text-slate-400 hover:text-emerald-600 hover:bg-emerald-50 rounded-full transition-colors"
+                        class="p-2 text-slate-400 hover:text-brand-600 hover:bg-brand-50 rounded-full transition-colors"
                       >
-                        <svg class="w-4.5 h-4.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
-                        </svg>
+                        <EditIcon :size="18" />
                       </button>
                       <button
                         v-if="customer.status !== 'deleted'"
                         @click="handleDelete(customer)"
                         class="p-2 text-slate-400 hover:text-rose-600 hover:bg-rose-50 rounded-full transition-colors"
                       >
-                        <svg class="w-4.5 h-4.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
-                        </svg>
+                        <TrashIcon :size="18" />
                       </button>
                     </div>
                   </td>
                 </tr>
                 <tr v-if="paginatedCustomers.length === 0">
-                  <td colspan="5" class="p-12 text-center">
+                  <td colspan="6" class="p-12 text-center">
                     <div class="flex flex-col items-center text-slate-400">
-                      <svg class="w-12 h-12 mb-4 opacity-20" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-                      </svg>
+                      <SearchIcon :size="48" class="mb-4 opacity-20" />
                       <p class="text-lg font-medium text-slate-600">{{ $t('mod.customers.no_results') }}</p>
                       <p class="text-sm">{{ $t('mod.customers.adjust_filters') }}</p>
                     </div>
@@ -419,6 +423,14 @@
 import { ref, computed, onMounted, watch, defineAsyncComponent } from 'vue'
 import { useI18n } from 'vue-i18n'
 import { useCustomersStore } from '../store/store'
+import {
+  Mail as MailIcon,
+  Phone as PhoneIcon,
+  Calendar as CalendarIcon,
+  Edit2 as EditIcon,
+  Trash2 as TrashIcon,
+  Search as SearchIcon,
+} from 'lucide-vue-next'
 
 // Lazy load form component
 const CustomersForm = defineAsyncComponent(() => import('../components/CustomersForm.vue'))

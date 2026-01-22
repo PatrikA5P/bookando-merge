@@ -22,109 +22,97 @@
       </button>
     </template>
 
-    <!-- Grid View - Employee Cards -->
-    <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6 p-6">
-      <div
-        v-for="employee in filteredEmployees"
-        :key="employee.id"
-        class="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden group hover:shadow-md transition-all duration-300 flex flex-col"
-      >
-        <!-- Card Header / Banner -->
-        <div class="h-24 bg-gradient-to-r from-slate-800 to-slate-900 relative">
-          <div class="absolute top-4 right-4">
-            <span :class="[
-              'px-2.5 py-1 text-[10px] font-bold uppercase rounded-full shadow-sm border border-white/10',
-              employee.status === 'active' ? 'bg-emerald-500 text-white' :
-              employee.status === 'vacation' ? 'bg-amber-500 text-white' : 'bg-slate-500 text-white'
-            ]">
-              {{ employee.status }}
-            </span>
-          </div>
-        </div>
-
-        <!-- Card Content -->
-        <div class="px-6 flex-1 flex flex-col relative">
-          <!-- Avatar - Overlapping Header -->
-          <div class="-mt-12 mb-3 flex justify-between items-end">
-            <div class="w-24 h-24 rounded-xl border-4 border-white shadow-md bg-white overflow-hidden flex items-center justify-center relative">
-              <img
-                v-if="employee.avatar"
-                :src="employee.avatar"
-                alt="Avatar"
-                class="w-full h-full object-cover"
-              >
-              <div
-                v-else
-                class="w-full h-full bg-brand-100 text-brand-600 flex items-center justify-center text-3xl font-bold"
-              >
-                {{ getInitials(employee) }}
+    <div class="flex-1 overflow-y-auto">
+      <table class="w-full text-left border-collapse">
+        <thead class="bg-slate-50 border-b border-slate-200 sticky top-0 z-10">
+          <tr>
+            <th class="p-4 text-xs font-semibold text-slate-500 uppercase tracking-wider">{{ $t('mod.employees.table.employee') }}</th>
+            <th class="p-4 text-xs font-semibold text-slate-500 uppercase tracking-wider">{{ $t('mod.employees.table.contact') }}</th>
+            <th class="p-4 text-xs font-semibold text-slate-500 uppercase tracking-wider">{{ $t('mod.employees.table.department') }}</th>
+            <th class="p-4 text-xs font-semibold text-slate-500 uppercase tracking-wider">{{ $t('mod.employees.table.status') }}</th>
+            <th class="p-4 text-xs font-semibold text-slate-500 uppercase tracking-wider">{{ $t('mod.employees.table.role') }}</th>
+            <th class="p-4 text-xs font-semibold text-slate-500 uppercase tracking-wider text-right">{{ $t('mod.employees.table.actions') }}</th>
+          </tr>
+        </thead>
+        <tbody class="divide-y divide-slate-200">
+          <tr
+            v-for="employee in filteredEmployees"
+            :key="employee.id"
+            class="hover:bg-slate-50 transition-colors group"
+          >
+            <td class="p-4">
+              <div class="flex items-center gap-3">
+                <div class="w-10 h-10 rounded-full bg-brand-100 text-brand-600 flex items-center justify-center font-semibold text-sm uppercase shrink-0 overflow-hidden">
+                  <img
+                    v-if="employee.avatar_url"
+                    :src="employee.avatar_url"
+                    alt="Avatar"
+                    class="w-full h-full object-cover"
+                  >
+                  <span v-else>{{ getInitials(employee) }}</span>
+                </div>
+                <div>
+                  <div class="font-medium text-slate-900">{{ employee.first_name }} {{ employee.last_name }}</div>
+                  <div class="text-xs text-slate-500">#{{ employee.id }}</div>
+                </div>
               </div>
-            </div>
-            <div class="mb-1">
+            </td>
+            <td class="p-4">
+              <div class="flex flex-col gap-1 text-sm text-slate-600">
+                <div v-if="employee.email" class="flex items-center gap-2">
+                  <MailIcon :size="14" class="text-slate-400" />
+                  <span class="truncate">{{ employee.email }}</span>
+                </div>
+                <div v-if="employee.phone" class="flex items-center gap-2">
+                  <PhoneIcon :size="14" class="text-slate-400" />
+                  <span class="truncate">{{ employee.phone }}</span>
+                </div>
+                <span v-if="!employee.email && !employee.phone" class="text-slate-400">—</span>
+              </div>
+            </td>
+            <td class="p-4">
+              <div class="flex flex-col gap-0.5 text-sm text-slate-600">
+                <div>{{ employee.position || $t('mod.employees.fallback_role') }}</div>
+                <div v-if="employee.department" class="text-xs text-slate-400">{{ employee.department }}</div>
+              </div>
+            </td>
+            <td class="p-4">
+              <span :class="[
+                'inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium border',
+                employee.status === 'active' ? 'bg-emerald-50 text-emerald-700 border-emerald-100' : '',
+                employee.status === 'vacation' ? 'bg-amber-50 text-amber-700 border-amber-100' : '',
+                employee.status === 'blocked' ? 'bg-rose-50 text-rose-700 border-rose-100' : '',
+                employee.status === 'deleted' ? 'bg-slate-100 text-slate-600 border-slate-200' : ''
+              ]">
+                {{ employee.status }}
+              </span>
+            </td>
+            <td class="p-4">
+              <span v-if="employee.role" class="inline-flex items-center gap-1.5 px-2 py-1 rounded bg-indigo-50 border border-indigo-100 text-indigo-700 text-xs font-bold">
+                <ShieldIcon :size="12" /> {{ employee.role }}
+              </span>
+              <span v-else class="text-sm text-slate-400">—</span>
+            </td>
+            <td class="p-4 text-right">
               <button
                 @click="handleEdit(employee)"
-                class="p-2 text-slate-400 hover:text-brand-600 hover:bg-brand-50 rounded-lg transition-colors"
+                class="p-2 text-slate-400 hover:text-brand-600 hover:bg-brand-50 rounded-full transition-colors"
               >
                 <Edit2Icon :size="18" />
               </button>
-            </div>
-          </div>
-
-          <!-- Info -->
-          <div class="mb-6">
-            <h3 class="font-bold text-lg text-slate-900 truncate">
-              {{ employee.first_name }} {{ employee.last_name }}
-            </h3>
-            <p class="text-brand-600 font-medium text-sm">{{ employee.position || 'Employee' }}</p>
-
-            <div class="mt-4 space-y-2.5">
-              <div class="flex items-center gap-3 text-sm text-slate-600">
-                <MailIcon :size="16" class="text-slate-400 shrink-0" />
-                <span class="truncate">{{ employee.email }}</span>
+            </td>
+          </tr>
+          <tr v-if="filteredEmployees.length === 0">
+            <td colspan="6" class="p-12 text-center">
+              <div class="flex flex-col items-center text-slate-400">
+                <SearchIcon :size="48" class="mb-4 opacity-20" />
+                <p class="text-lg font-medium text-slate-600">{{ $t('mod.employees.no_results') }}</p>
+                <p class="text-sm">{{ $t('mod.employees.no_results_desc') }}</p>
               </div>
-              <div v-if="employee.department" class="flex items-center gap-3 text-sm text-slate-600">
-                <BriefcaseIcon :size="16" class="text-slate-400 shrink-0" />
-                <span class="truncate">{{ employee.department }}</span>
-              </div>
-              <div v-if="employee.phone" class="flex items-center gap-3 text-sm text-slate-600">
-                <PhoneIcon :size="16" class="text-slate-400 shrink-0" />
-                <span class="truncate">{{ employee.phone }}</span>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <!-- Footer -->
-        <div class="px-6 py-4 bg-slate-50 border-t border-slate-100 flex justify-between items-center mt-auto">
-          <div class="flex flex-col">
-            <span class="text-[10px] uppercase tracking-wider text-slate-400 font-semibold">
-              {{ $t('mod.employees.joined') }}
-            </span>
-            <span class="text-xs font-medium text-slate-700">
-              {{ employee.hire_date || 'N/A' }}
-            </span>
-          </div>
-          <div v-if="employee.role" class="flex items-center gap-1.5 px-2 py-1 rounded bg-indigo-50 border border-indigo-100 text-indigo-700 text-xs font-bold">
-            <ShieldIcon :size="12" /> {{ employee.role }}
-          </div>
-        </div>
-      </div>
-
-      <!-- Empty State -->
-      <div v-if="filteredEmployees.length === 0" class="col-span-full">
-        <div class="bg-white rounded-xl border border-slate-200 p-12 text-center">
-          <BriefcaseIcon :size="48" class="mx-auto mb-4 text-slate-300" />
-          <h3 class="text-lg font-bold text-slate-800 mb-2">{{ $t('mod.employees.no_results') }}</h3>
-          <p class="text-slate-600 mb-6">{{ $t('mod.employees.no_results_desc') }}</p>
-          <button
-            @click="openCreateDialog"
-            class="inline-flex items-center gap-2 px-5 py-2.5 bg-brand-600 hover:bg-brand-700 text-white rounded-xl font-bold transition-colors"
-          >
-            <PlusIcon :size="18" />
-            {{ $t('mod.employees.actions.add') }}
-          </button>
-        </div>
-      </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
     </div>
   </ModuleLayout>
 
@@ -150,7 +138,8 @@ import {
   Mail as MailIcon,
   Phone as PhoneIcon,
   Edit2 as Edit2Icon,
-  Shield as ShieldIcon
+  Shield as ShieldIcon,
+  Search as SearchIcon
 } from 'lucide-vue-next'
 
 const EmployeesForm = defineAsyncComponent(() => import('../components/EmployeesForm.vue'))
