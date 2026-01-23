@@ -26,7 +26,7 @@ class QueueManager
     /**
      * Queue table name (without prefix)
      */
-    private const TABLE_NAME = 'queue_jobs';
+    private const TABLE_NAME = 'bookando_queue_jobs';
 
     /**
      * Job statuses
