@@ -549,7 +549,11 @@ export async function getEmployees(params: EmployeesQuery = {}): Promise<Employe
   const defaults: EmployeesQuery = { include_deleted: 'soft' }
   // GET /wp-json/bookando/v1/employees/employees
   const res = await http.get<Employee[] | ApiListResponse<Employee>>('employees', { ...defaults, ...params })
-  return Array.isArray(res.data) ? (res.data as Employee[]) : ((res.data as ApiListResponse<Employee>)?.data ?? [])
+  if (Array.isArray(res.data)) {
+    return res.data as Employee[]
+  }
+  const payload = res.data as ApiListResponse<Employee> & { items?: Employee[] }
+  return payload?.data ?? payload?.items ?? []
 }
 
 /**

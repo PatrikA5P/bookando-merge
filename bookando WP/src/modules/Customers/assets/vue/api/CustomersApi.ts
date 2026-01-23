@@ -97,7 +97,11 @@ export async function getCustomers(params: CustomersQuery = {}): Promise<Custome
   const res = await http.get<Customer[] | ApiListResponse<Customer>>('', { ...defaults, ...params })
   // Response Interceptor unwrappt automatisch Response::ok() Format
   // Ergebnis: { data: [...], total: 142, limit: 10000, offset: 0 }
-  return Array.isArray(res.data) ? res.data : ((res.data as ApiListResponse<Customer>)?.data ?? [])
+  if (Array.isArray(res.data)) {
+    return res.data
+  }
+  const payload = res.data as ApiListResponse<Customer> & { items?: Customer[] }
+  return payload?.data ?? payload?.items ?? []
 }
 
 /** API response for single customer */
