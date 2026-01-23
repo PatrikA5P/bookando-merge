@@ -152,8 +152,8 @@ class Installer
                     'birthdate' => $employee['birthdate'],
                     'roles' => json_encode(['employee']),
                     'status' => $employee['status'],
-                    'badge' => $employee['badge'],
-                    'notes' => $employee['notes'],
+                    'badge_id' => $employee['badge'],
+                    'note' => $employee['notes'],
                     'created_at' => current_time('mysql'),
                     'updated_at' => current_time('mysql')
                 ],
@@ -171,8 +171,8 @@ class Installer
                     '%s', // birthdate
                     '%s', // roles (JSON)
                     '%s', // status
-                    '%s', // badge
-                    '%s', // notes
+                    '%s', // badge_id
+                    '%s', // note
                     '%s', // created_at
                     '%s'  // updated_at
                 ]
