@@ -293,21 +293,13 @@ class EmployeeQueryHandler
 
         global $wpdb;
 
-        // Nur Employees mit bookando_employee oder employee Rolle
-        // JSON_CONTAINS kann bei ungültigem JSON (oder NULL) Fehler auslösen → JSON_VALID + Fallback auf LIKE
-        $roleCond = "("
-            . "(roles IS NOT NULL AND JSON_VALID(roles) AND ("
-            . "JSON_CONTAINS(roles, '\"bookando_employee\"') OR JSON_CONTAINS(roles, '\"employee\"')"
-            . "))"
-            . " OR "
-            . "(roles LIKE '%bookando_employee%' OR roles LIKE '%\"bookando_employee\"%'"
-            . " OR roles LIKE '%employee%' OR roles LIKE '%\"employee\"%')"
-            . ")";
+        // Nur Employees mit bookando_employee oder employee Rolle (analog Customer-Modul)
+        $roleCond = "(JSON_CONTAINS(roles, '\"bookando_employee\"') OR JSON_CONTAINS(roles, '\"employee\"'))";
         $where    = "WHERE {$roleCond}";
 
-        // Tenant-Isolation
-        if ($tenantId) {
-            $where .= $wpdb->prepare(" AND tenant_id = %d", $tenantId);
+        // Tenant-Isolation: Aktueller Tenant + Legacy-Daten (NULL)
+        if ($tenantId !== null) {
+            $where .= $wpdb->prepare(" AND (tenant_id = %d OR tenant_id IS NULL)", $tenantId);
         }
 
         // Include Deleted Filter

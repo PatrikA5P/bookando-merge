@@ -64,25 +64,26 @@ class RestHandler
         $method     = strtoupper($request->get_method());
         $employeeId = self::resolveEmployeeId($params, $request);
         $tenantId   = TenantManager::currentTenantId();
-        $tables     = EmployeeRepository::employeeTables();
-
         if ($method === 'GET' && $employeeId > 0) {
-            return EmployeeQueryHandler::handleEmployeeDetail($tables, $tenantId, $employeeId, $request);
+            return EmployeeQueryHandler::handleEmployeeDetail($employeeId, $tenantId, $request);
         }
 
         if ($method === 'GET') {
-            return EmployeeQueryHandler::handleEmployeeList($tables, $tenantId, $request);
+            return EmployeeQueryHandler::handleEmployeeList($tenantId, $request);
         }
 
         if ($method === 'POST') {
+            $tables = EmployeeRepository::employeeTables();
             return EmployeeCommandHandler::handleEmployeeCreate($tables, $tenantId, $request);
         }
 
         if ($method === 'PUT' && $employeeId > 0) {
+            $tables = EmployeeRepository::employeeTables();
             return EmployeeCommandHandler::handleEmployeeUpdate($tables, $tenantId, $employeeId, $request);
         }
 
         if ($method === 'DELETE' && $employeeId > 0) {
+            $tables = EmployeeRepository::employeeTables();
             return EmployeeDeleteHandler::handleEmployeeDelete($tables, $tenantId, $employeeId, $request);
         }
 
