@@ -14,7 +14,7 @@ class Module extends BaseModule
     {
         $module = $this; // Capture $this for use in closure
         $this->registerAdminHooks(function () use ($module): void {
-            add_action('bookando_register_module_menus', [Admin::class, 'register_menu']);
+            Admin::init(); // Direct initialization (registers admin_menu hook internally)
             add_action('admin_enqueue_scripts', [$module, 'enqueue_admin_assets']);
         });
 
