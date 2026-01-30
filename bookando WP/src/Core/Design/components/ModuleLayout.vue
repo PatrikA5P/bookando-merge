@@ -107,8 +107,8 @@
             :key="tab.id"
             @click="handleTabChange(tab.id)"
             :class="[
-              'w-full text-left px-4 py-2.5 rounded-lg text-sm font-medium flex items-center gap-3 transition-all border',
-              activeTab === tab.id ? activeTabClasses : inactiveTabClasses
+              'w-full text-left px-4 py-2.5 rounded-lg text-sm font-medium flex items-center gap-3 transition-all',
+              activeTab === tab.id ? 'bg-slate-100 text-slate-900 font-bold shadow-sm' : 'text-slate-600 hover:bg-slate-50'
             ]"
           >
             <component :is="tab.icon" :size="18" />
@@ -277,7 +277,6 @@
 <script setup lang="ts">
 import { ref, computed, onMounted, watch } from 'vue'
 import { Search, Filter } from 'lucide-vue-next'
-import { getModuleDesign } from '../designTokens'
 
 interface Tab {
   id: string
@@ -292,7 +291,6 @@ interface Props {
   heroDescription: string
   heroIcon: any
   heroGradient?: string
-  moduleName?: string
 
   // Tabs (optional)
   tabs?: Tab[]
@@ -321,8 +319,7 @@ const props = withDefaults(defineProps<Props>(), {
   filterOpen: false,
   showPrimaryAction: true,
   primaryActionLabel: 'Add',
-  tabs: () => [],
-  moduleName: ''
+  tabs: () => []
 })
 
 const emit = defineEmits(['update:searchQuery', 'update:activeTab', 'update:filterOpen', 'primaryAction'])
@@ -330,18 +327,6 @@ const emit = defineEmits(['update:searchQuery', 'update:activeTab', 'update:filt
 // Internal state
 const internalSearchQuery = ref(props.searchQuery || '')
 const isFilterOpen = ref(props.filterOpen)
-
-const moduleDesign = computed(() => getModuleDesign(props.moduleName || 'dashboard'))
-const activeTabClasses = computed(() => [
-  moduleDesign.value.activeBg,
-  moduleDesign.value.activeText,
-  moduleDesign.value.activeBorder,
-  'font-semibold'
-])
-const inactiveTabClasses = computed(() => [
-  'border-transparent text-slate-600',
-  moduleDesign.value.hoverBg
-])
 
 // Scroll direction for mobile sticky header
 const scrollDirection = ref<'up' | 'down' | null>(null)

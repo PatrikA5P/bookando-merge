@@ -4,7 +4,6 @@
     :hero-description="$t('mod.offers.description')"
     :hero-icon="BriefcaseIcon"
     hero-gradient="bg-gradient-to-br from-blue-700 to-sky-900"
-    module-name="offers"
     :tabs="tabs"
     :active-tab="activeTab"
     @update:active-tab="handleTabChange"
