@@ -17,7 +17,7 @@
     "@vueuse/core": "^11.0.0",
     "@tanstack/vue-query": "^5.50.0",
     "zod": "^3.23.0",
-    "lucide-vue-next": "^0.450.0",
+    "lucide-vue-next": "^0.563.0",
     "date-fns": "^4.0.0",
     "vue-i18n": "^10.0.0",
     "apexcharts": "^4.0.0",

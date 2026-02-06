@@ -12,7 +12,7 @@ import { ref, watch } from 'vue';
 import BInput from '@/components/ui/BInput.vue';
 import BButton from '@/components/ui/BButton.vue';
 import { BUTTON_STYLES, GRID_STYLES } from '@/design';
-import type { Customer } from '@bookando/shared/api-types';
+import type { Customer } from '../CustomersPage.vue';
 
 const props = defineProps<{
   customer?: Customer | null;

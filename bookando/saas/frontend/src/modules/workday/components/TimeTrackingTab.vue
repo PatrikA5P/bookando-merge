@@ -108,7 +108,7 @@ const teamStatus = computed(() => {
 
 // Table data for weekly overview
 const weekTableColumns = computed(() => {
-  const cols = [
+  const cols: { key: string; label: string; width?: string; align?: string }[] = [
     { key: 'day', label: t('common.today'), width: '100px' },
   ];
   if (!isMobile.value) {
@@ -118,8 +118,8 @@ const weekTableColumns = computed(() => {
     );
   }
   cols.push(
-    { key: 'breakMinutes', label: t('workday.breakDuration'), width: '90px', align: 'center' as const },
-    { key: 'netHours', label: t('workday.netHours'), width: '90px', align: 'right' as const },
+    { key: 'breakMinutes', label: t('workday.breakDuration'), width: '90px', align: 'center' },
+    { key: 'netHours', label: t('workday.netHours'), width: '90px', align: 'right' },
   );
   return cols;
 });

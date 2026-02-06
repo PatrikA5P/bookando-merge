@@ -4,7 +4,6 @@
  * Pinia Store fuer:
  * - CRUD-Operationen fuer Termine
  * - Filter nach Datum, Mitarbeiter, Status, Kunde
- * - Mock-Daten mit realistischen Schweizer Terminen
  * - Computed: todayAppointments, upcomingAppointments, getByDate
  *
  * Verbesserung gegenueber Referenz:
@@ -14,6 +13,7 @@
  */
 import { defineStore } from 'pinia';
 import { ref, computed } from 'vue';
+import api from '@/utils/api';
 
 export type AppointmentStatus = 'PENDING' | 'CONFIRMED' | 'COMPLETED' | 'CANCELLED' | 'NO_SHOW';
 
@@ -75,169 +75,14 @@ function todayStr(): string {
   return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
 }
 
-function tomorrowStr(): string {
-  const d = new Date();
-  d.setDate(d.getDate() + 1);
-  return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
-}
-
-function dayAfterTomorrowStr(): string {
-  const d = new Date();
-  d.setDate(d.getDate() + 2);
-  return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
-}
-
-function yesterdayStr(): string {
-  const d = new Date();
-  d.setDate(d.getDate() - 1);
-  return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
-}
-
-function weekFromNowStr(): string {
-  const d = new Date();
-  d.setDate(d.getDate() + 5);
-  return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
-}
-
-// Mock-Dienstleistungen
-const MOCK_SERVICES: Service[] = [
-  { id: 'svc-1', name: 'Haarschnitt Damen', duration: 60, priceMinor: 8500, category: 'Haare', description: 'Waschen, Schneiden, Styling' },
-  { id: 'svc-2', name: 'Haarschnitt Herren', duration: 30, priceMinor: 4500, category: 'Haare', description: 'Klassischer Herrenschnitt' },
-  { id: 'svc-3', name: 'Farbe & Straehnen', duration: 120, priceMinor: 18000, category: 'Haare', description: 'Komplette Faerbung oder Straehnen' },
-  { id: 'svc-4', name: 'Manikuere', duration: 45, priceMinor: 6500, category: 'Nails', description: 'Pflege und Lackierung' },
-  { id: 'svc-5', name: 'Gesichtsbehandlung', duration: 90, priceMinor: 15000, category: 'Kosmetik', description: 'Tiefenreinigung und Pflege' },
-  { id: 'svc-6', name: 'Massage 60min', duration: 60, priceMinor: 12000, category: 'Wellness', description: 'Entspannende Ganzkörpermassage' },
-  { id: 'svc-7', name: 'Bart-Trimm & Rasur', duration: 30, priceMinor: 3500, category: 'Haare', description: 'Professionelle Bartpflege' },
-  { id: 'svc-8', name: 'Braut-Styling', duration: 180, priceMinor: 35000, category: 'Special', description: 'Komplettes Styling fuer den grossen Tag' },
-];
-
-// Mock-Mitarbeiter
-const MOCK_EMPLOYEES: Employee[] = [
-  { id: 'emp-1', name: 'Anna Mueller', position: 'Senior Stylistin', avatar: '', serviceIds: ['svc-1', 'svc-3', 'svc-8'] },
-  { id: 'emp-2', name: 'Marco Bernasconi', position: 'Barber', avatar: '', serviceIds: ['svc-2', 'svc-7'] },
-  { id: 'emp-3', name: 'Sophie Dubois', position: 'Kosmetikerin', avatar: '', serviceIds: ['svc-4', 'svc-5'] },
-  { id: 'emp-4', name: 'Lena Fischer', position: 'Masseurin', avatar: '', serviceIds: ['svc-6'] },
-];
-
-// Mock-Kunden
-const MOCK_CUSTOMERS: Customer[] = [
-  { id: 'cust-1', name: 'Maria Schneider', email: 'maria.schneider@bluewin.ch', phone: '+41 79 123 45 67' },
-  { id: 'cust-2', name: 'Peter Huber', email: 'peter.huber@gmail.com', phone: '+41 78 234 56 78' },
-  { id: 'cust-3', name: 'Sabine Keller', email: 'sabine.keller@sunrise.ch', phone: '+41 76 345 67 89' },
-  { id: 'cust-4', name: 'Thomas Brunner', email: 'thomas.brunner@swisscom.ch', phone: '+41 79 456 78 90' },
-  { id: 'cust-5', name: 'Laura Zimmermann', email: 'laura.z@gmx.ch', phone: '+41 78 567 89 01' },
-  { id: 'cust-6', name: 'Michael Gerber', email: 'm.gerber@bluewin.ch', phone: '+41 76 678 90 12' },
-];
-
-// Mock-Termine
-function createMockAppointments(): Appointment[] {
-  const today = todayStr();
-  const tomorrow = tomorrowStr();
-  const dayAfter = dayAfterTomorrowStr();
-  const yesterday = yesterdayStr();
-  const nextWeek = weekFromNowStr();
-
-  return [
-    {
-      id: 'apt-1',
-      customerId: 'cust-1', customerName: 'Maria Schneider',
-      employeeId: 'emp-1', employeeName: 'Anna Mueller',
-      serviceId: 'svc-1', serviceName: 'Haarschnitt Damen',
-      date: today, startTime: '09:00', endTime: '10:00', duration: 60,
-      status: 'CONFIRMED', priceMinor: 8500, currency: 'CHF',
-      notes: 'Stammkundin, bevorzugt Schichtschnitt', locationId: 'loc-1', roomId: 'room-1',
-    },
-    {
-      id: 'apt-2',
-      customerId: 'cust-2', customerName: 'Peter Huber',
-      employeeId: 'emp-2', employeeName: 'Marco Bernasconi',
-      serviceId: 'svc-2', serviceName: 'Haarschnitt Herren',
-      date: today, startTime: '10:30', endTime: '11:00', duration: 30,
-      status: 'CONFIRMED', priceMinor: 4500, currency: 'CHF',
-      notes: '', locationId: 'loc-1', roomId: 'room-2',
-    },
-    {
-      id: 'apt-3',
-      customerId: 'cust-3', customerName: 'Sabine Keller',
-      employeeId: 'emp-3', employeeName: 'Sophie Dubois',
-      serviceId: 'svc-5', serviceName: 'Gesichtsbehandlung',
-      date: today, startTime: '11:00', endTime: '12:30', duration: 90,
-      status: 'PENDING', priceMinor: 15000, currency: 'CHF',
-      notes: 'Empfindliche Haut, bitte hypoallergene Produkte', locationId: 'loc-1', roomId: 'room-3',
-    },
-    {
-      id: 'apt-4',
-      customerId: 'cust-4', customerName: 'Thomas Brunner',
-      employeeId: 'emp-2', employeeName: 'Marco Bernasconi',
-      serviceId: 'svc-7', serviceName: 'Bart-Trimm & Rasur',
-      date: today, startTime: '14:00', endTime: '14:30', duration: 30,
-      status: 'CONFIRMED', priceMinor: 3500, currency: 'CHF',
-      notes: '', locationId: 'loc-1', roomId: 'room-2',
-    },
-    {
-      id: 'apt-5',
-      customerId: 'cust-5', customerName: 'Laura Zimmermann',
-      employeeId: 'emp-1', employeeName: 'Anna Mueller',
-      serviceId: 'svc-3', serviceName: 'Farbe & Straehnen',
-      date: tomorrow, startTime: '09:00', endTime: '11:00', duration: 120,
-      status: 'CONFIRMED', priceMinor: 18000, currency: 'CHF',
-      notes: 'Blonde Straehnen, Balayage-Technik', locationId: 'loc-1', roomId: 'room-1',
-    },
-    {
-      id: 'apt-6',
-      customerId: 'cust-6', customerName: 'Michael Gerber',
-      employeeId: 'emp-4', employeeName: 'Lena Fischer',
-      serviceId: 'svc-6', serviceName: 'Massage 60min',
-      date: tomorrow, startTime: '13:00', endTime: '14:00', duration: 60,
-      status: 'PENDING', priceMinor: 12000, currency: 'CHF',
-      notes: 'Rueckenprobleme, bitte vorsichtig im Lendenwirbelbereich', locationId: 'loc-1', roomId: 'room-4',
-    },
-    {
-      id: 'apt-7',
-      customerId: 'cust-1', customerName: 'Maria Schneider',
-      employeeId: 'emp-3', employeeName: 'Sophie Dubois',
-      serviceId: 'svc-4', serviceName: 'Manikuere',
-      date: dayAfter, startTime: '10:00', endTime: '10:45', duration: 45,
-      status: 'CONFIRMED', priceMinor: 6500, currency: 'CHF',
-      notes: '', locationId: 'loc-1', roomId: 'room-3',
-    },
-    {
-      id: 'apt-8',
-      customerId: 'cust-3', customerName: 'Sabine Keller',
-      employeeId: 'emp-1', employeeName: 'Anna Mueller',
-      serviceId: 'svc-8', serviceName: 'Braut-Styling',
-      date: nextWeek, startTime: '08:00', endTime: '11:00', duration: 180,
-      status: 'CONFIRMED', priceMinor: 35000, currency: 'CHF',
-      notes: 'Hochzeit am Samstag, Probetermin war letzte Woche', locationId: 'loc-1', roomId: 'room-1',
-    },
-    {
-      id: 'apt-9',
-      customerId: 'cust-2', customerName: 'Peter Huber',
-      employeeId: 'emp-2', employeeName: 'Marco Bernasconi',
-      serviceId: 'svc-2', serviceName: 'Haarschnitt Herren',
-      date: yesterday, startTime: '15:00', endTime: '15:30', duration: 30,
-      status: 'COMPLETED', priceMinor: 4500, currency: 'CHF',
-      notes: '', locationId: 'loc-1', roomId: 'room-2',
-    },
-    {
-      id: 'apt-10',
-      customerId: 'cust-4', customerName: 'Thomas Brunner',
-      employeeId: 'emp-4', employeeName: 'Lena Fischer',
-      serviceId: 'svc-6', serviceName: 'Massage 60min',
-      date: yesterday, startTime: '10:00', endTime: '11:00', duration: 60,
-      status: 'NO_SHOW', priceMinor: 12000, currency: 'CHF',
-      notes: 'Nicht erschienen, keine Absage', locationId: 'loc-1', roomId: 'room-4',
-    },
-  ];
-}
-
 export const useAppointmentsStore = defineStore('appointments', () => {
   // State
-  const appointments = ref<Appointment[]>(createMockAppointments());
-  const services = ref<Service[]>(MOCK_SERVICES);
-  const employees = ref<Employee[]>(MOCK_EMPLOYEES);
-  const customers = ref<Customer[]>(MOCK_CUSTOMERS);
+  const appointments = ref<Appointment[]>([]);
+  const services = ref<Service[]>([]);
+  const employees = ref<Employee[]>([]);
+  const customers = ref<Customer[]>([]);
   const isLoading = ref(false);
+  const error = ref<string | null>(null);
   const filters = ref<AppointmentFilters>({
     dateFrom: '',
     dateTo: '',
@@ -246,6 +91,65 @@ export const useAppointmentsStore = defineStore('appointments', () => {
     customerId: '',
     search: '',
   });
+
+  // Fetch functions
+
+  async function fetchAppointments(): Promise<void> {
+    isLoading.value = true;
+    error.value = null;
+    try {
+      const response = await api.get<{ data: Appointment[] }>('/v1/appointments', { per_page: 100 });
+      appointments.value = response.data;
+    } catch (e: any) {
+      error.value = e.message || 'Failed to load appointments';
+    } finally {
+      isLoading.value = false;
+    }
+  }
+
+  async function fetchServices(): Promise<void> {
+    try {
+      const response = await api.get<{ data: Service[] }>('/v1/services', { per_page: 100 });
+      services.value = response.data;
+    } catch {
+      // Services are supplementary; keep existing data on failure
+    }
+  }
+
+  async function fetchEmployees(): Promise<void> {
+    try {
+      const response = await api.get<{ data: Employee[] }>('/v1/employees', { per_page: 100 });
+      employees.value = response.data;
+    } catch {
+      // Employees are supplementary; keep existing data on failure
+    }
+  }
+
+  async function fetchCustomers(): Promise<void> {
+    try {
+      const response = await api.get<{ data: Customer[] }>('/v1/customers', { per_page: 100 });
+      customers.value = response.data;
+    } catch {
+      // Customers are supplementary; keep existing data on failure
+    }
+  }
+
+  async function fetchAll(): Promise<void> {
+    isLoading.value = true;
+    error.value = null;
+    try {
+      await Promise.all([
+        fetchAppointments(),
+        fetchServices(),
+        fetchEmployees(),
+        fetchCustomers(),
+      ]);
+    } catch (e: any) {
+      error.value = e.message || 'Failed to load data';
+    } finally {
+      isLoading.value = false;
+    }
+  }
 
   // Getters
   const filteredAppointments = computed(() => {
@@ -335,29 +239,34 @@ export const useAppointmentsStore = defineStore('appointments', () => {
   }
 
   // Actions
-  function createAppointment(data: Omit<Appointment, 'id'>): Appointment {
-    const newId = `apt-${Date.now()}`;
-    const appointment: Appointment = { ...data, id: newId };
-    appointments.value.push(appointment);
-    return appointment;
+  async function createAppointment(data: Omit<Appointment, 'id'>): Promise<Appointment> {
+    const response = await api.post<{ data: Appointment }>('/v1/appointments', data);
+    appointments.value.push(response.data);
+    return response.data;
   }
 
-  function updateAppointment(id: string, data: Partial<Appointment>): boolean {
+  async function updateAppointment(id: string, data: Partial<Appointment>): Promise<boolean> {
+    const response = await api.put<{ data: Appointment }>(`/v1/appointments/${id}`, data);
     const index = appointments.value.findIndex(a => a.id === id);
     if (index === -1) return false;
-    appointments.value[index] = { ...appointments.value[index], ...data };
+    appointments.value[index] = response.data;
     return true;
   }
 
-  function deleteAppointment(id: string): boolean {
+  async function deleteAppointment(id: string): Promise<boolean> {
+    await api.delete(`/v1/appointments/${id}`);
     const index = appointments.value.findIndex(a => a.id === id);
     if (index === -1) return false;
     appointments.value.splice(index, 1);
     return true;
   }
 
-  function updateStatus(id: string, status: AppointmentStatus): boolean {
-    return updateAppointment(id, { status });
+  async function updateStatus(id: string, status: AppointmentStatus): Promise<boolean> {
+    const response = await api.patch<{ data: Appointment }>(`/v1/appointments/${id}/status`, { status });
+    const index = appointments.value.findIndex(a => a.id === id);
+    if (index === -1) return false;
+    appointments.value[index] = response.data;
+    return true;
   }
 
   function setFilters(newFilters: Partial<AppointmentFilters>) {
@@ -418,6 +327,7 @@ export const useAppointmentsStore = defineStore('appointments', () => {
     employees,
     customers,
     isLoading,
+    error,
     filters,
 
     // Getters
@@ -426,6 +336,11 @@ export const useAppointmentsStore = defineStore('appointments', () => {
     upcomingAppointments,
 
     // Functions
+    fetchAll,
+    fetchAppointments,
+    fetchServices,
+    fetchEmployees,
+    fetchCustomers,
     getByDate,
     getById,
     getAppointmentsForWeek,

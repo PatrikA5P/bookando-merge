@@ -84,14 +84,14 @@ const filteredAbsences = computed(() => {
 
 // Table columns
 const tableColumns = computed(() => {
-  const cols = [
+  const cols: { key: string; label: string; width?: string; align?: string }[] = [
     { key: 'employeeName', label: t('employees.title'), width: '150px' },
     { key: 'type', label: 'Typ', width: '120px' },
     { key: 'startDate', label: 'Von', width: '100px' },
   ];
   if (!isMobile.value) {
     cols.push({ key: 'endDate', label: 'Bis', width: '100px' });
-    cols.push({ key: 'days', label: 'Tage', width: '60px', align: 'center' as any });
+    cols.push({ key: 'days', label: 'Tage', width: '60px', align: 'center' });
   }
   cols.push(
     { key: 'status', label: 'Status', width: '100px' },

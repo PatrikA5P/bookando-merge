@@ -12,6 +12,7 @@
  * Hier gibt es echte URLs, Deep-Linking, Browser-History.
  */
 import { createRouter, createWebHistory, type RouteRecordRaw } from 'vue-router';
+import { useAuthStore } from '@/stores/auth';
 
 const routes: RouteRecordRaw[] = [
   // Auth (kein Layout)
@@ -143,11 +144,14 @@ const router = createRouter({
 // Auth Guard
 router.beforeEach((to) => {
   const requiresAuth = to.meta.requiresAuth !== false;
-  // TODO: Check auth store
-  // const authStore = useAuthStore();
-  // if (requiresAuth && !authStore.isAuthenticated) {
-  //   return { name: 'login', query: { redirect: to.fullPath } };
-  // }
+  const authStore = useAuthStore();
+  if (requiresAuth && !authStore.isAuthenticated) {
+    return { name: 'login', query: { redirect: to.fullPath } };
+  }
+  // Redirect away from login if already authenticated
+  if (to.name === 'login' && authStore.isAuthenticated) {
+    return { name: 'dashboard' };
+  }
 });
 
 export default router;

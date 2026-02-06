@@ -10,9 +10,11 @@
  * - Typisierte Enums fuer Type, Visibility, Difficulty
  * - Curriculum als geordnete Liste mit Drag-Support
  * - Badge-Verknuepfung mit Kursen
+ * - Echte API-Anbindung statt Mock-Daten
  */
 import { defineStore } from 'pinia';
 import { ref, computed } from 'vue';
+import api from '@/utils/api';
 
 // ============================================================================
 // TYPES & ENUMS
@@ -80,136 +82,17 @@ export interface Badge {
 
 export const useAcademyStore = defineStore('academy', () => {
   // ---- State ----
-  const courses = ref<Course[]>([
-    {
-      id: 'course-001',
-      title: 'Grundlagen der Haarpflege',
-      description: 'Einsteigerkurs fuer professionelle Haarpflege-Techniken. Lernen Sie die Basics von Waschen, Schneiden und Styling.',
-      type: 'ONLINE',
-      visibility: 'PUBLIC',
-      difficulty: 'BEGINNER',
-      categoryId: 'cat-hair',
-      certificateEnabled: true,
-      badgeId: 'badge-001',
-      curriculum: [
-        { id: 'ci-001', type: 'LESSON', title: 'Einleitung & Werkzeuge', duration: 30, order: 1 },
-        { id: 'ci-002', type: 'LESSON', title: 'Haartypologie', duration: 45, order: 2 },
-        { id: 'ci-003', type: 'QUIZ', title: 'Zwischenpruefung Basics', duration: 15, order: 3 },
-        { id: 'ci-004', type: 'LESSON', title: 'Schnitttechniken Grundlagen', duration: 60, order: 4 },
-        { id: 'ci-005', type: 'ASSIGNMENT', title: 'Praxisaufgabe: Basisschnitt', duration: 90, order: 5 },
-      ],
-      participantCount: 45,
-      status: 'PUBLISHED',
-    },
-    {
-      id: 'course-002',
-      title: 'Farbtheorie & Koloristik',
-      description: 'Fortgeschrittener Kurs zu Farbtechniken, Balayage, Highlights und Farbkorrekturen.',
-      type: 'BLENDED',
-      visibility: 'INTERNAL',
-      difficulty: 'INTERMEDIATE',
-      categoryId: 'cat-color',
-      certificateEnabled: true,
-      badgeId: 'badge-002',
-      curriculum: [
-        { id: 'ci-006', type: 'LESSON', title: 'Farbrad & Grundlagen', duration: 40, order: 1 },
-        { id: 'ci-007', type: 'LESSON', title: 'Oxidationsfarben', duration: 50, order: 2 },
-        { id: 'ci-008', type: 'QUIZ', title: 'Farbtheorie Test', duration: 20, order: 3 },
-      ],
-      participantCount: 28,
-      status: 'PUBLISHED',
-    },
-    {
-      id: 'course-003',
-      title: 'Kundenberatung & Kommunikation',
-      description: 'Professionelle Kundenberatung, Bedarfsanalyse und Kommunikation im Salon.',
-      type: 'IN_PERSON',
-      visibility: 'INTERNAL',
-      difficulty: 'BEGINNER',
-      categoryId: 'cat-soft',
-      certificateEnabled: false,
-      curriculum: [
-        { id: 'ci-009', type: 'LESSON', title: 'Erstgespraech fuehren', duration: 45, order: 1 },
-        { id: 'ci-010', type: 'LESSON', title: 'Bedarfsanalyse', duration: 30, order: 2 },
-        { id: 'ci-011', type: 'ASSIGNMENT', title: 'Rollenspiel: Beratung', duration: 60, order: 3 },
-      ],
-      participantCount: 12,
-      status: 'PUBLISHED',
-    },
-    {
-      id: 'course-004',
-      title: 'Hochsteckfrisuren Meisterklasse',
-      description: 'Brautfrisuren, Abendfrisuren und kreative Hochstecktechniken fuer besondere Anlaesse.',
-      type: 'IN_PERSON',
-      visibility: 'PUBLIC',
-      difficulty: 'ADVANCED',
-      categoryId: 'cat-styling',
-      certificateEnabled: true,
-      badgeId: 'badge-003',
-      curriculum: [
-        { id: 'ci-012', type: 'LESSON', title: 'Grundtechniken Hochstecken', duration: 60, order: 1 },
-        { id: 'ci-013', type: 'LESSON', title: 'Brautfrisuren Klassiker', duration: 90, order: 2 },
-        { id: 'ci-014', type: 'QUIZ', title: 'Techniken Quiz', duration: 15, order: 3 },
-        { id: 'ci-015', type: 'ASSIGNMENT', title: 'Portfolio: 3 Looks', duration: 180, order: 4 },
-      ],
-      participantCount: 8,
-      status: 'DRAFT',
-    },
-    {
-      id: 'course-005',
-      title: 'Arbeitssicherheit im Salon',
-      description: 'Pflichtschulung zu Hygiene, Chemikaliensicherheit und Ergonomie am Arbeitsplatz.',
-      type: 'ONLINE',
-      visibility: 'INTERNAL',
-      difficulty: 'BEGINNER',
-      categoryId: 'cat-safety',
-      certificateEnabled: true,
-      badgeId: 'badge-004',
-      curriculum: [
-        { id: 'ci-016', type: 'LESSON', title: 'Hygienevorschriften', duration: 30, order: 1 },
-        { id: 'ci-017', type: 'LESSON', title: 'Chemikaliensicherheit', duration: 40, order: 2 },
-        { id: 'ci-018', type: 'QUIZ', title: 'Sicherheitstest', duration: 20, order: 3 },
-      ],
-      participantCount: 52,
-      status: 'PUBLISHED',
-    },
-    {
-      id: 'course-006',
-      title: 'Bartpflege & Rasurtechniken',
-      description: 'Von der klassischen Nassrasur bis zum modernen Bartstyling.',
-      type: 'BLENDED',
-      visibility: 'PUBLIC',
-      difficulty: 'INTERMEDIATE',
-      categoryId: 'cat-barber',
-      certificateEnabled: false,
-      curriculum: [
-        { id: 'ci-019', type: 'LESSON', title: 'Bartformen & Trends', duration: 25, order: 1 },
-        { id: 'ci-020', type: 'LESSON', title: 'Nassrasur-Technik', duration: 45, order: 2 },
-      ],
-      participantCount: 19,
-      status: 'ARCHIVED',
-    },
-  ]);
+  const courses = ref<Course[]>([]);
+  const lessons = ref<Lesson[]>([]);
 
+  // Lesson groups: local state (no backend endpoint)
   const lessonGroups = ref<LessonGroup[]>([
     { id: 'group-basics', name: 'Grundlagen' },
     { id: 'group-technique', name: 'Techniken' },
     { id: 'group-safety', name: 'Sicherheit & Hygiene' },
   ]);
 
-  const lessons = ref<Lesson[]>([
-    { id: 'lesson-001', title: 'Werkzeugkunde: Scheren & Kaemme', content: 'Ueberblick ueber professionelle Werkzeuge im Salon. Pflege und richtige Handhabung.', type: 'TEXT', groupId: 'group-basics', groupName: 'Grundlagen', mediaUrls: [], duration: 25 },
-    { id: 'lesson-002', title: 'Haartypologie verstehen', content: 'Die verschiedenen Haartypen und ihre Eigenschaften erkennen und behandeln.', type: 'TEXT', groupId: 'group-basics', groupName: 'Grundlagen', mediaUrls: [], duration: 30 },
-    { id: 'lesson-003', title: 'Waschtechniken Praxis', content: 'Professionelle Haarwaesche: Kopfhautmassage, Temperatur, Produktwahl.', type: 'VIDEO', groupId: 'group-basics', groupName: 'Grundlagen', mediaUrls: ['https://videos.example.com/wash-techniques.mp4'], duration: 20 },
-    { id: 'lesson-004', title: 'Schnitttechniken: Graduierung', content: 'Schrittweise Anleitung zur Graduierungstechnik mit Praxisbeispielen.', type: 'VIDEO', groupId: 'group-technique', groupName: 'Techniken', mediaUrls: ['https://videos.example.com/graduation-cut.mp4'], duration: 45 },
-    { id: 'lesson-005', title: 'Folientechnik Highlights', content: 'Interaktives Modul: Folientechnik Schritt fuer Schritt mit Uebungen.', type: 'INTERACTIVE', groupId: 'group-technique', groupName: 'Techniken', mediaUrls: ['https://interactive.example.com/foil-technique'], duration: 60 },
-    { id: 'lesson-006', title: 'Balayage Grundlagen', content: 'Freihandtechnik fuer natuerliche Farbverlaeufe. Theorie und Demonstration.', type: 'VIDEO', groupId: 'group-technique', groupName: 'Techniken', mediaUrls: ['https://videos.example.com/balayage-basics.mp4'], duration: 50 },
-    { id: 'lesson-007', title: 'Hygienevorschriften CH', content: 'Schweizerische Hygienevorschriften fuer Coiffeursalons. Gesetzliche Grundlagen.', type: 'TEXT', groupId: 'group-safety', groupName: 'Sicherheit & Hygiene', mediaUrls: [], duration: 30 },
-    { id: 'lesson-008', title: 'Umgang mit Chemikalien', content: 'Sicherheitsdatenblaetter, Schutzausruestung und Notfallmassnahmen.', type: 'TEXT', groupId: 'group-safety', groupName: 'Sicherheit & Hygiene', mediaUrls: [], duration: 35 },
-    { id: 'lesson-009', title: 'Ergonomie am Arbeitsplatz', content: 'Interaktive Uebungen zur korrekten Koerperhaltung bei der Arbeit.', type: 'INTERACTIVE', groupId: 'group-safety', groupName: 'Sicherheit & Hygiene', mediaUrls: ['https://interactive.example.com/ergonomics'], duration: 25 },
-    { id: 'lesson-010', title: 'Kundenberatung: Erstgespraech', content: 'Leitfaden fuer das professionelle Erstgespraech mit Neukunden.', type: 'TEXT', groupId: undefined, groupName: undefined, mediaUrls: [], duration: 40 },
-  ]);
-
+  // Badges: local state with mock data (no backend endpoint)
   const badges = ref<Badge[]>([
     { id: 'badge-001', name: 'Haarpflege Grundlagen', icon: 'scissors', color: '#f43f5e', description: 'Abschluss des Grundlagenkurses Haarpflege', courseCount: 1 },
     { id: 'badge-002', name: 'Koloristik Profi', icon: 'palette', color: '#8b5cf6', description: 'Zertifikat fuer Farbtheorie und Koloristik', courseCount: 1 },
@@ -219,6 +102,8 @@ export const useAcademyStore = defineStore('academy', () => {
   ]);
 
   const isLoading = ref(false);
+  const loading = ref(false);
+  const error = ref<string | null>(null);
 
   // ---- Getters ----
   const courseCount = computed(() => courses.value.length);
@@ -241,29 +126,130 @@ export const useAcademyStore = defineStore('academy', () => {
     return Object.entries(map).map(([value, label]) => ({ value, label }));
   });
 
-  // ---- Actions ----
+  // ---- Fetch Actions ----
 
-  function addCourse(course: Omit<Course, 'id' | 'participantCount'>): Course {
-    const newCourse: Course = {
-      ...course,
-      id: `course-${Date.now()}`,
-      participantCount: 0,
-    };
-    courses.value.push(newCourse);
-    return newCourse;
-  }
-
-  function updateCourse(id: string, data: Partial<Course>) {
-    const idx = courses.value.findIndex(c => c.id === id);
-    if (idx !== -1) {
-      courses.value[idx] = { ...courses.value[idx], ...data };
+  async function fetchCourses(): Promise<void> {
+    loading.value = true;
+    error.value = null;
+    try {
+      const response = await api.get<{ data: Course[] }>('/v1/courses', { per_page: 100 });
+      courses.value = response.data;
+    } catch (e: unknown) {
+      const message = e instanceof Error ? e.message : 'Failed to fetch courses';
+      error.value = message;
+      throw e;
+    } finally {
+      loading.value = false;
     }
   }
 
-  function deleteCourse(id: string) {
-    const idx = courses.value.findIndex(c => c.id === id);
-    if (idx !== -1) {
-      courses.value.splice(idx, 1);
+  async function fetchLessons(courseId: string): Promise<void> {
+    loading.value = true;
+    error.value = null;
+    try {
+      const response = await api.get<{ data: Lesson[] }>(
+        `/v1/courses/${courseId}/lessons`,
+        { per_page: 100 },
+      );
+      const fetched = response.data;
+      // Merge: replace existing lessons by id, add new ones
+      const fetchedIds = new Set(fetched.map(l => l.id));
+      lessons.value = [
+        ...lessons.value.filter(l => !fetchedIds.has(l.id)),
+        ...fetched,
+      ];
+    } catch (e: unknown) {
+      const message = e instanceof Error ? e.message : 'Failed to fetch lessons';
+      error.value = message;
+      throw e;
+    } finally {
+      loading.value = false;
+    }
+  }
+
+  async function fetchAll(): Promise<void> {
+    loading.value = true;
+    isLoading.value = true;
+    error.value = null;
+    try {
+      // Fetch all courses
+      const coursesResponse = await api.get<{ data: Course[] }>('/v1/courses', { per_page: 100 });
+      courses.value = coursesResponse.data;
+
+      // Fetch lessons for each course in parallel
+      if (courses.value.length > 0) {
+        const lessonResponses = await Promise.all(
+          courses.value.map(course =>
+            api.get<{ data: Lesson[] }>(
+              `/v1/courses/${course.id}/lessons`,
+              { per_page: 100 },
+            ),
+          ),
+        );
+        lessons.value = lessonResponses.flatMap(r => r.data);
+      }
+    } catch (e: unknown) {
+      const message = e instanceof Error ? e.message : 'Failed to fetch academy data';
+      error.value = message;
+      throw e;
+    } finally {
+      loading.value = false;
+      isLoading.value = false;
+    }
+  }
+
+  // ---- Course Actions ----
+
+  async function addCourse(course: Omit<Course, 'id' | 'participantCount'>): Promise<Course> {
+    loading.value = true;
+    error.value = null;
+    try {
+      const response = await api.post<{ data: Course }>('/v1/courses', course);
+      const newCourse = response.data;
+      courses.value.push(newCourse);
+      return newCourse;
+    } catch (e: unknown) {
+      const message = e instanceof Error ? e.message : 'Failed to create course';
+      error.value = message;
+      throw e;
+    } finally {
+      loading.value = false;
+    }
+  }
+
+  async function updateCourse(id: string, data: Partial<Course>): Promise<void> {
+    loading.value = true;
+    error.value = null;
+    try {
+      const response = await api.put<{ data: Course }>(`/v1/courses/${id}`, data);
+      const idx = courses.value.findIndex(c => c.id === id);
+      if (idx !== -1) {
+        courses.value[idx] = response.data;
+      }
+    } catch (e: unknown) {
+      const message = e instanceof Error ? e.message : 'Failed to update course';
+      error.value = message;
+      throw e;
+    } finally {
+      loading.value = false;
+    }
+  }
+
+  async function deleteCourse(id: string): Promise<void> {
+    loading.value = true;
+    error.value = null;
+    try {
+      await api.delete(`/v1/courses/${id}`);
+      const idx = courses.value.findIndex(c => c.id === id);
+      if (idx !== -1) {
+        courses.value.splice(idx, 1);
+      }
+    } catch (e: unknown) {
+      const message = e instanceof Error ? e.message : 'Failed to delete course';
+      error.value = message;
+      throw e;
+    } finally {
+      loading.value = false;
     }
   }
 
@@ -271,28 +257,74 @@ export const useAcademyStore = defineStore('academy', () => {
     return courses.value.find(c => c.id === id);
   }
 
-  function addLesson(lesson: Omit<Lesson, 'id'>): Lesson {
-    const newLesson: Lesson = {
-      ...lesson,
-      id: `lesson-${Date.now()}`,
-    };
-    lessons.value.push(newLesson);
-    return newLesson;
-  }
+  // ---- Lesson Actions ----
 
-  function updateLesson(id: string, data: Partial<Lesson>) {
-    const idx = lessons.value.findIndex(l => l.id === id);
-    if (idx !== -1) {
-      lessons.value[idx] = { ...lessons.value[idx], ...data };
+  async function addLesson(lesson: Omit<Lesson, 'id'>, courseId?: string): Promise<Lesson> {
+    loading.value = true;
+    error.value = null;
+    try {
+      if (courseId) {
+        const response = await api.post<{ data: Lesson }>(
+          `/v1/courses/${courseId}/lessons`,
+          lesson,
+        );
+        const newLesson = response.data;
+        lessons.value.push(newLesson);
+        return newLesson;
+      }
+      // Local-only lesson (library item, not yet attached to a course)
+      const newLesson: Lesson = {
+        ...lesson,
+        id: `lesson-${Date.now()}`,
+      };
+      lessons.value.push(newLesson);
+      return newLesson;
+    } catch (e: unknown) {
+      const message = e instanceof Error ? e.message : 'Failed to create lesson';
+      error.value = message;
+      throw e;
+    } finally {
+      loading.value = false;
     }
   }
 
-  function deleteLesson(id: string) {
-    const idx = lessons.value.findIndex(l => l.id === id);
-    if (idx !== -1) {
-      lessons.value.splice(idx, 1);
+  async function updateLesson(id: string, data: Partial<Lesson>): Promise<void> {
+    loading.value = true;
+    error.value = null;
+    try {
+      const response = await api.put<{ data: Lesson }>(`/v1/lessons/${id}`, data);
+      const idx = lessons.value.findIndex(l => l.id === id);
+      if (idx !== -1) {
+        lessons.value[idx] = response.data;
+      }
+    } catch (e: unknown) {
+      const message = e instanceof Error ? e.message : 'Failed to update lesson';
+      error.value = message;
+      throw e;
+    } finally {
+      loading.value = false;
     }
   }
+
+  async function deleteLesson(id: string): Promise<void> {
+    loading.value = true;
+    error.value = null;
+    try {
+      await api.delete(`/v1/lessons/${id}`);
+      const idx = lessons.value.findIndex(l => l.id === id);
+      if (idx !== -1) {
+        lessons.value.splice(idx, 1);
+      }
+    } catch (e: unknown) {
+      const message = e instanceof Error ? e.message : 'Failed to delete lesson';
+      error.value = message;
+      throw e;
+    } finally {
+      loading.value = false;
+    }
+  }
+
+  // ---- Lesson Group Actions (local state only) ----
 
   function addLessonGroup(name: string): LessonGroup {
     const group: LessonGroup = {
@@ -315,6 +347,8 @@ export const useAcademyStore = defineStore('academy', () => {
       });
     }
   }
+
+  // ---- Badge Actions (local state only) ----
 
   function addBadge(badge: Omit<Badge, 'id' | 'courseCount'>): Badge {
     const newBadge: Badge = {
@@ -357,6 +391,8 @@ export const useAcademyStore = defineStore('academy', () => {
     lessonGroups,
     badges,
     isLoading,
+    loading,
+    error,
 
     // Getters
     courseCount,
@@ -364,6 +400,11 @@ export const useAcademyStore = defineStore('academy', () => {
     badgeCount,
     publishedCourses,
     categories,
+
+    // Actions — Fetch
+    fetchCourses,
+    fetchLessons,
+    fetchAll,
 
     // Actions — Courses
     addCourse,
