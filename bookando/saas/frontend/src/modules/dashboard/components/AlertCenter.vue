@@ -4,6 +4,13 @@
  */
 import { ref } from 'vue';
 import { CARD_STYLES, BADGE_STYLES } from '@/design';
+import { useI18n } from '@/composables/useI18n';
+
+defineProps<{
+  title?: string;
+}>();
+
+const { t } = useI18n();
 
 interface Alert {
   id: string;
@@ -40,7 +47,7 @@ const unacknowledgedCount = ref(alerts.value.filter(a => !a.acknowledged).length
     <div :class="CARD_STYLES.headerCompact">
       <div class="flex items-center justify-between">
         <div class="flex items-center gap-2">
-          <h3 class="text-base font-semibold text-slate-900">Infocenter</h3>
+          <h3 class="text-base font-semibold text-slate-900">{{ title || t('dashboard.alertCenter') }}</h3>
           <span v-if="unacknowledgedCount > 0" :class="BADGE_STYLES.danger">
             {{ unacknowledgedCount }}
           </span>
@@ -72,7 +79,7 @@ const unacknowledgedCount = ref(alerts.value.filter(a => !a.acknowledged).length
                 class="text-xs text-brand-600 hover:text-brand-700 font-medium"
                 @click="acknowledge(alert.id)"
               >
-                Gelesen
+                {{ t('dashboard.acknowledged') }}
               </button>
             </div>
           </div>

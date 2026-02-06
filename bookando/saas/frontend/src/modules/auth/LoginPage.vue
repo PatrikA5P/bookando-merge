@@ -6,7 +6,9 @@
  * TODO: OAuth-Provider (Google, Apple), 2FA, Passwort-Reset
  */
 import { ref } from 'vue';
+import { useI18n } from '@/composables/useI18n';
 
+const { t } = useI18n();
 const email = ref('');
 const password = ref('');
 const isLoading = ref(false);
@@ -15,7 +17,7 @@ const errorMessage = ref('');
 async function handleLogin() {
   errorMessage.value = '';
   if (!email.value || !password.value) {
-    errorMessage.value = 'Bitte E-Mail und Passwort eingeben.';
+    errorMessage.value = t('auth.errorRequired');
     return;
   }
   isLoading.value = true;
@@ -23,7 +25,7 @@ async function handleLogin() {
     // TODO: API-Call an AuthApi.login()
     console.log('Login attempt:', email.value);
   } catch (err) {
-    errorMessage.value = 'Anmeldung fehlgeschlagen. Bitte versuchen Sie es erneut.';
+    errorMessage.value = t('auth.errorFailed');
   } finally {
     isLoading.value = false;
   }
@@ -38,8 +40,8 @@ async function handleLogin() {
         <div class="inline-flex items-center justify-center w-14 h-14 bg-brand-600 rounded-2xl mb-4">
           <span class="text-white font-bold text-xl">B</span>
         </div>
-        <h1 class="text-2xl font-bold text-slate-900">Willkommen bei Bookando</h1>
-        <p class="text-sm text-slate-500 mt-1">Melden Sie sich an, um fortzufahren</p>
+        <h1 class="text-2xl font-bold text-slate-900">{{ t('auth.welcome') }}</h1>
+        <p class="text-sm text-slate-500 mt-1">{{ t('auth.subtitle') }}</p>
       </div>
 
       <!-- Login-Formular -->
@@ -59,7 +61,7 @@ async function handleLogin() {
         <!-- E-Mail -->
         <div>
           <label for="login-email" class="block text-sm font-medium text-slate-700 mb-1.5">
-            E-Mail-Adresse
+            {{ t('auth.email') }}
           </label>
           <input
             id="login-email"
@@ -76,10 +78,10 @@ async function handleLogin() {
         <div>
           <div class="flex items-center justify-between mb-1.5">
             <label for="login-password" class="block text-sm font-medium text-slate-700">
-              Passwort
+              {{ t('auth.password') }}
             </label>
             <a href="#" class="text-xs text-brand-600 hover:text-brand-700 font-medium">
-              Passwort vergessen?
+              {{ t('auth.forgotPassword') }}
             </a>
           </div>
           <input
@@ -104,15 +106,15 @@ async function handleLogin() {
               <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4" />
               <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
             </svg>
-            Wird angemeldet...
+            {{ t('auth.loggingIn') }}
           </span>
-          <span v-else>Anmelden</span>
+          <span v-else>{{ t('auth.login') }}</span>
         </button>
       </form>
 
       <!-- Footer -->
       <p class="text-center text-xs text-slate-400 mt-6">
-        &copy; {{ new Date().getFullYear() }} Bookando. Alle Rechte vorbehalten.
+        &copy; {{ new Date().getFullYear() }} Bookando. {{ t('auth.allRights') }}
       </p>
     </div>
   </div>

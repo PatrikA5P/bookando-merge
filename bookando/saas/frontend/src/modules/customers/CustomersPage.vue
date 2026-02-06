@@ -17,6 +17,7 @@
  * + Responsive Karten-Ansicht auf Mobile
  */
 import { ref, computed, watch } from 'vue';
+import { useI18n } from '@/composables/useI18n';
 import { useRouter } from 'vue-router';
 import ModuleLayout from '@/components/layout/ModuleLayout.vue';
 import BButton from '@/components/ui/BButton.vue';
@@ -36,6 +37,7 @@ const router = useRouter();
 const toast = useToast();
 const appStore = useAppStore();
 const { isMobile } = useBreakpoint();
+const { t } = useI18n();
 
 // State
 const searchQuery = ref('');
@@ -112,14 +114,14 @@ const paginatedCustomers = computed(() => {
 });
 
 // Tabellen-Spalten
-const columns = [
-  { key: 'name', label: 'Kunde', sortable: true },
-  { key: 'email', label: 'E-Mail', sortable: true },
-  { key: 'phone', label: 'Telefon' },
-  { key: 'city', label: 'Stadt', sortable: true },
+const columns = computed(() => [
+  { key: 'name', label: t('customers.lastName'), sortable: true },
+  { key: 'email', label: t('customers.email'), sortable: true },
+  { key: 'phone', label: t('customers.phone') },
+  { key: 'city', label: t('customers.city'), sortable: true },
   { key: 'status', label: 'Status' },
   { key: 'actions', label: '', width: '80px', align: 'right' as const },
-];
+]);
 
 // Aktionen
 function openCreate() {
@@ -143,7 +145,7 @@ function handleSave(data: Partial<Customer>) {
     if (idx !== -1) {
       customers.value[idx] = { ...customers.value[idx], ...data } as Customer;
     }
-    toast.success('Kunde aktualisiert');
+    toast.success(t('customers.customerUpdated'));
   } else {
     // Create
     const newCustomer: Customer = {
@@ -154,7 +156,7 @@ function handleSave(data: Partial<Customer>) {
       ...data,
     } as Customer;
     customers.value.push(newCustomer);
-    toast.success('Kunde erstellt');
+    toast.success(t('customers.customerCreated'));
   }
   isModalOpen.value = false;
 }
@@ -165,9 +167,9 @@ function handleDelete(customer: Customer) {
   if (idx !== -1) {
     const original = { ...customers.value[idx] };
     customers.value[idx] = { ...customers.value[idx], status: 'DELETED' as CustomerStatus };
-    toast.success('Kunde gelöscht', {
+    toast.success(t('customers.customerDeleted'), {
       action: {
-        label: 'Rückgängig',
+        label: t('common.undo'),
         onClick: () => {
           const restoreIdx = customers.value.findIndex(c => c.id === customer.id);
           if (restoreIdx !== -1) {
@@ -190,7 +192,7 @@ function handleSort(column: string) {
 
 function exportCsv() {
   // TODO: Server-seitiger Export mit aktuellem Filter
-  toast.info('Export wird generiert...');
+  toast.info(t('customers.exportCsv') + '...');
 }
 
 // Reset Pagination bei Filter-Änderung
@@ -202,10 +204,10 @@ watch([searchQuery, filters], () => {
 <template>
   <ModuleLayout
     module-name="customers"
-    title="Kunden"
-    :subtitle="`${total} Kunden`"
+    :title="t('customers.title')"
+    :subtitle="t('customers.subtitle', { count: total })"
     :show-fab="true"
-    fab-label="Neuen Kunden erstellen"
+    :fab-label="t('customers.newCustomer')"
     @fab-click="openCreate"
   >
     <template #header-actions>
@@ -218,13 +220,13 @@ watch([searchQuery, filters], () => {
           <svg class="w-4 h-4 inline mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
           </svg>
-          <span class="hidden sm:inline">Export</span>
+          <span class="hidden sm:inline">{{ t('customers.exportCsv') }}</span>
         </button>
         <BButton variant="primary" class="!text-xs hidden md:flex" @click="openCreate">
           <svg class="w-4 h-4 inline mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
           </svg>
-          Neuer Kunde
+          {{ t('customers.newCustomer') }}
         </BButton>
       </div>
     </template>
@@ -238,7 +240,7 @@ watch([searchQuery, filters], () => {
         <input
           v-model="searchQuery"
           :class="INPUT_STYLES.search"
-          placeholder="Name, E-Mail oder Telefon suchen..."
+          :placeholder="t('customers.searchPlaceholder')"
           type="search"
         />
       </div>
@@ -250,7 +252,7 @@ watch([searchQuery, filters], () => {
         <svg class="w-4 h-4 inline mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z" />
         </svg>
-        Filter
+        {{ t('common.filter') }}
       </BButton>
     </div>
 
@@ -278,7 +280,7 @@ watch([searchQuery, filters], () => {
             <p class="text-xs text-slate-500 truncate">{{ customer.email }}</p>
           </div>
           <BBadge :status="customer.status" dot>
-            {{ customer.status === 'ACTIVE' ? 'Aktiv' : customer.status === 'BLOCKED' ? 'Gesperrt' : 'Gelöscht' }}
+            {{ customer.status === 'ACTIVE' ? t('customers.status.active') : customer.status === 'BLOCKED' ? t('customers.status.blocked') : t('customers.status.deleted') }}
           </BBadge>
         </div>
         <div class="mt-2 flex items-center gap-4 text-xs text-slate-500">
@@ -298,8 +300,8 @@ watch([searchQuery, filters], () => {
       :page="page"
       :per-page="perPage"
       :total="total"
-      empty-title="Keine Kunden gefunden"
-      empty-message="Erstellen Sie Ihren ersten Kunden oder passen Sie die Filter an."
+      :empty-title="t('customers.noCustomers')"
+      :empty-message="t('customers.noCustomersDesc')"
       @sort="handleSort"
       @page-change="(p: number) => page = p"
       @row-click="openDetail"
@@ -317,7 +319,7 @@ watch([searchQuery, filters], () => {
 
       <template #cell-status="{ row }">
         <BBadge :status="String((row as any).status)" dot>
-          {{ (row as any).status === 'ACTIVE' ? 'Aktiv' : (row as any).status === 'BLOCKED' ? 'Gesperrt' : 'Gelöscht' }}
+          {{ (row as any).status === 'ACTIVE' ? t('customers.status.active') : (row as any).status === 'BLOCKED' ? t('customers.status.blocked') : t('customers.status.deleted') }}
         </BBadge>
       </template>
 
@@ -325,7 +327,7 @@ watch([searchQuery, filters], () => {
         <div class="flex items-center justify-end gap-1">
           <button
             :class="BUTTON_STYLES.icon"
-            title="Bearbeiten"
+            :title="t('common.edit')"
             @click.stop="openEdit(row as unknown as Customer)"
           >
             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -334,7 +336,7 @@ watch([searchQuery, filters], () => {
           </button>
           <button
             :class="BUTTON_STYLES.icon"
-            title="Löschen"
+            :title="t('common.delete')"
             @click.stop="handleDelete(row as unknown as Customer)"
           >
             <svg class="w-4 h-4 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -346,7 +348,7 @@ watch([searchQuery, filters], () => {
 
       <template #empty-action>
         <BButton variant="primary" class="mt-2" @click="openCreate">
-          Ersten Kunden erstellen
+          {{ t('customers.createFirst') }}
         </BButton>
       </template>
     </BTable>
@@ -354,7 +356,7 @@ watch([searchQuery, filters], () => {
     <!-- Kunden-Modal -->
     <BModal
       v-model="isModalOpen"
-      :title="editingCustomer ? 'Kunde bearbeiten' : 'Neuer Kunde'"
+      :title="editingCustomer ? t('customers.editCustomer') : t('customers.newCustomer')"
       size="lg"
     >
       <CustomerForm

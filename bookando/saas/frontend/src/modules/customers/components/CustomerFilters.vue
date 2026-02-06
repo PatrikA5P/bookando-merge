@@ -3,6 +3,9 @@
  * CustomerFilters — Erweiterte Filter
  */
 import { CARD_STYLES, BADGE_STYLES, BUTTON_STYLES } from '@/design';
+import { useI18n } from '@/composables/useI18n';
+
+const { t } = useI18n();
 
 const model = defineModel<{
   status: string[];
@@ -40,7 +43,7 @@ const hasActiveFilters = () => {
       <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
         <!-- Status -->
         <div>
-          <label class="block text-xs font-semibold text-slate-500 uppercase tracking-wider mb-2">Status</label>
+          <label class="block text-xs font-semibold text-slate-500 uppercase tracking-wider mb-2">{{ t('common.sortBy') }}</label>
           <div class="flex flex-wrap gap-2">
             <button
               v-for="status in ['ACTIVE', 'BLOCKED', 'DELETED']"
@@ -53,33 +56,33 @@ const hasActiveFilters = () => {
               ]"
               @click="toggleStatus(status)"
             >
-              {{ status === 'ACTIVE' ? 'Aktiv' : status === 'BLOCKED' ? 'Gesperrt' : 'Gelöscht' }}
+              {{ status === 'ACTIVE' ? t('customers.status.active') : status === 'BLOCKED' ? t('customers.status.blocked') : t('customers.status.deleted') }}
             </button>
           </div>
         </div>
 
         <!-- Geschlecht -->
         <div>
-          <label class="block text-xs font-semibold text-slate-500 uppercase tracking-wider mb-2">Geschlecht</label>
+          <label class="block text-xs font-semibold text-slate-500 uppercase tracking-wider mb-2">{{ t('customers.gender') }}</label>
           <select
             v-model="model.gender"
             class="w-full px-3 py-2 border border-slate-300 rounded-lg text-sm bg-white focus:outline-none focus:ring-2 focus:ring-brand-500"
           >
-            <option value="">Alle</option>
-            <option value="male">Männlich</option>
-            <option value="female">Weiblich</option>
-            <option value="other">Andere</option>
+            <option value="">{{ t('common.selectAll') }}</option>
+            <option value="male">{{ t('customers.male') }}</option>
+            <option value="female">{{ t('customers.female') }}</option>
+            <option value="other">{{ t('customers.other') }}</option>
           </select>
         </div>
 
         <!-- Land -->
         <div>
-          <label class="block text-xs font-semibold text-slate-500 uppercase tracking-wider mb-2">Land</label>
+          <label class="block text-xs font-semibold text-slate-500 uppercase tracking-wider mb-2">{{ t('customers.country') }}</label>
           <select
             v-model="model.country"
             class="w-full px-3 py-2 border border-slate-300 rounded-lg text-sm bg-white focus:outline-none focus:ring-2 focus:ring-brand-500"
           >
-            <option value="">Alle</option>
+            <option value="">{{ t('common.selectAll') }}</option>
             <option value="CH">Schweiz</option>
             <option value="DE">Deutschland</option>
             <option value="AT">Österreich</option>
@@ -89,11 +92,11 @@ const hasActiveFilters = () => {
 
         <!-- Stadt -->
         <div>
-          <label class="block text-xs font-semibold text-slate-500 uppercase tracking-wider mb-2">Stadt</label>
+          <label class="block text-xs font-semibold text-slate-500 uppercase tracking-wider mb-2">{{ t('customers.city') }}</label>
           <input
             v-model="model.city"
             class="w-full px-3 py-2 border border-slate-300 rounded-lg text-sm bg-white focus:outline-none focus:ring-2 focus:ring-brand-500"
-            placeholder="Stadt eingeben..."
+            :placeholder="t('customers.city') + '...'"
           />
         </div>
       </div>
@@ -104,7 +107,7 @@ const hasActiveFilters = () => {
           class="text-xs text-brand-600 hover:text-brand-700 font-medium"
           @click="resetFilters"
         >
-          Filter zurücksetzen
+          {{ t('common.reset') }}
         </button>
       </div>
     </div>

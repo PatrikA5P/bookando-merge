@@ -11,6 +11,7 @@ defineProps<{
   value: string;
   trend: number;
   icon: string;
+  trendLabel?: string;
 }>();
 </script>
 
@@ -68,7 +69,7 @@ defineProps<{
         </svg>
         {{ Math.abs(trend) }}%
       </span>
-      <span class="text-xs text-slate-400">vs. Vormonat</span>
+      <span class="text-xs text-slate-400">{{ trendLabel || 'vs. Vormonat' }}</span>
     </div>
   </div>
 </template>
