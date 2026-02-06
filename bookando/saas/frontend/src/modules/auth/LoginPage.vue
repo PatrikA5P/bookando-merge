@@ -6,11 +6,16 @@
  * TODO: OAuth-Provider (Google, Apple), 2FA, Passwort-Reset
  */
 import { ref } from 'vue';
+import { useRouter, useRoute } from 'vue-router';
 import { useI18n } from '@/composables/useI18n';
+import { useAuthStore } from '@/stores/auth';
 
 const { t } = useI18n();
-const email = ref('');
-const password = ref('');
+const router = useRouter();
+const route = useRoute();
+const authStore = useAuthStore();
+const email = ref('admin@bookando.ch');
+const password = ref('bookando123');
 const isLoading = ref(false);
 const errorMessage = ref('');
 
@@ -22,8 +27,9 @@ async function handleLogin() {
   }
   isLoading.value = true;
   try {
-    // TODO: API-Call an AuthApi.login()
-    console.log('Login attempt:', email.value);
+    await authStore.login(email.value, password.value);
+    const redirect = (route.query.redirect as string) || '/dashboard';
+    router.push(redirect);
   } catch (err) {
     errorMessage.value = t('auth.errorFailed');
   } finally {
@@ -111,6 +117,13 @@ async function handleLogin() {
           <span v-else>{{ t('auth.login') }}</span>
         </button>
       </form>
+
+      <!-- Demo Hint -->
+      <div class="bg-blue-50 border border-blue-200 rounded-lg px-4 py-3 mt-4 text-xs text-blue-700">
+        <p class="font-semibold mb-1">Demo Login:</p>
+        <p>E-Mail: <code class="bg-blue-100 px-1 rounded">admin@bookando.ch</code></p>
+        <p>Passwort: <code class="bg-blue-100 px-1 rounded">bookando123</code></p>
+      </div>
 
       <!-- Footer -->
       <p class="text-center text-xs text-slate-400 mt-6">

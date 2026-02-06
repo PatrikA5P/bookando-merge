@@ -88,8 +88,8 @@ function handleEdit(row: Record<string, unknown>) {
   if (eq) emit('edit', eq);
 }
 
-function handleDelete(row: Record<string, unknown>) {
-  if (store.deleteEquipment(row.id as string)) {
+async function handleDelete(row: Record<string, unknown>) {
+  if (await store.deleteEquipment(row.id as string)) {
     toast.success(t('common.deletedSuccessfully'));
   }
 }

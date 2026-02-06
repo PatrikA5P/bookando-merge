@@ -57,8 +57,8 @@ const statusFilterOptions = [
   { value: 'MAINTENANCE', label: t('resources.maintenance') },
 ];
 
-function handleDelete(room: Room) {
-  if (store.deleteRoom(room.id)) {
+async function handleDelete(room: Room) {
+  if (await store.deleteRoom(room.id)) {
     toast.success(t('common.deletedSuccessfully'));
   }
 }

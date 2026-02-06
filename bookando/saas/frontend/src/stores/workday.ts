@@ -11,6 +11,7 @@
  */
 import { defineStore } from 'pinia';
 import { ref, computed } from 'vue';
+import api from '@/utils/api';
 
 // ============================================================================
 // TYPES
@@ -115,245 +116,16 @@ function calcHours(clockIn: string, clockOut: string | null, breakMinutes: numbe
 }
 
 // ============================================================================
-// MOCK DATA
-// ============================================================================
-
-const today = new Date();
-const monday = getMonday(today);
-
-function dayStr(offset: number): string {
-  const d = new Date(monday);
-  d.setDate(d.getDate() + offset);
-  return formatDate(d);
-}
-
-const EMPLOYEES = [
-  { id: 'emp-1', name: 'Anna Müller' },
-  { id: 'emp-2', name: 'Beat Keller' },
-  { id: 'emp-3', name: 'Claudia Brunner' },
-  { id: 'emp-4', name: 'Daniel Schmid' },
-];
-
-function createMockTimeEntries(): TimeEntry[] {
-  const entries: TimeEntry[] = [];
-  // Anna Müller — full week
-  const annaSchedule = [
-    { day: 0, clockIn: '08:00', clockOut: '17:00', breakMinutes: 60 },
-    { day: 1, clockIn: '07:30', clockOut: '16:30', breakMinutes: 60 },
-    { day: 2, clockIn: '08:00', clockOut: '17:30', breakMinutes: 45 },
-    { day: 3, clockIn: '08:15', clockOut: '17:15', breakMinutes: 60 },
-    { day: 4, clockIn: '08:00', clockOut: '16:00', breakMinutes: 30 },
-  ];
-  annaSchedule.forEach((s, i) => {
-    entries.push({
-      id: `te-anna-${i}`,
-      employeeId: 'emp-1',
-      employeeName: 'Anna Müller',
-      date: dayStr(s.day),
-      clockIn: s.clockIn,
-      clockOut: s.clockOut,
-      breakMinutes: s.breakMinutes,
-      type: 'REGULAR',
-      notes: '',
-      status: i < 3 ? 'APPROVED' : 'SUBMITTED',
-    });
-  });
-
-  // Beat Keller — partial week, some overtime
-  const beatSchedule = [
-    { day: 0, clockIn: '07:00', clockOut: '18:00', breakMinutes: 30, type: 'OVERTIME' as TimeEntryType },
-    { day: 1, clockIn: '07:00', clockOut: '17:30', breakMinutes: 45, type: 'REGULAR' as TimeEntryType },
-    { day: 2, clockIn: '08:00', clockOut: '17:00', breakMinutes: 60, type: 'REGULAR' as TimeEntryType },
-    { day: 3, clockIn: '07:30', clockOut: '16:30', breakMinutes: 60, type: 'REGULAR' as TimeEntryType },
-  ];
-  beatSchedule.forEach((s, i) => {
-    entries.push({
-      id: `te-beat-${i}`,
-      employeeId: 'emp-2',
-      employeeName: 'Beat Keller',
-      date: dayStr(s.day),
-      clockIn: s.clockIn,
-      clockOut: s.clockOut,
-      breakMinutes: s.breakMinutes,
-      type: s.type,
-      notes: i === 0 ? 'Projektdeadline' : '',
-      status: 'OPEN',
-    });
-  });
-
-  // Claudia Brunner — 3 days, short break violation
-  const claudiaSchedule = [
-    { day: 0, clockIn: '09:00', clockOut: '17:30', breakMinutes: 15 },
-    { day: 1, clockIn: '09:00', clockOut: '18:00', breakMinutes: 30 },
-    { day: 2, clockIn: '09:00', clockOut: '17:00', breakMinutes: 30 },
-  ];
-  claudiaSchedule.forEach((s, i) => {
-    entries.push({
-      id: `te-claudia-${i}`,
-      employeeId: 'emp-3',
-      employeeName: 'Claudia Brunner',
-      date: dayStr(s.day),
-      clockIn: s.clockIn,
-      clockOut: s.clockOut,
-      breakMinutes: s.breakMinutes,
-      type: 'REGULAR',
-      notes: '',
-      status: 'SUBMITTED',
-    });
-  });
-
-  // Daniel Schmid — sick on Mon, rest normal
-  entries.push({
-    id: 'te-daniel-0',
-    employeeId: 'emp-4',
-    employeeName: 'Daniel Schmid',
-    date: dayStr(0),
-    clockIn: '00:00',
-    clockOut: '00:00',
-    breakMinutes: 0,
-    type: 'SICK',
-    notes: 'Arztzeugnis vorhanden',
-    status: 'APPROVED',
-  });
-  const danielSchedule = [
-    { day: 1, clockIn: '08:00', clockOut: '16:30', breakMinutes: 30 },
-    { day: 2, clockIn: '08:00', clockOut: '17:00', breakMinutes: 45 },
-    { day: 3, clockIn: '08:30', clockOut: '17:30', breakMinutes: 60 },
-  ];
-  danielSchedule.forEach((s, i) => {
-    entries.push({
-      id: `te-daniel-${i + 1}`,
-      employeeId: 'emp-4',
-      employeeName: 'Daniel Schmid',
-      date: dayStr(s.day),
-      clockIn: s.clockIn,
-      clockOut: s.clockOut,
-      breakMinutes: s.breakMinutes,
-      type: 'REGULAR',
-      notes: '',
-      status: 'OPEN',
-    });
-  });
-
-  return entries;
-}
-
-function createMockShifts(): ShiftEntry[] {
-  const shifts: ShiftEntry[] = [];
-  const shiftDefs: Record<ShiftType, { start: string; end: string }> = {
-    EARLY: { start: '06:00', end: '14:00' },
-    LATE: { start: '14:00', end: '22:00' },
-    NIGHT: { start: '22:00', end: '06:00' },
-    OFF: { start: '', end: '' },
-  };
-
-  // Week schedule per employee
-  const schedule: Record<string, ShiftType[]> = {
-    'emp-1': ['EARLY', 'EARLY', 'LATE', 'LATE', 'EARLY', 'OFF', 'OFF'],
-    'emp-2': ['LATE', 'LATE', 'EARLY', 'EARLY', 'LATE', 'OFF', 'OFF'],
-    'emp-3': ['EARLY', 'LATE', 'EARLY', 'LATE', 'OFF', 'EARLY', 'OFF'],
-    'emp-4': ['OFF', 'EARLY', 'EARLY', 'LATE', 'LATE', 'OFF', 'OFF'],
-  };
-
-  EMPLOYEES.forEach(emp => {
-    const empSchedule = schedule[emp.id] || [];
-    empSchedule.forEach((shiftType, dayIndex) => {
-      const def = shiftDefs[shiftType];
-      shifts.push({
-        id: `shift-${emp.id}-${dayIndex}`,
-        employeeId: emp.id,
-        employeeName: emp.name,
-        date: dayStr(dayIndex),
-        shiftType,
-        startTime: def.start,
-        endTime: def.end,
-      });
-    });
-  });
-
-  return shifts;
-}
-
-function createMockAbsences(): AbsenceRequest[] {
-  return [
-    {
-      id: 'abs-1',
-      employeeId: 'emp-1',
-      employeeName: 'Anna Müller',
-      type: 'VACATION',
-      startDate: '2026-03-02',
-      endDate: '2026-03-06',
-      days: 5,
-      status: 'APPROVED',
-      notes: 'Skiferien',
-    },
-    {
-      id: 'abs-2',
-      employeeId: 'emp-2',
-      employeeName: 'Beat Keller',
-      type: 'TRAINING',
-      startDate: '2026-02-16',
-      endDate: '2026-02-17',
-      days: 2,
-      status: 'APPROVED',
-      notes: 'Vue.js Advanced Workshop',
-    },
-    {
-      id: 'abs-3',
-      employeeId: 'emp-3',
-      employeeName: 'Claudia Brunner',
-      type: 'VACATION',
-      startDate: '2026-04-13',
-      endDate: '2026-04-24',
-      days: 10,
-      status: 'PENDING',
-      notes: 'Osterferien',
-    },
-    {
-      id: 'abs-4',
-      employeeId: 'emp-4',
-      employeeName: 'Daniel Schmid',
-      type: 'SICK',
-      startDate: dayStr(0),
-      endDate: dayStr(0),
-      days: 1,
-      status: 'APPROVED',
-      notes: 'Arztzeugnis vorhanden',
-    },
-    {
-      id: 'abs-5',
-      employeeId: 'emp-1',
-      employeeName: 'Anna Müller',
-      type: 'PERSONAL',
-      startDate: '2026-02-20',
-      endDate: '2026-02-20',
-      days: 1,
-      status: 'PENDING',
-      notes: 'Umzug',
-    },
-    {
-      id: 'abs-6',
-      employeeId: 'emp-2',
-      employeeName: 'Beat Keller',
-      type: 'MILITARY',
-      startDate: '2026-06-01',
-      endDate: '2026-06-19',
-      days: 15,
-      status: 'APPROVED',
-      notes: 'WK',
-    },
-  ];
-}
-
-// ============================================================================
 // STORE
 // ============================================================================
 
 export const useWorkdayStore = defineStore('workday', () => {
-  // State
-  const timeEntries = ref<TimeEntry[]>(createMockTimeEntries());
-  const shiftEntries = ref<ShiftEntry[]>(createMockShifts());
-  const absenceRequests = ref<AbsenceRequest[]>(createMockAbsences());
+  // State — initialized empty, populated via API
+  const timeEntries = ref<TimeEntry[]>([]);
+  const shiftEntries = ref<ShiftEntry[]>([]);
+  const absenceRequests = ref<AbsenceRequest[]>([]);
+  const loading = ref(false);
+  const error = ref<string | null>(null);
 
   // Clock state for the current user (emp-1 by default)
   const currentEmployeeId = ref('emp-1');
@@ -365,17 +137,52 @@ export const useWorkdayStore = defineStore('workday', () => {
   // Current week reference
   const currentWeekStart = ref(getMonday(new Date()));
 
-  // Vacation balances
-  const vacationBalances = ref<VacationBalance[]>([
-    { employeeId: 'emp-1', employeeName: 'Anna Müller', totalDays: 25, usedDays: 6, remainingDays: 19 },
-    { employeeId: 'emp-2', employeeName: 'Beat Keller', totalDays: 25, usedDays: 17, remainingDays: 8 },
-    { employeeId: 'emp-3', employeeName: 'Claudia Brunner', totalDays: 25, usedDays: 10, remainingDays: 15 },
-    { employeeId: 'emp-4', employeeName: 'Daniel Schmid', totalDays: 20, usedDays: 3, remainingDays: 17 },
-  ]);
-
   // ----------------------------------------------------------
   // COMPUTED
   // ----------------------------------------------------------
+
+  /** Derive unique employees from all loaded data sources */
+  const EMPLOYEES = computed(() => {
+    const map = new Map<string, string>();
+    for (const e of timeEntries.value) {
+      if (!map.has(e.employeeId)) map.set(e.employeeId, e.employeeName);
+    }
+    for (const s of shiftEntries.value) {
+      if (!map.has(s.employeeId)) map.set(s.employeeId, s.employeeName);
+    }
+    for (const a of absenceRequests.value) {
+      if (!map.has(a.employeeId)) map.set(a.employeeId, a.employeeName);
+    }
+    return Array.from(map.entries()).map(([id, name]) => ({ id, name }));
+  });
+
+  /** Vacation balances computed from absence data (default 25 days/year Swiss standard) */
+  const vacationBalances = computed<VacationBalance[]>(() => {
+    const DEFAULT_VACATION_DAYS = 25;
+    const balanceMap = new Map<string, VacationBalance>();
+
+    for (const emp of EMPLOYEES.value) {
+      balanceMap.set(emp.id, {
+        employeeId: emp.id,
+        employeeName: emp.name,
+        totalDays: DEFAULT_VACATION_DAYS,
+        usedDays: 0,
+        remainingDays: DEFAULT_VACATION_DAYS,
+      });
+    }
+
+    for (const absence of absenceRequests.value) {
+      if (absence.type === 'VACATION' && absence.status !== 'REJECTED') {
+        const bal = balanceMap.get(absence.employeeId);
+        if (bal) {
+          bal.usedDays += absence.days;
+          bal.remainingDays = bal.totalDays - bal.usedDays;
+        }
+      }
+    }
+
+    return Array.from(balanceMap.values());
+  });
 
   const todayStr = computed(() => formatDate(new Date()));
 
@@ -492,7 +299,7 @@ export const useWorkdayStore = defineStore('workday', () => {
       if (v) violations.push(v);
     }
     // Check weekly max for each employee
-    for (const emp of EMPLOYEES) {
+    for (const emp of EMPLOYEES.value) {
       const v = validateWeeklyMax(emp.id);
       if (v) violations.push(v);
     }
@@ -500,7 +307,39 @@ export const useWorkdayStore = defineStore('workday', () => {
   });
 
   // ----------------------------------------------------------
-  // ACTIONS
+  // API FETCH ACTIONS
+  // ----------------------------------------------------------
+
+  async function fetchTimeEntries() {
+    const response = await api.get<{ data: TimeEntry[] }>('/v1/time-entries', { per_page: 100 });
+    timeEntries.value = response.data;
+  }
+
+  async function fetchShifts() {
+    const response = await api.get<{ data: ShiftEntry[] }>('/v1/shifts', { per_page: 100 });
+    shiftEntries.value = response.data;
+  }
+
+  async function fetchAbsences() {
+    const response = await api.get<{ data: AbsenceRequest[] }>('/v1/absences', { per_page: 100 });
+    absenceRequests.value = response.data;
+  }
+
+  async function fetchAll() {
+    loading.value = true;
+    error.value = null;
+    try {
+      await Promise.all([fetchTimeEntries(), fetchShifts(), fetchAbsences()]);
+    } catch (e) {
+      error.value = e instanceof Error ? e.message : 'Failed to load workday data';
+      throw e;
+    } finally {
+      loading.value = false;
+    }
+  }
+
+  // ----------------------------------------------------------
+  // CLOCK ACTIONS (local state management)
   // ----------------------------------------------------------
 
   function clockIn() {
@@ -510,27 +349,27 @@ export const useWorkdayStore = defineStore('workday', () => {
     breakStartTime.value = null;
   }
 
-  function clockOut() {
+  async function clockOut() {
     if (!clockStartTime.value) return;
     const now = new Date();
     const breakMins = Math.round(totalBreakSeconds.value / 60);
     const clockInStr = `${String(clockStartTime.value.getHours()).padStart(2, '0')}:${String(clockStartTime.value.getMinutes()).padStart(2, '0')}`;
     const clockOutStr = `${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}`;
 
-    const newEntry: TimeEntry = {
-      id: `te-new-${Date.now()}`,
+    const payload = {
       employeeId: currentEmployeeId.value,
-      employeeName: EMPLOYEES.find(e => e.id === currentEmployeeId.value)?.name || '',
       date: formatDate(now),
       clockIn: clockInStr,
       clockOut: clockOutStr,
       breakMinutes: breakMins,
-      type: 'REGULAR',
+      type: 'REGULAR' as TimeEntryType,
       notes: '',
-      status: 'OPEN',
+      status: 'OPEN' as TimeEntryStatus,
     };
 
-    timeEntries.value.push(newEntry);
+    const response = await api.post<{ data: TimeEntry }>('/v1/time-entries', payload);
+    timeEntries.value.push(response.data);
+
     clockState.value = 'NOT_STARTED';
     clockStartTime.value = null;
     breakStartTime.value = null;
@@ -551,64 +390,86 @@ export const useWorkdayStore = defineStore('workday', () => {
     clockState.value = 'WORKING';
   }
 
-  function addTimeEntry(entry: Omit<TimeEntry, 'id'>) {
-    timeEntries.value.push({
-      ...entry,
-      id: `te-${Date.now()}-${Math.random().toString(36).slice(2, 7)}`,
-    });
+  // ----------------------------------------------------------
+  // TIME ENTRY CRUD ACTIONS
+  // ----------------------------------------------------------
+
+  async function addTimeEntry(entry: Omit<TimeEntry, 'id'>) {
+    const response = await api.post<{ data: TimeEntry }>('/v1/time-entries', entry);
+    timeEntries.value.push(response.data);
   }
 
-  function updateTimeEntry(id: string, updates: Partial<TimeEntry>) {
+  async function updateTimeEntry(id: string, updates: Partial<TimeEntry>) {
+    const response = await api.put<{ data: TimeEntry }>(`/v1/time-entries/${id}`, updates);
     const idx = timeEntries.value.findIndex(e => e.id === id);
     if (idx >= 0) {
-      timeEntries.value[idx] = { ...timeEntries.value[idx], ...updates };
+      timeEntries.value[idx] = response.data;
     }
   }
 
-  function deleteTimeEntry(id: string) {
+  async function deleteTimeEntry(id: string) {
+    await api.delete(`/v1/time-entries/${id}`);
     timeEntries.value = timeEntries.value.filter(e => e.id !== id);
   }
 
-  function updateShift(id: string, shiftType: ShiftType) {
+  // ----------------------------------------------------------
+  // SHIFT ACTIONS
+  // ----------------------------------------------------------
+
+  async function updateShift(id: string, shiftType: ShiftType) {
+    const shiftDefs: Record<ShiftType, { start: string; end: string }> = {
+      EARLY: { start: '06:00', end: '14:00' },
+      LATE: { start: '14:00', end: '22:00' },
+      NIGHT: { start: '22:00', end: '06:00' },
+      OFF: { start: '', end: '' },
+    };
+    const def = shiftDefs[shiftType];
+    const response = await api.put<{ data: ShiftEntry }>(`/v1/shifts/${id}`, {
+      shiftType,
+      startTime: def.start,
+      endTime: def.end,
+    });
     const idx = shiftEntries.value.findIndex(s => s.id === id);
     if (idx >= 0) {
-      const shiftDefs: Record<ShiftType, { start: string; end: string }> = {
-        EARLY: { start: '06:00', end: '14:00' },
-        LATE: { start: '14:00', end: '22:00' },
-        NIGHT: { start: '22:00', end: '06:00' },
-        OFF: { start: '', end: '' },
-      };
-      const def = shiftDefs[shiftType];
-      shiftEntries.value[idx] = {
-        ...shiftEntries.value[idx],
-        shiftType,
-        startTime: def.start,
-        endTime: def.end,
-      };
+      shiftEntries.value[idx] = response.data;
     }
   }
 
-  function addAbsenceRequest(request: Omit<AbsenceRequest, 'id' | 'status'>) {
-    absenceRequests.value.push({
+  // ----------------------------------------------------------
+  // ABSENCE ACTIONS
+  // ----------------------------------------------------------
+
+  async function addAbsenceRequest(request: Omit<AbsenceRequest, 'id' | 'status'>) {
+    const response = await api.post<{ data: AbsenceRequest }>('/v1/absences', {
       ...request,
-      id: `abs-${Date.now()}-${Math.random().toString(36).slice(2, 7)}`,
       status: 'PENDING',
     });
+    absenceRequests.value.push(response.data);
   }
 
-  function approveAbsence(id: string) {
+  async function approveAbsence(id: string) {
+    const response = await api.patch<{ data: AbsenceRequest }>(`/v1/absences/${id}`, {
+      status: 'APPROVED',
+    });
     const idx = absenceRequests.value.findIndex(a => a.id === id);
     if (idx >= 0) {
-      absenceRequests.value[idx] = { ...absenceRequests.value[idx], status: 'APPROVED' };
+      absenceRequests.value[idx] = response.data;
     }
   }
 
-  function rejectAbsence(id: string) {
+  async function rejectAbsence(id: string) {
+    const response = await api.patch<{ data: AbsenceRequest }>(`/v1/absences/${id}`, {
+      status: 'REJECTED',
+    });
     const idx = absenceRequests.value.findIndex(a => a.id === id);
     if (idx >= 0) {
-      absenceRequests.value[idx] = { ...absenceRequests.value[idx], status: 'REJECTED' };
+      absenceRequests.value[idx] = response.data;
     }
   }
+
+  // ----------------------------------------------------------
+  // NAVIGATION ACTIONS
+  // ----------------------------------------------------------
 
   function navigateWeek(direction: 'prev' | 'next') {
     const d = new Date(currentWeekStart.value);
@@ -632,6 +493,8 @@ export const useWorkdayStore = defineStore('workday', () => {
     totalBreakSeconds,
     currentWeekStart,
     vacationBalances,
+    loading,
+    error,
 
     // Computed
     todayStr,
@@ -645,11 +508,19 @@ export const useWorkdayStore = defineStore('workday', () => {
     dailyHours,
     argViolations,
 
-    // Actions
+    // Actions — API fetches
+    fetchTimeEntries,
+    fetchShifts,
+    fetchAbsences,
+    fetchAll,
+
+    // Actions — Clock
     clockIn,
     clockOut,
     startBreak,
     endBreak,
+
+    // Actions — CRUD
     addTimeEntry,
     updateTimeEntry,
     deleteTimeEntry,
@@ -657,6 +528,8 @@ export const useWorkdayStore = defineStore('workday', () => {
     addAbsenceRequest,
     approveAbsence,
     rejectAbsence,
+
+    // Actions — Navigation
     navigateWeek,
     goToCurrentWeek,
 

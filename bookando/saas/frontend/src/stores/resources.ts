@@ -9,6 +9,7 @@
  */
 import { defineStore } from 'pinia';
 import { ref, computed } from 'vue';
+import api from '@/utils/api';
 
 // ============================================================================
 // TYPES
@@ -84,228 +85,14 @@ export const EQUIPMENT_CATEGORIES = [
 ] as const;
 
 // ============================================================================
-// MOCK DATA
-// ============================================================================
-
-const MOCK_LOCATIONS: Location[] = [
-  {
-    id: 'loc-001',
-    name: 'Hauptstandort Zuerich',
-    address: 'Bahnhofstrasse 42',
-    city: 'Zuerich',
-    zip: '8001',
-    country: 'CH',
-    status: 'OPEN',
-    roomCount: 3,
-    phone: '+41 44 123 45 67',
-    email: 'zuerich@bookando.ch',
-    createdAt: '2023-01-15T10:00:00Z',
-    updatedAt: '2025-11-20T14:30:00Z',
-  },
-  {
-    id: 'loc-002',
-    name: 'Filiale Bern',
-    address: 'Kramgasse 18',
-    city: 'Bern',
-    zip: '3011',
-    country: 'CH',
-    status: 'OPEN',
-    roomCount: 2,
-    phone: '+41 31 234 56 78',
-    email: 'bern@bookando.ch',
-    createdAt: '2023-06-01T08:00:00Z',
-    updatedAt: '2025-10-15T09:00:00Z',
-  },
-  {
-    id: 'loc-003',
-    name: 'Pop-up Basel',
-    address: 'Freie Strasse 7',
-    city: 'Basel',
-    zip: '4001',
-    country: 'CH',
-    status: 'CLOSED',
-    roomCount: 1,
-    phone: '+41 61 345 67 89',
-    createdAt: '2024-03-01T09:00:00Z',
-    updatedAt: '2025-12-01T11:00:00Z',
-  },
-];
-
-const MOCK_ROOMS: Room[] = [
-  {
-    id: 'room-001',
-    locationId: 'loc-001',
-    locationName: 'Hauptstandort Zuerich',
-    name: 'Salon A',
-    capacity: 8,
-    status: 'AVAILABLE',
-    features: ['Spiegel', 'Waschbecken', 'Klimaanlage'],
-    createdAt: '2023-01-20T10:00:00Z',
-    updatedAt: '2025-11-20T14:30:00Z',
-  },
-  {
-    id: 'room-002',
-    locationId: 'loc-001',
-    locationName: 'Hauptstandort Zuerich',
-    name: 'Wellness-Raum',
-    capacity: 3,
-    status: 'IN_USE',
-    features: ['Liege', 'Dimmbar', 'Musikanlage', 'Aromatherapie'],
-    createdAt: '2023-01-20T10:00:00Z',
-    updatedAt: '2025-11-20T14:30:00Z',
-  },
-  {
-    id: 'room-003',
-    locationId: 'loc-001',
-    locationName: 'Hauptstandort Zuerich',
-    name: 'VIP-Bereich',
-    capacity: 2,
-    status: 'AVAILABLE',
-    features: ['Minibar', 'TV', 'Privat', 'Klimaanlage'],
-    createdAt: '2023-03-15T10:00:00Z',
-    updatedAt: '2025-10-01T12:00:00Z',
-  },
-  {
-    id: 'room-004',
-    locationId: 'loc-002',
-    locationName: 'Filiale Bern',
-    name: 'Salon Hauptraum',
-    capacity: 6,
-    status: 'AVAILABLE',
-    features: ['Spiegel', 'Waschbecken'],
-    createdAt: '2023-06-05T08:00:00Z',
-    updatedAt: '2025-09-15T16:00:00Z',
-  },
-  {
-    id: 'room-005',
-    locationId: 'loc-002',
-    locationName: 'Filiale Bern',
-    name: 'Kosmetik-Kabine',
-    capacity: 2,
-    status: 'MAINTENANCE',
-    features: ['Liege', 'Vergroesserungsspiegel', 'LED-Licht'],
-    createdAt: '2023-06-05T08:00:00Z',
-    updatedAt: '2025-12-01T10:00:00Z',
-  },
-  {
-    id: 'room-006',
-    locationId: 'loc-003',
-    locationName: 'Pop-up Basel',
-    name: 'Offener Bereich',
-    capacity: 4,
-    status: 'CLOSED',
-    features: ['Spiegel', 'Waschbecken'],
-    createdAt: '2024-03-05T09:00:00Z',
-    updatedAt: '2025-12-01T11:00:00Z',
-  },
-];
-
-const MOCK_EQUIPMENT: Equipment[] = [
-  {
-    id: 'eq-001',
-    name: 'Haartrockner Dyson Supersonic',
-    category: 'Elektronik',
-    available: 5,
-    total: 6,
-    condition: 'GOOD',
-    locationId: 'loc-001',
-    locationName: 'Hauptstandort Zuerich',
-    createdAt: '2023-02-01T10:00:00Z',
-    updatedAt: '2025-11-01T12:00:00Z',
-  },
-  {
-    id: 'eq-002',
-    name: 'Friseurstuhl Premium',
-    category: 'Moebel',
-    available: 7,
-    total: 8,
-    condition: 'GOOD',
-    locationId: 'loc-001',
-    locationName: 'Hauptstandort Zuerich',
-    createdAt: '2023-01-15T10:00:00Z',
-    updatedAt: '2025-10-20T14:00:00Z',
-  },
-  {
-    id: 'eq-003',
-    name: 'Glätteisen GHD Platinum+',
-    category: 'Elektronik',
-    available: 3,
-    total: 4,
-    condition: 'FAIR',
-    locationId: 'loc-001',
-    locationName: 'Hauptstandort Zuerich',
-    createdAt: '2023-04-10T08:00:00Z',
-    updatedAt: '2025-11-15T09:00:00Z',
-  },
-  {
-    id: 'eq-004',
-    name: 'Massageliege Elektrisch',
-    category: 'Moebel',
-    available: 2,
-    total: 2,
-    condition: 'GOOD',
-    locationId: 'loc-001',
-    locationName: 'Hauptstandort Zuerich',
-    createdAt: '2023-05-20T10:00:00Z',
-    updatedAt: '2025-09-01T16:00:00Z',
-  },
-  {
-    id: 'eq-005',
-    name: 'Sterilisator UV',
-    category: 'Hygiene',
-    available: 2,
-    total: 3,
-    condition: 'FAIR',
-    locationId: 'loc-002',
-    locationName: 'Filiale Bern',
-    createdAt: '2023-07-01T08:00:00Z',
-    updatedAt: '2025-10-15T11:00:00Z',
-  },
-  {
-    id: 'eq-006',
-    name: 'Lockenstab Set',
-    category: 'Elektronik',
-    available: 4,
-    total: 5,
-    condition: 'GOOD',
-    locationId: 'loc-002',
-    locationName: 'Filiale Bern',
-    createdAt: '2023-07-15T08:00:00Z',
-    updatedAt: '2025-11-10T10:00:00Z',
-  },
-  {
-    id: 'eq-007',
-    name: 'Handtuchwaermer',
-    category: 'Elektronik',
-    available: 1,
-    total: 2,
-    condition: 'POOR',
-    locationId: 'loc-001',
-    locationName: 'Hauptstandort Zuerich',
-    createdAt: '2023-03-01T10:00:00Z',
-    updatedAt: '2025-12-01T09:00:00Z',
-  },
-  {
-    id: 'eq-008',
-    name: 'Scherenset Professionell',
-    category: 'Werkzeug',
-    available: 10,
-    total: 12,
-    condition: 'GOOD',
-    createdAt: '2023-01-15T10:00:00Z',
-    updatedAt: '2025-11-20T14:00:00Z',
-  },
-];
-
-// ============================================================================
 // STORE
 // ============================================================================
 
 export const useResourcesStore = defineStore('resources', () => {
   // State
-  const locations = ref<Location[]>([...MOCK_LOCATIONS]);
-  const rooms = ref<Room[]>([...MOCK_ROOMS]);
-  const equipment = ref<Equipment[]>([...MOCK_EQUIPMENT]);
+  const locations = ref<Location[]>([]);
+  const rooms = ref<Room[]>([]);
+  const equipment = ref<Equipment[]>([]);
   const loading = ref(false);
   const error = ref<string | null>(null);
   const filters = ref<ResourceFilters>({
@@ -313,6 +100,55 @@ export const useResourcesStore = defineStore('resources', () => {
     locationId: '',
     status: '',
   });
+
+  // ========================================================================
+  // FETCH ACTIONS
+  // ========================================================================
+
+  async function fetchLocations(): Promise<void> {
+    try {
+      const response = await api.get<{ data: Location[] }>('/v1/locations', { per_page: 100 });
+      locations.value = response.data;
+    } catch (err: unknown) {
+      const message = err instanceof Error ? err.message : 'Standorte konnten nicht geladen werden';
+      error.value = message;
+      throw err;
+    }
+  }
+
+  async function fetchRooms(): Promise<void> {
+    try {
+      const response = await api.get<{ data: Room[] }>('/v1/rooms', { per_page: 100 });
+      rooms.value = response.data;
+    } catch (err: unknown) {
+      const message = err instanceof Error ? err.message : 'Raeume konnten nicht geladen werden';
+      error.value = message;
+      throw err;
+    }
+  }
+
+  async function fetchEquipment(): Promise<void> {
+    try {
+      const response = await api.get<{ data: Equipment[] }>('/v1/equipment', { per_page: 100 });
+      equipment.value = response.data;
+    } catch (err: unknown) {
+      const message = err instanceof Error ? err.message : 'Equipment konnte nicht geladen werden';
+      error.value = message;
+      throw err;
+    }
+  }
+
+  async function fetchAll(): Promise<void> {
+    loading.value = true;
+    error.value = null;
+    try {
+      await Promise.all([fetchLocations(), fetchRooms(), fetchEquipment()]);
+    } catch {
+      // Individual fetch functions already set error.value
+    } finally {
+      loading.value = false;
+    }
+  }
 
   // ========================================================================
   // LOCATION GETTERS & ACTIONS
@@ -344,39 +180,47 @@ export const useResourcesStore = defineStore('resources', () => {
     return locations.value.find(l => l.id === id);
   }
 
-  function createLocation(data: LocationFormData): Location {
-    const now = new Date().toISOString();
-    const newLocation: Location = {
-      ...data,
-      id: `loc-${String(locations.value.length + 1).padStart(3, '0')}`,
-      roomCount: 0,
-      createdAt: now,
-      updatedAt: now,
-    };
-    locations.value.push(newLocation);
-    return newLocation;
+  async function createLocation(data: LocationFormData): Promise<Location> {
+    try {
+      const response = await api.post<{ data: Location }>('/v1/locations', data);
+      locations.value.push(response.data);
+      return response.data;
+    } catch (err: unknown) {
+      const message = err instanceof Error ? err.message : 'Standort konnte nicht erstellt werden';
+      error.value = message;
+      throw err;
+    }
   }
 
-  function updateLocation(id: string, data: Partial<LocationFormData>): Location | null {
-    const index = locations.value.findIndex(l => l.id === id);
-    if (index === -1) return null;
-
-    const updated: Location = {
-      ...locations.value[index],
-      ...data,
-      updatedAt: new Date().toISOString(),
-    };
-    locations.value[index] = updated;
-    return updated;
+  async function updateLocation(id: string, data: Partial<LocationFormData>): Promise<Location | null> {
+    try {
+      const response = await api.put<{ data: Location }>(`/v1/locations/${id}`, data);
+      const index = locations.value.findIndex(l => l.id === id);
+      if (index !== -1) {
+        locations.value[index] = response.data;
+      }
+      return response.data;
+    } catch (err: unknown) {
+      const message = err instanceof Error ? err.message : 'Standort konnte nicht aktualisiert werden';
+      error.value = message;
+      throw err;
+    }
   }
 
-  function deleteLocation(id: string): boolean {
-    const index = locations.value.findIndex(l => l.id === id);
-    if (index === -1) return false;
-    locations.value.splice(index, 1);
-    // Also remove associated rooms
-    rooms.value = rooms.value.filter(r => r.locationId !== id);
-    return true;
+  async function deleteLocation(id: string): Promise<boolean> {
+    try {
+      await api.delete(`/v1/locations/${id}`);
+      const index = locations.value.findIndex(l => l.id === id);
+      if (index === -1) return false;
+      locations.value.splice(index, 1);
+      // Also remove associated rooms from local state
+      rooms.value = rooms.value.filter(r => r.locationId !== id);
+      return true;
+    } catch (err: unknown) {
+      const message = err instanceof Error ? err.message : 'Standort konnte nicht geloescht werden';
+      error.value = message;
+      throw err;
+    }
   }
 
   // ========================================================================
@@ -412,43 +256,54 @@ export const useResourcesStore = defineStore('resources', () => {
     return rooms.value.find(r => r.id === id);
   }
 
-  function createRoom(data: RoomFormData): Room {
-    const now = new Date().toISOString();
-    const newRoom: Room = {
-      ...data,
-      id: `room-${String(rooms.value.length + 1).padStart(3, '0')}`,
-      createdAt: now,
-      updatedAt: now,
-    };
-    rooms.value.push(newRoom);
-    // Update room count on location
-    const loc = locations.value.find(l => l.id === data.locationId);
-    if (loc) loc.roomCount++;
-    return newRoom;
+  async function createRoom(data: RoomFormData): Promise<Room> {
+    try {
+      const response = await api.post<{ data: Room }>('/v1/rooms', data);
+      rooms.value.push(response.data);
+      // Update room count on location
+      const loc = locations.value.find(l => l.id === data.locationId);
+      if (loc) loc.roomCount++;
+      return response.data;
+    } catch (err: unknown) {
+      const message = err instanceof Error ? err.message : 'Raum konnte nicht erstellt werden';
+      error.value = message;
+      throw err;
+    }
   }
 
-  function updateRoom(id: string, data: Partial<RoomFormData>): Room | null {
-    const index = rooms.value.findIndex(r => r.id === id);
-    if (index === -1) return null;
-
-    const updated: Room = {
-      ...rooms.value[index],
-      ...data,
-      updatedAt: new Date().toISOString(),
-    };
-    rooms.value[index] = updated;
-    return updated;
+  async function updateRoom(id: string, data: Partial<RoomFormData>): Promise<Room | null> {
+    try {
+      const response = await api.put<{ data: Room }>(`/v1/rooms/${id}`, data);
+      const index = rooms.value.findIndex(r => r.id === id);
+      if (index !== -1) {
+        rooms.value[index] = response.data;
+      }
+      return response.data;
+    } catch (err: unknown) {
+      const message = err instanceof Error ? err.message : 'Raum konnte nicht aktualisiert werden';
+      error.value = message;
+      throw err;
+    }
   }
 
-  function deleteRoom(id: string): boolean {
-    const room = rooms.value.find(r => r.id === id);
-    if (!room) return false;
-    const index = rooms.value.indexOf(room);
-    rooms.value.splice(index, 1);
-    // Update room count on location
-    const loc = locations.value.find(l => l.id === room.locationId);
-    if (loc && loc.roomCount > 0) loc.roomCount--;
-    return true;
+  async function deleteRoom(id: string): Promise<boolean> {
+    try {
+      const room = rooms.value.find(r => r.id === id);
+      await api.delete(`/v1/rooms/${id}`);
+      const index = rooms.value.findIndex(r => r.id === id);
+      if (index === -1) return false;
+      rooms.value.splice(index, 1);
+      // Update room count on location
+      if (room) {
+        const loc = locations.value.find(l => l.id === room.locationId);
+        if (loc && loc.roomCount > 0) loc.roomCount--;
+      }
+      return true;
+    } catch (err: unknown) {
+      const message = err instanceof Error ? err.message : 'Raum konnte nicht geloescht werden';
+      error.value = message;
+      throw err;
+    }
   }
 
   // ========================================================================
@@ -482,36 +337,45 @@ export const useResourcesStore = defineStore('resources', () => {
     return equipment.value.find(eq => eq.id === id);
   }
 
-  function createEquipment(data: EquipmentFormData): Equipment {
-    const now = new Date().toISOString();
-    const newEquipment: Equipment = {
-      ...data,
-      id: `eq-${String(equipment.value.length + 1).padStart(3, '0')}`,
-      createdAt: now,
-      updatedAt: now,
-    };
-    equipment.value.push(newEquipment);
-    return newEquipment;
+  async function createEquipment(data: EquipmentFormData): Promise<Equipment> {
+    try {
+      const response = await api.post<{ data: Equipment }>('/v1/equipment', data);
+      equipment.value.push(response.data);
+      return response.data;
+    } catch (err: unknown) {
+      const message = err instanceof Error ? err.message : 'Equipment konnte nicht erstellt werden';
+      error.value = message;
+      throw err;
+    }
   }
 
-  function updateEquipment(id: string, data: Partial<EquipmentFormData>): Equipment | null {
-    const index = equipment.value.findIndex(eq => eq.id === id);
-    if (index === -1) return null;
-
-    const updated: Equipment = {
-      ...equipment.value[index],
-      ...data,
-      updatedAt: new Date().toISOString(),
-    };
-    equipment.value[index] = updated;
-    return updated;
+  async function updateEquipment(id: string, data: Partial<EquipmentFormData>): Promise<Equipment | null> {
+    try {
+      const response = await api.put<{ data: Equipment }>(`/v1/equipment/${id}`, data);
+      const index = equipment.value.findIndex(eq => eq.id === id);
+      if (index !== -1) {
+        equipment.value[index] = response.data;
+      }
+      return response.data;
+    } catch (err: unknown) {
+      const message = err instanceof Error ? err.message : 'Equipment konnte nicht aktualisiert werden';
+      error.value = message;
+      throw err;
+    }
   }
 
-  function deleteEquipment(id: string): boolean {
-    const index = equipment.value.findIndex(eq => eq.id === id);
-    if (index === -1) return false;
-    equipment.value.splice(index, 1);
-    return true;
+  async function deleteEquipment(id: string): Promise<boolean> {
+    try {
+      await api.delete(`/v1/equipment/${id}`);
+      const index = equipment.value.findIndex(eq => eq.id === id);
+      if (index === -1) return false;
+      equipment.value.splice(index, 1);
+      return true;
+    } catch (err: unknown) {
+      const message = err instanceof Error ? err.message : 'Equipment konnte nicht geloescht werden';
+      error.value = message;
+      throw err;
+    }
   }
 
   // ========================================================================
@@ -539,6 +403,12 @@ export const useResourcesStore = defineStore('resources', () => {
     loading,
     error,
     filters,
+
+    // Fetch actions
+    fetchLocations,
+    fetchRooms,
+    fetchEquipment,
+    fetchAll,
 
     // Location getters & actions
     filteredLocations,

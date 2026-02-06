@@ -32,8 +32,8 @@ const search = computed({
   set: (val: string) => store.setFilters({ search: val }),
 });
 
-function handleDelete(location: Location) {
-  if (store.deleteLocation(location.id)) {
+async function handleDelete(location: Location) {
+  if (await store.deleteLocation(location.id)) {
     toast.success(t('common.deletedSuccessfully'));
   }
 }

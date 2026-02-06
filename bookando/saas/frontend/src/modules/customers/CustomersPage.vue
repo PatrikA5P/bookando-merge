@@ -31,7 +31,27 @@ import { useBreakpoint } from '@/composables/useBreakpoint';
 import { useToast } from '@/composables/useToast';
 import { useAppStore } from '@/stores/app';
 import { BUTTON_STYLES, INPUT_STYLES, BADGE_STYLES, GRID_STYLES } from '@/design';
-import type { Customer, CustomerStatus } from '@bookando/shared/api-types';
+export type CustomerStatus = 'ACTIVE' | 'BLOCKED' | 'DELETED';
+
+export interface Customer {
+  id: string;
+  tenantId: number;
+  firstName: string;
+  lastName: string;
+  email: string;
+  phone: string;
+  status: CustomerStatus;
+  gender?: string;
+  birthday?: string;
+  street?: string;
+  zip?: string;
+  city?: string;
+  country?: string;
+  notes?: string;
+  tags?: string[];
+  createdAt: string;
+  updatedAt: string;
+}
 
 const router = useRouter();
 const toast = useToast();

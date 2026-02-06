@@ -42,7 +42,7 @@ const locationForm = ref({
   country: 'CH',
   phone: '',
   email: '',
-  status: 'OPEN' as const,
+  status: 'OPEN' as string,
 });
 
 const roomForm = ref({
@@ -50,7 +50,7 @@ const roomForm = ref({
   locationId: '',
   locationName: '',
   capacity: 4,
-  status: 'AVAILABLE' as const,
+  status: 'AVAILABLE' as string,
   features: [] as string[],
 });
 
@@ -59,7 +59,7 @@ const equipmentForm = ref({
   category: '',
   total: 1,
   available: 1,
-  condition: 'GOOD' as const,
+  condition: 'GOOD' as string,
   locationId: '',
   locationName: '',
 });
