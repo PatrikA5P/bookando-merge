@@ -65,14 +65,18 @@ Software Foundation/
 │   │   │   ├── Currency/               # ExchangeRate
 │   │   │   ├── RateLimit/              # RateLimit
 │   │   │   ├── Webhook/                # WebhookSubscription, WebhookDelivery
-│   │   │   └── Storage/                # FileValidationResult, MalwareScanResult
-│   │   ├── Ports/                       # Infrastructure interfaces (33 ports)
+│   │   │   ├── Storage/                # FileValidationResult, MalwareScanResult
+│   │   │   ├── Dossier/                # Dossier, DossierEntry, AccessLog (GeBüV)
+│   │   │   ├── TimeTracking/           # TimeEntry, WorkTimeValidation (ArG)
+│   │   │   ├── Consent/                # Consent, ConsentPurpose (DSG/DSGVO)
+│   │   │   └── Payroll/                # SalaryDeclaration, SwissdecDomain, WageType
+│   │   ├── Ports/                       # Infrastructure interfaces (37 ports)
 │   │   ├── Application/                 # SecurityContext, Guards, Command/Query
 │   │   └── Contracts/                   # Module contracts + cross-cutting interfaces
 │   └── tests/
-│       ├── Domain/                      # Value Object unit tests (21 domains)
+│       ├── Domain/                      # Value Object unit tests (25 domains)
 │       ├── Application/                 # Guard and SecurityContext tests
-│       └── TestAdapters/                # 11 in-memory/fake adapters
+│       └── TestAdapters/                # 15 in-memory/fake adapters
 ├── docs/                                # Analysis and evaluation documents
 └── ARCHITECTURE.md                      # This file
 ```
@@ -108,6 +112,12 @@ Pure business logic. No dependencies on infrastructure. Contains:
 - **RateLimit/**: RateLimit (per-minute/per-hour sliding windows)
 - **Webhook/**: WebhookSubscription (HTTPS-only), WebhookDelivery (with retry logic)
 - **Storage/**: FileValidationResult, MalwareScanResult
+
+**Phase 4 — Dossier, Zeiterfassung, Consent, Payroll:**
+- **Dossier/**: DossierType (9 types with CH retention periods), Dossier (revisionssicher), DossierEntry (SHA-256 integrity), DossierAccessLog/Action (GeBüV audit trail), DossierStatus
+- **TimeTracking/**: TimeEntry (ArG Art. 46 compliant), TimeEntryType, WorkTimeValidation (ArG break/overtime rules)
+- **Consent/**: Consent (DSG Art. 6 / DSGVO Art. 7), ConsentPurpose (photo storage, biometric, marketing, cross-border)
+- **Payroll/**: SwissdecDomain (7 ELM domains), SocialInsuranceType (AHV/IV/EO/ALV/BVG/UVG/KTG/FAK), WageType (Swissdec XML mapping), SalaryDeclaration, SalaryDeclarationStatus
 
 ### Ports Layer (`src/Ports/`)
 33 interface definitions that the kernel depends on. Adapters are provided per host:
@@ -146,6 +156,10 @@ Pure business logic. No dependencies on infrastructure. Contains:
 | `WebhookDispatcherPort` | Outbound webhook dispatch + subscription mgmt | — |
 | `RateLimiterPort` | Rate limiting (check/attempt/reset) | — |
 | `FileValidationPort` | File type validation + malware scanning | ISO 27001 |
+| `DossierPort` | Revisionssichere dossier management + access logging | GeBüV Art. 4/7/8 |
+| `TimeTrackingPort` | ArG-compliant time tracking + validation | ArG Art. 46 |
+| `ConsentPort` | DSG/DSGVO consent lifecycle management | DSG Art. 6, DSGVO Art. 7 |
+| `SwissdecTransmitterPort` | Swissdec ELM payroll data transmission | Swissdec ELM 5.0+ |
 
 ### Application Layer (`src/Application/`)
 Orchestration and cross-cutting concerns:
@@ -162,6 +176,7 @@ Interfaces that modules must implement to plug into the platform:
 - **TaxRule**: Country-specific tax rule implementations
 - **AuditReportContract**: Module-level integrity checks and audit data export
 - **Notifiable**: Entities that can trigger notifications
+- **SwissdecCertifiable**: Modules participating in Swissdec ELM certification
 
 ## Key Decisions (ADR Summary)
 
@@ -217,6 +232,22 @@ Interfaces that modules must implement to plug into the platform:
 **Context**: Legal documents require varying levels of digital signatures.
 **Decision**: `DigitalSignaturePort` supports SES (simple), AES (advanced), and QES (qualified) signature levels per eIDAS/ZertES. `SignatureLevel::isLegallyBinding()` distinguishes non-binding from legally binding signatures.
 
+### ADR-014: Revisionssichere Dossier-Verwaltung (GeBüV)
+**Context**: Swiss GeBüV requires that business documents are stored completely, immutably, and with full access logging.
+**Decision**: `Dossier` enforces encryption for personal data, `DossierEntry` uses SHA-256 content hashes for integrity verification, and `DossierAccessLog` records every VIEW, DOWNLOAD, UPLOAD, DELETE, EXPORT, and PRINT action.
+
+### ADR-015: ArG-Compliant Time Tracking
+**Context**: Swiss ArG Art. 46 / ArGV 1 Art. 73 requires recording of work hours, breaks, and overtime with 5-year retention.
+**Decision**: `TimeEntry` captures start/end/breaks per ArG. `WorkTimeValidation` enforces Swiss break rules (15min >5.5h, 30min >7h, 60min >9h) and overtime limits (max 2h/day).
+
+### ADR-016: Consent Management (DSG/DSGVO)
+**Context**: Storing employee photos, biometric data, or transferring data cross-border requires explicit consent under DSG Art. 6 / DSGVO Art. 7.
+**Decision**: `Consent` records grant/revoke decisions with timestamps, IP, and expiry. `ConsentPurpose` distinguishes sensitive from non-sensitive purposes. `ConsentPort` provides lifecycle management including bulk revocation.
+
+### ADR-017: Swissdec ELM Integration
+**Context**: Swiss payroll software must transmit salary declarations via Swissdec ELM to AHV, BVG, UVG, KTG, tax authorities, and BFS. Certification by Swissdec association is required.
+**Decision**: The kernel provides domain primitives (`SwissdecDomain`, `SocialInsuranceType`, `WageType`, `SalaryDeclaration`) and a `SwissdecTransmitterPort`. The actual certified implementation is an adapter, potentially using SwissDecTX or equivalent certified transmitter component. `SwissdecCertifiable` contract enables modules to participate in certification.
+
 ## Compliance Matrix
 
 | Regulation | Kernel Component |
@@ -232,11 +263,13 @@ Interfaces that modules must implement to plug into the platform:
 | ISO 27001 | FileValidationPort (malware scanning), EncryptedField, KeyManagement |
 | Swiss GAAP FER | HashChain (audit trail), ArchivalPort |
 | PDF/A | DocumentGeneratorPort::generatePdfA() |
+| ArG Art. 46 | TimeTrackingPort (5Y retention), WorkTimeValidation |
+| Swissdec ELM 5.0+ | SwissdecTransmitterPort, SalaryDeclaration, WageType |
 
 ## Testing Strategy
 
-- **Domain tests**: Pure unit tests with no infrastructure dependencies (36 test classes)
-- **Application tests**: Use `TestAdapters/` (11 in-memory/fake adapters)
+- **Domain tests**: Pure unit tests with no infrastructure dependencies (46 test classes)
+- **Application tests**: Use `TestAdapters/` (15 in-memory/fake adapters)
 - **No mocking frameworks**: Fakes and in-memory implementations ensure tests verify real behavior
 - **Test pyramid**: Heavily weighted towards fast domain/unit tests
 
@@ -254,6 +287,10 @@ Interfaces that modules must implement to plug into the platform:
 | `InMemoryTranslation` | `TranslationPort` |
 | `InMemoryNotification` | `NotificationPort` |
 | `FakeAiGateway` | `AiGatewayPort` |
+| `InMemoryDossier` | `DossierPort` |
+| `InMemoryTimeTracking` | `TimeTrackingPort` |
+| `InMemoryConsent` | `ConsentPort` |
+| `FakeSwissdecTransmitter` | `SwissdecTransmitterPort` |
 
 ## Next Steps
 
