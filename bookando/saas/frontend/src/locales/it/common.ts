@@ -23,6 +23,7 @@ export default {
   undo: 'Annullare',
   retry: 'Riprovare',
   refresh: 'Aggiornare',
+  copy: 'Copiare',
   download: 'Scaricare',
   upload: 'Caricare',
   duplicate: 'Duplicare',
