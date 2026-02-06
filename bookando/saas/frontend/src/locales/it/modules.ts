@@ -2,6 +2,18 @@
  * Traduzioni in italiano — Termini specifici dei moduli
  */
 export default {
+  auth: {
+    welcome: 'Benvenuto su Bookando',
+    subtitle: 'Acceda per continuare',
+    email: 'Indirizzo e-mail',
+    password: 'Password',
+    forgotPassword: 'Password dimenticata?',
+    login: 'Accedere',
+    loggingIn: 'Accesso in corso...',
+    errorRequired: 'Inserisca e-mail e password.',
+    errorFailed: 'Accesso non riuscito. Riprovi.',
+    allRights: 'Tutti i diritti riservati.',
+  },
   dashboard: {
     title: 'Pannello di controllo',
     subtitle: 'Panoramica',
@@ -27,6 +39,7 @@ export default {
   },
   appointments: {
     title: 'Appuntamenti',
+    subtitle: 'Prenotazioni e gestione degli appuntamenti',
     calendar: 'Calendario',
     list: 'Elenco',
     newAppointment: 'Nuovo appuntamento',
@@ -92,11 +105,16 @@ export default {
   },
   employees: {
     title: 'Collaboratori',
+    subtitle: '{count} Collaboratori',
+    fabLabel: 'Nuovo collaboratore',
+    action: { new: 'Nuovo collaboratore' },
+    emptyTitle: 'Nessun collaboratore trovato',
+    emptyDescription: 'Modifichi la ricerca o crei un nuovo collaboratore.',
     newEmployee: 'Nuovo collaboratore',
     position: 'Posizione',
     department: 'Reparto',
     searchPlaceholder: 'Cercare collaboratori...',
-    status: { active: 'Attivo', inactive: 'Inattivo', vacation: 'In vacanza', sickLeave: 'In malattia', terminated: 'Uscito' },
+    status: { active: 'Attivo', inactive: 'Inattivo', vacation: 'In vacanza', sickLeave: 'In malattia', pause: 'Pausa', terminated: 'Uscito' },
     profile: 'Profilo',
     addressTab: 'Indirizzo',
     hrData: 'Dati HR',

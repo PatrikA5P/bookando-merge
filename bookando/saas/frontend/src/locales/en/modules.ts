@@ -2,6 +2,18 @@
  * English translations — Module-specific terms
  */
 export default {
+  auth: {
+    welcome: 'Welcome to Bookando',
+    subtitle: 'Sign in to continue',
+    email: 'Email address',
+    password: 'Password',
+    forgotPassword: 'Forgot password?',
+    login: 'Sign in',
+    loggingIn: 'Signing in...',
+    errorRequired: 'Please enter email and password.',
+    errorFailed: 'Login failed. Please try again.',
+    allRights: 'All rights reserved.',
+  },
   dashboard: {
     title: 'Dashboard',
     subtitle: 'Overview',
@@ -27,6 +39,7 @@ export default {
   },
   appointments: {
     title: 'Appointments',
+    subtitle: 'Bookings and appointment management',
     calendar: 'Calendar',
     list: 'List',
     newAppointment: 'New appointment',
@@ -92,11 +105,16 @@ export default {
   },
   employees: {
     title: 'Employees',
+    subtitle: '{count} Employees',
+    fabLabel: 'New employee',
+    action: { new: 'New employee' },
+    emptyTitle: 'No employees found',
+    emptyDescription: 'Adjust your search or create a new employee.',
     newEmployee: 'New employee',
     position: 'Position',
     department: 'Department',
     searchPlaceholder: 'Search employees...',
-    status: { active: 'Active', inactive: 'Inactive', vacation: 'On leave', sickLeave: 'Sick leave', terminated: 'Terminated' },
+    status: { active: 'Active', inactive: 'Inactive', vacation: 'On leave', sickLeave: 'Sick leave', pause: 'Break', terminated: 'Terminated' },
     profile: 'Profile',
     addressTab: 'Address',
     hrData: 'HR data',

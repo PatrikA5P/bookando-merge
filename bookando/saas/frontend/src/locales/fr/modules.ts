@@ -2,6 +2,18 @@
  * Traductions en français — Termes spécifiques aux modules
  */
 export default {
+  auth: {
+    welcome: 'Bienvenue sur Bookando',
+    subtitle: 'Connectez-vous pour continuer',
+    email: 'Adresse e-mail',
+    password: 'Mot de passe',
+    forgotPassword: 'Mot de passe oublié ?',
+    login: 'Se connecter',
+    loggingIn: 'Connexion en cours...',
+    errorRequired: 'Veuillez saisir l\u2019e-mail et le mot de passe.',
+    errorFailed: 'Échec de la connexion. Veuillez réessayer.',
+    allRights: 'Tous droits réservés.',
+  },
   dashboard: {
     title: 'Tableau de bord',
     subtitle: 'Vue d\u2019ensemble',
@@ -27,6 +39,7 @@ export default {
   },
   appointments: {
     title: 'Rendez-vous',
+    subtitle: 'Réservations et gestion des rendez-vous',
     calendar: 'Calendrier',
     list: 'Liste',
     newAppointment: 'Nouveau rendez-vous',
@@ -92,11 +105,16 @@ export default {
   },
   employees: {
     title: 'Collaborateurs',
+    subtitle: '{count} Collaborateurs',
+    fabLabel: 'Nouveau collaborateur',
+    action: { new: 'Nouveau collaborateur' },
+    emptyTitle: 'Aucun collaborateur trouvé',
+    emptyDescription: 'Ajustez votre recherche ou créez un nouveau collaborateur.',
     newEmployee: 'Nouveau collaborateur',
     position: 'Poste',
     department: 'Département',
     searchPlaceholder: 'Rechercher des collaborateurs...',
-    status: { active: 'Actif', inactive: 'Inactif', vacation: 'En vacances', sickLeave: 'En arrêt maladie', terminated: 'Sorti' },
+    status: { active: 'Actif', inactive: 'Inactif', vacation: 'En vacances', sickLeave: 'En arrêt maladie', pause: 'Pause', terminated: 'Sorti' },
     profile: 'Profil',
     addressTab: 'Adresse',
     hrData: 'Données RH',
