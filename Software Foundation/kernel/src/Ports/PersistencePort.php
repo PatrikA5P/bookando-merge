@@ -111,6 +111,37 @@ interface PersistencePort
     public function transactional(callable $fn): mixed;
 
     /**
+     * Insert multiple rows in a single batch operation.
+     *
+     * Implementations SHOULD use a single INSERT statement with multiple value
+     * tuples for performance. Falls back to sequential inserts if not supported.
+     *
+     * @param string                        $table Logical table name (without prefix).
+     * @param array<int, array<string, mixed>> $rows  List of column => value pairs.
+     *
+     * @return int Number of inserted rows.
+     */
+    public function insertBatch(string $table, array $rows): int;
+
+    /**
+     * Execute a paginated query.
+     *
+     * @param string $sql      Parameterised SQL statement (without LIMIT/OFFSET).
+     * @param array  $params   Positional or named bind values.
+     * @param int    $page     Page number (1-based).
+     * @param int    $pageSize Number of rows per page.
+     *
+     * @return array{
+     *     data: array<int, array<string, mixed>>,
+     *     total: int,
+     *     page: int,
+     *     page_size: int,
+     *     total_pages: int
+     * }
+     */
+    public function queryPaginated(string $sql, array $params, int $page, int $pageSize): array;
+
+    /**
      * Resolve the fully-qualified (prefixed) table name for the current host.
      *
      * @param string $base The logical/base table name (e.g. "bookings").

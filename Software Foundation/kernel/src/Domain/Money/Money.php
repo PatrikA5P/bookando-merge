@@ -232,6 +232,33 @@ final class Money
         );
     }
 
+    // --- Currency Conversion ---
+
+    /**
+     * Convert this money to another currency using an exchange rate.
+     *
+     * @param Currency $targetCurrency The target currency.
+     * @param float    $rate           Exchange rate (e.g., 1.08 for EUR→CHF).
+     *
+     * @return self New Money instance in the target currency.
+     */
+    public function convertTo(Currency $targetCurrency, float $rate): self
+    {
+        if ($rate <= 0) {
+            throw new \InvalidArgumentException('Exchange rate must be positive');
+        }
+
+        $fromDecimals = $this->currency->decimalPlaces();
+        $toDecimals = $targetCurrency->decimalPlaces();
+
+        // Normalize to a common base, apply rate, then scale to target decimals
+        $decimalDiff = $toDecimals - $fromDecimals;
+        $scaleFactor = $rate * (10 ** $decimalDiff);
+        $converted = (int) round($this->amount * $scaleFactor, 0, PHP_ROUND_HALF_UP);
+
+        return new self($converted, $targetCurrency);
+    }
+
     // --- Guards ---
 
     private function assertSameCurrency(self $other): void

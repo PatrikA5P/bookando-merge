@@ -23,6 +23,8 @@ final class SecurityContext
         public readonly string $authMethod,  // 'jwt', 'api_key', 'session', 'system'
         public readonly ?string $ip = null,
         public readonly ?string $correlationId = null,
+        public readonly string $locale = 'de-CH',
+        public readonly string $hostingMode = 'saas',  // 'saas', 'self_hosted', 'hybrid'
     ) {}
 
     public function hasPermission(string $permission): bool
@@ -70,6 +72,8 @@ final class SecurityContext
             license: $license,
             authMethod: 'system',
             correlationId: $correlationId,
+            locale: 'en',
+            hostingMode: 'saas',
         );
     }
 }

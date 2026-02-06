@@ -13,14 +13,16 @@ namespace SoftwareFoundation\Kernel\Domain\Licensing;
 final class Plan
 {
     /**
-     * @param string   $id           Unique plan identifier (e.g., 'starter', 'professional', 'enterprise')
-     * @param string   $name         Display name
-     * @param string[] $modules      Module slugs included (e.g., ['booking', 'customers', 'finance'])
-     * @param string[] $features     Feature flags included (e.g., ['export_csv', 'api_write', 'white_label'])
-     * @param array<string, int> $quotas  Usage limits: key → max (-1 = unlimited)
-     * @param string[] $integrations Integration slugs allowed
-     * @param int      $maxSeats     Maximum user seats (-1 = unlimited)
-     * @param int      $sortOrder    Display order (lower = cheaper)
+     * @param string   $id              Unique plan identifier (e.g., 'starter', 'professional', 'enterprise')
+     * @param string   $name            Display name
+     * @param string[] $modules         Module slugs included (e.g., ['booking', 'customers', 'finance'])
+     * @param string[] $features        Feature flags included (e.g., ['export_csv', 'api_write', 'white_label'])
+     * @param array<string, int> $quotas Usage limits: key → max (-1 = unlimited)
+     * @param string[] $integrations    Integration slugs allowed
+     * @param int      $maxSeats        Maximum user seats (-1 = unlimited)
+     * @param int      $sortOrder       Display order (lower = cheaper)
+     * @param int      $aiCallsPerMonth AI API calls per month (-1 = unlimited, 0 = none)
+     * @param int      $storageGb       Storage in GB (-1 = unlimited)
      */
     public function __construct(
         public readonly string $id,
@@ -31,6 +33,8 @@ final class Plan
         public readonly array $integrations,
         public readonly int $maxSeats = -1,
         public readonly int $sortOrder = 0,
+        public readonly int $aiCallsPerMonth = 0,
+        public readonly int $storageGb = 1,
     ) {}
 
     public function includesModule(string $moduleSlug): bool
@@ -64,5 +68,20 @@ final class Plan
     public function isUnlimitedSeats(): bool
     {
         return $this->maxSeats === -1;
+    }
+
+    public function hasAiAccess(): bool
+    {
+        return $this->aiCallsPerMonth !== 0;
+    }
+
+    public function isUnlimitedAi(): bool
+    {
+        return $this->aiCallsPerMonth === -1;
+    }
+
+    public function isUnlimitedStorage(): bool
+    {
+        return $this->storageGb === -1;
     }
 }
