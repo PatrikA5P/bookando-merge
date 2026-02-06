@@ -15,7 +15,7 @@
  * Mobile: Farbiger sticky Header + horizontale Tab-Pills + FAB
  */
 import { ref, computed, onMounted, onUnmounted } from 'vue';
-import { getModuleDesign } from '@/design';
+import { useDesignStore } from '@/stores/design';
 
 export interface Tab {
   id: string;
@@ -50,7 +50,8 @@ const emit = defineEmits<{
   (e: 'toggle-filter'): void;
 }>();
 
-const design = computed(() => getModuleDesign(props.moduleName));
+const designStore = useDesignStore();
+const design = computed(() => designStore.getModuleDesign(props.moduleName));
 const hasTabs = computed(() => props.tabs && props.tabs.length > 0);
 
 const searchQuery = ref('');
