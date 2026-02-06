@@ -226,7 +226,7 @@ export const MODULE_DESIGNS: Record<string, ModuleDesignConfig> = {
     iconBg: 'bg-slate-200',
     iconText: 'text-slate-700',
   },
-  'design-system': {
+  designsystem: {
     gradient: 'from-fuchsia-700 to-purple-900',
     accentColor: 'fuchsia-600',
     activeBg: 'bg-fuchsia-50',
@@ -236,7 +236,7 @@ export const MODULE_DESIGNS: Record<string, ModuleDesignConfig> = {
     iconBg: 'bg-fuchsia-100',
     iconText: 'text-fuchsia-600',
   },
-  'design-frontend': {
+  designfrontend: {
     gradient: 'from-violet-700 to-purple-900',
     accentColor: 'violet-600',
     activeBg: 'bg-violet-50',
