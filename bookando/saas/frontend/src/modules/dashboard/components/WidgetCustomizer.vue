@@ -3,6 +3,9 @@
  * WidgetCustomizer — Dashboard-Anpassung
  */
 import { CARD_STYLES, BUTTON_STYLES } from '@/design';
+import { useI18n } from '@/composables/useI18n';
+
+const { t } = useI18n();
 
 defineProps<{
   allWidgets: { id: string; title: string; size: string }[];
@@ -19,7 +22,7 @@ const emit = defineEmits<{
   <div :class="[CARD_STYLES.base, 'animate-slide-down']">
     <div :class="CARD_STYLES.headerCompact">
       <div class="flex items-center justify-between">
-        <h3 class="text-base font-semibold text-slate-900">Widgets anpassen</h3>
+        <h3 class="text-base font-semibold text-slate-900">{{ t('dashboard.widgets') }}</h3>
         <button
           class="p-1 rounded-lg hover:bg-slate-100 text-slate-400"
           @click="emit('close')"

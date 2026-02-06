@@ -3,76 +3,93 @@
  * Mitarbeiter-Modul — Mitarbeiterverwaltung
  *
  * Kartenbasierte Übersicht aller Mitarbeiter.
- * TODO: Vue Query für Server-State, Bulk-Operationen,
- *       Kalender-Integration, Abwesenheitsverwaltung
+ * Integriert den Pinia Employees Store und das EmployeeModal.
+ * Card-Layout wird beibehalten (explizite Anforderung).
  */
 import { ref, computed } from 'vue';
+import { useRouter } from 'vue-router';
+import { useI18n } from '@/composables/useI18n';
 import ModuleLayout from '@/components/layout/ModuleLayout.vue';
+import { useEmployeesStore } from '@/stores/employees';
+import type { Employee, EmployeeFormData } from '@/stores/employees';
+import EmployeeModal from './components/EmployeeModal.vue';
 
-interface Employee {
-  id: string;
-  firstName: string;
-  lastName: string;
-  role: string;
-  email: string;
-  phone: string;
-  status: 'active' | 'inactive' | 'vacation';
-  avatar?: string;
-}
+const { t } = useI18n();
+const router = useRouter();
+const store = useEmployeesStore();
 
 const searchQuery = ref('');
-
-// Mock-Daten (TODO: durch API-Calls ersetzen)
-const employees = ref<Employee[]>([
-  { id: 'emp-001', firstName: 'Lisa', lastName: 'Weber', role: 'Friseurin', email: 'lisa@beispiel.ch', phone: '+41 79 111 22 33', status: 'active' },
-  { id: 'emp-002', firstName: 'Marco', lastName: 'Bianchi', role: 'Barbier', email: 'marco@beispiel.ch', phone: '+41 79 222 33 44', status: 'active' },
-  { id: 'emp-003', firstName: 'Sarah', lastName: 'Keller', role: 'Kosmetikerin', email: 'sarah@beispiel.ch', phone: '+41 79 333 44 55', status: 'vacation' },
-  { id: 'emp-004', firstName: 'Thomas', lastName: 'Brunner', role: 'Masseur', email: 'thomas@beispiel.ch', phone: '+41 79 444 55 66', status: 'inactive' },
-]);
+const showCreateModal = ref(false);
+const showEditModal = ref(false);
+const selectedEmployee = ref<Employee | null>(null);
 
 const filteredEmployees = computed(() => {
-  if (!searchQuery.value) return employees.value;
+  if (!searchQuery.value) return store.employees;
   const q = searchQuery.value.toLowerCase();
-  return employees.value.filter(e =>
+  return store.employees.filter(e =>
     `${e.firstName} ${e.lastName}`.toLowerCase().includes(q) ||
-    e.role.toLowerCase().includes(q) ||
+    e.position.toLowerCase().includes(q) ||
     e.email.toLowerCase().includes(q)
   );
 });
 
 const statusLabel: Record<string, string> = {
-  active: 'Aktiv',
-  inactive: 'Inaktiv',
-  vacation: 'Urlaub',
+  ACTIVE: t('employees.status.active'),
+  VACATION: t('employees.status.vacation'),
+  SICK_LEAVE: t('employees.status.sickLeave'),
+  PAUSE: t('employees.status.pause'),
+  TERMINATED: t('employees.status.terminated'),
 };
 
 const statusColor: Record<string, string> = {
-  active: 'bg-emerald-100 text-emerald-700',
-  inactive: 'bg-slate-100 text-slate-600',
-  vacation: 'bg-amber-100 text-amber-700',
+  ACTIVE: 'bg-emerald-100 text-emerald-700',
+  VACATION: 'bg-amber-100 text-amber-700',
+  SICK_LEAVE: 'bg-red-100 text-red-700',
+  PAUSE: 'bg-slate-100 text-slate-600',
+  TERMINATED: 'bg-red-100 text-red-600',
 };
 
 function getInitials(emp: Employee): string {
   return `${emp.firstName[0]}${emp.lastName[0]}`;
+}
+
+function openCreateModal() {
+  selectedEmployee.value = null;
+  showCreateModal.value = true;
+}
+
+function handleCreate(data: EmployeeFormData) {
+  store.createEmployee(data);
+  showCreateModal.value = false;
+}
+
+function handleCardClick(emp: Employee) {
+  router.push(`/employees/${emp.id}`);
+}
+
+function handleFabClick() {
+  openCreateModal();
 }
 </script>
 
 <template>
   <ModuleLayout
     module-name="employees"
-    title="Mitarbeiter"
-    :subtitle="`${employees.length} Mitarbeiter`"
+    :title="t('employees.title')"
+    :subtitle="t('employees.subtitle', { count: store.employeeCount })"
     :show-fab="true"
-    fab-label="Neuen Mitarbeiter erstellen"
+    :fab-label="t('employees.fabLabel')"
+    @fab-click="handleFabClick"
   >
     <template #header-actions>
       <button
         class="px-3 py-1.5 text-xs font-medium rounded-lg bg-white/20 text-white hover:bg-white/30 transition-colors hidden md:inline-flex items-center gap-1.5"
+        @click="openCreateModal"
       >
         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
         </svg>
-        Neuer Mitarbeiter
+        {{ t('employees.action.new') }}
       </button>
     </template>
 
@@ -85,7 +102,7 @@ function getInitials(emp: Employee): string {
         <input
           v-model="searchQuery"
           type="search"
-          placeholder="Mitarbeiter suchen..."
+          :placeholder="t('employees.searchPlaceholder')"
           class="w-full pl-10 pr-4 py-2.5 rounded-lg border border-slate-300 text-sm text-slate-900 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-slate-500 focus:border-slate-500 transition-colors"
         />
       </div>
@@ -97,6 +114,7 @@ function getInitials(emp: Employee): string {
         v-for="emp in filteredEmployees"
         :key="emp.id"
         class="bg-white rounded-xl border border-slate-200 p-5 shadow-sm hover:shadow-md transition-shadow cursor-pointer group"
+        @click="handleCardClick(emp)"
       >
         <div class="flex items-start gap-4">
           <!-- Avatar -->
@@ -108,14 +126,14 @@ function getInitials(emp: Employee): string {
             <h3 class="text-sm font-semibold text-slate-900 truncate">
               {{ emp.firstName }} {{ emp.lastName }}
             </h3>
-            <p class="text-xs text-slate-500 mt-0.5">{{ emp.role }}</p>
+            <p class="text-xs text-slate-500 mt-0.5">{{ emp.position }}</p>
             <span
               :class="[
                 'inline-block mt-2 px-2 py-0.5 text-xs font-medium rounded-full',
-                statusColor[emp.status],
+                statusColor[emp.status] || 'bg-slate-100 text-slate-600',
               ]"
             >
-              {{ statusLabel[emp.status] }}
+              {{ statusLabel[emp.status] || emp.status }}
             </span>
           </div>
         </div>
@@ -143,8 +161,15 @@ function getInitials(emp: Employee): string {
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z" />
         </svg>
       </div>
-      <h3 class="text-sm font-medium text-slate-900">Keine Mitarbeiter gefunden</h3>
-      <p class="text-sm text-slate-500 mt-1">Passen Sie Ihre Suche an oder erstellen Sie einen neuen Mitarbeiter.</p>
+      <h3 class="text-sm font-medium text-slate-900">{{ t('employees.emptyTitle') }}</h3>
+      <p class="text-sm text-slate-500 mt-1">{{ t('employees.emptyDescription') }}</p>
     </div>
+
+    <!-- Create Modal -->
+    <EmployeeModal
+      v-model="showCreateModal"
+      :employee="null"
+      @save="handleCreate"
+    />
   </ModuleLayout>
 </template>

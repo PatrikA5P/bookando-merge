@@ -3,6 +3,13 @@
  * UpcomingList — Kommende Termine Widget
  */
 import { CARD_STYLES, BADGE_STYLES } from '@/design';
+import { useI18n } from '@/composables/useI18n';
+
+defineProps<{
+  title?: string;
+}>();
+
+const { t } = useI18n();
 
 // Mock-Daten (TODO: API)
 const upcoming = [
@@ -17,8 +24,8 @@ const upcoming = [
   <div :class="CARD_STYLES.base">
     <div :class="CARD_STYLES.headerCompact">
       <div class="flex items-center justify-between">
-        <h3 class="text-base font-semibold text-slate-900">Kommende Termine</h3>
-        <span class="text-xs text-slate-500">Heute</span>
+        <h3 class="text-base font-semibold text-slate-900">{{ title || t('dashboard.upcomingAppointments') }}</h3>
+        <span class="text-xs text-slate-500">{{ t('dashboard.today') }}</span>
       </div>
     </div>
     <div class="divide-y divide-slate-100">
@@ -37,7 +44,7 @@ const upcoming = [
             :class="item.status === 'confirmed' ? BADGE_STYLES.success : BADGE_STYLES.warning"
             class="mt-1 inline-block"
           >
-            {{ item.status === 'confirmed' ? 'Bestätigt' : 'Ausstehend' }}
+            {{ item.status === 'confirmed' ? t('dashboard.confirmed') : t('dashboard.pendingStatus') }}
           </span>
         </div>
       </div>

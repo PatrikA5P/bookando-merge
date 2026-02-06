@@ -9,14 +9,16 @@ import { ref, computed } from 'vue';
 import { useRouter, useRoute } from 'vue-router';
 import ModuleLayout from '@/components/layout/ModuleLayout.vue';
 import type { Tab } from '@/components/layout/ModuleLayout.vue';
+import { useI18n } from '@/composables/useI18n';
 
+const { t } = useI18n();
 const router = useRouter();
 const route = useRoute();
 
-const tabs: Tab[] = [
-  { id: 'calendar', label: 'Kalender', icon: 'calendar' },
-  { id: 'list', label: 'Liste', icon: 'list' },
-];
+const tabs = computed<Tab[]>(() => [
+  { id: 'calendar', label: t('appointments.calendar'), icon: 'calendar' },
+  { id: 'list', label: t('appointments.list'), icon: 'list' },
+]);
 
 const activeTab = computed(() => {
   const child = route.name as string | undefined;
@@ -36,12 +38,12 @@ function onTabChange(tabId: string) {
 <template>
   <ModuleLayout
     module-name="appointments"
-    title="Termine"
-    subtitle="Buchungen und Terminverwaltung"
+    :title="t('appointments.title')"
+    :subtitle="t('appointments.calendar')"
     :tabs="tabs"
     :active-tab="activeTab"
     :show-fab="true"
-    fab-label="Neuen Termin erstellen"
+    :fab-label="t('appointments.newAppointment')"
     @tab-change="onTabChange"
   >
     <template #header-actions>
@@ -52,7 +54,7 @@ function onTabChange(tabId: string) {
           <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
           </svg>
-          Neuer Termin
+          {{ t('appointments.newAppointment') }}
         </button>
       </div>
     </template>

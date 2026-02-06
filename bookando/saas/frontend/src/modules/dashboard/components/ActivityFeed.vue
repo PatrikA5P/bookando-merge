@@ -3,6 +3,13 @@
  * ActivityFeed — Letzte Aktivitäten Widget
  */
 import { CARD_STYLES } from '@/design';
+import { useI18n } from '@/composables/useI18n';
+
+defineProps<{
+  title?: string;
+}>();
+
+const { t } = useI18n();
 
 // Mock-Daten (TODO: API)
 const activities = [
@@ -25,7 +32,7 @@ const typeColors: Record<string, string> = {
 <template>
   <div :class="CARD_STYLES.base">
     <div :class="CARD_STYLES.headerCompact">
-      <h3 class="text-base font-semibold text-slate-900">Letzte Aktivitäten</h3>
+      <h3 class="text-base font-semibold text-slate-900">{{ title || t('dashboard.recentActivity') }}</h3>
     </div>
     <div class="divide-y divide-slate-100">
       <div

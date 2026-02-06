@@ -68,6 +68,12 @@ const routes: RouteRecordRaw[] = [
         meta: { module: 'employees', title: 'Mitarbeiter' },
       },
       {
+        path: 'employees/:id',
+        name: 'employee-detail',
+        component: () => import('@/modules/employees/EmployeeDetailPage.vue'),
+        meta: { module: 'employees', title: 'Mitarbeiterdetail' },
+      },
+      {
         path: 'workday',
         name: 'workday',
         component: () => import('@/modules/workday/WorkdayPage.vue'),
