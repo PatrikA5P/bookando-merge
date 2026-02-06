@@ -1,0 +1,169 @@
+name: Backend CI
+
+on:
+  push:
+    branches: [main, develop, 'claude/**']
+    paths:
+      - 'backend/**'
+      - '.github/workflows/backend.yml'
+  pull_request:
+    branches: [main, develop]
+    paths:
+      - 'backend/**'
+
+jobs:
+  validate-schema:
+    name: Validate Prisma Schema
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20.x
+          cache: 'npm'
+          cache-dependency-path: backend/package-lock.json
+
+      - name: Install dependencies
+        working-directory: backend
+        run: npm ci
+
+      - name: Validate Prisma schema
+        working-directory: backend
+        run: npx prisma validate
+
+      - name: Check Prisma schema formatting
+        working-directory: backend
+        run: npx prisma format --check
+
+      - name: Generate Prisma Client
+        working-directory: backend
+        run: npx prisma generate
+
+      - name: Check for migration issues
+        working-directory: backend
+        run: |
+          if [ -d "prisma/migrations" ]; then
+            MIGRATION_COUNT=$(ls -1 prisma/migrations | wc -l)
+            echo "::notice::Found $MIGRATION_COUNT migrations"
+          else
+            echo "::warning::No migrations directory found"
+          fi
+
+  build-and-test:
+    name: Build & Test Backend
+    runs-on: ubuntu-latest
+    needs: validate-schema
+
+    strategy:
+      matrix:
+        node-version: [18.x, 20.x]
+
+    services:
+      postgres:
+        image: postgres:15
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: bookando_test
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+        ports:
+          - 5432:5432
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: 'npm'
+          cache-dependency-path: backend/package-lock.json
+
+      - name: Install dependencies
+        working-directory: backend
+        run: npm ci
+
+      - name: Run TypeScript type checking
+        working-directory: backend
+        run: npx tsc --noEmit
+
+      - name: Setup test database
+        working-directory: backend
+        env:
+          DATABASE_URL: postgresql://postgres:postgres@localhost:5432/bookando_test
+        run: |
+          npx prisma generate
+          npx prisma migrate deploy
+
+      - name: Build backend
+        working-directory: backend
+        run: npm run build
+
+      - name: Run tests
+        working-directory: backend
+        env:
+          DATABASE_URL: postgresql://postgres:postgres@localhost:5432/bookando_test
+          JWT_SECRET: test-secret-key-for-ci-testing-only-min-32-chars
+          NODE_ENV: test
+        run: npm test --if-present
+
+      - name: Upload build artifacts
+        uses: actions/upload-artifact@v4
+        if: matrix.node-version == '20.x'
+        with:
+          name: backend-build
+          path: backend/dist/
+          retention-days: 7
+
+  security-scan:
+    name: Security Audit
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20.x
+
+      - name: Run npm audit
+        working-directory: backend
+        run: npm audit --audit-level=moderate
+        continue-on-error: true
+
+      - name: Check for secrets in code
+        run: |
+          if grep -r "sk_live_\|pk_live_\|SECRET\|PASSWORD" backend/src/ --exclude-dir=node_modules || true; then
+            echo "::warning::Potential secrets found in code"
+          fi
+
+  summary:
+    name: Backend Summary
+    runs-on: ubuntu-latest
+    needs: [validate-schema, build-and-test, security-scan]
+    if: always()
+
+    steps:
+      - name: Check results
+        run: |
+          echo "Schema Validation: ${{ needs.validate-schema.result }}"
+          echo "Build & Test: ${{ needs.build-and-test.result }}"
+          echo "Security Scan: ${{ needs.security-scan.result }}"
+
+          if [ "${{ needs.validate-schema.result }}" != "success" ] || [ "${{ needs.build-and-test.result }}" != "success" ]; then
+            echo "❌ Backend checks failed"
+            exit 1
+          else
+            echo "✅ All backend checks passed"
+          fi

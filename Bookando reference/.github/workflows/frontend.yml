@@ -1,0 +1,136 @@
+name: Frontend CI
+
+on:
+  push:
+    branches: [main, develop, 'claude/**']
+    paths:
+      - 'src/**'
+      - 'components/**'
+      - 'modules/**'
+      - 'context/**'
+      - 'utils/**'
+      - 'types.ts'
+      - 'types-api.ts'
+      - 'package.json'
+      - 'tsconfig.json'
+      - 'vite.config.ts'
+      - '.github/workflows/frontend.yml'
+  pull_request:
+    branches: [main, develop]
+    paths:
+      - 'src/**'
+      - 'components/**'
+      - 'modules/**'
+      - 'context/**'
+      - 'utils/**'
+      - 'types.ts'
+      - 'types-api.ts'
+      - 'package.json'
+
+jobs:
+  build-and-test:
+    name: Build & Test Frontend
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        node-version: [18.x, 20.x]
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run TypeScript type checking
+        run: npx tsc --noEmit
+
+      - name: Run ESLint
+        run: npm run lint --if-present
+        continue-on-error: true
+
+      - name: Build frontend
+        run: npm run build
+        env:
+          NODE_ENV: production
+
+      - name: Run tests
+        run: npm test --if-present
+        env:
+          CI: true
+
+      - name: Check bundle size
+        run: |
+          DIST_SIZE=$(du -sh dist | cut -f1)
+          echo "::notice::Bundle size: $DIST_SIZE"
+
+      - name: Upload build artifacts
+        uses: actions/upload-artifact@v4
+        if: matrix.node-version == '20.x'
+        with:
+          name: frontend-build
+          path: dist/
+          retention-days: 7
+
+  quality-checks:
+    name: Code Quality
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20.x
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Check for TODO comments
+        run: |
+          TODO_COUNT=$(grep -r "TODO\|FIXME\|HACK" src/ components/ modules/ || true | wc -l)
+          echo "::notice::Found $TODO_COUNT TODO/FIXME/HACK comments"
+          if [ $TODO_COUNT -gt 100 ]; then
+            echo "::warning::High number of TODO comments ($TODO_COUNT)"
+          fi
+
+      - name: Check for console.log
+        run: |
+          CONSOLE_COUNT=$(grep -r "console\\.log" src/ components/ modules/ || true | wc -l)
+          if [ $CONSOLE_COUNT -gt 0 ]; then
+            echo "::warning::Found $CONSOLE_COUNT console.log statements"
+          fi
+
+      - name: Validate types-api.ts structure
+        run: |
+          if grep -q "Prisma" types-api.ts; then
+            echo "✅ types-api.ts contains Prisma-synced types"
+          else
+            echo "::warning::types-api.ts might need Prisma sync"
+          fi
+
+  summary:
+    name: Build Summary
+    runs-on: ubuntu-latest
+    needs: [build-and-test, quality-checks]
+    if: always()
+
+    steps:
+      - name: Check results
+        run: |
+          if [ "${{ needs.build-and-test.result }}" == "success" ]; then
+            echo "✅ Frontend build successful"
+          else
+            echo "❌ Frontend build failed"
+            exit 1
+          fi
