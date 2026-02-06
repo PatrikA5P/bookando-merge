@@ -4,17 +4,11 @@
  * Zentraler HTTP-Client für alle API-Aufrufe.
  *
  * Features:
- * - Automatisches Auth-Token-Handling
+ * - Sanctum SPA cookie-based auth (primary)
+ * - Bearer token fallback (for API testing)
+ * - CSRF token handling with automatic retry on 419
  * - Multi-Tenancy Header (x-tenant-id)
- * - Error-Handling mit Retry-Logic
- * - Request/Response Interceptors
  * - TypeScript Generics für typsichere Responses
- *
- * Verbesserung gegenüber Referenz:
- * + Retry-Logic bei Netzwerkfehlern
- * + Automatisches Token-Refresh bei 401
- * + Request-Deduplication
- * + Standardisierte Error-Responses
  */
 
 export interface ApiError {
@@ -45,6 +39,20 @@ export interface PaginatedResponse<T> {
 
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || '/api';
 
+// CSRF state
+let csrfInitialized = false;
+
+function getCookie(name: string): string | null {
+  const match = document.cookie.match(new RegExp('(^|;\\s*)' + name + '=([^;]*)'));
+  return match ? decodeURIComponent(match[2]) : null;
+}
+
+async function ensureCsrf(): Promise<void> {
+  if (csrfInitialized) return;
+  await fetch('/sanctum/csrf-cookie', { credentials: 'include' });
+  csrfInitialized = true;
+}
+
 class ApiClient {
   private baseUrl: string;
   private getAccessToken: (() => string | null) | null = null;
@@ -68,25 +76,6 @@ class ApiClient {
     this.onUnauthorized = options.onUnauthorized;
   }
 
-  private buildHeaders(): HeadersInit {
-    const headers: Record<string, string> = {
-      'Content-Type': 'application/json',
-      'Accept': 'application/json',
-    };
-
-    const token = this.getAccessToken?.();
-    if (token) {
-      headers['Authorization'] = `Bearer ${token}`;
-    }
-
-    const tenantId = this.getTenantId?.();
-    if (tenantId) {
-      headers['X-Tenant-Id'] = String(tenantId);
-    }
-
-    return headers;
-  }
-
   private buildUrl(path: string, params?: Record<string, string | number | boolean | undefined>): string {
     const url = new URL(`${this.baseUrl}${path}`, window.location.origin);
 
@@ -104,49 +93,90 @@ class ApiClient {
   private async request<T>(method: string, path: string, options?: {
     body?: unknown;
     params?: Record<string, string | number | boolean | undefined>;
-    retry?: number;
   }): Promise<T> {
+    // For mutating requests, ensure CSRF cookie
+    if (['POST', 'PUT', 'PATCH', 'DELETE'].includes(method)) {
+      await ensureCsrf();
+    }
+
     const url = this.buildUrl(path, options?.params);
-    const maxRetries = options?.retry ?? 0;
-    let lastError: Error | null = null;
+    const headers: Record<string, string> = {
+      'Content-Type': 'application/json',
+      'Accept': 'application/json',
+      'X-Requested-With': 'XMLHttpRequest',
+    };
 
-    for (let attempt = 0; attempt <= maxRetries; attempt++) {
-      try {
-        const response = await fetch(url, {
-          method,
-          headers: this.buildHeaders(),
-          body: options?.body ? JSON.stringify(options.body) : undefined,
-        });
+    // Add XSRF token from cookie
+    const xsrfToken = getCookie('XSRF-TOKEN');
+    if (xsrfToken) {
+      headers['X-XSRF-TOKEN'] = xsrfToken;
+    }
 
-        if (response.status === 401) {
-          this.onUnauthorized?.();
-          throw new Error('Unauthorized');
-        }
-
-        if (!response.ok) {
-          const errorBody = await response.json().catch(() => ({}));
-          const error: ApiError = {
-            status: response.status,
-            message: errorBody.message || `HTTP ${response.status}`,
-            errors: errorBody.errors,
-          };
-          throw error;
-        }
-
-        if (response.status === 204) {
-          return undefined as T;
-        }
-
-        return await response.json();
-      } catch (error) {
-        lastError = error as Error;
-        if (attempt < maxRetries) {
-          await new Promise(r => setTimeout(r, Math.pow(2, attempt) * 1000));
-        }
+    // Fallback: Bearer token if configured
+    if (this.getAccessToken) {
+      const token = this.getAccessToken();
+      if (token) {
+        headers['Authorization'] = `Bearer ${token}`;
       }
     }
 
-    throw lastError;
+    // Tenant header
+    if (this.getTenantId) {
+      const tenantId = this.getTenantId();
+      if (tenantId) {
+        headers['X-Tenant-Id'] = String(tenantId);
+      }
+    }
+
+    const fetchOptions: RequestInit = {
+      method,
+      headers,
+      credentials: 'include', // CRITICAL for Sanctum cookies
+    };
+
+    if (options?.body !== undefined) {
+      fetchOptions.body = JSON.stringify(options.body);
+    }
+
+    const response = await fetch(url, fetchOptions);
+
+    if (response.status === 419) {
+      // CSRF token expired - retry once
+      csrfInitialized = false;
+      await ensureCsrf();
+      const retryHeaders = { ...headers };
+      retryHeaders['X-XSRF-TOKEN'] = getCookie('XSRF-TOKEN') || '';
+      const retryResponse = await fetch(url, { ...fetchOptions, headers: retryHeaders });
+      if (!retryResponse.ok) {
+        let errorData;
+        try { errorData = await retryResponse.json(); } catch { errorData = {}; }
+        throw {
+          status: retryResponse.status,
+          message: errorData.message || `HTTP ${retryResponse.status}`,
+          errors: errorData.errors,
+        } as ApiError;
+      }
+      if (retryResponse.status === 204) return undefined as T;
+      return retryResponse.json();
+    }
+
+    if (response.status === 401 && this.onUnauthorized) {
+      this.onUnauthorized();
+      throw { status: 401, message: 'Unauthorized' } as ApiError;
+    }
+
+    if (!response.ok) {
+      let errorData;
+      try { errorData = await response.json(); } catch { errorData = {}; }
+      throw {
+        status: response.status,
+        message: errorData.message || `HTTP ${response.status}`,
+        errors: errorData.errors,
+      } as ApiError;
+    }
+
+    if (response.status === 204) return undefined as T;
+    return response.json();
   }
 
   async get<T>(path: string, params?: Record<string, string | number | boolean | undefined>): Promise<T> {

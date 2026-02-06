@@ -41,11 +41,10 @@ const routes: RouteRecordRaw[] = [
       },
       {
         path: 'appointments',
-        name: 'appointments',
         component: () => import('@/modules/appointments/AppointmentsPage.vue'),
         meta: { module: 'appointments', title: 'Termine' },
         children: [
-          { path: '', redirect: { name: 'appointments-calendar' } },
+          { path: '', name: 'appointments', redirect: { name: 'appointments-calendar' } },
           { path: 'calendar', name: 'appointments-calendar', component: () => import('@/modules/appointments/views/CalendarView.vue') },
           { path: 'list', name: 'appointments-list', component: () => import('@/modules/appointments/views/ListView.vue') },
         ],
@@ -122,6 +121,18 @@ const routes: RouteRecordRaw[] = [
         component: () => import('@/modules/partnerhub/PartnerHubPage.vue'),
         meta: { module: 'partnerhub', title: 'Partner Hub' },
       },
+      {
+        path: 'design-system',
+        name: 'design-system',
+        component: () => import('@/modules/design-system/DesignSystemPage.vue'),
+        meta: { module: 'design-system', title: 'Design System' },
+      },
+      {
+        path: 'design-frontend',
+        name: 'design-frontend',
+        component: () => import('@/modules/design-frontend/DesignFrontendPage.vue'),
+        meta: { module: 'design-frontend', title: 'Design Frontend' },
+      },
     ],
   },
 
@@ -142,9 +153,16 @@ const router = createRouter({
 });
 
 // Auth Guard
-router.beforeEach((to) => {
-  const requiresAuth = to.meta.requiresAuth !== false;
+router.beforeEach(async (to) => {
   const authStore = useAuthStore();
+
+  // Wait for initial auth check on first navigation
+  if (!authStore.isReady) {
+    await authStore.bootstrap();
+  }
+
+  const requiresAuth = to.meta.requiresAuth !== false;
+
   if (requiresAuth && !authStore.isAuthenticated) {
     return { name: 'login', query: { redirect: to.fullPath } };
   }

@@ -23,6 +23,7 @@ export default {
   undo: 'Undo',
   retry: 'Retry',
   refresh: 'Refresh',
+  copy: 'Copy',
   download: 'Download',
   upload: 'Upload',
   duplicate: 'Duplicate',

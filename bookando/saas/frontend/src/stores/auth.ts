@@ -2,15 +2,10 @@
  * Auth Store — Authentifizierung & Session
  *
  * Pinia Store fuer:
+ * - Cookie-based Sanctum SPA auth (primary)
+ * - Bootstrap: checks existing session on app startup
  * - Login/Logout
- * - JWT Token Management
- * - Session Refresh
- * - User Profile
- *
- * Verbesserung gegenueber Referenz:
- * - Pinia statt monolithischem Context
- * - Automatisches Token-Refresh
- * - Sicheres Token-Handling (kein localStorage fuer Access-Token)
+ * - Bearer token fallback for API testing
  */
 import { defineStore } from 'pinia';
 import { ref, computed } from 'vue';
@@ -29,25 +24,36 @@ export interface User {
 
 export const useAuthStore = defineStore('auth', () => {
   const user = ref<User | null>(null);
-  const accessToken = ref<string | null>(null);
   const isLoading = ref(false);
+  const isReady = ref(false); // true after initial bootstrap attempt
 
-  const isAuthenticated = computed(() => !!accessToken.value && !!user.value);
+  const isAuthenticated = computed(() => !!user.value);
   const fullName = computed(() => user.value ? `${user.value.firstName} ${user.value.lastName}` : '');
   const initials = computed(() => {
     if (!user.value) return '';
-    return `${user.value.firstName[0]}${user.value.lastName[0]}`.toUpperCase();
+    return `${user.value.firstName?.[0] || ''}${user.value.lastName?.[0] || ''}`.toUpperCase();
   });
+
+  // Called on app startup - checks if user has active session
+  async function bootstrap(): Promise<void> {
+    try {
+      const response = await api.get<{ data: User }>('/v1/auth/me');
+      user.value = response.data;
+    } catch {
+      user.value = null;
+    } finally {
+      isReady.value = true;
+    }
+  }
 
   async function login(email: string, password: string): Promise<void> {
     isLoading.value = true;
     try {
       const response = await api.post<{ data: { accessToken: string; user: User } }>('/v1/auth/login', { email, password });
-      accessToken.value = response.data.accessToken;
       user.value = response.data.user;
-      // Configure API client with token
+      // Configure api client with token as fallback
       api.configure({
-        getAccessToken: () => accessToken.value,
+        getAccessToken: () => response.data.accessToken,
         getTenantId: () => user.value?.tenantId ?? null,
         onUnauthorized: () => logout(),
       });
@@ -59,8 +65,9 @@ export const useAuthStore = defineStore('auth', () => {
   async function logout(): Promise<void> {
     try {
       await api.post('/v1/auth/logout');
-    } catch { /* ignore */ }
-    accessToken.value = null;
+    } catch {
+      // Ignore logout errors
+    }
     user.value = null;
   }
 
@@ -69,40 +76,20 @@ export const useAuthStore = defineStore('auth', () => {
       const response = await api.get<{ data: User }>('/v1/auth/me');
       user.value = response.data;
     } catch {
-      await logout();
-    }
-  }
-
-  function setAuth(token: string, userData: User) {
-    accessToken.value = token;
-    user.value = userData;
-  }
-
-  /**
-   * Initializes the API client configuration on app start.
-   * Call this in the app's main setup if a token is already present (e.g., from persistence).
-   */
-  function initAuth() {
-    if (accessToken.value) {
-      api.configure({
-        getAccessToken: () => accessToken.value,
-        getTenantId: () => user.value?.tenantId ?? null,
-        onUnauthorized: () => logout(),
-      });
+      user.value = null;
     }
   }
 
   return {
     user,
-    accessToken,
     isLoading,
+    isReady,
     isAuthenticated,
     fullName,
     initials,
+    bootstrap,
     login,
     logout,
     refreshSession,
-    setAuth,
-    initAuth,
   };
 });

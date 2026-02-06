@@ -226,6 +226,26 @@ export const MODULE_DESIGNS: Record<string, ModuleDesignConfig> = {
     iconBg: 'bg-slate-200',
     iconText: 'text-slate-700',
   },
+  'design-system': {
+    gradient: 'from-fuchsia-700 to-purple-900',
+    accentColor: 'fuchsia-600',
+    activeBg: 'bg-fuchsia-50',
+    activeText: 'text-fuchsia-700',
+    activeBorder: 'border-fuchsia-200',
+    hoverBg: 'hover:bg-fuchsia-50',
+    iconBg: 'bg-fuchsia-100',
+    iconText: 'text-fuchsia-600',
+  },
+  'design-frontend': {
+    gradient: 'from-violet-700 to-purple-900',
+    accentColor: 'violet-600',
+    activeBg: 'bg-violet-50',
+    activeText: 'text-violet-700',
+    activeBorder: 'border-violet-200',
+    hoverBg: 'hover:bg-violet-50',
+    iconBg: 'bg-violet-100',
+    iconText: 'text-violet-600',
+  },
 };
 
 // ============================================================================
