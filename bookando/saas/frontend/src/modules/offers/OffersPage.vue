@@ -4,14 +4,15 @@
  *
  * Dienstleistungskatalog, Pakete, Gutscheine, Dynamic Pricing,
  * Tags, Extras, Kategorien und Buchungsformulare.
+ *
+ * Refactored: Nutzt neue Domain-Types (Offer statt ServiceItem),
+ * store.offers statt store.services, kein ServiceModal mehr.
  */
 import { ref, computed } from 'vue';
 import ModuleLayout from '@/components/layout/ModuleLayout.vue';
 import type { Tab } from '@/components/layout/ModuleLayout.vue';
 import { useI18n } from '@/composables/useI18n';
-import { useDesignStore } from '@/stores/design';
 import { useOffersStore } from '@/stores/offers';
-import { BUTTON_STYLES } from '@/design';
 import CatalogTab from './components/CatalogTab.vue';
 import BundlesTab from './components/BundlesTab.vue';
 import VouchersTab from './components/VouchersTab.vue';
@@ -19,11 +20,10 @@ import DynamicPricingTab from './components/DynamicPricingTab.vue';
 import CategoriesTab from './components/CategoriesTab.vue';
 
 const { t } = useI18n();
-const designStore = useDesignStore();
 const store = useOffersStore();
 
 const tabs = computed<Tab[]>(() => [
-  { id: 'catalog', label: t('offers.catalog'), badge: store.services.length },
+  { id: 'catalog', label: t('offers.catalog'), badge: store.offers.length },
   { id: 'bundles', label: t('offers.bundles'), badge: store.bundles.length },
   { id: 'vouchers', label: t('offers.vouchers'), badge: store.vouchers.length },
   { id: 'dynamic-pricing', label: t('offers.dynamicPricing'), badge: store.pricingRules.length },
@@ -35,11 +35,12 @@ const tabs = computed<Tab[]>(() => [
 
 const activeTab = ref('catalog');
 
-const showNewServiceModal = ref(false);
+// Template ref for CatalogTab to trigger openCreatePanel from FAB
+const catalogTabRef = ref<InstanceType<typeof CatalogTab> | null>(null);
 
 function onFabClick() {
-  if (activeTab.value === 'catalog') {
-    showNewServiceModal.value = true;
+  if (activeTab.value === 'catalog' && catalogTabRef.value) {
+    catalogTabRef.value.openCreatePanel();
   }
 }
 </script>
@@ -61,7 +62,7 @@ function onFabClick() {
         :class="[
           'px-3 py-1.5 text-xs font-medium rounded-lg bg-white/20 text-white hover:bg-white/30 transition-colors hidden md:inline-flex items-center gap-1.5',
         ]"
-        @click="showNewServiceModal = true"
+        @click="onFabClick"
       >
         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
@@ -71,7 +72,7 @@ function onFabClick() {
     </template>
 
     <!-- Katalog -->
-    <CatalogTab v-if="activeTab === 'catalog'" />
+    <CatalogTab v-if="activeTab === 'catalog'" ref="catalogTabRef" />
 
     <!-- Pakete -->
     <BundlesTab v-else-if="activeTab === 'bundles'" />
