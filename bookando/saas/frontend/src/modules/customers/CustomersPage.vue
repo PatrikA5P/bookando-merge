@@ -30,6 +30,7 @@ import CustomerFilters from './components/CustomerFilters.vue';
 import { useBreakpoint } from '@/composables/useBreakpoint';
 import { useToast } from '@/composables/useToast';
 import { useAppStore } from '@/stores/app';
+import { useDesignStore } from '@/stores/design';
 import { BUTTON_STYLES, INPUT_STYLES, BADGE_STYLES, GRID_STYLES } from '@/design';
 export type CustomerStatus = 'ACTIVE' | 'BLOCKED' | 'DELETED';
 
@@ -56,6 +57,7 @@ export interface Customer {
 const router = useRouter();
 const toast = useToast();
 const appStore = useAppStore();
+const designStore = useDesignStore();
 const { isMobile } = useBreakpoint();
 const { t } = useI18n();
 

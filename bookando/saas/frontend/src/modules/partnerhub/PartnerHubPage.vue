@@ -9,8 +9,10 @@ import NetworkTab from './components/NetworkTab.vue';
 import GdprTab from './components/GdprTab.vue';
 import PartnerApiTab from './components/PartnerApiTab.vue';
 import { useI18n } from '@/composables/useI18n';
+import { useDesignStore } from '@/stores/design';
 
 const { t } = useI18n();
+const designStore = useDesignStore();
 const activeTab = ref('network');
 
 const tabs = computed<Tab[]>(() => [

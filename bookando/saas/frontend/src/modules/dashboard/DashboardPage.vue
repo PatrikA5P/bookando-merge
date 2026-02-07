@@ -20,10 +20,12 @@ import UpcomingList from './components/UpcomingList.vue';
 import AlertCenter from './components/AlertCenter.vue';
 import WidgetCustomizer from './components/WidgetCustomizer.vue';
 import { useAppStore } from '@/stores/app';
+import { useDesignStore } from '@/stores/design';
 import { useI18n } from '@/composables/useI18n';
 import { GRID_STYLES } from '@/design';
 
 const appStore = useAppStore();
+const designStore = useDesignStore();
 const { t } = useI18n();
 
 interface WidgetDef {

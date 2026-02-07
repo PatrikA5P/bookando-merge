@@ -17,8 +17,10 @@ import DataImportTab from './components/DataImportTab.vue';
 import ApiTab from './components/ApiTab.vue';
 import NotificationsTab from './components/NotificationsTab.vue';
 import { useI18n } from '@/composables/useI18n';
+import { useDesignStore } from '@/stores/design';
 
 const { t } = useI18n();
+const designStore = useDesignStore();
 
 const tabs: Tab[] = [
   { id: 'reports', label: t('tools.tabs.reports') || 'Reports' },

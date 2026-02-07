@@ -8,10 +8,12 @@ import type { Tab } from '@/components/layout/ModuleLayout.vue';
 import CoursesTab from './components/CoursesTab.vue';
 import LessonsTab from './components/LessonsTab.vue';
 import { useI18n } from '@/composables/useI18n';
+import { useDesignStore } from '@/stores/design';
 import { useAcademyStore } from '@/stores/academy';
 import { BUTTON_STYLES } from '@/design';
 
 const { t } = useI18n();
+const designStore = useDesignStore();
 const store = useAcademyStore();
 
 const activeTab = ref('courses');

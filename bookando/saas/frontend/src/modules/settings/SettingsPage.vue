@@ -10,8 +10,10 @@ import CompanyTab from './components/CompanyTab.vue';
 import IntegrationsTab from './components/IntegrationsTab.vue';
 import RolesTab from './components/RolesTab.vue';
 import { useI18n } from '@/composables/useI18n';
+import { useDesignStore } from '@/stores/design';
 
 const { t } = useI18n();
+const designStore = useDesignStore();
 const activeTab = ref('general');
 
 const tabs = computed<Tab[]>(() => [

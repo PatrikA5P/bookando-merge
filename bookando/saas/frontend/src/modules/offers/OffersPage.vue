@@ -9,6 +9,7 @@ import { ref, computed } from 'vue';
 import ModuleLayout from '@/components/layout/ModuleLayout.vue';
 import type { Tab } from '@/components/layout/ModuleLayout.vue';
 import { useI18n } from '@/composables/useI18n';
+import { useDesignStore } from '@/stores/design';
 import { useOffersStore } from '@/stores/offers';
 import { BUTTON_STYLES } from '@/design';
 import CatalogTab from './components/CatalogTab.vue';
@@ -18,6 +19,7 @@ import DynamicPricingTab from './components/DynamicPricingTab.vue';
 import CategoriesTab from './components/CategoriesTab.vue';
 
 const { t } = useI18n();
+const designStore = useDesignStore();
 const store = useOffersStore();
 
 const tabs = computed<Tab[]>(() => [
