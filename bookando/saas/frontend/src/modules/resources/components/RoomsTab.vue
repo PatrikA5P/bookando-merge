@@ -3,15 +3,15 @@
  * RoomsTab — Raeume-Uebersicht
  *
  * Kartenbasierte Darstellung aller Raeume.
- * Filter nach Standort und Status.
- * CRUD ueber ResourceModal.
+ * Nutzt das einheitliche Resource-Modell mit resourceType 'ROOM'.
+ * Filter nach Standort (parentId) und Status.
+ * CRUD ueber ResourceFormPanel (SlideIn).
  */
-import { ref, computed } from 'vue';
+import { computed } from 'vue';
 import { useI18n } from '@/composables/useI18n';
 import { useToast } from '@/composables/useToast';
-import { useBreakpoint } from '@/composables/useBreakpoint';
-import { useResourcesStore } from '@/stores/resources';
-import type { Room } from '@/stores/resources';
+import { useResourcesStore, RESOURCE_STATUS_COLORS } from '@/stores/resources';
+import type { Resource, RoomProperties } from '@/stores/resources';
 import BSearchBar from '@/components/ui/BSearchBar.vue';
 import BSelect from '@/components/ui/BSelect.vue';
 import BBadge from '@/components/ui/BBadge.vue';
@@ -21,11 +21,10 @@ import { CARD_STYLES, GRID_STYLES } from '@/design';
 
 const { t } = useI18n();
 const toast = useToast();
-const { isMobile } = useBreakpoint();
 const store = useResourcesStore();
 
 const emit = defineEmits<{
-  (e: 'edit', room: Room): void;
+  (e: 'edit', resource: Resource): void;
   (e: 'create'): void;
 }>();
 
@@ -35,13 +34,13 @@ const search = computed({
 });
 
 const locationFilter = computed({
-  get: () => store.filters.locationId,
-  set: (val: string) => store.setFilters({ locationId: val }),
+  get: () => store.filters.parentId,
+  set: (val: string) => store.setFilters({ parentId: val }),
 });
 
 const statusFilter = computed({
   get: () => store.filters.status,
-  set: (val: string) => store.setFilters({ status: val }),
+  set: (val: string) => store.setFilters({ status: val as any }),
 });
 
 const locationFilterOptions = computed(() => [
@@ -51,34 +50,35 @@ const locationFilterOptions = computed(() => [
 
 const statusFilterOptions = [
   { value: '', label: 'Status (' + t('common.filter') + ')' },
-  { value: 'AVAILABLE', label: t('resources.available') },
-  { value: 'IN_USE', label: t('resources.inUse') },
-  { value: 'CLOSED', label: t('resources.closed') },
+  { value: 'ACTIVE', label: t('resources.available') },
   { value: 'MAINTENANCE', label: t('resources.maintenance') },
+  { value: 'RETIRED', label: t('resources.closed') },
 ];
 
-async function handleDelete(room: Room) {
-  if (await store.deleteRoom(room.id)) {
+function getProps(resource: Resource): RoomProperties {
+  return resource.properties as RoomProperties;
+}
+
+async function handleDelete(resource: Resource) {
+  if (await store.deleteResource(resource.id)) {
     toast.success(t('common.deletedSuccessfully'));
   }
 }
 
 function getStatusColor(status: string): string {
   switch (status) {
-    case 'AVAILABLE': return 'bg-emerald-500';
-    case 'IN_USE': return 'bg-blue-500';
-    case 'CLOSED': return 'bg-red-500';
+    case 'ACTIVE': return 'bg-emerald-500';
     case 'MAINTENANCE': return 'bg-amber-500';
+    case 'RETIRED': return 'bg-red-500';
     default: return 'bg-slate-400';
   }
 }
 
 function getStatusLabel(status: string): string {
   switch (status) {
-    case 'AVAILABLE': return t('resources.available');
-    case 'IN_USE': return t('resources.inUse');
-    case 'CLOSED': return t('resources.closed');
+    case 'ACTIVE': return t('resources.available');
     case 'MAINTENANCE': return t('resources.maintenance');
+    case 'RETIRED': return t('resources.closed');
     default: return status;
   }
 }
@@ -117,13 +117,14 @@ function getStatusLabel(status: string): string {
         v-for="room in store.filteredRooms"
         :key="room.id"
         :class="CARD_STYLES.hover"
-        class="p-5"
+        class="p-5 cursor-pointer"
+        @click="emit('edit', room)"
       >
         <!-- Header -->
         <div class="flex items-start justify-between mb-3">
           <div>
             <h3 class="text-sm font-semibold text-slate-900">{{ room.name }}</h3>
-            <p class="text-xs text-slate-500 mt-0.5">{{ room.locationName }}</p>
+            <p class="text-xs text-slate-500 mt-0.5">{{ room.parentName || '—' }}</p>
           </div>
           <div class="flex items-center gap-1.5">
             <span :class="['w-2 h-2 rounded-full', getStatusColor(room.status)]" />
@@ -143,9 +144,9 @@ function getStatusLabel(status: string): string {
         </div>
 
         <!-- Features -->
-        <div v-if="room.features.length > 0" class="flex flex-wrap gap-1.5 mb-4">
+        <div v-if="getProps(room).features?.length > 0" class="flex flex-wrap gap-1.5 mb-4">
           <span
-            v-for="feature in room.features"
+            v-for="feature in getProps(room).features"
             :key="feature"
             class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-slate-100 text-slate-600"
           >
@@ -153,15 +154,20 @@ function getStatusLabel(status: string): string {
           </span>
         </div>
 
+        <!-- Floor info -->
+        <div v-if="getProps(room).floor" class="text-xs text-slate-500 mb-4">
+          Stockwerk: {{ getProps(room).floor }}
+        </div>
+
         <!-- Actions -->
         <div class="flex items-center gap-2 pt-3 border-t border-slate-100">
-          <BButton variant="ghost" size="sm" @click="emit('edit', room)">
+          <BButton variant="ghost" size="sm" @click.stop="emit('edit', room)">
             <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
             </svg>
             {{ t('common.edit') }}
           </BButton>
-          <BButton variant="ghost" size="sm" @click="handleDelete(room)">
+          <BButton variant="ghost" size="sm" @click.stop="handleDelete(room)">
             <svg class="w-4 h-4 mr-1 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
             </svg>

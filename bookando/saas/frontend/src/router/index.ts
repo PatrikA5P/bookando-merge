@@ -98,10 +98,22 @@ const routes: RouteRecordRaw[] = [
         meta: { module: 'academy', title: 'Akademie' },
       },
       {
+        path: 'bookings',
+        name: 'bookings',
+        component: () => import('@/modules/bookings/BookingsPage.vue'),
+        meta: { module: 'bookings', title: 'Buchungen' },
+      },
+      {
         path: 'resources',
         name: 'resources',
         component: () => import('@/modules/resources/ResourcesPage.vue'),
         meta: { module: 'resources', title: 'Ressourcen' },
+      },
+      {
+        path: 'automation',
+        name: 'automation',
+        component: () => import('@/modules/automation/AutomationPage.vue'),
+        meta: { module: 'automation', title: 'Automatisierung' },
       },
       {
         path: 'settings',
@@ -120,6 +132,18 @@ const routes: RouteRecordRaw[] = [
         name: 'partnerhub',
         component: () => import('@/modules/partnerhub/PartnerHubPage.vue'),
         meta: { module: 'partnerhub', title: 'Partner Hub' },
+      },
+      {
+        path: 'employee-hub',
+        name: 'employee-portal',
+        component: () => import('@/modules/employee-portal/EmployeePortalPage.vue'),
+        meta: { module: 'employee-portal', title: 'Mein Arbeitsplatz' },
+      },
+      {
+        path: 'portal',
+        name: 'customer-portal',
+        component: () => import('@/modules/customer-portal/CustomerPortalPage.vue'),
+        meta: { module: 'customer-portal', title: 'Mein Portal' },
       },
       {
         path: 'design-system',

@@ -3,30 +3,28 @@
  * EquipmentTab — Equipment-Uebersicht
  *
  * Tabellenbasierte Darstellung aller Equipment-Gegenstaende.
+ * Nutzt das einheitliche Resource-Modell mit resourceType 'EQUIPMENT'.
  * Verfuegbarkeits-Fortschrittsbalken, Zustands-Badges.
- * CRUD ueber ResourceModal.
+ * CRUD ueber ResourceFormPanel (SlideIn).
  */
 import { computed } from 'vue';
 import { useI18n } from '@/composables/useI18n';
 import { useToast } from '@/composables/useToast';
-import { useBreakpoint } from '@/composables/useBreakpoint';
 import { useResourcesStore } from '@/stores/resources';
-import type { Equipment } from '@/stores/resources';
+import type { Resource, EquipmentProperties } from '@/stores/resources';
 import BSearchBar from '@/components/ui/BSearchBar.vue';
 import BTable from '@/components/ui/BTable.vue';
 import type { Column } from '@/components/ui/BTable.vue';
 import BBadge from '@/components/ui/BBadge.vue';
 import BButton from '@/components/ui/BButton.vue';
 import BEmptyState from '@/components/ui/BEmptyState.vue';
-import { BADGE_STYLES } from '@/design';
 
 const { t } = useI18n();
 const toast = useToast();
-const { isMobile } = useBreakpoint();
 const store = useResourcesStore();
 
 const emit = defineEmits<{
-  (e: 'edit', equipment: Equipment): void;
+  (e: 'edit', resource: Resource): void;
   (e: 'create'): void;
 }>();
 
@@ -40,15 +38,27 @@ const columns: Column[] = [
   { key: 'category', label: 'Kategorie', sortable: true },
   { key: 'availability', label: t('resources.available'), sortable: false },
   { key: 'condition', label: 'Zustand', sortable: true },
-  { key: 'locationName', label: t('resources.locations'), sortable: true },
+  { key: 'parentName', label: t('resources.locations'), sortable: true },
+  { key: 'status', label: 'Status', sortable: true },
   { key: 'actions', label: '', align: 'right', width: '120px' },
 ];
 
+function getEquipmentProps(resource: Resource): EquipmentProperties {
+  return resource.properties as EquipmentProperties;
+}
+
 const tableData = computed(() =>
-  store.filteredEquipment.map(eq => ({
-    ...eq,
-    availability: `${eq.available}/${eq.total}`,
-  })) as unknown as Record<string, unknown>[]
+  store.filteredEquipment.map(eq => {
+    const props = getEquipmentProps(eq);
+    return {
+      ...eq,
+      category: props.category,
+      condition: props.condition,
+      totalUnits: props.totalUnits,
+      availableUnits: props.availableUnits,
+      availability: `${props.availableUnits}/${props.totalUnits}`,
+    };
+  }) as unknown as Record<string, unknown>[]
 );
 
 function getConditionVariant(condition: string): 'success' | 'warning' | 'danger' {
@@ -69,9 +79,27 @@ function getConditionLabel(condition: string): string {
   }
 }
 
+function getStatusVariant(status: string): 'success' | 'warning' | 'danger' {
+  switch (status) {
+    case 'ACTIVE': return 'success';
+    case 'MAINTENANCE': return 'warning';
+    case 'RETIRED': return 'danger';
+    default: return 'warning';
+  }
+}
+
+function getStatusLabel(status: string): string {
+  switch (status) {
+    case 'ACTIVE': return 'Aktiv';
+    case 'MAINTENANCE': return 'Wartung';
+    case 'RETIRED': return 'Ausser Betrieb';
+    default: return status;
+  }
+}
+
 function getAvailabilityPercent(row: Record<string, unknown>): number {
-  const available = row.available as number;
-  const total = row.total as number;
+  const available = row.availableUnits as number;
+  const total = row.totalUnits as number;
   if (total === 0) return 0;
   return Math.round((available / total) * 100);
 }
@@ -89,7 +117,7 @@ function handleEdit(row: Record<string, unknown>) {
 }
 
 async function handleDelete(row: Record<string, unknown>) {
-  if (await store.deleteEquipment(row.id as string)) {
+  if (await store.deleteResource(row.id as string)) {
     toast.success(t('common.deletedSuccessfully'));
   }
 }
@@ -135,7 +163,7 @@ async function handleDelete(row: Record<string, unknown>) {
               />
             </div>
             <span class="text-xs text-slate-600 whitespace-nowrap font-medium">
-              {{ row.available }}/{{ row.total }}
+              {{ row.availableUnits }}/{{ row.totalUnits }}
             </span>
           </div>
         </template>
@@ -148,8 +176,15 @@ async function handleDelete(row: Record<string, unknown>) {
         </template>
 
         <!-- Location cell -->
-        <template #cell-locationName="{ row }">
-          <span class="text-slate-600">{{ row.locationName || '—' }}</span>
+        <template #cell-parentName="{ row }">
+          <span class="text-slate-600">{{ row.parentName || '—' }}</span>
+        </template>
+
+        <!-- Status cell -->
+        <template #cell-status="{ row }">
+          <BBadge :variant="getStatusVariant(row.status as string)">
+            {{ getStatusLabel(row.status as string) }}
+          </BBadge>
         </template>
 
         <!-- Actions cell -->
