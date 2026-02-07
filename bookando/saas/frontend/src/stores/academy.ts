@@ -1,169 +1,185 @@
 /**
- * Academy Store — Kurse, Lektionen, Quizze & Badges
+ * Academy Store — Kurse, Module, Lektionen, Quizze & Badges
  *
- * Pinia Store fuer das Academy-Modul.
- * Verwaltet Kurse mit Curriculum, Lektionen-Bibliothek
- * und Badge-System fuer Zertifizierungen.
- *
- * Verbesserung gegenueber Referenz:
- * - Pinia statt monolithischem Context
- * - Typisierte Enums fuer Type, Visibility, Difficulty
- * - Curriculum als geordnete Liste mit Drag-Support
- * - Badge-Verknuepfung mit Kursen
- * - Echte API-Anbindung statt Mock-Daten
+ * Refactored gemaess MODUL_ANALYSE.md Abschnitt 2.7:
+ * - AcademyCourse mit Kurs → Modul → Lektion Hierarchie
+ * - AcademyQuiz mit wiederverwendbaren Fragen
+ * - Badge-System fuer Zertifizierungen
+ * - CourseEnrollment fuer Teilnehmer-Tracking
  */
 import { defineStore } from 'pinia';
 import { ref, computed } from 'vue';
 import api from '@/utils/api';
+import type {
+  AcademyCourse,
+  AcademyModule,
+  AcademyLesson,
+  AcademyQuiz,
+  QuizQuestion,
+  Badge,
+  CourseEnrollment,
+  QuizAttempt,
+  AcademyCourseFormData,
+  AcademyLessonFormData,
+  AcademyQuizFormData,
+  CourseType,
+  CourseVisibility,
+  CourseDifficulty,
+  CourseStatus,
+  LessonType,
+  QuestionType,
+} from '@/types/domain/academy';
+
+// Re-export domain types
+export type {
+  AcademyCourse,
+  AcademyModule,
+  AcademyLesson,
+  AcademyQuiz,
+  QuizQuestion,
+  Badge,
+  CourseEnrollment,
+  QuizAttempt,
+  AcademyCourseFormData,
+  AcademyLessonFormData,
+  AcademyQuizFormData,
+  CourseType,
+  CourseVisibility,
+  CourseDifficulty,
+  CourseStatus,
+  LessonType,
+  QuestionType,
+};
 
 // ============================================================================
-// TYPES & ENUMS
+// CONSTANTS
 // ============================================================================
 
-export type CourseType = 'ONLINE' | 'IN_PERSON' | 'BLENDED';
-export type CourseVisibility = 'PRIVATE' | 'INTERNAL' | 'PUBLIC';
-export type CourseDifficulty = 'BEGINNER' | 'INTERMEDIATE' | 'ADVANCED';
-export type CourseStatus = 'DRAFT' | 'PUBLISHED' | 'ARCHIVED';
-export type CurriculumItemType = 'LESSON' | 'QUIZ' | 'ASSIGNMENT';
-export type LessonType = 'TEXT' | 'VIDEO' | 'INTERACTIVE';
+export const COURSE_TYPE_LABELS: Record<CourseType, string> = {
+  ONLINE: 'Online',
+  IN_PERSON: 'Vor Ort',
+  BLENDED: 'Blended',
+};
 
-export interface CurriculumItem {
-  id: string;
-  type: CurriculumItemType;
-  title: string;
-  duration: number;
-  order: number;
-}
+export const COURSE_VISIBILITY_LABELS: Record<CourseVisibility, string> = {
+  PRIVATE: 'Privat',
+  INTERNAL: 'Intern',
+  PUBLIC: 'Oeffentlich',
+};
 
-export interface Course {
-  id: string;
-  title: string;
-  description: string;
-  type: CourseType;
-  visibility: CourseVisibility;
-  difficulty: CourseDifficulty;
-  categoryId: string;
-  image?: string;
-  certificateEnabled: boolean;
-  badgeId?: string;
-  curriculum: CurriculumItem[];
-  participantCount: number;
-  status: CourseStatus;
-}
+export const COURSE_DIFFICULTY_LABELS: Record<CourseDifficulty, string> = {
+  BEGINNER: 'Einsteiger',
+  INTERMEDIATE: 'Fortgeschritten',
+  ADVANCED: 'Experte',
+};
 
-export interface Lesson {
-  id: string;
-  title: string;
-  content: string;
-  type: LessonType;
-  groupId?: string;
-  groupName?: string;
-  mediaUrls: string[];
-  duration: number;
-}
+export const COURSE_STATUS_LABELS: Record<CourseStatus, string> = {
+  DRAFT: 'Entwurf',
+  PUBLISHED: 'Veroeffentlicht',
+  ARCHIVED: 'Archiviert',
+};
 
-export interface LessonGroup {
-  id: string;
-  name: string;
-}
+export const COURSE_STATUS_COLORS: Record<CourseStatus, string> = {
+  DRAFT: 'warning',
+  PUBLISHED: 'success',
+  ARCHIVED: 'info',
+};
 
-export interface Badge {
-  id: string;
-  name: string;
-  icon: string;
-  color: string;
-  description: string;
-  courseCount: number;
-}
+export const LESSON_TYPE_LABELS: Record<LessonType, string> = {
+  VIDEO: 'Video',
+  TEXT: 'Text',
+  INTERACTIVE: 'Interaktiv',
+  LIVE_SESSION: 'Live-Session',
+};
+
+export const QUESTION_TYPE_LABELS: Record<QuestionType, string> = {
+  SINGLE_CHOICE: 'Einzelauswahl',
+  MULTIPLE_CHOICE: 'Mehrfachauswahl',
+  TRUE_FALSE: 'Wahr/Falsch',
+  FREE_TEXT: 'Freitext',
+};
+
+export const ACADEMY_CATEGORIES = [
+  { value: 'cat-driving-theory', label: 'Fahrtheorie' },
+  { value: 'cat-driving-practice', label: 'Fahrpraxis' },
+  { value: 'cat-safety', label: 'Sicherheit' },
+  { value: 'cat-first-aid', label: 'Erste Hilfe' },
+  { value: 'cat-regulations', label: 'Vorschriften' },
+  { value: 'cat-soft-skills', label: 'Soft Skills' },
+  { value: 'cat-business', label: 'Business' },
+] as const;
 
 // ============================================================================
 // STORE
 // ============================================================================
 
 export const useAcademyStore = defineStore('academy', () => {
-  // ---- State ----
-  const courses = ref<Course[]>([]);
-  const lessons = ref<Lesson[]>([]);
-
-  // Lesson groups: local state (no backend endpoint)
-  const lessonGroups = ref<LessonGroup[]>([
-    { id: 'group-basics', name: 'Grundlagen' },
-    { id: 'group-technique', name: 'Techniken' },
-    { id: 'group-safety', name: 'Sicherheit & Hygiene' },
-  ]);
-
-  // Badges: local state with mock data (no backend endpoint)
+  // ── State ──────────────────────────────────────────────────────────────
+  const courses = ref<AcademyCourse[]>([]);
+  const enrollments = ref<CourseEnrollment[]>([]);
   const badges = ref<Badge[]>([
-    { id: 'badge-001', name: 'Haarpflege Grundlagen', icon: 'scissors', color: '#f43f5e', description: 'Abschluss des Grundlagenkurses Haarpflege', courseCount: 1 },
-    { id: 'badge-002', name: 'Koloristik Profi', icon: 'palette', color: '#8b5cf6', description: 'Zertifikat fuer Farbtheorie und Koloristik', courseCount: 1 },
-    { id: 'badge-003', name: 'Hochsteck-Meister', icon: 'crown', color: '#f59e0b', description: 'Meisterklasse Hochsteckfrisuren absolviert', courseCount: 1 },
-    { id: 'badge-004', name: 'Sicherheitsexperte', icon: 'shield', color: '#10b981', description: 'Arbeitssicherheit und Hygiene zertifiziert', courseCount: 1 },
-    { id: 'badge-005', name: 'Academy Star', icon: 'star', color: '#3b82f6', description: 'Alle Pflichtschulungen erfolgreich abgeschlossen', courseCount: 0 },
+    { id: 'badge-001', name: 'Theorie Grundlagen', icon: 'book', color: '#3b82f6', description: 'Abschluss des Theorie-Grundlagenkurses', courseCount: 1 },
+    { id: 'badge-002', name: 'Sicherheitsexperte', icon: 'shield', color: '#10b981', description: 'Sicherheitskurs erfolgreich abgeschlossen', courseCount: 1 },
+    { id: 'badge-003', name: 'Erste Hilfe', icon: 'heart', color: '#f43f5e', description: 'Erste-Hilfe-Kurs zertifiziert', courseCount: 1 },
+    { id: 'badge-004', name: 'Fahrprofi', icon: 'star', color: '#f59e0b', description: 'Alle Pflichtmodule erfolgreich absolviert', courseCount: 0 },
+    { id: 'badge-005', name: 'Academy Star', icon: 'trophy', color: '#8b5cf6', description: 'Alle Kurse mit Bestnote abgeschlossen', courseCount: 0 },
   ]);
 
-  const isLoading = ref(false);
   const loading = ref(false);
+  const isLoading = ref(false);
   const error = ref<string | null>(null);
 
-  // ---- Getters ----
+  // ── Getters ────────────────────────────────────────────────────────────
   const courseCount = computed(() => courses.value.length);
-  const lessonCount = computed(() => lessons.value.length);
   const badgeCount = computed(() => badges.value.length);
 
   const publishedCourses = computed(() =>
     courses.value.filter(c => c.status === 'PUBLISHED')
   );
 
-  const categories = computed(() => {
-    const map: Record<string, string> = {
-      'cat-hair': 'Haarpflege',
-      'cat-color': 'Koloristik',
-      'cat-soft': 'Soft Skills',
-      'cat-styling': 'Styling',
-      'cat-safety': 'Sicherheit',
-      'cat-barber': 'Barber',
-    };
-    return Object.entries(map).map(([value, label]) => ({ value, label }));
-  });
+  const draftCourses = computed(() =>
+    courses.value.filter(c => c.status === 'DRAFT')
+  );
 
-  // ---- Fetch Actions ----
+  const archivedCourses = computed(() =>
+    courses.value.filter(c => c.status === 'ARCHIVED')
+  );
 
+  const totalLessonCount = computed(() =>
+    courses.value.reduce((sum, c) =>
+      sum + c.modules.reduce((mSum, m) => mSum + m.lessons.length, 0), 0)
+  );
+
+  const totalQuizCount = computed(() =>
+    courses.value.reduce((sum, c) => sum + c.quizzes.length, 0)
+  );
+
+  const categories = computed(() => ACADEMY_CATEGORIES.map(c => ({ value: c.value, label: c.label })));
+
+  // Backward compat
+  const lessonCount = computed(() => totalLessonCount.value);
+
+  // ── Fetch Actions ──────────────────────────────────────────────────────
   async function fetchCourses(): Promise<void> {
-    loading.value = true;
-    error.value = null;
     try {
-      const response = await api.get<{ data: Course[] }>('/v1/courses', { per_page: 100 });
+      const response = await api.get<{ data: AcademyCourse[] }>('/v1/courses', { per_page: 100 });
       courses.value = response.data;
-    } catch (e: unknown) {
-      const message = e instanceof Error ? e.message : 'Failed to fetch courses';
+    } catch (err: unknown) {
+      const message = err instanceof Error ? err.message : 'Kurse konnten nicht geladen werden';
       error.value = message;
-      throw e;
-    } finally {
-      loading.value = false;
+      throw err;
     }
   }
 
-  async function fetchLessons(courseId: string): Promise<void> {
-    loading.value = true;
-    error.value = null;
+  async function fetchEnrollments(courseId?: string): Promise<void> {
     try {
-      const response = await api.get<{ data: Lesson[] }>(
-        `/v1/courses/${courseId}/lessons`,
-        { per_page: 100 },
-      );
-      const fetched = response.data;
-      // Merge: replace existing lessons by id, add new ones
-      const fetchedIds = new Set(fetched.map(l => l.id));
-      lessons.value = [
-        ...lessons.value.filter(l => !fetchedIds.has(l.id)),
-        ...fetched,
-      ];
-    } catch (e: unknown) {
-      const message = e instanceof Error ? e.message : 'Failed to fetch lessons';
+      const params = courseId ? { courseId } : {};
+      const response = await api.get<{ data: CourseEnrollment[] }>('/v1/enrollments', params);
+      enrollments.value = response.data;
+    } catch (err: unknown) {
+      const message = err instanceof Error ? err.message : 'Einschreibungen konnten nicht geladen werden';
       error.value = message;
-      throw e;
-    } finally {
-      loading.value = false;
+      throw err;
     }
   }
 
@@ -172,183 +188,191 @@ export const useAcademyStore = defineStore('academy', () => {
     isLoading.value = true;
     error.value = null;
     try {
-      // Fetch all courses
-      const coursesResponse = await api.get<{ data: Course[] }>('/v1/courses', { per_page: 100 });
-      courses.value = coursesResponse.data;
-
-      // Fetch lessons for each course in parallel
-      if (courses.value.length > 0) {
-        const lessonResponses = await Promise.all(
-          courses.value.map(course =>
-            api.get<{ data: Lesson[] }>(
-              `/v1/courses/${course.id}/lessons`,
-              { per_page: 100 },
-            ),
-          ),
-        );
-        lessons.value = lessonResponses.flatMap(r => r.data);
-      }
-    } catch (e: unknown) {
-      const message = e instanceof Error ? e.message : 'Failed to fetch academy data';
-      error.value = message;
-      throw e;
+      await fetchCourses();
+    } catch {
+      // fetchCourses already sets error.value
     } finally {
       loading.value = false;
       isLoading.value = false;
     }
   }
 
-  // ---- Course Actions ----
+  // ── Course CRUD ────────────────────────────────────────────────────────
+  function getCourseById(id: string): AcademyCourse | undefined {
+    return courses.value.find(c => c.id === id);
+  }
 
-  async function addCourse(course: Omit<Course, 'id' | 'participantCount'>): Promise<Course> {
-    loading.value = true;
-    error.value = null;
+  async function addCourse(data: Partial<AcademyCourse>): Promise<AcademyCourse> {
     try {
-      const response = await api.post<{ data: Course }>('/v1/courses', course);
-      const newCourse = response.data;
-      courses.value.push(newCourse);
-      return newCourse;
-    } catch (e: unknown) {
-      const message = e instanceof Error ? e.message : 'Failed to create course';
+      const response = await api.post<{ data: AcademyCourse }>('/v1/courses', data);
+      courses.value.push(response.data);
+      return response.data;
+    } catch (err: unknown) {
+      const message = err instanceof Error ? err.message : 'Kurs konnte nicht erstellt werden';
       error.value = message;
-      throw e;
-    } finally {
-      loading.value = false;
+      throw err;
     }
   }
 
-  async function updateCourse(id: string, data: Partial<Course>): Promise<void> {
-    loading.value = true;
-    error.value = null;
+  async function updateCourse(id: string, data: Partial<AcademyCourse>): Promise<void> {
     try {
-      const response = await api.put<{ data: Course }>(`/v1/courses/${id}`, data);
+      const response = await api.put<{ data: AcademyCourse }>(`/v1/courses/${id}`, data);
       const idx = courses.value.findIndex(c => c.id === id);
       if (idx !== -1) {
         courses.value[idx] = response.data;
       }
-    } catch (e: unknown) {
-      const message = e instanceof Error ? e.message : 'Failed to update course';
+    } catch (err: unknown) {
+      const message = err instanceof Error ? err.message : 'Kurs konnte nicht aktualisiert werden';
       error.value = message;
-      throw e;
-    } finally {
-      loading.value = false;
+      throw err;
     }
   }
 
   async function deleteCourse(id: string): Promise<void> {
-    loading.value = true;
-    error.value = null;
     try {
       await api.delete(`/v1/courses/${id}`);
-      const idx = courses.value.findIndex(c => c.id === id);
-      if (idx !== -1) {
-        courses.value.splice(idx, 1);
-      }
-    } catch (e: unknown) {
-      const message = e instanceof Error ? e.message : 'Failed to delete course';
+      courses.value = courses.value.filter(c => c.id !== id);
+    } catch (err: unknown) {
+      const message = err instanceof Error ? err.message : 'Kurs konnte nicht geloescht werden';
       error.value = message;
-      throw e;
-    } finally {
-      loading.value = false;
+      throw err;
     }
   }
 
-  function getCourseById(id: string): Course | undefined {
-    return courses.value.find(c => c.id === id);
-  }
-
-  // ---- Lesson Actions ----
-
-  async function addLesson(lesson: Omit<Lesson, 'id'>, courseId?: string): Promise<Lesson> {
-    loading.value = true;
-    error.value = null;
+  // ── Module CRUD ────────────────────────────────────────────────────────
+  async function addModule(courseId: string, data: Omit<AcademyModule, 'id' | 'courseId' | 'lessons'>): Promise<AcademyModule> {
     try {
-      if (courseId) {
-        const response = await api.post<{ data: Lesson }>(
-          `/v1/courses/${courseId}/lessons`,
-          lesson,
-        );
-        const newLesson = response.data;
-        lessons.value.push(newLesson);
-        return newLesson;
+      const response = await api.post<{ data: AcademyModule }>(`/v1/courses/${courseId}/modules`, data);
+      const course = courses.value.find(c => c.id === courseId);
+      if (course) {
+        course.modules.push(response.data);
       }
-      // Local-only lesson (library item, not yet attached to a course)
-      const newLesson: Lesson = {
-        ...lesson,
-        id: `lesson-${Date.now()}`,
-      };
-      lessons.value.push(newLesson);
-      return newLesson;
-    } catch (e: unknown) {
-      const message = e instanceof Error ? e.message : 'Failed to create lesson';
+      return response.data;
+    } catch (err: unknown) {
+      const message = err instanceof Error ? err.message : 'Modul konnte nicht erstellt werden';
       error.value = message;
-      throw e;
-    } finally {
-      loading.value = false;
+      throw err;
     }
   }
 
-  async function updateLesson(id: string, data: Partial<Lesson>): Promise<void> {
-    loading.value = true;
-    error.value = null;
+  async function updateModule(courseId: string, moduleId: string, data: Partial<AcademyModule>): Promise<void> {
     try {
-      const response = await api.put<{ data: Lesson }>(`/v1/lessons/${id}`, data);
-      const idx = lessons.value.findIndex(l => l.id === id);
-      if (idx !== -1) {
-        lessons.value[idx] = response.data;
-      }
-    } catch (e: unknown) {
-      const message = e instanceof Error ? e.message : 'Failed to update lesson';
-      error.value = message;
-      throw e;
-    } finally {
-      loading.value = false;
-    }
-  }
-
-  async function deleteLesson(id: string): Promise<void> {
-    loading.value = true;
-    error.value = null;
-    try {
-      await api.delete(`/v1/lessons/${id}`);
-      const idx = lessons.value.findIndex(l => l.id === id);
-      if (idx !== -1) {
-        lessons.value.splice(idx, 1);
-      }
-    } catch (e: unknown) {
-      const message = e instanceof Error ? e.message : 'Failed to delete lesson';
-      error.value = message;
-      throw e;
-    } finally {
-      loading.value = false;
-    }
-  }
-
-  // ---- Lesson Group Actions (local state only) ----
-
-  function addLessonGroup(name: string): LessonGroup {
-    const group: LessonGroup = {
-      id: `group-${Date.now()}`,
-      name,
-    };
-    lessonGroups.value.push(group);
-    return group;
-  }
-
-  function renameLessonGroup(id: string, name: string) {
-    const group = lessonGroups.value.find(g => g.id === id);
-    if (group) {
-      group.name = name;
-      // Update groupName in all lessons of this group
-      lessons.value.forEach(l => {
-        if (l.groupId === id) {
-          l.groupName = name;
+      const response = await api.put<{ data: AcademyModule }>(`/v1/courses/${courseId}/modules/${moduleId}`, data);
+      const course = courses.value.find(c => c.id === courseId);
+      if (course) {
+        const idx = course.modules.findIndex(m => m.id === moduleId);
+        if (idx !== -1) {
+          course.modules[idx] = response.data;
         }
-      });
+      }
+    } catch (err: unknown) {
+      const message = err instanceof Error ? err.message : 'Modul konnte nicht aktualisiert werden';
+      error.value = message;
+      throw err;
     }
   }
 
-  // ---- Badge Actions (local state only) ----
+  async function deleteModule(courseId: string, moduleId: string): Promise<void> {
+    try {
+      await api.delete(`/v1/courses/${courseId}/modules/${moduleId}`);
+      const course = courses.value.find(c => c.id === courseId);
+      if (course) {
+        course.modules = course.modules.filter(m => m.id !== moduleId);
+      }
+    } catch (err: unknown) {
+      const message = err instanceof Error ? err.message : 'Modul konnte nicht geloescht werden';
+      error.value = message;
+      throw err;
+    }
+  }
+
+  // ── Lesson CRUD ────────────────────────────────────────────────────────
+  async function addLesson(courseId: string, moduleId: string, data: Omit<AcademyLesson, 'id' | 'moduleId' | 'attachments'>): Promise<AcademyLesson> {
+    try {
+      const response = await api.post<{ data: AcademyLesson }>(`/v1/courses/${courseId}/modules/${moduleId}/lessons`, data);
+      const course = courses.value.find(c => c.id === courseId);
+      if (course) {
+        const mod = course.modules.find(m => m.id === moduleId);
+        if (mod) {
+          mod.lessons.push(response.data);
+        }
+      }
+      return response.data;
+    } catch (err: unknown) {
+      const message = err instanceof Error ? err.message : 'Lektion konnte nicht erstellt werden';
+      error.value = message;
+      throw err;
+    }
+  }
+
+  async function deleteLesson(courseId: string, moduleId: string, lessonId: string): Promise<void> {
+    try {
+      await api.delete(`/v1/lessons/${lessonId}`);
+      const course = courses.value.find(c => c.id === courseId);
+      if (course) {
+        const mod = course.modules.find(m => m.id === moduleId);
+        if (mod) {
+          mod.lessons = mod.lessons.filter(l => l.id !== lessonId);
+        }
+      }
+    } catch (err: unknown) {
+      const message = err instanceof Error ? err.message : 'Lektion konnte nicht geloescht werden';
+      error.value = message;
+      throw err;
+    }
+  }
+
+  // ── Quiz CRUD ──────────────────────────────────────────────────────────
+  async function addQuiz(courseId: string, data: Omit<AcademyQuiz, 'id' | 'courseId'>): Promise<AcademyQuiz> {
+    try {
+      const response = await api.post<{ data: AcademyQuiz }>(`/v1/courses/${courseId}/quizzes`, data);
+      const course = courses.value.find(c => c.id === courseId);
+      if (course) {
+        course.quizzes.push(response.data);
+      }
+      return response.data;
+    } catch (err: unknown) {
+      const message = err instanceof Error ? err.message : 'Quiz konnte nicht erstellt werden';
+      error.value = message;
+      throw err;
+    }
+  }
+
+  async function updateQuiz(courseId: string, quizId: string, data: Partial<AcademyQuiz>): Promise<void> {
+    try {
+      const response = await api.put<{ data: AcademyQuiz }>(`/v1/courses/${courseId}/quizzes/${quizId}`, data);
+      const course = courses.value.find(c => c.id === courseId);
+      if (course) {
+        const idx = course.quizzes.findIndex(q => q.id === quizId);
+        if (idx !== -1) {
+          course.quizzes[idx] = response.data;
+        }
+      }
+    } catch (err: unknown) {
+      const message = err instanceof Error ? err.message : 'Quiz konnte nicht aktualisiert werden';
+      error.value = message;
+      throw err;
+    }
+  }
+
+  async function deleteQuiz(courseId: string, quizId: string): Promise<void> {
+    try {
+      await api.delete(`/v1/courses/${courseId}/quizzes/${quizId}`);
+      const course = courses.value.find(c => c.id === courseId);
+      if (course) {
+        course.quizzes = course.quizzes.filter(q => q.id !== quizId);
+      }
+    } catch (err: unknown) {
+      const message = err instanceof Error ? err.message : 'Quiz konnte nicht geloescht werden';
+      error.value = message;
+      throw err;
+    }
+  }
+
+  // ── Badge CRUD ─────────────────────────────────────────────────────────
+  function getBadgeById(id: string): Badge | undefined {
+    return badges.value.find(b => b.id === id);
+  }
 
   function addBadge(badge: Omit<Badge, 'id' | 'courseCount'>): Badge {
     const newBadge: Badge = {
@@ -368,61 +392,77 @@ export const useAcademyStore = defineStore('academy', () => {
   }
 
   function deleteBadge(id: string) {
-    const idx = badges.value.findIndex(b => b.id === id);
-    if (idx !== -1) {
-      badges.value.splice(idx, 1);
-    }
-    // Remove badge from courses
+    badges.value = badges.value.filter(b => b.id !== id);
     courses.value.forEach(c => {
       if (c.badgeId === id) {
         c.badgeId = undefined;
+        c.badgeName = undefined;
       }
     });
   }
 
-  function getBadgeById(id: string): Badge | undefined {
-    return badges.value.find(b => b.id === id);
+  // ── Enrollment helpers ─────────────────────────────────────────────────
+  function getEnrollmentsForCourse(courseId: string): CourseEnrollment[] {
+    return enrollments.value.filter(e => e.courseId === courseId);
+  }
+
+  function getEnrollmentsForCustomer(customerId: string): CourseEnrollment[] {
+    return enrollments.value.filter(e => e.customerId === customerId);
   }
 
   return {
     // State
     courses,
-    lessons,
-    lessonGroups,
+    enrollments,
     badges,
-    isLoading,
     loading,
+    isLoading,
     error,
 
     // Getters
     courseCount,
-    lessonCount,
     badgeCount,
     publishedCourses,
+    draftCourses,
+    archivedCourses,
+    totalLessonCount,
+    totalQuizCount,
+    lessonCount,
     categories,
 
-    // Actions — Fetch
+    // Fetch
     fetchCourses,
-    fetchLessons,
+    fetchEnrollments,
     fetchAll,
 
-    // Actions — Courses
+    // Course CRUD
+    getCourseById,
     addCourse,
     updateCourse,
     deleteCourse,
-    getCourseById,
 
-    // Actions — Lessons
+    // Module CRUD
+    addModule,
+    updateModule,
+    deleteModule,
+
+    // Lesson CRUD
     addLesson,
-    updateLesson,
     deleteLesson,
-    addLessonGroup,
-    renameLessonGroup,
 
-    // Actions — Badges
+    // Quiz CRUD
+    addQuiz,
+    updateQuiz,
+    deleteQuiz,
+
+    // Badge CRUD
+    getBadgeById,
     addBadge,
     updateBadge,
     deleteBadge,
-    getBadgeById,
+
+    // Enrollment helpers
+    getEnrollmentsForCourse,
+    getEnrollmentsForCustomer,
   };
 });

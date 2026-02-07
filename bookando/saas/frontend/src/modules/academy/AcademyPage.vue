@@ -1,29 +1,92 @@
 <script setup lang="ts">
 /**
- * Academy-Modul — Kurse, Training & Zertifizierungen
+ * Academy-Modul — Kurse, Quizze, Ausbildungskarten, Badges
+ *
+ * Refactored: Domain-Typen, neue Tabs (Quizze, Ausbildungskarten),
+ * CourseFormPanel + TrainingCardFormPanel (SlideIn statt BModal)
  */
 import { ref, computed } from 'vue';
 import ModuleLayout from '@/components/layout/ModuleLayout.vue';
 import type { Tab } from '@/components/layout/ModuleLayout.vue';
 import CoursesTab from './components/CoursesTab.vue';
 import LessonsTab from './components/LessonsTab.vue';
+import BadgesTab from './components/BadgesTab.vue';
+import QuizzesTab from './components/QuizzesTab.vue';
+import TrainingCardsTab from './components/TrainingCardsTab.vue';
+import CourseFormPanel from './components/CourseFormPanel.vue';
+import TrainingCardFormPanel from './components/TrainingCardFormPanel.vue';
 import { useI18n } from '@/composables/useI18n';
-import { useDesignStore } from '@/stores/design';
 import { useAcademyStore } from '@/stores/academy';
-import { BUTTON_STYLES } from '@/design';
+import { useTrainingCardsStore } from '@/stores/training-cards';
+import type { AcademyCourse } from '@/stores/academy';
+import type { TrainingCardTemplate } from '@/stores/training-cards';
 
 const { t } = useI18n();
-const designStore = useDesignStore();
-const store = useAcademyStore();
+const academyStore = useAcademyStore();
+const trainingCardsStore = useTrainingCardsStore();
 
 const activeTab = ref('courses');
 
 const tabs = computed<Tab[]>(() => [
-  { id: 'courses', label: t('academy.courses'), badge: store.courses?.length },
-  { id: 'lessons', label: t('academy.lessons') },
-  { id: 'badges', label: t('academy.badges') },
-  { id: 'quizzes', label: t('academy.quizzes') },
+  { id: 'courses', label: t('academy.courses'), badge: academyStore.courseCount },
+  { id: 'quizzes', label: t('academy.quizzes'), badge: academyStore.totalQuizCount },
+  { id: 'training-cards', label: 'Ausbildungskarten', badge: trainingCardsStore.templateCount },
+  { id: 'badges', label: t('academy.badges'), badge: academyStore.badgeCount },
 ]);
+
+// ── CourseFormPanel State ─────────────────────────────────────────────────
+const showCoursePanel = ref(false);
+const editingCourse = ref<AcademyCourse | null>(null);
+
+function handleCreateCourse() {
+  editingCourse.value = null;
+  showCoursePanel.value = true;
+}
+
+function handleEditCourse(course: AcademyCourse) {
+  editingCourse.value = course;
+  showCoursePanel.value = true;
+}
+
+function handleCourseSaved() {
+  showCoursePanel.value = false;
+  editingCourse.value = null;
+}
+
+// ── TrainingCardFormPanel State ───────────────────────────────────────────
+const showTrainingCardPanel = ref(false);
+const editingTemplate = ref<TrainingCardTemplate | null>(null);
+
+function handleCreateTemplate() {
+  editingTemplate.value = null;
+  showTrainingCardPanel.value = true;
+}
+
+function handleEditTemplate(template: TrainingCardTemplate) {
+  editingTemplate.value = template;
+  showTrainingCardPanel.value = true;
+}
+
+function handleTemplateSaved() {
+  showTrainingCardPanel.value = false;
+  editingTemplate.value = null;
+}
+
+// ── FAB ──────────────────────────────────────────────────────────────────
+const fabLabel = computed(() => {
+  switch (activeTab.value) {
+    case 'courses': return t('academy.newCourse');
+    case 'training-cards': return 'Neue Vorlage';
+    default: return '';
+  }
+});
+
+const showFab = computed(() => ['courses', 'training-cards'].includes(activeTab.value));
+
+function handleFabClick() {
+  if (activeTab.value === 'courses') handleCreateCourse();
+  else if (activeTab.value === 'training-cards') handleCreateTemplate();
+}
 </script>
 
 <template>
@@ -33,52 +96,58 @@ const tabs = computed<Tab[]>(() => [
     :subtitle="t('academy.subtitle')"
     :tabs="tabs"
     :active-tab="activeTab"
-    :show-fab="activeTab === 'courses'"
-    :fab-label="t('academy.newCourse')"
+    :show-fab="showFab"
+    :fab-label="fabLabel"
     @tab-change="(id: string) => activeTab = id"
+    @fab-click="handleFabClick"
   >
     <template #header-actions>
       <button
+        v-if="showFab"
         class="px-3 py-1.5 text-xs font-medium rounded-lg bg-white/20 text-white hover:bg-white/30 transition-colors hidden md:inline-flex items-center gap-1.5"
-        @click="activeTab = 'courses'"
+        @click="handleFabClick"
       >
         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
         </svg>
-        {{ t('academy.newCourse') }}
+        {{ fabLabel }}
       </button>
     </template>
 
     <!-- Kurse -->
-    <CoursesTab v-if="activeTab === 'courses'" />
+    <CoursesTab
+      v-if="activeTab === 'courses'"
+      @edit="handleEditCourse"
+      @create="handleCreateCourse"
+    />
 
-    <!-- Lektionen -->
-    <LessonsTab v-else-if="activeTab === 'lessons'" />
+    <!-- Quizze -->
+    <QuizzesTab v-else-if="activeTab === 'quizzes'" />
 
-    <!-- Badges (Platzhalter) -->
-    <div v-else-if="activeTab === 'badges'" class="bg-white rounded-xl border border-slate-200 p-8 min-h-[300px] flex items-center justify-center">
-      <div class="text-center">
-        <div class="w-16 h-16 mx-auto bg-rose-50 rounded-full flex items-center justify-center mb-4">
-          <svg class="w-8 h-8 text-rose-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z" />
-          </svg>
-        </div>
-        <h3 class="text-sm font-semibold text-slate-900">{{ t('academy.badges') }}</h3>
-        <p class="text-sm text-slate-500 mt-1">Coming soon</p>
-      </div>
-    </div>
+    <!-- Ausbildungskarten -->
+    <TrainingCardsTab
+      v-else-if="activeTab === 'training-cards'"
+      @edit="handleEditTemplate"
+      @create="handleCreateTemplate"
+    />
 
-    <!-- Quizze (Platzhalter) -->
-    <div v-else class="bg-white rounded-xl border border-slate-200 p-8 min-h-[300px] flex items-center justify-center">
-      <div class="text-center">
-        <div class="w-16 h-16 mx-auto bg-rose-50 rounded-full flex items-center justify-center mb-4">
-          <svg class="w-8 h-8 text-rose-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-          </svg>
-        </div>
-        <h3 class="text-sm font-semibold text-slate-900">{{ t('academy.quizzes') }}</h3>
-        <p class="text-sm text-slate-500 mt-1">Coming soon</p>
-      </div>
-    </div>
+    <!-- Badges -->
+    <BadgesTab v-else-if="activeTab === 'badges'" />
   </ModuleLayout>
+
+  <!-- Course Form Panel (SlideIn) -->
+  <CourseFormPanel
+    v-model="showCoursePanel"
+    :course="editingCourse"
+    @saved="handleCourseSaved"
+    @deleted="handleCourseSaved"
+  />
+
+  <!-- Training Card Form Panel (SlideIn) -->
+  <TrainingCardFormPanel
+    v-model="showTrainingCardPanel"
+    :template="editingTemplate"
+    @saved="handleTemplateSaved"
+    @deleted="handleTemplateSaved"
+  />
 </template>
