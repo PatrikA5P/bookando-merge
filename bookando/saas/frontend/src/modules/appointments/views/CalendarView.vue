@@ -1,46 +1,58 @@
 <script setup lang="ts">
 /**
- * CalendarView — Kalenderansicht fuer Termine
+ * CalendarView -- Calendar view for appointments
  *
  * Features:
- * - Tag/Woche/Monat-Umschalter
- * - Wochenansicht: 7-Spalten-Grid mit Stunden 07:00-20:00
- * - Tagesansicht: Einzelspalte mit Zeitslots
- * - Monatsansicht: Kalender-Grid mit Terminanzahl pro Tag
- * - Datumsnavigation (zurueck/weiter/heute)
- * - Aktuelle-Zeit-Indikator (rote Linie)
- * - Responsive: Mobile nur Tagesansicht als Karten
+ * - Day / Week / Month toggle (desktop only; mobile forces day view)
+ * - Week view: 7-column grid with hours 07:00-20:00, Monday start (Swiss)
+ * - Day view: single-column time grid, mobile shows cards instead
+ * - Month view: calendar grid with appointment counts per day, click to drill
+ * - Date navigation (prev / next / today) with clickable header date picker
+ * - Current-time red line indicator (updates every 60s)
+ * - Drag-to-reschedule hint on hover
+ * - Color-coded appointment blocks by status
+ * - Detail modal on click
+ * - Responsive: Mobile shows only day view as cards
+ *
+ * Uses useDesignStore for reactive design tokens.
+ * ALL strings via t() -- no hardcoded text.
  */
 import { ref, computed, onMounted, onUnmounted } from 'vue';
 import {
   BUTTON_STYLES,
   CARD_STYLES,
-  BADGE_STYLES,
-  TAB_STYLES,
-  GRID_STYLES,
 } from '@/design';
 import BButton from '@/components/ui/BButton.vue';
 import BBadge from '@/components/ui/BBadge.vue';
 import BEmptyState from '@/components/ui/BEmptyState.vue';
+import BModal from '@/components/ui/BModal.vue';
 import AppointmentCard from '../components/AppointmentCard.vue';
-import AppointmentModal from '../components/AppointmentModal.vue';
 import { useI18n } from '@/composables/useI18n';
+import { useDesignStore } from '@/stores/design';
 import { useBreakpoint } from '@/composables/useBreakpoint';
+import { useAppStore } from '@/stores/app';
 import { useAppointmentsStore } from '@/stores/appointments';
 import type { Appointment } from '@/stores/appointments';
 
+const emit = defineEmits<{
+  (e: 'open-create'): void;
+}>();
+
 const { t } = useI18n();
+const designStore = useDesignStore();
 const { isMobile } = useBreakpoint();
+const appStore = useAppStore();
 const store = useAppointmentsStore();
 
-// View state
+// ---------- State ----------
+
 const viewMode = ref<'day' | 'week' | 'month'>('week');
 const currentDate = ref(new Date());
 const selectedAppointment = ref<Appointment | null>(null);
 const showDetailModal = ref(false);
-const showCreateModal = ref(false);
+const dateInputRef = ref<HTMLInputElement | null>(null);
 
-// Current time for indicator
+// Current time for red-line indicator
 const currentTime = ref(new Date());
 let timeInterval: ReturnType<typeof setInterval> | null = null;
 
@@ -60,10 +72,12 @@ const effectiveViewMode = computed(() => {
   return viewMode.value;
 });
 
-// Hours for day/week grid
-const HOURS = Array.from({ length: 14 }, (_, i) => i + 7); // 07:00 - 20:00
+// Hours for day/week grid: 07:00 - 20:00
+const HOURS = Array.from({ length: 14 }, (_, i) => i + 7);
+const HOUR_HEIGHT = 60; // px per hour in grids
 
-// Date helpers
+// ---------- Date helpers ----------
+
 function toDateStr(d: Date): string {
   return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
 }
@@ -71,18 +85,22 @@ function toDateStr(d: Date): string {
 function getWeekStart(date: Date): Date {
   const d = new Date(date);
   const day = d.getDay();
-  // Monday as start of week (Swiss convention)
+  // Monday start (Swiss convention)
   const diff = d.getDate() - day + (day === 0 ? -6 : 1);
   d.setDate(diff);
   d.setHours(0, 0, 0, 0);
   return d;
 }
 
-function getMonthStart(date: Date): Date {
-  return new Date(date.getFullYear(), date.getMonth(), 1);
+function getWeekNumber(d: Date): number {
+  const date = new Date(Date.UTC(d.getFullYear(), d.getMonth(), d.getDate()));
+  date.setUTCDate(date.getUTCDate() + 4 - (date.getUTCDay() || 7));
+  const yearStart = new Date(Date.UTC(date.getUTCFullYear(), 0, 1));
+  return Math.ceil((((date.getTime() - yearStart.getTime()) / 86400000) + 1) / 7);
 }
 
-// Week dates
+// ---------- Week dates ----------
+
 const weekDates = computed(() => {
   const start = getWeekStart(currentDate.value);
   const dates: Date[] = [];
@@ -94,14 +112,26 @@ const weekDates = computed(() => {
   return dates;
 });
 
-// Month calendar grid
-const monthGrid = computed(() => {
-  const start = getMonthStart(currentDate.value);
-  const year = start.getFullYear();
-  const month = start.getMonth();
+// Swiss week day abbreviations
+const weekDayNames = computed(() => [
+  t('employees.detail.monday').slice(0, 2),
+  t('employees.detail.tuesday').slice(0, 2),
+  t('employees.detail.wednesday').slice(0, 2),
+  t('employees.detail.thursday').slice(0, 2),
+  t('employees.detail.friday').slice(0, 2),
+  t('employees.detail.saturday').slice(0, 2),
+  t('employees.detail.sunday').slice(0, 2),
+]);
 
-  // First day of month, adjusted for Monday start
-  let firstDayOffset = start.getDay() - 1;
+// ---------- Month grid ----------
+
+const monthGrid = computed(() => {
+  const year = currentDate.value.getFullYear();
+  const month = currentDate.value.getMonth();
+  const firstDay = new Date(year, month, 1);
+
+  // Monday-based offset
+  let firstDayOffset = firstDay.getDay() - 1;
   if (firstDayOffset < 0) firstDayOffset = 6;
 
   const daysInMonth = new Date(year, month + 1, 0).getDate();
@@ -140,7 +170,8 @@ const monthGrid = computed(() => {
   return rows;
 });
 
-// Navigation
+// ---------- Navigation ----------
+
 const headerTitle = computed(() => {
   const d = currentDate.value;
   if (effectiveViewMode.value === 'day') {
@@ -149,9 +180,10 @@ const headerTitle = computed(() => {
   if (effectiveViewMode.value === 'week') {
     const start = weekDates.value[0];
     const end = weekDates.value[6];
+    const kw = getWeekNumber(d);
     const startStr = start.toLocaleDateString('de-CH', { day: 'numeric', month: 'short' });
     const endStr = end.toLocaleDateString('de-CH', { day: 'numeric', month: 'short', year: 'numeric' });
-    return `${startStr} - ${endStr}`;
+    return `KW ${kw} (${startStr} - ${endStr})`;
   }
   return d.toLocaleDateString('de-CH', { month: 'long', year: 'numeric' });
 });
@@ -177,22 +209,29 @@ function selectDay(date: Date) {
   viewMode.value = 'day';
 }
 
-// Current time indicator position (percentage from top of grid)
+function onDatePick(event: Event) {
+  const target = event.target as HTMLInputElement;
+  if (target.value) {
+    currentDate.value = new Date(target.value + 'T00:00:00');
+  }
+}
+
+// ---------- Current time indicator ----------
+
 const currentTimePosition = computed(() => {
   const now = currentTime.value;
   const hours = now.getHours();
   const minutes = now.getMinutes();
   const totalMinutes = hours * 60 + minutes;
-  const startMinutes = 7 * 60; // 07:00
-  const endMinutes = 20 * 60; // 20:00
+  const startMinutes = 7 * 60;
+  const endMinutes = 20 * 60;
   const range = endMinutes - startMinutes;
   const position = ((totalMinutes - startMinutes) / range) * 100;
   return Math.max(0, Math.min(100, position));
 });
 
 const showTimeIndicator = computed(() => {
-  const now = currentTime.value;
-  const hours = now.getHours();
+  const hours = currentTime.value.getHours();
   return hours >= 7 && hours < 20;
 });
 
@@ -200,17 +239,21 @@ const isToday = computed(() => {
   return toDateStr(currentDate.value) === toDateStr(new Date());
 });
 
-// Appointment positioning in grid
+function isTodayDate(date: Date): boolean {
+  return toDateStr(date) === toDateStr(new Date());
+}
+
+// ---------- Appointment helpers ----------
+
 function getAppointmentStyle(appointment: Appointment) {
   const [startH, startM] = appointment.startTime.split(':').map(Number);
   const [endH, endM] = appointment.endTime.split(':').map(Number);
   const startMinutes = startH * 60 + startM;
   const endMinutes = endH * 60 + endM;
   const gridStartMinutes = 7 * 60;
-  const hourHeight = 60; // px per hour
 
-  const top = ((startMinutes - gridStartMinutes) / 60) * hourHeight;
-  const height = Math.max(((endMinutes - startMinutes) / 60) * hourHeight - 2, 20);
+  const top = ((startMinutes - gridStartMinutes) / 60) * HOUR_HEIGHT;
+  const height = Math.max(((endMinutes - startMinutes) / 60) * HOUR_HEIGHT - 2, 20);
 
   return {
     top: `${top}px`,
@@ -229,17 +272,43 @@ function getStatusColor(status: string): string {
   return map[status] || 'bg-slate-100 border-slate-300 text-slate-600';
 }
 
+function getStatusBorderLeft(status: string): string {
+  const map: Record<string, string> = {
+    PENDING: 'border-l-amber-500',
+    CONFIRMED: 'border-l-emerald-500',
+    COMPLETED: 'border-l-blue-500',
+    CANCELLED: 'border-l-slate-400',
+    NO_SHOW: 'border-l-rose-500',
+  };
+  return map[status] || 'border-l-slate-400';
+}
+
+function getStatusLabel(status: string): string {
+  const map: Record<string, string> = {
+    PENDING: t('common.pending'),
+    CONFIRMED: t('appointments.confirmed'),
+    COMPLETED: t('common.completed'),
+    CANCELLED: t('common.cancelled'),
+    NO_SHOW: t('appointments.noShow'),
+  };
+  return map[status] || status;
+}
+
+function getStatusKey(status: string): string {
+  const map: Record<string, string> = {
+    PENDING: 'pending',
+    CONFIRMED: 'confirmed',
+    COMPLETED: 'completed',
+    CANCELLED: 'cancelled',
+    NO_SHOW: 'noShow',
+  };
+  return map[status] || 'inactive';
+}
+
 // Day appointments
 const dayAppointments = computed(() => {
   return store.getByDate(toDateStr(currentDate.value));
 });
-
-// Week day names
-const weekDayNames = ['Mo', 'Di', 'Mi', 'Do', 'Fr', 'Sa', 'So'];
-
-function isTodayDate(date: Date): boolean {
-  return toDateStr(date) === toDateStr(new Date());
-}
 
 function getAppointmentsForDate(date: Date): Appointment[] {
   return store.getByDate(toDateStr(date));
@@ -250,30 +319,47 @@ function onAppointmentClick(appointment: Appointment) {
   showDetailModal.value = true;
 }
 
-function onAppointmentCreated() {
-  showCreateModal.value = false;
-}
+// Format date for hidden input
+const formattedInputDate = computed(() => {
+  if (effectiveViewMode.value === 'month') {
+    return toDateStr(currentDate.value).slice(0, 7);
+  }
+  return toDateStr(currentDate.value);
+});
 </script>
 
 <template>
-  <div>
+  <div class="p-4 lg:p-6">
     <!-- Toolbar -->
     <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 mb-4">
-      <!-- Navigation -->
+      <!-- Date Navigation -->
       <div class="flex items-center gap-2">
         <button :class="BUTTON_STYLES.icon" @click="navigate(-1)">
           <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
           </svg>
         </button>
-        <h2 class="text-sm font-semibold text-slate-900 min-w-[200px] text-center">
-          {{ headerTitle }}
-        </h2>
+
+        <!-- Clickable header label with hidden date picker -->
+        <div class="relative group cursor-pointer" @click="dateInputRef?.showPicker?.()">
+          <h2 class="text-sm font-semibold text-slate-900 min-w-[200px] text-center select-none hover:text-brand-600 transition-colors">
+            {{ headerTitle }}
+          </h2>
+          <input
+            ref="dateInputRef"
+            :type="effectiveViewMode === 'month' ? 'month' : 'date'"
+            class="absolute inset-0 opacity-0 cursor-pointer w-full"
+            :value="formattedInputDate"
+            @change="onDatePick"
+          />
+        </div>
+
         <button :class="BUTTON_STYLES.icon" @click="navigate(1)">
           <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
           </svg>
         </button>
+
         <button
           :class="[
             'ml-1 px-3 py-1.5 text-xs font-medium rounded-lg transition-colors',
@@ -305,7 +391,7 @@ function onAppointmentCreated() {
       </div>
     </div>
 
-    <!-- DAY VIEW -->
+    <!-- ======================== DAY VIEW ======================== -->
     <template v-if="effectiveViewMode === 'day'">
       <!-- Mobile: Card Layout -->
       <div v-if="isMobile" class="space-y-3">
@@ -315,7 +401,7 @@ function onAppointmentCreated() {
           :description="t('common.noResultsMessage')"
           icon="calendar"
           :action-label="t('appointments.newAppointment')"
-          @action="showCreateModal = true"
+          @action="emit('open-create')"
         />
         <AppointmentCard
           v-for="apt in dayAppointments"
@@ -327,13 +413,13 @@ function onAppointmentCreated() {
 
       <!-- Desktop: Time Grid -->
       <div v-else :class="[CARD_STYLES.base, 'overflow-hidden']">
-        <div class="relative" style="height: 840px;"> <!-- 14 hours * 60px -->
-          <!-- Time Grid Lines -->
+        <div class="relative" :style="{ height: `${HOURS.length * HOUR_HEIGHT}px` }">
+          <!-- Hour grid lines -->
           <div
             v-for="hour in HOURS"
             :key="hour"
             class="absolute left-0 right-0 border-t border-slate-100"
-            :style="{ top: `${(hour - 7) * 60}px` }"
+            :style="{ top: `${(hour - 7) * HOUR_HEIGHT}px` }"
           >
             <span class="absolute -top-2.5 left-2 text-[10px] font-medium text-slate-400 bg-white px-1">
               {{ String(hour).padStart(2, '0') }}:00
@@ -357,20 +443,25 @@ function onAppointmentCreated() {
             <button
               v-for="apt in dayAppointments"
               :key="apt.id"
-              class="absolute left-0 right-0 rounded-lg border px-2 py-1 cursor-pointer transition-shadow hover:shadow-md overflow-hidden text-left"
-              :class="getStatusColor(apt.status)"
+              class="absolute left-0 right-0 rounded-lg border border-l-4 px-2 py-1 cursor-pointer transition-shadow hover:shadow-md overflow-hidden text-left group"
+              :class="[getStatusColor(apt.status), getStatusBorderLeft(apt.status)]"
               :style="getAppointmentStyle(apt)"
+              :title="t('appointments.dragToReschedule')"
               @click="onAppointmentClick(apt)"
             >
               <div class="text-[11px] font-bold truncate">{{ apt.startTime }} {{ apt.serviceName }}</div>
               <div class="text-[10px] opacity-75 truncate">{{ apt.customerName }}</div>
+              <!-- Drag hint on hover -->
+              <div class="absolute bottom-0.5 right-1 text-[8px] text-slate-400 opacity-0 group-hover:opacity-100 transition-opacity">
+                {{ t('appointments.dragToReschedule') }}
+              </div>
             </button>
           </div>
         </div>
       </div>
     </template>
 
-    <!-- WEEK VIEW -->
+    <!-- ======================== WEEK VIEW ======================== -->
     <template v-if="effectiveViewMode === 'week'">
       <div :class="[CARD_STYLES.base, 'overflow-hidden']">
         <!-- Week Header -->
@@ -398,14 +489,14 @@ function onAppointmentCreated() {
 
         <!-- Week Grid -->
         <div class="relative overflow-y-auto" style="height: 660px;">
-          <div class="grid grid-cols-[56px_repeat(7,1fr)]" style="height: 840px;">
+          <div class="grid grid-cols-[56px_repeat(7,1fr)]" :style="{ height: `${HOURS.length * HOUR_HEIGHT}px` }">
             <!-- Time Labels -->
             <div class="relative">
               <div
                 v-for="hour in HOURS"
                 :key="hour"
                 class="absolute left-0 right-0"
-                :style="{ top: `${(hour - 7) * 60}px` }"
+                :style="{ top: `${(hour - 7) * HOUR_HEIGHT}px` }"
               >
                 <span class="text-[10px] font-medium text-slate-400 px-1 relative -top-2">
                   {{ String(hour).padStart(2, '0') }}:00
@@ -425,16 +516,17 @@ function onAppointmentCreated() {
                 v-for="hour in HOURS"
                 :key="hour"
                 class="absolute left-0 right-0 border-t border-slate-100"
-                :style="{ top: `${(hour - 7) * 60}px` }"
+                :style="{ top: `${(hour - 7) * HOUR_HEIGHT}px` }"
               />
 
               <!-- Appointments -->
               <button
                 v-for="apt in getAppointmentsForDate(date)"
                 :key="apt.id"
-                class="absolute left-0.5 right-0.5 rounded border px-1 py-0.5 cursor-pointer transition-shadow hover:shadow-md overflow-hidden text-left z-10"
-                :class="getStatusColor(apt.status)"
+                class="absolute left-0.5 right-0.5 rounded border border-l-[3px] px-1 py-0.5 cursor-pointer transition-shadow hover:shadow-md overflow-hidden text-left z-10 group"
+                :class="[getStatusColor(apt.status), getStatusBorderLeft(apt.status)]"
                 :style="getAppointmentStyle(apt)"
+                :title="t('appointments.dragToReschedule')"
                 @click="onAppointmentClick(apt)"
               >
                 <div class="text-[10px] font-bold truncate">{{ apt.startTime }}</div>
@@ -459,14 +551,14 @@ function onAppointmentCreated() {
       </div>
     </template>
 
-    <!-- MONTH VIEW -->
+    <!-- ======================== MONTH VIEW ======================== -->
     <template v-if="effectiveViewMode === 'month'">
       <div :class="[CARD_STYLES.base, 'overflow-hidden']">
         <!-- Month Header -->
         <div class="grid grid-cols-7 border-b border-slate-200">
           <div
-            v-for="dayName in weekDayNames"
-            :key="dayName"
+            v-for="(dayName, i) in weekDayNames"
+            :key="i"
             class="p-2 text-center text-xs font-semibold text-slate-500 uppercase tracking-wider"
           >
             {{ dayName }}
@@ -533,7 +625,7 @@ function onAppointmentCreated() {
       </div>
     </template>
 
-    <!-- Detail Modal for clicked appointment -->
+    <!-- ======================== DETAIL MODAL ======================== -->
     <BModal
       v-model="showDetailModal"
       :title="selectedAppointment?.serviceName || ''"
@@ -541,22 +633,19 @@ function onAppointmentCreated() {
       @close="selectedAppointment = null"
     >
       <div v-if="selectedAppointment" class="space-y-4">
-        <!-- Status -->
+        <!-- Status + Price -->
         <div class="flex items-center justify-between">
-          <BBadge
-            :status="selectedAppointment.status.toLowerCase().replace('_', '')"
-            dot
-          >
-            {{ selectedAppointment.status === 'PENDING' ? t('common.pending') :
-               selectedAppointment.status === 'CONFIRMED' ? t('appointments.confirmed') :
-               selectedAppointment.status === 'COMPLETED' ? t('common.completed') :
-               selectedAppointment.status === 'CANCELLED' ? t('common.cancelled') :
-               t('appointments.noShow') }}
+          <BBadge :status="getStatusKey(selectedAppointment.status)" dot>
+            {{ getStatusLabel(selectedAppointment.status) }}
           </BBadge>
+          <span class="text-lg font-bold text-slate-900">
+            {{ appStore.formatPrice(selectedAppointment.priceMinor) }}
+          </span>
         </div>
 
-        <!-- Details -->
+        <!-- Details Card -->
         <div :class="[CARD_STYLES.flat, 'divide-y divide-slate-100']">
+          <!-- Time -->
           <div class="p-3 flex items-center gap-3">
             <svg class="w-4 h-4 text-slate-400 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
@@ -568,6 +657,7 @@ function onAppointmentCreated() {
               <div class="text-xs text-slate-500">{{ selectedAppointment.duration }} min</div>
             </div>
           </div>
+          <!-- Date -->
           <div class="p-3 flex items-center gap-3">
             <svg class="w-4 h-4 text-slate-400 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
@@ -576,12 +666,14 @@ function onAppointmentCreated() {
               {{ new Date(selectedAppointment.date + 'T00:00:00').toLocaleDateString('de-CH', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' }) }}
             </div>
           </div>
+          <!-- Customer -->
           <div class="p-3 flex items-center gap-3">
             <svg class="w-4 h-4 text-slate-400 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
             </svg>
             <div class="text-sm text-slate-900">{{ selectedAppointment.customerName }}</div>
           </div>
+          <!-- Employee -->
           <div class="p-3 flex items-center gap-3">
             <svg class="w-4 h-4 text-slate-400 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
@@ -619,11 +711,5 @@ function onAppointmentCreated() {
         </div>
       </template>
     </BModal>
-
-    <!-- Create Modal -->
-    <AppointmentModal
-      v-model="showCreateModal"
-      @created="onAppointmentCreated"
-    />
   </div>
 </template>

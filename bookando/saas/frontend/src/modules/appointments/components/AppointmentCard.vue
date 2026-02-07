@@ -1,15 +1,21 @@
 <script setup lang="ts">
 /**
- * AppointmentCard — Wiederverwendbare Termin-Karte
+ * AppointmentCard -- Reusable Appointment Card Component
  *
- * Wird in CalendarView und ListView verwendet.
- * Zeigt: Zeitraum, Service, Kunde, Mitarbeiter, Status-Badge, Preis.
- * Status-farbiger linker Rand. Klick oeffnet Details.
+ * Compact card used in CalendarView (mobile day) and ListView (mobile).
+ * Shows: time range, service name, customer name, employee (avatar initials),
+ * status badge with dot indicator, price, and colored left border by status.
+ *
+ * Props:
+ * - appointment: Appointment object
+ * - compact: reduces padding/font sizes (for tight calendar grids)
+ * - showDate: show the date below the time (for cross-date lists)
  */
 import { computed } from 'vue';
-import { CARD_STYLES, BADGE_STYLES, AVATAR_STYLES, getStatusColors } from '@/design';
+import { CARD_STYLES, AVATAR_STYLES, getStatusColors } from '@/design';
 import BBadge from '@/components/ui/BBadge.vue';
 import { useI18n } from '@/composables/useI18n';
+import { useDesignStore } from '@/stores/design';
 import { useAppStore } from '@/stores/app';
 import type { Appointment } from '@/stores/appointments';
 
@@ -27,9 +33,11 @@ const emit = defineEmits<{
 }>();
 
 const { t } = useI18n();
+const designStore = useDesignStore();
 const appStore = useAppStore();
 
-const statusColors = computed(() => {
+// Status color mapping to design system keys
+const statusKey = computed(() => {
   const map: Record<string, string> = {
     PENDING: 'pending',
     CONFIRMED: 'confirmed',
@@ -37,8 +45,10 @@ const statusColors = computed(() => {
     CANCELLED: 'cancelled',
     NO_SHOW: 'noShow',
   };
-  return getStatusColors(map[props.appointment.status] || 'inactive');
+  return map[props.appointment.status] || 'inactive';
 });
+
+const statusColors = computed(() => getStatusColors(statusKey.value));
 
 const statusLabel = computed(() => {
   const labels: Record<string, string> = {
@@ -51,6 +61,7 @@ const statusLabel = computed(() => {
   return labels[props.appointment.status] || props.appointment.status;
 });
 
+// Left border color by status
 const borderColorClass = computed(() => {
   const map: Record<string, string> = {
     PENDING: 'border-l-amber-500',
@@ -64,6 +75,7 @@ const borderColorClass = computed(() => {
 
 const formattedPrice = computed(() => appStore.formatPrice(props.appointment.priceMinor));
 
+// Employee initials for avatar
 const initials = computed(() => {
   const parts = props.appointment.employeeName.split(' ');
   if (parts.length >= 2) {
@@ -111,20 +123,25 @@ function formatDateDisplay(dateStr: string): string {
 
     <!-- Content -->
     <div class="flex-1 min-w-0">
+      <!-- Top row: service name + status badge -->
       <div class="flex items-start justify-between gap-2">
         <div class="min-w-0">
           <h4 :class="compact ? 'text-xs font-semibold text-slate-900 truncate' : 'text-sm font-semibold text-slate-900 truncate'">
             {{ appointment.serviceName }}
           </h4>
           <p :class="compact ? 'text-[10px] text-slate-500 truncate' : 'text-xs text-slate-600 truncate mt-0.5'">
+            <svg class="w-3 h-3 inline-block mr-0.5 -mt-0.5 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+            </svg>
             {{ appointment.customerName }}
           </p>
         </div>
-        <BBadge :status="statusColors.dot.replace('bg-', '')" dot class="flex-shrink-0">
+        <BBadge :status="statusKey" dot class="flex-shrink-0">
           <template v-if="!compact">{{ statusLabel }}</template>
         </BBadge>
       </div>
 
+      <!-- Bottom row: employee + duration + price (hidden in compact) -->
       <div v-if="!compact" class="flex items-center justify-between mt-2">
         <!-- Employee -->
         <div class="flex items-center gap-1.5">
@@ -135,8 +152,11 @@ function formatDateDisplay(dateStr: string): string {
           </div>
           <span class="text-xs text-slate-500 truncate max-w-[120px]">{{ appointment.employeeName }}</span>
         </div>
-        <!-- Price -->
-        <span class="text-xs font-medium text-slate-700">{{ formattedPrice }}</span>
+        <!-- Duration + Price -->
+        <div class="flex items-center gap-2">
+          <span class="text-[10px] text-slate-400">{{ appointment.duration }} min</span>
+          <span class="text-xs font-medium text-slate-700">{{ formattedPrice }}</span>
+        </div>
       </div>
     </div>
   </div>

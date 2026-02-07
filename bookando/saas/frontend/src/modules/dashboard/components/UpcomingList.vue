@@ -1,51 +1,44 @@
 <script setup lang="ts">
 /**
- * UpcomingList — Kommende Termine Widget
+ * UpcomingList -- Upcoming appointments list widget
+ *
+ * Displays upcoming appointments with client name, type, and time badge.
+ * Matches reference ListWidget pattern for "list-upcoming".
+ * TODO: Replace mock data with API call
  */
-import { CARD_STYLES, BADGE_STYLES } from '@/design';
 import { useI18n } from '@/composables/useI18n';
 
 defineProps<{
-  title?: string;
+  title: string;
 }>();
 
 const { t } = useI18n();
 
-// Mock-Daten (TODO: API)
-const upcoming = [
-  { id: '1', title: 'Yoga Kurs', customer: 'Anna Müller', time: '14:00 – 15:00', employee: 'Lisa B.', status: 'confirmed' },
-  { id: '2', title: 'Massage Klassisch', customer: 'Peter Schmidt', time: '15:30 – 16:30', employee: 'Marco R.', status: 'confirmed' },
-  { id: '3', title: 'Personal Training', customer: 'Sarah Weber', time: '16:00 – 17:00', employee: 'Tom K.', status: 'pending' },
-  { id: '4', title: 'Pilates Intro', customer: 'Julia Keller', time: '17:30 – 18:30', employee: 'Lisa B.', status: 'confirmed' },
+// Mock data matching reference (TODO: API)
+const upcomingAppointments = [
+  { id: 1, client: 'Sarah Connor', time: t('dashboard.time1400Today'), type: t('dashboard.typeConsultation') },
+  { id: 2, client: 'John Wick', time: t('dashboard.time1630Today'), type: t('dashboard.typeEmergency') },
+  { id: 3, client: 'Ellen Ripley', time: t('dashboard.time0900Tomorrow'), type: t('dashboard.typeFollowUp') },
 ];
 </script>
 
 <template>
-  <div :class="CARD_STYLES.base">
-    <div :class="CARD_STYLES.headerCompact">
-      <div class="flex items-center justify-between">
-        <h3 class="text-base font-semibold text-slate-900">{{ title || t('dashboard.upcomingAppointments') }}</h3>
-        <span class="text-xs text-slate-500">{{ t('dashboard.today') }}</span>
-      </div>
-    </div>
-    <div class="divide-y divide-slate-100">
+  <div class="h-full flex flex-col">
+    <h3 class="text-base font-semibold text-slate-800 mb-4">{{ title }}</h3>
+    <div class="flex-1 overflow-y-auto pr-2 space-y-3">
       <div
-        v-for="item in upcoming"
+        v-for="item in upcomingAppointments"
         :key="item.id"
-        class="px-4 py-3 flex items-center justify-between hover:bg-slate-50 transition-colors cursor-pointer"
+        class="border-b border-slate-100 last:border-0 pb-3 last:pb-0"
       >
-        <div class="flex-1 min-w-0">
-          <p class="text-sm font-medium text-slate-900">{{ item.title }}</p>
-          <p class="text-xs text-slate-500 mt-0.5">{{ item.customer }} · {{ item.employee }}</p>
-        </div>
-        <div class="text-right shrink-0 ml-4">
-          <p class="text-sm font-medium text-slate-700">{{ item.time }}</p>
-          <span
-            :class="item.status === 'confirmed' ? BADGE_STYLES.success : BADGE_STYLES.warning"
-            class="mt-1 inline-block"
-          >
-            {{ item.status === 'confirmed' ? t('dashboard.confirmed') : t('dashboard.pendingStatus') }}
-          </span>
+        <div class="flex justify-between items-center text-sm">
+          <div>
+            <p class="font-medium text-slate-800">{{ item.client }}</p>
+            <p class="text-slate-500 text-xs">{{ item.type }}</p>
+          </div>
+          <div class="text-right bg-slate-100 px-2 py-1 rounded text-xs font-medium text-slate-600">
+            {{ item.time }}
+          </div>
         </div>
       </div>
     </div>
