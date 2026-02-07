@@ -134,6 +134,12 @@ const routes: RouteRecordRaw[] = [
         meta: { module: 'partnerhub', title: 'Partner Hub' },
       },
       {
+        path: 'portal',
+        name: 'customer-portal',
+        component: () => import('@/modules/customer-portal/CustomerPortalPage.vue'),
+        meta: { module: 'customer-portal', title: 'Mein Portal' },
+      },
+      {
         path: 'design-system',
         name: 'design-system',
         component: () => import('@/modules/design-system/DesignSystemPage.vue'),
