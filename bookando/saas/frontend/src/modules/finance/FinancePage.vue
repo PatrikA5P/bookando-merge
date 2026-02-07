@@ -15,10 +15,12 @@ import InvoicesTab from './components/InvoicesTab.vue';
 import AccountingTab from './components/AccountingTab.vue';
 import PayrollTab from './components/PayrollTab.vue';
 import { useI18n } from '@/composables/useI18n';
+import { useDesignStore } from '@/stores/design';
 import { useFinanceStore } from '@/stores/finance';
 import { BUTTON_STYLES } from '@/design';
 
 const { t } = useI18n();
+const designStore = useDesignStore();
 const financeStore = useFinanceStore();
 
 const activeTab = ref('overview');

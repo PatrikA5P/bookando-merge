@@ -1,37 +1,118 @@
 <script setup lang="ts">
 /**
- * RevenueChart — Umsatz-Diagramm Widget
+ * RevenueChart -- Revenue area chart widget
+ *
+ * Displays a revenue analytics area chart.
+ * Currently renders a visual SVG placeholder matching the reference AreaChart style.
+ * TODO: Replace with real charting library (e.g. ApexCharts / Chart.js)
  */
-import { CARD_STYLES } from '@/design';
 import { useI18n } from '@/composables/useI18n';
-
-defineProps<{
-  dateRange: string;
-  title?: string;
-}>();
 
 const { t } = useI18n();
 
-// TODO: ApexCharts Integration mit echten Daten
+// Mock data matching reference
+const chartData = [
+  { name: 'Mon', revenue: 4000 },
+  { name: 'Tue', revenue: 3000 },
+  { name: 'Wed', revenue: 2000 },
+  { name: 'Thu', revenue: 2780 },
+  { name: 'Fri', revenue: 1890 },
+  { name: 'Sat', revenue: 2390 },
+  { name: 'Sun', revenue: 3490 },
+];
+
+// SVG chart dimensions
+const width = 600;
+const height = 200;
+const padding = { top: 10, right: 10, bottom: 30, left: 50 };
+const chartWidth = width - padding.left - padding.right;
+const chartHeight = height - padding.top - padding.bottom;
+
+const maxRevenue = Math.max(...chartData.map(d => d.revenue));
+
+function getX(index: number): number {
+  return padding.left + (index / (chartData.length - 1)) * chartWidth;
+}
+
+function getY(value: number): number {
+  return padding.top + chartHeight - (value / maxRevenue) * chartHeight;
+}
+
+// Build SVG path for the area
+const linePath = chartData.map((d, i) => `${i === 0 ? 'M' : 'L'}${getX(i)},${getY(d.revenue)}`).join(' ');
+const areaPath = `${linePath} L${getX(chartData.length - 1)},${padding.top + chartHeight} L${getX(0)},${padding.top + chartHeight} Z`;
+
+// Y-axis ticks
+const yTicks = [0, 1000, 2000, 3000, 4000];
 </script>
 
 <template>
-  <div :class="CARD_STYLES.base">
-    <div :class="CARD_STYLES.header">
-      <div class="flex items-center justify-between">
-        <h3 class="text-base font-semibold text-slate-900">{{ title || t('dashboard.revenue') }}</h3>
-        <span class="text-sm text-slate-500">{{ dateRange }}</span>
-      </div>
-    </div>
-    <div :class="CARD_STYLES.body" class="h-64 flex items-center justify-center">
-      <!-- Placeholder für ApexCharts -->
-      <div class="text-center text-slate-400">
-        <svg class="w-12 h-12 mx-auto mb-2 text-slate-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M7 12l3-3 3 3 4-4M8 21l4-4 4 4M3 4h18M4 4h16v12a1 1 0 01-1 1H5a1 1 0 01-1-1V4z" />
-        </svg>
-        <p class="text-sm">{{ t('dashboard.revenueChart') }}</p>
-        <p class="text-xs mt-1">{{ t('dashboard.chartPlaceholder') }}</p>
-      </div>
+  <div class="h-full flex flex-col">
+    <h3 class="text-base font-semibold text-slate-800 mb-4">{{ t('dashboard.revenueAnalytics') }}</h3>
+    <div class="flex-1 min-h-[200px]">
+      <svg :viewBox="`0 0 ${width} ${height}`" class="w-full h-full" preserveAspectRatio="xMidYMid meet">
+        <defs>
+          <linearGradient id="colorRevenue" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="5%" stop-color="#0ea5e9" stop-opacity="0.1" />
+            <stop offset="95%" stop-color="#0ea5e9" stop-opacity="0" />
+          </linearGradient>
+        </defs>
+
+        <!-- Grid lines (horizontal) -->
+        <line
+          v-for="tick in yTicks"
+          :key="tick"
+          :x1="padding.left"
+          :y1="getY(tick)"
+          :x2="width - padding.right"
+          :y2="getY(tick)"
+          stroke="#e2e8f0"
+          stroke-dasharray="3 3"
+        />
+
+        <!-- Y-axis labels -->
+        <text
+          v-for="tick in yTicks"
+          :key="'label-' + tick"
+          :x="padding.left - 8"
+          :y="getY(tick) + 4"
+          text-anchor="end"
+          fill="#64748b"
+          font-size="11"
+        >
+          CHF {{ tick.toLocaleString() }}
+        </text>
+
+        <!-- Area fill -->
+        <path :d="areaPath" fill="url(#colorRevenue)" />
+
+        <!-- Line -->
+        <path :d="linePath" fill="none" stroke="#0ea5e9" stroke-width="2" />
+
+        <!-- Data points -->
+        <circle
+          v-for="(d, i) in chartData"
+          :key="'point-' + i"
+          :cx="getX(i)"
+          :cy="getY(d.revenue)"
+          r="3"
+          fill="#0ea5e9"
+          class="opacity-0 hover:opacity-100 transition-opacity"
+        />
+
+        <!-- X-axis labels -->
+        <text
+          v-for="(d, i) in chartData"
+          :key="'x-' + i"
+          :x="getX(i)"
+          :y="height - 5"
+          text-anchor="middle"
+          fill="#64748b"
+          font-size="11"
+        >
+          {{ d.name }}
+        </text>
+      </svg>
     </div>
   </div>
 </template>

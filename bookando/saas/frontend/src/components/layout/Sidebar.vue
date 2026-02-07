@@ -11,7 +11,7 @@
  */
 import { computed } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
-import { getModuleDesign } from '@/design';
+import { useDesignStore } from '@/stores/design';
 
 export interface NavItem {
   id: string;
@@ -31,6 +31,7 @@ const props = withDefaults(defineProps<{
 
 const route = useRoute();
 const router = useRouter();
+const designStore = useDesignStore();
 
 const activeModule = computed(() => {
   const path = route.path.split('/')[1] || 'dashboard';
@@ -65,7 +66,7 @@ function navigate(item: NavItem) {
         :class="[
           'w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-all duration-200',
           activeModule === item.module
-            ? `${getModuleDesign(item.module).activeBg} ${getModuleDesign(item.module).activeText}`
+            ? `${designStore.getModuleDesign(item.module).activeBg} ${designStore.getModuleDesign(item.module).activeText}`
             : 'text-slate-600 hover:bg-slate-100 hover:text-slate-900',
           collapsed ? 'justify-center' : '',
         ]"
@@ -77,7 +78,7 @@ function navigate(item: NavItem) {
           :class="[
             'w-5 h-5 rounded shrink-0',
             activeModule === item.module
-              ? getModuleDesign(item.module).iconText
+              ? designStore.getModuleDesign(item.module).iconText
               : 'text-slate-500',
           ]"
         >

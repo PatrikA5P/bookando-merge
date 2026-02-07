@@ -1,14 +1,14 @@
 <script setup lang="ts">
 /**
- * AlertCenter — Infocenter/Benachrichtigungen Widget
+ * AlertCenter -- Infocenter/notification widget
+ *
+ * Displays active alerts with dismiss (acknowledge) functionality.
+ * Shows "all clear" empty state when no alerts remain.
+ * Matches reference InfocenterWidget exactly.
+ * TODO: Replace mock data with API call via Foundation NotificationPort
  */
-import { ref } from 'vue';
-import { CARD_STYLES, BADGE_STYLES } from '@/design';
+import { ref, computed } from 'vue';
 import { useI18n } from '@/composables/useI18n';
-
-defineProps<{
-  title?: string;
-}>();
 
 const { t } = useI18n();
 
@@ -16,73 +16,100 @@ interface Alert {
   id: string;
   title: string;
   message: string;
-  type: 'info' | 'warning' | 'error';
   acknowledged: boolean;
   timestamp: string;
 }
 
-// Mock-Daten (TODO: API via Foundation NotificationPort)
+// Mock data (TODO: API)
 const alerts = ref<Alert[]>([
-  { id: '1', title: 'Swissdec Update', message: 'ELM 5.3 Quellensteuer-Update verfügbar (ab Jan. 2026 obligatorisch)', type: 'info', acknowledged: false, timestamp: 'Vor 1 Std.' },
-  { id: '2', title: 'Überstunden-Warnung', message: '3 Mitarbeiter haben das Überstundenlimit erreicht', type: 'warning', acknowledged: false, timestamp: 'Vor 3 Std.' },
-  { id: '3', title: 'Offene Rechnungen', message: '5 Rechnungen sind überfällig (Total: CHF 4,250.00)', type: 'error', acknowledged: false, timestamp: 'Gestern' },
+  {
+    id: '1',
+    title: t('dashboard.alertSwissdecTitle'),
+    message: t('dashboard.alertSwissdecMessage'),
+    acknowledged: false,
+    timestamp: t('dashboard.time1hour'),
+  },
+  {
+    id: '2',
+    title: t('dashboard.alertOvertimeTitle'),
+    message: t('dashboard.alertOvertimeMessage'),
+    acknowledged: false,
+    timestamp: t('dashboard.time3hours'),
+  },
+  {
+    id: '3',
+    title: t('dashboard.alertInvoicesTitle'),
+    message: t('dashboard.alertInvoicesMessage'),
+    acknowledged: false,
+    timestamp: t('dashboard.timeYesterday'),
+  },
 ]);
 
-function acknowledge(id: string) {
+const activeAlerts = computed(() => alerts.value.filter(a => !a.acknowledged));
+
+function acknowledgeAlert(id: string) {
   const alert = alerts.value.find(a => a.id === id);
   if (alert) alert.acknowledged = true;
 }
-
-const typeIcon: Record<string, string> = {
-  info: 'text-blue-500',
-  warning: 'text-amber-500',
-  error: 'text-red-500',
-};
-
-const unacknowledgedCount = ref(alerts.value.filter(a => !a.acknowledged).length);
 </script>
 
 <template>
-  <div :class="CARD_STYLES.base">
-    <div :class="CARD_STYLES.headerCompact">
-      <div class="flex items-center justify-between">
-        <div class="flex items-center gap-2">
-          <h3 class="text-base font-semibold text-slate-900">{{ title || t('dashboard.alertCenter') }}</h3>
-          <span v-if="unacknowledgedCount > 0" :class="BADGE_STYLES.danger">
-            {{ unacknowledgedCount }}
-          </span>
-        </div>
-      </div>
+  <!-- All clear state -->
+  <div v-if="activeAlerts.length === 0" class="h-full flex flex-col items-center justify-center text-center p-4">
+    <div class="w-12 h-12 bg-emerald-50 rounded-full flex items-center justify-center mb-3">
+      <!-- Check icon -->
+      <svg class="w-6 h-6 text-emerald-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+      </svg>
     </div>
-    <div class="divide-y divide-slate-100 max-h-80 overflow-y-auto">
+    <h3 class="text-base font-semibold text-slate-800">{{ t('dashboard.allClear') }}</h3>
+    <p class="text-xs text-slate-500">{{ t('dashboard.noAlerts') }}</p>
+  </div>
+
+  <!-- Active alerts -->
+  <div v-else class="h-full flex flex-col">
+    <div class="flex justify-between items-center mb-4">
+      <h3 class="text-base font-semibold text-slate-800 flex items-center gap-2">
+        <!-- Bell icon -->
+        <svg class="w-4 h-4 text-rose-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
+        </svg>
+        {{ t('dashboard.infocenter') }}
+      </h3>
+      <span class="text-xs font-bold bg-rose-100 text-rose-700 px-2 py-0.5 rounded-full">
+        {{ activeAlerts.length }} {{ t('dashboard.new') }}
+      </span>
+    </div>
+    <div class="flex-1 overflow-y-auto pr-2 space-y-3">
       <div
-        v-for="alert in alerts"
+        v-for="alert in activeAlerts"
         :key="alert.id"
-        :class="[
-          'px-4 py-3 transition-colors',
-          alert.acknowledged ? 'opacity-60 bg-slate-50' : 'hover:bg-slate-50',
-        ]"
+        class="p-3 bg-rose-50 border border-rose-100 rounded-lg"
       >
-        <div class="flex items-start gap-3">
-          <svg :class="['w-5 h-5 shrink-0 mt-0.5', typeIcon[alert.type]]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path v-if="alert.type === 'error'" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-            <path v-else-if="alert.type === 'warning'" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
-            <path v-else stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-          </svg>
-          <div class="flex-1 min-w-0">
-            <p class="text-sm font-medium text-slate-900">{{ alert.title }}</p>
-            <p class="text-xs text-slate-500 mt-0.5">{{ alert.message }}</p>
-            <div class="flex items-center justify-between mt-2">
-              <span class="text-xs text-slate-400">{{ alert.timestamp }}</span>
-              <button
-                v-if="!alert.acknowledged"
-                class="text-xs text-brand-600 hover:text-brand-700 font-medium"
-                @click="acknowledge(alert.id)"
-              >
-                {{ t('dashboard.acknowledged') }}
-              </button>
-            </div>
+        <div class="flex justify-between items-start mb-1">
+          <div class="flex items-center gap-2 text-sm font-bold text-rose-800">
+            <!-- AlertTriangle icon -->
+            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+            </svg>
+            {{ alert.title }}
           </div>
+          <button
+            class="text-rose-400 hover:text-rose-700 transition-colors"
+            :title="t('dashboard.acknowledge')"
+            @click="acknowledgeAlert(alert.id)"
+          >
+            <!-- Check icon -->
+            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+            </svg>
+          </button>
+        </div>
+        <p class="text-xs text-rose-700 mb-2 leading-relaxed">
+          {{ alert.message }}
+        </p>
+        <div class="text-[10px] text-rose-400 text-right">
+          {{ alert.timestamp }}
         </div>
       </div>
     </div>

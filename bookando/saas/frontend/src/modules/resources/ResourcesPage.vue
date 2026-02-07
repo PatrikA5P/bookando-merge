@@ -9,9 +9,11 @@ import LocationsTab from './components/LocationsTab.vue';
 import RoomsTab from './components/RoomsTab.vue';
 import EquipmentTab from './components/EquipmentTab.vue';
 import { useI18n } from '@/composables/useI18n';
+import { useDesignStore } from '@/stores/design';
 import { useResourcesStore } from '@/stores/resources';
 
 const { t } = useI18n();
+const designStore = useDesignStore();
 const store = useResourcesStore();
 
 const activeTab = ref('locations');
