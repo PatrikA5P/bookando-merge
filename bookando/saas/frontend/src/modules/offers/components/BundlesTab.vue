@@ -3,77 +3,81 @@
  * BundlesTab — Paket-Verwaltung
  *
  * Karten-Grid mit Paket-Uebersicht, Erstellen und Bearbeiten
- * von Bundles mit Service-Auswahl und automatischer Preisberechnung.
+ * von Bundles mit Offer-Auswahl und automatischer Preisberechnung.
+ *
+ * GOLD STANDARD: BFormPanel (SlideIn) statt BModal (Overlay).
  */
-import { ref, computed, watch } from 'vue';
+import { ref, computed } from 'vue';
 import { useI18n } from '@/composables/useI18n';
-import { useBreakpoint } from '@/composables/useBreakpoint';
 import { useToast } from '@/composables/useToast';
-import { useAppStore } from '@/stores/app';
 import { useOffersStore } from '@/stores/offers';
-import type { Bundle } from '@/stores/offers';
-import { CARD_STYLES, BADGE_STYLES, BUTTON_STYLES, GRID_STYLES, MODAL_STYLES, INPUT_STYLES, LABEL_STYLES } from '@/design';
+import type { Bundle, Offer } from '@/stores/offers';
+import { formatMoney } from '@/utils/money';
+import { CARD_STYLES, BUTTON_STYLES, LABEL_STYLES } from '@/design';
 import BButton from '@/components/ui/BButton.vue';
 import BBadge from '@/components/ui/BBadge.vue';
 import BToggle from '@/components/ui/BToggle.vue';
 import BEmptyState from '@/components/ui/BEmptyState.vue';
-import BModal from '@/components/ui/BModal.vue';
+import BFormPanel from '@/components/ui/BFormPanel.vue';
+import BFormSection from '@/components/ui/BFormSection.vue';
 import BInput from '@/components/ui/BInput.vue';
 import BTextarea from '@/components/ui/BTextarea.vue';
 
 const { t } = useI18n();
-const { isMobile } = useBreakpoint();
 const toast = useToast();
-const appStore = useAppStore();
 const store = useOffersStore();
 
-const showModal = ref(false);
+const showPanel = ref(false);
 const editingBundle = ref<Bundle | null>(null);
+const saving = ref(false);
 
 // Form
 const form = ref({
   title: '',
   description: '',
-  serviceIds: [] as string[],
+  offerIds: [] as string[],
   active: true,
 });
 
 const errors = ref<Record<string, string>>({});
 
-const selectedServicesTotal = computed(() => {
-  return form.value.serviceIds.reduce((sum, id) => {
-    const svc = store.getServiceById(id);
-    return sum + (svc ? svc.priceMinor : 0);
+const isEditing = computed(() => !!editingBundle.value);
+
+const selectedOffersTotal = computed(() => {
+  return form.value.offerIds.reduce((sum, id) => {
+    const offer = store.getOfferById(id);
+    return sum + (offer ? offer.priceCents : 0);
   }, 0);
 });
 
 const bundleSavings = computed(() => {
-  const total = selectedServicesTotal.value;
-  // Default savings: 10% off
+  const total = selectedOffersTotal.value;
   return Math.round(total * 0.1);
 });
 
 const bundlePrice = computed(() => {
-  return selectedServicesTotal.value - bundleSavings.value;
+  return selectedOffersTotal.value - bundleSavings.value;
 });
 
-function getServicesForBundle(bundle: Bundle) {
-  return bundle.serviceIds
-    .map(id => store.getServiceById(id))
-    .filter(Boolean);
+const dirty = computed(() => form.value.title !== '' || form.value.offerIds.length > 0);
+
+function getOffersForBundle(bundle: Bundle): Offer[] {
+  return bundle.offerIds
+    .map(id => store.getOfferById(id))
+    .filter((o): o is Offer => !!o);
 }
 
 function onToggleActive(bundle: Bundle) {
-  store.toggleBundleActive(bundle.id);
-  const label = bundle.active ? 'aktiviert' : 'deaktiviert';
+  store.updateBundle(bundle.id, { active: !bundle.active });
+  const label = !bundle.active ? 'aktiviert' : 'deaktiviert';
   toast.success(`${bundle.title} ${label}`);
 }
 
 function onCreateBundle() {
   editingBundle.value = null;
-  form.value = { title: '', description: '', serviceIds: [], active: true };
+  form.value = { title: '', description: '', offerIds: [], active: true };
   errors.value = {};
-  showModal.value = true;
+  showPanel.value = true;
 }
 
 function onEditBundle(bundle: Bundle) {
@@ -81,11 +85,11 @@ function onEditBundle(bundle: Bundle) {
   form.value = {
     title: bundle.title,
     description: bundle.description,
-    serviceIds: [...bundle.serviceIds],
+    offerIds: [...bundle.offerIds],
     active: bundle.active,
   };
   errors.value = {};
-  showModal.value = true;
+  showPanel.value = true;
 }
 
 function onDeleteBundle(bundle: Bundle) {
@@ -93,12 +97,12 @@ function onDeleteBundle(bundle: Bundle) {
   toast.success(`${bundle.title} geloescht`);
 }
 
-function toggleService(serviceId: string) {
-  const idx = form.value.serviceIds.indexOf(serviceId);
+function toggleOffer(offerId: string) {
+  const idx = form.value.offerIds.indexOf(offerId);
   if (idx === -1) {
-    form.value.serviceIds.push(serviceId);
+    form.value.offerIds.push(offerId);
   } else {
-    form.value.serviceIds.splice(idx, 1);
+    form.value.offerIds.splice(idx, 1);
   }
 }
 
@@ -107,39 +111,49 @@ function validate(): boolean {
   if (!form.value.title.trim()) {
     errs.title = t('common.required');
   }
-  if (form.value.serviceIds.length < 2) {
-    errs.services = 'Min. 2 Dienstleistungen';
+  if (form.value.offerIds.length < 2) {
+    errs.offers = 'Min. 2 Angebote';
   }
   errors.value = errs;
   return Object.keys(errs).length === 0;
 }
 
-function onSave() {
+async function onSave() {
   if (!validate()) return;
 
-  if (editingBundle.value) {
-    store.updateBundle(editingBundle.value.id, {
-      title: form.value.title,
-      description: form.value.description,
-      serviceIds: form.value.serviceIds,
-      totalPriceMinor: bundlePrice.value,
-      savingsMinor: bundleSavings.value,
-      active: form.value.active,
-    });
+  saving.value = true;
+  try {
+    if (editingBundle.value) {
+      await store.updateBundle(editingBundle.value.id, {
+        title: form.value.title,
+        description: form.value.description,
+        offerIds: form.value.offerIds,
+        totalPriceCents: bundlePrice.value,
+        savingsCents: bundleSavings.value,
+        active: form.value.active,
+      });
+    } else {
+      await store.addBundle({
+        title: form.value.title,
+        description: form.value.description,
+        offerIds: form.value.offerIds,
+        totalPriceCents: bundlePrice.value,
+        savingsCents: bundleSavings.value,
+        active: form.value.active,
+      });
+    }
     toast.success(t('common.saved'));
-  } else {
-    store.addBundle({
-      title: form.value.title,
-      description: form.value.description,
-      serviceIds: form.value.serviceIds,
-      totalPriceMinor: bundlePrice.value,
-      savingsMinor: bundleSavings.value,
-      active: form.value.active,
-    });
-    toast.success(t('common.saved'));
+    showPanel.value = false;
+  } catch {
+    toast.error('Fehler beim Speichern');
+  } finally {
+    saving.value = false;
   }
+}
 
-  showModal.value = false;
+function onPanelClose() {
+  showPanel.value = false;
+  editingBundle.value = null;
 }
 </script>
 
@@ -160,7 +174,7 @@ function onSave() {
     <BEmptyState
       v-if="store.bundles.length === 0"
       title="Keine Pakete"
-      description="Erstellen Sie Ihr erstes Paket mit kombinierten Dienstleistungen."
+      description="Erstellen Sie Ihr erstes Paket mit kombinierten Angeboten."
       icon="inbox"
       :action-label="t('common.create')"
       @action="onCreateBundle"
@@ -181,7 +195,7 @@ function onSave() {
           <!-- Savings badge -->
           <div class="absolute top-3 right-3">
             <BBadge variant="success">
-              {{ t('offers.savings') }}: {{ appStore.formatPrice(bundle.savingsMinor) }}
+              {{ t('offers.savings') }}: {{ formatMoney(bundle.savingsCents) }}
             </BBadge>
           </div>
         </div>
@@ -191,18 +205,18 @@ function onSave() {
           <h3 class="text-sm font-semibold text-slate-900 mb-1">{{ bundle.title }}</h3>
           <p class="text-xs text-slate-500 mb-3 line-clamp-2">{{ bundle.description }}</p>
 
-          <!-- Enthaltene Services -->
+          <!-- Enthaltene Offers -->
           <div class="space-y-1.5 mb-3">
             <div
-              v-for="svc in getServicesForBundle(bundle)"
-              :key="svc!.id"
+              v-for="offer in getOffersForBundle(bundle)"
+              :key="offer.id"
               class="flex items-center gap-2 text-xs text-slate-600"
             >
               <svg class="w-3.5 h-3.5 text-emerald-500 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
               </svg>
-              <span>{{ svc!.title }}</span>
-              <span class="text-slate-400 ml-auto">{{ appStore.formatPrice(svc!.priceMinor) }}</span>
+              <span>{{ offer.title }}</span>
+              <span class="text-slate-400 ml-auto">{{ formatMoney(offer.priceCents) }}</span>
             </div>
           </div>
 
@@ -210,10 +224,10 @@ function onSave() {
             <!-- Preis -->
             <div class="flex items-baseline gap-2 mb-3">
               <span class="text-base font-bold text-slate-900">
-                {{ appStore.formatPrice(bundle.totalPriceMinor) }}
+                {{ formatMoney(bundle.totalPriceCents) }}
               </span>
               <span class="text-xs text-slate-400 line-through">
-                {{ appStore.formatPrice(bundle.totalPriceMinor + bundle.savingsMinor) }}
+                {{ formatMoney(bundle.totalPriceCents + bundle.savingsCents) }}
               </span>
             </div>
 
@@ -247,15 +261,19 @@ function onSave() {
       </div>
     </div>
 
-    <!-- Bundle Modal -->
-    <BModal
-      :model-value="showModal"
-      :title="editingBundle ? t('common.edit') + ': ' + editingBundle.title : t('offers.bundles') + ' ' + t('common.create')"
-      size="lg"
-      @update:model-value="showModal = false"
-      @close="showModal = false"
+    <!-- Bundle FormPanel (SlideIn Gold Standard) -->
+    <BFormPanel
+      :model-value="showPanel"
+      :title="isEditing ? 'Paket bearbeiten: ' + editingBundle?.title : 'Neues Paket'"
+      :mode="isEditing ? 'edit' : 'create'"
+      size="md"
+      :saving="saving"
+      :dirty="dirty"
+      @update:model-value="onPanelClose"
+      @save="onSave"
+      @cancel="onPanelClose"
     >
-      <div class="space-y-4">
+      <BFormSection title="Grunddaten" :columns="1" divided>
         <BInput
           v-model="form.title"
           :label="t('common.name')"
@@ -263,73 +281,72 @@ function onSave() {
           :required="true"
           :error="errors.title"
         />
-
         <BTextarea
           v-model="form.description"
           :label="t('offers.description')"
           :placeholder="t('offers.description') + '...'"
           :rows="2"
         />
+      </BFormSection>
 
-        <!-- Service-Auswahl -->
-        <div>
-          <label :class="LABEL_STYLES.required">{{ t('offers.catalog') }}</label>
-          <p v-if="errors.services" :class="LABEL_STYLES.error" class="mb-2">{{ errors.services }}</p>
-          <div class="space-y-2 max-h-64 overflow-y-auto">
-            <label
-              v-for="svc in store.services.filter(s => s.active)"
-              :key="svc.id"
-              class="flex items-center gap-3 p-3 rounded-lg border border-slate-200 hover:border-blue-200 hover:bg-blue-50/50 cursor-pointer transition-all"
-              :class="{ 'border-blue-300 bg-blue-50': form.serviceIds.includes(svc.id) }"
-            >
-              <input
-                type="checkbox"
-                :checked="form.serviceIds.includes(svc.id)"
-                :class="INPUT_STYLES.checkbox"
-                @change="toggleService(svc.id)"
-              />
-              <div class="flex-1 min-w-0">
-                <span class="text-sm font-medium text-slate-900">{{ svc.title }}</span>
-                <span class="text-xs text-slate-500 ml-2">{{ svc.duration }} min</span>
-              </div>
-              <span class="text-sm font-medium text-slate-700">{{ appStore.formatPrice(svc.priceMinor) }}</span>
-            </label>
+      <BFormSection title="Enthaltene Angebote" :columns="1" divided>
+        <p v-if="errors.offers" :class="LABEL_STYLES.error" class="mb-2">{{ errors.offers }}</p>
+        <div class="space-y-2 max-h-64 overflow-y-auto">
+          <label
+            v-for="offer in store.activeOffers"
+            :key="offer.id"
+            class="flex items-center gap-3 p-3 rounded-lg border border-slate-200 hover:border-blue-200 hover:bg-blue-50/50 cursor-pointer transition-all"
+            :class="{ 'border-blue-300 bg-blue-50': form.offerIds.includes(offer.id) }"
+          >
+            <input
+              type="checkbox"
+              :checked="form.offerIds.includes(offer.id)"
+              class="rounded border-slate-300 text-brand-600"
+              @change="toggleOffer(offer.id)"
+            />
+            <div class="flex-1 min-w-0">
+              <span class="text-sm font-medium text-slate-900">{{ offer.title }}</span>
+            </div>
+            <span class="text-sm font-medium text-slate-700">{{ formatMoney(offer.priceCents) }}</span>
+          </label>
+        </div>
+      </BFormSection>
+
+      <!-- Preis-Uebersicht -->
+      <div v-if="form.offerIds.length > 0" :class="CARD_STYLES.ghost" class="p-4 mx-0 mt-4">
+        <h4 class="text-sm font-medium text-slate-700 mb-2">{{ t('common.preview') }}</h4>
+        <div class="space-y-1 text-sm">
+          <div class="flex justify-between text-slate-600">
+            <span>{{ form.offerIds.length }} Angebote</span>
+            <span>{{ formatMoney(selectedOffersTotal) }}</span>
+          </div>
+          <div class="flex justify-between text-emerald-600 font-medium">
+            <span>{{ t('offers.savings') }} (10%)</span>
+            <span>-{{ formatMoney(bundleSavings) }}</span>
+          </div>
+          <div class="flex justify-between text-slate-900 font-bold pt-1 border-t border-slate-200">
+            <span>Total</span>
+            <span>{{ formatMoney(bundlePrice) }}</span>
           </div>
         </div>
+      </div>
 
-        <!-- Preis-Uebersicht -->
-        <div v-if="form.serviceIds.length > 0" :class="CARD_STYLES.ghost" class="p-4">
-          <h4 class="text-sm font-medium text-slate-700 mb-2">{{ t('common.preview') }}</h4>
-          <div class="space-y-1 text-sm">
-            <div class="flex justify-between text-slate-600">
-              <span>{{ form.serviceIds.length }} {{ t('offers.catalog') }}</span>
-              <span>{{ appStore.formatPrice(selectedServicesTotal) }}</span>
-            </div>
-            <div class="flex justify-between text-emerald-600 font-medium">
-              <span>{{ t('offers.savings') }} (10%)</span>
-              <span>-{{ appStore.formatPrice(bundleSavings) }}</span>
-            </div>
-            <div class="flex justify-between text-slate-900 font-bold pt-1 border-t border-slate-200">
-              <span>Total</span>
-              <span>{{ appStore.formatPrice(bundlePrice) }}</span>
-            </div>
-          </div>
-        </div>
-
+      <BFormSection title="Status" :columns="1">
         <BToggle
           v-model="form.active"
           :label="t('common.active')"
         />
-      </div>
+      </BFormSection>
 
-      <template #footer>
-        <BButton variant="secondary" @click="showModal = false">
-          {{ t('common.cancel') }}
-        </BButton>
-        <BButton variant="primary" @click="onSave">
-          {{ t('common.save') }}
-        </BButton>
+      <!-- Delete button in footer-left -->
+      <template v-if="isEditing" #footer-left>
+        <button
+          class="px-4 py-2 rounded-lg text-sm font-medium text-red-600 hover:bg-red-50 transition-colors"
+          @click="() => { if (editingBundle) { onDeleteBundle(editingBundle); showPanel = false; } }"
+        >
+          Loeschen
+        </button>
       </template>
-    </BModal>
+    </BFormPanel>
   </div>
 </template>

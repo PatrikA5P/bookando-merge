@@ -4,52 +4,52 @@
  *
  * Karten-Grid mit dynamischen Preisregeln nach Typ,
  * inkl. Erstellung/Bearbeitung und Bedingungskonfiguration.
+ *
+ * GOLD STANDARD: BFormPanel (SlideIn) statt BModal (Overlay).
  */
 import { ref, computed } from 'vue';
 import { useI18n } from '@/composables/useI18n';
-import { useBreakpoint } from '@/composables/useBreakpoint';
 import { useToast } from '@/composables/useToast';
 import { useOffersStore } from '@/stores/offers';
 import type { PricingRule, PricingRuleType, PricingRuleConditions } from '@/stores/offers';
-import { CARD_STYLES, BADGE_STYLES, BUTTON_STYLES, GRID_STYLES, MODAL_STYLES, INPUT_STYLES, LABEL_STYLES } from '@/design';
+import { CARD_STYLES, BADGE_STYLES, BUTTON_STYLES } from '@/design';
 import BButton from '@/components/ui/BButton.vue';
 import BBadge from '@/components/ui/BBadge.vue';
 import BToggle from '@/components/ui/BToggle.vue';
 import BEmptyState from '@/components/ui/BEmptyState.vue';
-import BModal from '@/components/ui/BModal.vue';
+import BFormPanel from '@/components/ui/BFormPanel.vue';
+import BFormSection from '@/components/ui/BFormSection.vue';
 import BInput from '@/components/ui/BInput.vue';
 import BSelect from '@/components/ui/BSelect.vue';
 
 const { t } = useI18n();
-const { isMobile } = useBreakpoint();
 const toast = useToast();
 const store = useOffersStore();
 
-const showModal = ref(false);
+const showPanel = ref(false);
 const editingRule = ref<PricingRule | null>(null);
+const saving = ref(false);
 
 // Form
 const form = ref({
   name: '',
   type: 'EARLY_BIRD' as PricingRuleType,
   discountPercent: 10,
-  conditions: {
-    daysBeforeMin: undefined as number | undefined,
-    daysBeforeMax: undefined as number | undefined,
-    dateRange: undefined as { start: string; end: string } | undefined,
-    timeRange: undefined as { start: string; end: string } | undefined,
-  } as PricingRuleConditions,
+  conditions: {} as PricingRuleConditions,
   active: true,
 });
 const errors = ref<Record<string, string>>({});
 
 // Internal state for date/time conditions
+const daysBeforeMin = ref(0);
+const daysBeforeMax = ref(14);
 const dateRangeStart = ref('');
 const dateRangeEnd = ref('');
 const timeRangeStart = ref('08:00');
 const timeRangeEnd = ref('10:00');
-const daysBeforeMin = ref(0);
-const daysBeforeMax = ref(14);
+
+const isEditing = computed(() => !!editingRule.value);
+const dirty = computed(() => form.value.name !== '');
 
 const typeOptions = [
   { value: 'EARLY_BIRD', label: t('offers.earlyBird') },
@@ -126,8 +126,8 @@ function getCardGradient(type: PricingRuleType): string {
 }
 
 function onToggleActive(rule: PricingRule) {
-  store.togglePricingRuleActive(rule.id);
-  const label = rule.active ? 'aktiviert' : 'deaktiviert';
+  store.updatePricingRule(rule.id, { active: !rule.active });
+  const label = !rule.active ? 'aktiviert' : 'deaktiviert';
   toast.success(`${rule.name} ${label}`);
 }
 
@@ -147,7 +147,7 @@ function onCreateRule() {
   timeRangeStart.value = '08:00';
   timeRangeEnd.value = '10:00';
   errors.value = {};
-  showModal.value = true;
+  showPanel.value = true;
 }
 
 function onEditRule(rule: PricingRule) {
@@ -166,7 +166,7 @@ function onEditRule(rule: PricingRule) {
   timeRangeStart.value = rule.conditions.timeRange?.start || '08:00';
   timeRangeEnd.value = rule.conditions.timeRange?.end || '10:00';
   errors.value = {};
-  showModal.value = true;
+  showPanel.value = true;
 }
 
 function onDeleteRule(rule: PricingRule) {
@@ -213,32 +213,42 @@ function buildConditions(): PricingRuleConditions {
   return conditions;
 }
 
-function onSave() {
+async function onSave() {
   if (!validate()) return;
 
-  const conditions = buildConditions();
+  saving.value = true;
+  try {
+    const conditions = buildConditions();
 
-  if (editingRule.value) {
-    store.updatePricingRule(editingRule.value.id, {
-      name: form.value.name,
-      type: form.value.type,
-      discountPercent: form.value.discountPercent,
-      conditions,
-      active: form.value.active,
-    });
+    if (editingRule.value) {
+      await store.updatePricingRule(editingRule.value.id, {
+        name: form.value.name,
+        type: form.value.type,
+        discountPercent: form.value.discountPercent,
+        conditions,
+        active: form.value.active,
+      });
+    } else {
+      await store.addPricingRule({
+        name: form.value.name,
+        type: form.value.type,
+        discountPercent: form.value.discountPercent,
+        conditions,
+        active: form.value.active,
+      });
+    }
     toast.success(t('common.saved'));
-  } else {
-    store.addPricingRule({
-      name: form.value.name,
-      type: form.value.type,
-      discountPercent: form.value.discountPercent,
-      conditions,
-      active: form.value.active,
-    });
-    toast.success(t('common.saved'));
+    showPanel.value = false;
+  } catch {
+    toast.error('Fehler beim Speichern');
+  } finally {
+    saving.value = false;
   }
+}
 
-  showModal.value = false;
+function onPanelClose() {
+  showPanel.value = false;
+  editingRule.value = null;
 }
 </script>
 
@@ -333,15 +343,19 @@ function onSave() {
       </div>
     </div>
 
-    <!-- Pricing Rule Modal -->
-    <BModal
-      :model-value="showModal"
-      :title="editingRule ? t('common.edit') + ': ' + editingRule.name : t('offers.pricingRules') + ' ' + t('common.create')"
+    <!-- Pricing Rule FormPanel (SlideIn Gold Standard) -->
+    <BFormPanel
+      :model-value="showPanel"
+      :title="isEditing ? 'Preisregel bearbeiten: ' + editingRule?.name : 'Neue Preisregel'"
+      :mode="isEditing ? 'edit' : 'create'"
       size="md"
-      @update:model-value="showModal = false"
-      @close="showModal = false"
+      :saving="saving"
+      :dirty="dirty"
+      @update:model-value="onPanelClose"
+      @save="onSave"
+      @cancel="onPanelClose"
     >
-      <div class="space-y-4">
+      <BFormSection title="Grunddaten" :columns="1" divided>
         <BInput
           v-model="form.name"
           :label="t('common.name')"
@@ -349,14 +363,12 @@ function onSave() {
           :required="true"
           :error="errors.name"
         />
-
         <BSelect
           v-model="form.type"
           label="Typ"
           :options="typeOptions"
           :required="true"
         />
-
         <BInput
           v-model="form.discountPercent"
           type="number"
@@ -365,90 +377,84 @@ function onSave() {
           :error="errors.discount"
           :hint="'1-100%'"
         />
+      </BFormSection>
 
-        <!-- Bedingungen: Tage vor Buchung (Early Bird / Last Minute) -->
-        <div v-if="needsDaysBefore" :class="CARD_STYLES.ghost" class="p-4">
-          <label :class="LABEL_STYLES.base" class="!mb-3">Buchungszeitraum (Tage vorher)</label>
-          <div class="grid grid-cols-2 gap-4">
-            <BInput
-              v-model="daysBeforeMin"
-              type="number"
-              label="Min. Tage"
-            />
-            <BInput
-              v-model="daysBeforeMax"
-              type="number"
-              label="Max. Tage"
-            />
+      <!-- Bedingungen: Tage vor Buchung (Early Bird / Last Minute) -->
+      <BFormSection v-if="needsDaysBefore" title="Buchungszeitraum (Tage vorher)" :columns="2" divided>
+        <BInput
+          v-model="daysBeforeMin"
+          type="number"
+          label="Min. Tage"
+        />
+        <BInput
+          v-model="daysBeforeMax"
+          type="number"
+          label="Max. Tage"
+        />
+      </BFormSection>
+
+      <!-- Bedingungen: Datumsbereich (Seasonal) -->
+      <BFormSection v-if="needsDateRange" title="Saisonzeitraum" :columns="2" divided>
+        <BInput
+          v-model="dateRangeStart"
+          type="date"
+          label="Von"
+        />
+        <BInput
+          v-model="dateRangeEnd"
+          type="date"
+          label="Bis"
+        />
+      </BFormSection>
+
+      <!-- Bedingungen: Zeitfenster (Demand) -->
+      <BFormSection v-if="needsTimeRange" title="Zeitfenster" :columns="2" divided>
+        <BInput
+          v-model="timeRangeStart"
+          type="time"
+          label="Von"
+        />
+        <BInput
+          v-model="timeRangeEnd"
+          type="time"
+          label="Bis"
+        />
+      </BFormSection>
+
+      <!-- AI Hinweis -->
+      <div v-if="form.type === 'AI'" :class="CARD_STYLES.ghost" class="p-4 mt-4">
+        <div class="flex items-start gap-3">
+          <div class="w-8 h-8 bg-fuchsia-100 rounded-lg flex items-center justify-center shrink-0">
+            <svg class="w-4 h-4 text-fuchsia-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
+            </svg>
+          </div>
+          <div>
+            <p class="text-sm font-medium text-slate-700">AI-optimierte Preisgestaltung</p>
+            <p class="text-xs text-slate-500 mt-0.5">
+              Preise werden automatisch basierend auf Nachfrage, Auslastung und historischen Daten angepasst.
+              Der Rabatt dient als maximaler Rabatt.
+            </p>
           </div>
         </div>
+      </div>
 
-        <!-- Bedingungen: Datumsbereich (Seasonal) -->
-        <div v-if="needsDateRange" :class="CARD_STYLES.ghost" class="p-4">
-          <label :class="LABEL_STYLES.base" class="!mb-3">Saisonzeitraum</label>
-          <div class="grid grid-cols-2 gap-4">
-            <BInput
-              v-model="dateRangeStart"
-              type="date"
-              label="Von"
-            />
-            <BInput
-              v-model="dateRangeEnd"
-              type="date"
-              label="Bis"
-            />
-          </div>
-        </div>
-
-        <!-- Bedingungen: Zeitfenster (Demand) -->
-        <div v-if="needsTimeRange" :class="CARD_STYLES.ghost" class="p-4">
-          <label :class="LABEL_STYLES.base" class="!mb-3">Zeitfenster</label>
-          <div class="grid grid-cols-2 gap-4">
-            <BInput
-              v-model="timeRangeStart"
-              type="time"
-              label="Von"
-            />
-            <BInput
-              v-model="timeRangeEnd"
-              type="time"
-              label="Bis"
-            />
-          </div>
-        </div>
-
-        <!-- AI Hinweis -->
-        <div v-if="form.type === 'AI'" :class="CARD_STYLES.ghost" class="p-4">
-          <div class="flex items-start gap-3">
-            <div class="w-8 h-8 bg-fuchsia-100 rounded-lg flex items-center justify-center shrink-0">
-              <svg class="w-4 h-4 text-fuchsia-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
-              </svg>
-            </div>
-            <div>
-              <p class="text-sm font-medium text-slate-700">AI-optimierte Preisgestaltung</p>
-              <p class="text-xs text-slate-500 mt-0.5">
-                Preise werden automatisch basierend auf Nachfrage, Auslastung und historischen Daten angepasst.
-                Der Rabatt dient als maximaler Rabatt.
-              </p>
-            </div>
-          </div>
-        </div>
-
+      <BFormSection title="Status" :columns="1">
         <BToggle
           v-model="form.active"
           :label="t('common.active')"
         />
-      </div>
+      </BFormSection>
 
-      <template #footer>
-        <BButton variant="secondary" @click="showModal = false">
-          {{ t('common.cancel') }}
-        </BButton>
-        <BButton variant="primary" @click="onSave">
-          {{ t('common.save') }}
-        </BButton>
+      <!-- Delete button in footer-left -->
+      <template v-if="isEditing" #footer-left>
+        <button
+          class="px-4 py-2 rounded-lg text-sm font-medium text-red-600 hover:bg-red-50 transition-colors"
+          @click="() => { if (editingRule) { onDeleteRule(editingRule); showPanel = false; } }"
+        >
+          Loeschen
+        </button>
       </template>
-    </BModal>
+    </BFormPanel>
   </div>
 </template>
