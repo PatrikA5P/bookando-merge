@@ -110,6 +110,12 @@ const routes: RouteRecordRaw[] = [
         meta: { module: 'resources', title: 'Ressourcen' },
       },
       {
+        path: 'automation',
+        name: 'automation',
+        component: () => import('@/modules/automation/AutomationPage.vue'),
+        meta: { module: 'automation', title: 'Automatisierung' },
+      },
+      {
         path: 'settings',
         name: 'settings',
         component: () => import('@/modules/settings/SettingsPage.vue'),
