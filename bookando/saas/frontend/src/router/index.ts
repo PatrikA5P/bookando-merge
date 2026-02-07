@@ -98,6 +98,12 @@ const routes: RouteRecordRaw[] = [
         meta: { module: 'academy', title: 'Akademie' },
       },
       {
+        path: 'bookings',
+        name: 'bookings',
+        component: () => import('@/modules/bookings/BookingsPage.vue'),
+        meta: { module: 'bookings', title: 'Buchungen' },
+      },
+      {
         path: 'resources',
         name: 'resources',
         component: () => import('@/modules/resources/ResourcesPage.vue'),
