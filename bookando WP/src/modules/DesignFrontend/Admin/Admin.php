@@ -11,23 +11,19 @@ class Admin
 {
     public static function init(): void
     {
-        add_action('admin_menu', [self::class, 'registerMenus']);
+        // Direct registration on admin_menu hook (no waiting for bookando_register_module_menus)
+        add_action('admin_menu', [self::class, 'registerMenus'], 100);
     }
 
     public static function registerMenus(): void
     {
-        // Register as module submenu in central Bookando menu
-        add_action('bookando_register_module_menus', [self::class, 'register_menu']);
-    }
-
-    public static function register_menu(): void
-    {
+        // Direct submenu registration in Bookando menu
         \Bookando\Core\Admin\Menu::addModuleSubmenu([
             'page_title'  => 'Design Frontend',
             'menu_title'  => 'Design Frontend',
             'capability'  => 'manage_bookando_designfrontend',
             'menu_slug'   => 'bookando_designfrontend',
-            'module_slug' => 'designfrontend',
+            'module_slug' => 'design-frontend',
             'callback'    => [self::class, 'renderPage'],
             'icon_url'    => 'dashicons-admin-customizer',
             'position'    => 90

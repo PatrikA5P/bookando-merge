@@ -6,7 +6,13 @@ namespace Bookando\Modules\Dashboard\Admin;
 
 class Admin
 {
-    public static function register_menu(): void
+    public static function init(): void
+    {
+        // Direct registration on admin_menu hook
+        add_action('admin_menu', [self::class, 'registerMenus'], 5);
+    }
+
+    public static function registerMenus(): void
     {
         \Bookando\Core\Admin\Menu::addModuleSubmenu([
             'page_title'  => __('Dashboard', 'bookando'),
